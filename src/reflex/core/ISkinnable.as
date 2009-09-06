@@ -2,12 +2,13 @@ package reflex.core
 {
 	import flash.events.IEventDispatcher;
 
-	public interface IComponent extends IEventDispatcher
+	public interface ISkinnable extends IEventDispatcher
 	{
 		
 		function get skin():ISkin;
 		function set skin(value:ISkin):void;
 		
+		/*
 		function get state():String;
 		function set state(value:String):void;
 		
@@ -16,6 +17,6 @@ package reflex.core
 		
 		function get enabled():Boolean;
 		function set enabled(value:Boolean):void;
-		
+		*/
 	}
 }

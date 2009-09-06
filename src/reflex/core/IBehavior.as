@@ -2,7 +2,7 @@ package reflex.core
 {
 	public interface IBehavior
 	{
-		function get owner():IComponent;
-		function set owner(value:IComponent):void;
+		function get owner():Object;
+		function set owner(value:Object):void;
 	}
 }

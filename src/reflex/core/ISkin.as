@@ -2,11 +2,9 @@ package reflex.core
 {
 	import flash.events.IEventDispatcher;
 
-	public interface ISkin extends IEventDispatcher
+	public interface ISkin
 	{
-		function get owner():IComponent;
-		function set owner(value:IComponent):void;
-		
-		function draw():void;
+		function get data():Object;
+		function set data(value:Object):void;
 	}
 }

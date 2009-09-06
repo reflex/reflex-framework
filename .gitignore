@@ -1,2 +1,8 @@
 Thumbs.db
 .DS_Store
+.project
+.actionScriptProperties
+.flexLibProperties
+.settings
+bin
+bin/*

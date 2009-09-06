@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rx:Skin xmlns:rx="reflex.skins.*" xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:text="flash.text.*">
+	
+	<mx:Script>
+		<![CDATA[
+			
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				if(graphics) {
+					graphics.beginFill(0x0000FF, 1);
+					graphics.drawRect(0, 0, unscaledWidth, unscaledHeight);
+					graphics.endFill();
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	<rx:content>
+		<text:TextField text="{data.label != null ? data.label : ''}" selectable="false" />
+	</rx:content>
+</rx:Skin>
