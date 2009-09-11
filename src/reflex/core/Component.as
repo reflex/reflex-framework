@@ -9,16 +9,16 @@ package reflex.core
 		
 		[Bindable] public var behavior:IBehavior;
 		
-		private var _skin:ISkin; [Bindable]
-		public function get skin():ISkin { return _skin; }
-		public function set skin(value:ISkin):void {
+		private var _skin:Object; [Bindable]
+		public function get skin():Object { return _skin; }
+		public function set skin(value:Object):void {
 			removeSkin(_skin);
 			_skin = value;
 			addSkin(_skin);
 		}
 		
-		private function removeSkin(skin:ISkin):void {
-			if(skin) {
+		private function removeSkin(skin:Object):void {
+			if(skin && skin is ISkin) {
 				if(skin is DisplayObject && this.contains(skin as DisplayObject)) {
 					this.removeChild(skin as DisplayObject);
 				}
@@ -26,8 +26,8 @@ package reflex.core
 			}
 		}
 		
-		private function addSkin(skin:ISkin):void {
-			if(skin) {
+		private function addSkin(skin:Object):void {
+			if(skin && skin is ISkin) {
 				skin.data = this;
 				if(skin is DisplayObject) {
 					this.addChild(skin as DisplayObject);

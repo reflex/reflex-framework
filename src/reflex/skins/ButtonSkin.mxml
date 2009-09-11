@@ -16,6 +16,6 @@
 		]]>
 	</mx:Script>
 	<rx:content>
-		<text:TextField text="{data.label != null ? data.label : ''}" selectable="false" />
+		<text:TextField id="label" text="{data.label != null ? data.label : ''}" selectable="false" />
 	</rx:content>
 </rx:Skin>

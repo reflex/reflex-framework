@@ -5,8 +5,8 @@ package reflex.core
 	public interface ISkinnable extends IEventDispatcher
 	{
 		
-		function get skin():ISkin;
-		function set skin(value:ISkin):void;
+		function get skin():Object;
+		function set skin(value:Object):void;
 		
 		/*
 		function get state():String;
