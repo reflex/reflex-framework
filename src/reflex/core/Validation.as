@@ -5,7 +5,20 @@ package reflex.core
 	import flash.utils.Dictionary;
 
 	/**
-	 * Utility class which centralizes logic for component validation. 
+	 * Utility class which centralizes logic for component validation. Rather
+	 * than having many invalidation/validation method pairs a validation method
+	 * is passed in to the <code>invalidate</code> method. This allows add-on
+	 * code such as layouts and animation libraries to tie into the validation
+	 * of a component, and it makes for cleaner code.
+	 * 
+	 * Example on a mythical <code>Layout</code> object:
+	 * 
+	 * public function set percentWidth(value:Number):void
+	 * {
+	 *     if (value == _percentWidth) return;
+	 *     _percentWidth = value;
+	 *     Validation.invalidate(target, validate);
+	 * }
 	 */
 	public class Validation
 	{
