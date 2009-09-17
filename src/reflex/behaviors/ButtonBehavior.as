@@ -7,8 +7,7 @@ package reflex.behaviors
 		
 		public function ButtonBehavior()
 		{
-			super();
-			
+			_name = "button";
 		}
 		
 	}

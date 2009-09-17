@@ -3,11 +3,40 @@ package reflex.core
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	
+	import reflex.behaviors.BehaviorMap;
 	
 	public class Component extends MovieClip implements IBehavioral, ISkinnable
 	{
+		protected var _behaviorMap:BehaviorMap;
 		
-		[Bindable] public var behavior:IBehavior;
+		
+		public function Component()
+		{
+			_behaviorMap = new BehaviorMap(this);
+		}
+		
+		
+		[ArrayElementType("reflex.core.IBehavior")]
+		/**
+		 * A dynamic object or hash map of behavior objects. <code>behaviors</code>
+		 * is effectively read-only, but setting either an IBehavior or array of
+		 * IBehavior to this property will add those behaviors to the <code>behaviors</code>
+		 * object/map.
+		 */
+		public function get behaviors():BehaviorMap
+		{
+			return _behaviorMap;
+		}
+		
+		public function set behaviors(value:*):void
+		{
+			if (value is Array) {
+				_behaviorMap.add(value);
+			} else if (value is IBehavior) {
+				_behaviorMap[IBehavior(value).name] = value;
+			}
+		}
+		
 		
 		private var _skin:ISkin; [Bindable]
 		public function get skin():ISkin { return _skin; }

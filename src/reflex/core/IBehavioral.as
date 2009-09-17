@@ -1,8 +1,10 @@
 package reflex.core
 {
+	import reflex.behaviors.BehaviorMap;
+
 	public interface IBehavioral
 	{
-		function get behavior():IBehavior;
-		function set behavior(value:IBehavior):void;
+		function get behaviors():BehaviorMap;
+		function set behaviors(value:*):void;
 	}
 }
