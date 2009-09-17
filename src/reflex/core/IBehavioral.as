@@ -4,7 +4,7 @@ package reflex.core
 
 	public interface IBehavioral
 	{
-		function get behaviors():BehaviorMap;
+		function get behaviors():Object;
 		function set behaviors(value:*):void;
 	}
 }

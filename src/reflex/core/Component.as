@@ -23,7 +23,7 @@ package reflex.core
 		 * IBehavior to this property will add those behaviors to the <code>behaviors</code>
 		 * object/map.
 		 */
-		public function get behaviors():BehaviorMap
+		public function get behaviors():Object
 		{
 			return _behaviorMap;
 		}
