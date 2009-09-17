@@ -28,7 +28,7 @@ package reflex.core
 		 * they may be removed. To remove an invalidated listener use
 		 * uninvalidate.
 		 */
-		protected static var displayTargets:Dictionary = new Dictionary(true);
+		protected static var validateMethods:Dictionary = new Dictionary(true);
 		
 		/**
 		 * Store the listeners associated with eventTargets and an event name.
@@ -105,7 +105,7 @@ package reflex.core
 		 */
 		public static function invalidate(target:DisplayObject, validateMethod:Function, priority:int = 0):void
 		{
-			if (target in displayTargets && validateMethod in displayTargets[target]) return;
+			if (validateMethod in validateMethods) return;
 			
 			if (target.stage) {
 				target.stage.invalidate();
@@ -115,15 +115,18 @@ package reflex.core
 			
 			var listener:Function = function(event:Event):void {
 				target.removeEventListener(Event.RENDER, listener);
-				delete displayTargets[target][validateMethod];
+				delete validateMethods[validateMethod];
 				validateMethod();
 			}
 			
-			if ( !(target in displayTargets) ) {
-				displayTargets[target] = new Dictionary(); // strong reference to keep methods, otherwise they slip out
-			}
+			// add the validateMethod to a dummy event listener on the displayTarget.
+			// if it is not reference directly like this, it will slip out of our
+			// weak-reference dictionary. But the only thing that targets it is the
+			// target, so when that goes, so does the validateMethod. All clean.
+			// This event should never be dispatched
+			target.addEventListener("_$hold$_", validateMethod);
 			
-			displayTargets[target][validateMethod] = listener;
+			validateMethods[validateMethod] = listener;
 			
 			target.addEventListener(Event.RENDER, listener, false, priority);
 		}
@@ -142,9 +145,9 @@ package reflex.core
 		 */
 		public static function uninvalidate(target:DisplayObject, validateMethod:Function):void
 		{
-			if ( !(target in displayTargets) || !(validateMethod in displayTargets[target]) ) return;
-			target.removeEventListener(Event.RENDER, displayTargets[target][validateMethod]);
-			delete displayTargets[target][validateMethod];
+			if ( !(validateMethod in validateMethods) ) return;
+			target.removeEventListener(Event.RENDER, validateMethods[validateMethod]);
+			delete validateMethods[validateMethod];
 		}
 		
 		
