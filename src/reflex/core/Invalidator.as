@@ -2,6 +2,7 @@ package reflex.core
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 
 	/**
@@ -20,13 +21,75 @@ package reflex.core
 	 *     Validation.invalidate(target, validate);
 	 * }
 	 */
-	public class Validation
+	public class Invalidator
 	{
 		/**
-		 * Store the listeners temporarily so they may be removed. To remove
-		 * an invalidated listener use uninvalidate.
+		 * Store the listeners associated with a validateMethod temporarily so
+		 * they may be removed. To remove an invalidated listener use
+		 * uninvalidate.
 		 */
-		private static var listeners:Dictionary = new Dictionary();
+		protected static var displayTargets:Dictionary = new Dictionary(true);
+		
+		/**
+		 * Store the listeners associated with eventTargets and an event name.
+		 * To remove a registered event use unregister.
+		 */
+		protected static var eventTargets:Dictionary = new Dictionary(true);
+		
+		
+		/**
+		 * Register events to trigger an invalidate. Every time this event is
+		 * dispatched invalidate will be called with the provided <code>displayTarget</code>,
+		 * <code>validateMethod</code>, and <code>priority</code>.
+		 * 
+		 * @param The target which will be dispatching the events. This may be the
+		 * same as the display target, but could often be different.
+		 * @param An array of one or more event types which will trigger the
+		 * invalidation.
+		 * @param Any display object which is or will be on the stage which this
+		 * invalidation affects.
+		 * @param The validation method to be called during the validation cycle.
+		 * @param Optional priority to cause some validation methods to be triggered before others.
+		 */
+		public static function register(eventTarget:IEventDispatcher, events:Array, displayTarget:DisplayObject, validateMethod:Function, priority:int = 0):void
+		{
+			for each (var type:String in events) {
+				var listener:Function = function(event:Event):void {
+					invalidate(displayTarget, validateMethod, priority);
+				};
+				
+				var listeners:Object = eventTargets[eventTarget];
+				if (listeners == null) {
+					eventTargets[eventTarget] = listeners = {};
+				}
+				listeners[type] = listener;
+				
+				eventTarget.addEventListener(type, listener);
+			}
+		}
+		
+		
+		/**
+		 * Unregister events which were previously registered with <code>register</code>.
+		 * 
+		 * @param The target which was dispatching the events.
+		 * @param An array of one or more event types which trigged the
+		 * invalidation.
+		 */
+		public static function unregister(eventTarget:IEventDispatcher, events:Array):void
+		{
+			for each (var type:String in events) {
+				var listeners:Object = eventTargets[eventTarget];
+				if (listeners == null) return;
+				
+				var listener:Function = listeners[type];
+				if (listener == null) return;
+				
+				delete listeners[type];
+				
+				eventTarget.removeEventListener(type, listener);
+			}
+		}
 		
 		
 		/**
@@ -35,12 +98,15 @@ package reflex.core
 		 * to cause certain types of functionality to happen sooner than others,
 		 * such as measure before layout.
 		 * 
-		 * @param Any display object which is or will be on the stage.
+		 * @param Any display object which is or will be on the stage which this
+		 * invalidation affects.
 		 * @param The validation method to be called during the validation cycle.
 		 * @param Optional priority to cause some validation methods to be triggered before others.
 		 */
 		public static function invalidate(target:DisplayObject, validateMethod:Function, priority:int = 0):void
 		{
+			if (target in displayTargets && validateMethod in displayTargets[target]) return;
+			
 			if (target.stage) {
 				target.stage.invalidate();
 			} else {
@@ -49,11 +115,15 @@ package reflex.core
 			
 			var listener:Function = function(event:Event):void {
 				target.removeEventListener(Event.RENDER, listener);
-				delete listeners[validateMethod];
+				delete displayTargets[target][validateMethod];
 				validateMethod();
 			}
 			
-			listeners[validateMethod] = listener;
+			if ( !(target in displayTargets) ) {
+				displayTargets[target] = new Dictionary(); // strong reference to keep methods, otherwise they slip out
+			}
+			
+			displayTargets[target][validateMethod] = listener;
 			
 			target.addEventListener(Event.RENDER, listener, false, priority);
 		}
@@ -72,9 +142,9 @@ package reflex.core
 		 */
 		public static function uninvalidate(target:DisplayObject, validateMethod:Function):void
 		{
-			if ( !(validateMethod in listeners) ) return;
-			target.removeEventListener(Event.RENDER, listeners[validateMethod]);
-			delete listeners[validateMethod];
+			if ( !(target in displayTargets) || !(validateMethod in displayTargets[target]) ) return;
+			target.removeEventListener(Event.RENDER, displayTargets[target][validateMethod]);
+			delete displayTargets[target][validateMethod];
 		}
 		
 		
