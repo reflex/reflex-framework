@@ -22,6 +22,14 @@ package reflex.core
 		 * is effectively read-only, but setting either an IBehavior or array of
 		 * IBehavior to this property will add those behaviors to the <code>behaviors</code>
 		 * object/map.
+		 * 
+		 * To set behaviors in MXML:
+		 * <Component...>
+		 *   <behaviors>
+		 *     <SelectBehavior/>
+		 *     <ButtonBehavior/>
+		 *   </behaviors>
+		 * </Component>
 		 */
 		public function get behaviors():Object
 		{

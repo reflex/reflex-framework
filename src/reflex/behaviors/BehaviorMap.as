@@ -14,7 +14,7 @@ package reflex.behaviors
 	 * A dynamic holder for behaviors. This object will store behaviors for a
 	 * target for access at runtime. Setting a behavior on the behaviorMap will
 	 * set the target of that behavior for initialization. The map may be
-	 * iterated through just as a regular object might. 
+	 * iterated through just as a regular object might.
 	 */
 	public dynamic class BehaviorMap extends Proxy implements IEventDispatcher
 	{
