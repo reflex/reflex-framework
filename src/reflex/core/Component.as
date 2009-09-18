@@ -15,6 +15,7 @@ package reflex.core
 		public function Component()
 		{
 			_behaviorMap = new BehaviorMap(this);
+			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
 		
