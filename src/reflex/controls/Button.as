@@ -1,9 +1,10 @@
 package reflex.controls
 {
 	import reflex.core.Component;
+	import reflex.utils.MetaInjector;
 	
 	[DefaultSetting(skin="reflex.skins.ButtonSkin")]
-	[DefaultSetting(behavior="reflex.behaviors.ButtonBehavior")]
+	[DefaultSetting(behaviors="reflex.behaviors.ButtonBehavior")]
 	public class Button extends Component implements IEnableable, ISelectable, IStateful
 	{
 		
@@ -15,5 +16,6 @@ package reflex.controls
 		[Bindable] public var selected:Boolean;
 		
 		[Bindable] public var state:String;
+		
 	}
 }

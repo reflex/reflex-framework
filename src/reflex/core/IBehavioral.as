@@ -1,8 +1,10 @@
 package reflex.core
 {
+	import reflex.behaviors.CompositeBehavior;
+
 	public interface IBehavioral
 	{
-		function get behavior():IBehavior;
-		function set behavior(value:IBehavior):void;
+		function get behaviors():Object;
+		function set behaviors(value:*):void;
 	}
 }

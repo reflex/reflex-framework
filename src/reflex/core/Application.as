@@ -11,6 +11,8 @@ package reflex.core
 	public class Application extends Sprite implements IContainer
 	{
 		
+		public var profile:Object;
+		
 		private var _content:Array;
 		public function get content():Array { return _content; }
 		public function set content(value:Array):void {

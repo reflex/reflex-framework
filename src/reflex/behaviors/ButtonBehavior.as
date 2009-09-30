@@ -1,14 +1,12 @@
 package reflex.behaviors
 {
-	import flash.utils.getDefinitionByName;
+	import reflex.core.IBehavior;
 	
-	public class ButtonBehavior extends Behavior
+	public class ButtonBehavior extends Behavior implements IBehavior
 	{
 		
 		public function ButtonBehavior()
 		{
-			super();
-			
 		}
 		
 	}
