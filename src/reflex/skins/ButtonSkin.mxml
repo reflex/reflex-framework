@@ -6,7 +6,7 @@
 			
 			public function set render(value:Number):void {
 				if(graphics) {
-					graphics.beginFill(0x0000FF, 1);
+					graphics.beginFill(data.state == "over" ? 0x0000FF : 0x00FF00, 1);
 					graphics.drawRect(0, 0, data.width, data.height);
 					graphics.endFill();
 				}
@@ -17,6 +17,7 @@
 	<!-- obviously a temporary solution for rendering graphics -->
 	<mx:Binding source="data.width" destination="render" />
 	<mx:Binding source="data.height" destination="render" />
+	<mx:Binding source="data.state" destination="render" />
 	<rx:content>
 		<text:TextField id="label" x="{data.width/2 - label.width/2}" y="{data.height/2 - label.height/2}" width="70" height="20"
 			text="{data.label != null ? data.label : ''}" selectable="false" />

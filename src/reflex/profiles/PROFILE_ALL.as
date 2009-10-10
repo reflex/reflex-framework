@@ -1,11 +1,12 @@
 package reflex.profiles
 {
 	
+	import reflex.behaviors.ButtonStateBehavior;
+	import reflex.behaviors.SelectableBehavior;
 	import reflex.skins.ButtonSkin;
-	import reflex.behaviors.ButtonBehavior;
 	
 	public const PROFILE_ALL:Array = [
-		ButtonSkin, ButtonBehavior
+		ButtonSkin, ButtonStateBehavior, SelectableBehavior
 	]
 	
 }

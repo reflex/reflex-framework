@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<componentPackage>
+	
+	<!-- Controls -->
+	<component id="Button" class="reflex.controls.Button" />
+	
+	<!-- Behaviors -->
+	<component id="ButtonStateBehavior" class="reflex.behaviors.ButtonStateBehavior" />
+	<component id="SelectableBehavior" class="reflex.behaviors.SelectableBehavior" />
+	
+	<!-- Skins -->
+	<component id="ButtonSkin" class="reflex.skins.ButtonSkin" />
+	
+	<!-- Core -->
+	<component id="Application" class="reflex.core.Application" />
+	
+</componentPackage>

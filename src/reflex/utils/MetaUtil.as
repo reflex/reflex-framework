@@ -1,11 +1,14 @@
 package reflex.utils
 {
-	import flash.utils.Dictionary;
 	import flash.system.ApplicationDomain;
+	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.getQualifiedSuperclassName;
+	
+	import reflex.metadata.Alias;
 	import reflex.metadata.ClassDirectives;
 	import reflex.metadata.DefaultSetting;
+	import reflex.metadata.EventHandler;
 	
 	public class MetaUtil
 	{
@@ -40,8 +43,8 @@ package reflex.utils
 				var baseClassDirectives:ClassDirectives = directivesForClass(baseClassName);
 				//directives.bindings = baseClassDirectives.bindings.concat();
 				directives.defaultSettings = baseClassDirectives.defaultSettings.concat();
-				//directives.modelAliases = baseClassDirectives.modelAliases.concat();
-				//directives.modelHandlers = baseClassDirectives.modelHandlers.concat();
+				directives.aliases = baseClassDirectives.aliases.concat();
+				directives.eventHandlers = baseClassDirectives.eventHandlers.concat();
 				//directives.viewContracts = baseClassDirectives.viewContracts.concat();
 				//directives.viewHandlers = baseClassDirectives.viewHandlers.concat();
 				//directives.styles = baseClassDirectives.styles.concat();
@@ -51,8 +54,8 @@ package reflex.utils
 			
 			var description:XML = flash.utils.describeType(type);
 			//resolveStyleBindings(description, directives.styles);
-			//resolveModelAliases(description, directives.modelAliases);
-			//resolveEventHandlers(description, directives.modelHandlers);
+			resolveAliases(description, directives.aliases);
+			resolveEventHandlers(description, directives.eventHandlers);
 			//resolveViewContracts(description, directives.viewContracts);
 			//resolveViewHandlers(description, directives.viewHandlers);
 			resolveDefaultSettings(description, directives.defaultSettings);
@@ -68,6 +71,79 @@ package reflex.utils
 				directive.property = metadata[i].arg.@key;
 				directive.value = metadata[i].arg.@value;
 				directives.unshift(directive);
+			}
+		}
+		
+		private static function resolveEventHandlers(description:XML, directives:Array):void {
+			var metadata:XMLList = description.factory.metadata.(@name == "EventHandler");
+			for (var i:int = 0; i < metadata.length(); i++) {
+				var directive:EventHandler = new EventHandler();
+				directive.dispatcher = null;
+				directive.event = metadata[i].arg.(@key == "type").@value;
+				directive.handler = metadata[i].arg.(@key == "handler").@value;
+				directives.push(directive);
+			}
+			
+			metadata = description.factory.accessor.metadata.(@name == "EventHandler");
+			metadata += description.factory.variable.metadata.(@name == "EventHandler");
+			for (i = 0; i < metadata.length(); i++) {
+				directive = new EventHandler();
+				directive.dispatcher = metadata[i].parent().@name;
+				directive.event = metadata[i].arg.(@key == "type").@value;
+				directive.handler = metadata[i].arg.(@key == "handler").@value;
+				directives.push(directive);
+			}
+			
+			metadata = description.factory.method.metadata.(@name == "EventHandler");
+			for (i = 0; i < metadata.length(); i++) {
+				directive = new EventHandler();
+				var dispatcherArg:Object = metadata[i].arg.(@key == "dispatcher");
+				directive.dispatcher = metadata[i].arg.(@key == "dispatcher").@value;
+				if (directive.dispatcher == "") {
+					directive.dispatcher = null;
+				}
+				directive.event = metadata[i].arg.(@key == "type" || @key == "").@value;
+				directive.handler = metadata[i].parent().@name;
+				if(directive.event == "" || directive.handler == "") {
+					directive = resolveEventHandlerFromFunction(metadata[i].parent(), directive);
+				}
+				directives.push(directive);
+			}
+			
+			// find reflex functions without metadata - we'll autowire them
+			metadata = description.factory.method.(attribute("uri") == "http://reflex.io");
+			for (i = 0; i < metadata.length(); i++) {
+				var meta:XMLList = metadata.metadata.(@name == "EventHandler");
+				if(meta.length() == 0) {
+					directive = new EventHandler();
+					directive = resolveEventHandlerFromFunction(metadata[i], directive);
+					directives.push(directive);
+				}
+			}
+		}
+		
+		// this parsing isn't very robust at the moment
+		private static function resolveEventHandlerFromFunction(xml:XML, directive:EventHandler):EventHandler {
+			var split:Array = xml.@name.toString().split("_");
+			if(split.length == 2) {
+				directive.dispatcher = split[0];
+				directive.event = split[1].replace("Handler", "");
+				directive.handler = xml.@name.toString();
+			} else {
+				directive.event = split[0].replace("Handler", "");
+				directive.handler = xml.@name.toString();
+			}
+			return directive;
+		}
+		
+		private static function resolveAliases(description:XML, directives:Array):void {
+			var metadata:XMLList = description.factory.accessor.metadata.(@name == "Alias");
+			metadata += description.factory.variable.metadata.(@name == "Alias");
+			for (var i:int = 0; i < metadata.length(); i++) {
+				var directive:Alias = new Alias();
+				directive.property = metadata[i].parent().@name;
+				directive.type = metadata[i].parent().@type;
+				directives.push(directive);
 			}
 		}
 		
