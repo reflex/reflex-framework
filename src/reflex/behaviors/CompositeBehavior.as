@@ -67,13 +67,13 @@ package reflex.behaviors
 		}
 		
 		//[ArrayElementType("reflex.core.IBehavior")]
-		public function push(...args):uint
+		public function add(item:Object):uint
 		{
-			if(args is IBehavior) {
-				(args as IBehavior).target = _target;
-				behaviors.push(args as IBehavior);
-			} else if(args is Array) {
-				for each (var behavior:IBehavior in args) {
+			if(item is IBehavior) {
+				(item as IBehavior).target = _target;
+				behaviors.push(item as IBehavior);
+			} else if(item is Array) {
+				for each (var behavior:IBehavior in item) {
 					behavior.target = _target;
 					behaviors.push(behavior);
 				}
