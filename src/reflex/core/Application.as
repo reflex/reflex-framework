@@ -7,11 +7,13 @@ package reflex.core
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
-	//[DefaultProperty(name="content")]
+	[DefaultProperty(name="content")]
 	public class Application extends Sprite implements IContainer
 	{
+		public var background:Number = 0xEEEEEE
 		
-		public var profile:Object;
+		protected var unscaledWidth:Number = 0;
+		protected var unscaledHeight:Number = 0;
 		
 		private var _content:Array;
 		public function get content():Array { return _content; }
@@ -20,26 +22,28 @@ package reflex.core
 			updateChildren(_content);
 		}
 		
-		//public var profile:Object;
-		
 		public function Application()
 		{
-			super();
 			stage.align = StageAlign.TOP_LEFT;
+			// NOTE: "bitmaps are always smoothed" vs "bitmaps are smoothed if the movie is static"
+			// ... is this a noticable quality improvement?
 			stage.quality = StageQuality.BEST;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.addEventListener(Event.RESIZE, resizeHandler, false, 0, true);
-			updateDisplayList(stage.stageWidth, stage.stageHeight);
+			stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
+			
+			onStageResize(null);
 		}
 		
-		protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-			/*graphics.beginFill(0xFF0000, 1);
-			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
-			graphics.endFill();*/
+		protected function draw():void {
+			graphics.beginFill(background, 1);
+			graphics.drawRect(0, 0, unscaledWidth, unscaledHeight);
+			graphics.endFill();
 		}
 		
-		private function resizeHandler(event:Event):void {
-			updateDisplayList(stage.stageWidth, stage.stageHeight);
+		private function onStageResize(event:Event):void {
+			unscaledWidth = stage.stageWidth;
+			unscaledHeight = stage.stageHeight;
+			draw();
 		}
 		
 		private function updateChildren(children:Array):void {
