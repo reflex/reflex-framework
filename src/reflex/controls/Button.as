@@ -1,8 +1,8 @@
 package reflex.controls
 {
 	import reflex.core.Component;
-	import reflex.utils.MetaInjector;
 	
+	// TODO: refactor DefaultSetting refelction in Component class
 	[DefaultSetting(skin="reflex.skins.ButtonSkin")]
 	[DefaultSetting(behaviors="reflex.behaviors.ButtonStateBehavior, reflex.behaviors.SelectableBehavior")]
 	public class Button extends Component implements IEnableable, ISelectable, IStateful
