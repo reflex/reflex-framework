@@ -34,6 +34,9 @@ package reflex.core
 		 */
 		public function get behaviors():Object
 		{
+			if(_behaviors == null) {
+				_behaviors = new CompositeBehavior(this);
+			}
 			return _behaviors;
 		}
 		
@@ -50,16 +53,21 @@ package reflex.core
 			}
 		}
 		
-		// TODO: refactor skin to receive a target of Sprite
 		private var _skin:Object; [Bindable]
 		public function get skin():Object { return _skin; }
 		public function set skin(value:Object):void {
 			if (_skin == value) {
 				return;
 			}
-			_skin.target = null;
+			if (_skin != null) {
+				_skin.data = null;
+			}
+			
 			_skin = value;
-			_skin.target = this;
+			
+			if (_skin != null) {
+				_skin.data = this;
+			}
 		}
 		
 	}

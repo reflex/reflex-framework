@@ -355,7 +355,7 @@ package flight.binding
 				}
 			}
 			
-			listenerList.push(args);
+			listenerList.push(arguments);
 			
 			return binding.bindListener(onDispatcherChange, false);
 		}

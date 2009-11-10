@@ -73,7 +73,7 @@ package flight.utils
 		 * Ensures a class has a registered alias for object serialization and
 		 * remoting. If the class doesn't yet have an alias it will be
 		 * registered with it's full qualified class name, for example:
-		 * <code>flash.utils.Type</code>. If the class has already been
+		 * <code>flight.utils.Type</code>. If the class has already been
 		 * assigned an alias then its previous registration will be honored.
 		 * 
 		 * @param	value			The object or class to register.
@@ -144,17 +144,17 @@ package flight.utils
 		 * accessor's (getter/setters) and pure properties.
 		 * 
 		 * @param	value			The object or class to introspect.
-		 * @param	metadata		Optional filter to return only those
+		 * @param	metadataType	Optional filter to return only those
 		 * 							property descritions containing the
 		 * 							specified metadata.
 		 * 
 		 * @return					A list of XML property descriptions.
 		 */
-		public static function describeProperties(value:Object, metadata:String = null):XMLList
+		public static function describeProperties(value:Object, metadataType:String = null):XMLList
 		{
 			var properties:XMLList = describeType(value).factory.*.(localName() == "accessor" || localName() == "variable");
 			
-			return (metadata == null) ? properties : properties.(child("metadata").(@name == metadata).length() > 0);
+			return (metadataType == null) ? properties : properties.(child("metadata").(@name == metadataType).length() > 0);
 		}
 		
 		
@@ -162,17 +162,17 @@ package flight.utils
 		 * Targeted reflection describing an object's methods.
 		 * 
 		 * @param	value			The object or class to introspect.
-		 * @param	metadata		Optional filter to return only those
+		 * @param	metadataType	Optional filter to return only those
 		 * 							method descritions containing the
 		 * 							specified metadata.
 		 * 
 		 * @return					A list of XML method descriptions.
 		 */
-		public static function describeMethods(value:Object, metadata:String = null):XMLList
+		public static function describeMethods(value:Object, metadataType:String = null):XMLList
 		{
 			var methods:XMLList = describeType(value).factory.method;
 			
-			return (metadata == null) ? methods : methods.(child("metadata").(@name == metadata).length() > 0);
+			return (metadataType == null) ? methods : methods.(child("metadata").(@name == metadataType).length() > 0);
 		}
 		
 	}
