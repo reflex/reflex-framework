@@ -1,31 +1,34 @@
 package reflex.behaviors
 {
 	
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
-	import flash.system.ApplicationDomain;
 	
-	import reflex.metadata.Alias;
-	import reflex.metadata.ClassDirectives;
-	import reflex.metadata.EventHandler;
-	import reflex.utils.MetaUtil;
+	import flight.binding.Bind;
+	import flight.utils.Type;
+	
+	import reflex.core.IBehavior;
 	
 	/**
 	 * A base behavior class. Provides functionality for setting up listeners
 	 * automatically with metadata.
 	 */
-	public class Behavior extends EventDispatcher
+	public class Behavior extends EventDispatcher implements IBehavior
 	{
 		
 		protected namespace reflex = "http://reflex.io";
 		
 		private var _target:Object;
 		
-		[Bindable("targetChange")]
+		public function Behavior()
+		{
+			describeEventListeners(this);
+			describeAliases(this);
+		}
+		
 		/**
 		 * The object this behavior acts upon.
 		 */
+		[Bindable]
 		public function get target():Object
 		{
 			return _target;
@@ -34,69 +37,43 @@ package reflex.behaviors
 		public function set target(value:Object):void
 		{
 			if (value == _target) return;
-			detach(_target);
-			removeAliases();
 			_target = value;
-			applyAliases(_target);
-			attach(_target);
-			dispatch("targetChange");
 		}
 		
 		
-		////// Other base behavior methods which handle metadata etc. //////////
 		
-		private function attach(instance:Object):void {
-			if(instance is IEventDispatcher) {
-				var directives:ClassDirectives = MetaUtil.resolveDirectives(this);
-				for each(var directive:EventHandler in directives.eventHandlers) {
-					var f:Function = this.reflex::[directive.handler] as Function;
-					var d:IEventDispatcher = this[directive.dispatcher] as IEventDispatcher;
-					//dispatcher.addEventListener(directive.event, f, false, 0, true);
-					if(d) {d.addEventListener(directive.event, f, false, 0, true); }
-				}
-			}
-		}
-		
-		private function detach(instance:Object):void {
-			if(instance is IEventDispatcher) {
-				var directives:ClassDirectives = MetaUtil.resolveDirectives(this);
-				for each(var directive:EventHandler in directives.eventHandlers) {
-					var f:Function = this.reflex::[directive.handler] as Function;
-					(instance as IEventDispatcher).removeEventListener(directive.event, f, false);
-				}
-			}
-		}
-		
-		private function applyAliases(instance:Object):void {
-			var directives:ClassDirectives = MetaUtil.resolveDirectives(this);
-			for each(var alias:Alias in directives.aliases) {
-				var type:Class = ApplicationDomain.currentDomain.getDefinition(alias.type) as Class;
-				if(instance is type) {
-					this[alias.property] = instance;
-				}
-			}
-		}
-		
-		private function removeAliases():void {
-			var directives:ClassDirectives = MetaUtil.resolveDirectives(this);
-			for each(var alias:Alias in directives.aliases) {
-				//var type:Class = ApplicationDomain.currentDomain.getDefinition(alias.type) as Class;
-				//if(_target is type) {
-					this[alias.property] = null;
-				//}
-			}
-		}
-		
-		/**
-		 * Easier event dispatching with better performance if no one is
-		 * listening.
-		 */
-		public function dispatch(type:String):Boolean
+		// parses [EventListener(type="eventType", path="optionalPath")] metadata
+		// and binds EventListeners in one concise method
+		public static function describeEventListeners(behavior:IBehavior):void
 		{
-			if (hasEventListener(type)) {
-				return super.dispatchEvent( new Event(type) );
+			var desc:XMLList = Type.describeMethods(behavior, "EventListener");
+			
+			for each (var meth:XML in desc) {
+				var method:String = meth.@name;
+				var eventListener:XMLList = meth.metadata.(@name == "EventListener");
+				
+				// to support multiple EventListener metadata tags on a single method
+				for each (var listener:XML in eventListener) {
+					var type:String = (listener.arg.(@key == "type").length() > 0) ?
+									   listener.arg.(@key == "type").@value :
+									   listener.arg.@value;
+					var path:String = listener.arg.(@key == "path").@value;
+						path = "target" + (path ? "." + path : "");
+					
+					Bind.bindEventListener(type, behavior[method], behavior, path);
+				}
 			}
-			return false;
 		}
+		
+		public static function describeAliases(behavior:IBehavior):void
+		{
+			var desc:XMLList = Type.describeProperties(behavior, "Alias");
+			
+			for each (var prop:XML in desc) {
+				var property:String = prop.@name;
+				Bind.addBinding(behavior, property, behavior, "target");
+			}
+		}
+		
 	}
 }

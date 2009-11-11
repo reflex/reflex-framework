@@ -11,7 +11,6 @@ package reflex.skins
 
 	public class Skin implements ISkin, IContainer
 	{
-		
 		protected var graphics:Graphics;
 		protected var component:DisplayObjectContainer;
 		
@@ -25,7 +24,6 @@ package reflex.skins
 			if(_data is Sprite || _data is Shape) {
 				graphics = _data.graphics;
 			}
-			//updateDisplayList(_data.width, _data.height);
 			updateChildren(_content);
 		}
 		
@@ -36,16 +34,6 @@ package reflex.skins
 			updateChildren(_content);
 		}
 		
-		public function Skin()
-		{
-			super();
-			//updateDisplayList(100, 50);
-		}
-		/*
-		protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-			
-		}
-		*/
 		private function updateChildren(children:Array):void {
 			if(component) {
 				var length:int = children.length;

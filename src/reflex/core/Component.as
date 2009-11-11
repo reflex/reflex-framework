@@ -1,21 +1,19 @@
 package reflex.core
 {
 	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
 	import flash.events.Event;
 	
 	import reflex.behaviors.CompositeBehavior;
-	import reflex.utils.MetaInjector;
 	
-	// Ideally we'll compile for Flash/Flex by extending FlashComponent or FlexComponent here
-	public class Component extends FlashComponent implements IBehavioral, ISkinnable
+	public class Component extends MovieClip implements IBehavioral, ISkinnable
 	{
+		[Bindable] override public var enabled:Boolean;
 		
 		private var _behaviors:CompositeBehavior;
 		
 		public function Component()
 		{
-			MetaInjector.createDefaults(this);
-			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
 		
@@ -36,6 +34,9 @@ package reflex.core
 		 */
 		public function get behaviors():Object
 		{
+			if(_behaviors == null) {
+				_behaviors = new CompositeBehavior(this);
+			}
 			return _behaviors;
 		}
 		
@@ -52,33 +53,22 @@ package reflex.core
 			}
 		}
 		
-		
 		private var _skin:Object; [Bindable]
 		public function get skin():Object { return _skin; }
 		public function set skin(value:Object):void {
-			removeSkin(_skin);
+			if (_skin == value) {
+				return;
+			}
+			if (_skin != null) {
+				_skin.data = null;
+			}
+			
 			_skin = value;
-			addSkin(_skin);
-		}
-		
-		private function removeSkin(skin:Object):void {
-			if(skin && skin is ISkin) {
-				if(skin is DisplayObject && this.contains(skin as DisplayObject)) {
-					this.removeChild(skin as DisplayObject);
-				}
-				skin.data = null;
+			
+			if (_skin != null) {
+				_skin.data = this;
 			}
 		}
-		
-		private function addSkin(skin:Object):void {
-			if(skin && skin is ISkin) {
-				skin.data = this;
-				if(skin is DisplayObject) {
-					this.addChild(skin as DisplayObject);
-				}
-			}
-		}
-		
 		
 	}
 }

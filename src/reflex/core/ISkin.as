@@ -1,6 +1,6 @@
 package reflex.core
 {
-	import flash.events.IEventDispatcher;
+	import flash.display.Sprite;
 
 	public interface ISkin
 	{
