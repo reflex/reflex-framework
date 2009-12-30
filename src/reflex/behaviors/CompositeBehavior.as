@@ -1,5 +1,6 @@
 package reflex.behaviors
 {
+	import flash.display.InteractiveObject;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
@@ -18,7 +19,7 @@ package reflex.behaviors
 	public dynamic class CompositeBehavior extends Proxy implements IBehavior, IEventDispatcher
 	{
 		
-		private var _target:Object;
+		private var _target:InteractiveObject;
 		
 		private var behaviors:Array;
 		private var dictionary:Dictionary;
@@ -30,7 +31,7 @@ package reflex.behaviors
 		 * 
 		 * @param The target for this behavior map.
 		 */
-		public function CompositeBehavior(target:Object = null)
+		public function CompositeBehavior(target:InteractiveObject = null)
 		{
 			_target = target;
 			behaviors = [];
@@ -42,12 +43,12 @@ package reflex.behaviors
 		/**
 		 * The object which the behaviors in this map will act upon.
 		 */
-		public function get target():Object
+		public function get target():InteractiveObject
 		{
 			return _target;
 		}
 		
-		public function set target(value:Object):void
+		public function set target(value:InteractiveObject):void
 		{
 			if (value == _target) return;
 			_target = value;

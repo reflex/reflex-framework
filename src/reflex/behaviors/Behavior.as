@@ -1,6 +1,7 @@
 package reflex.behaviors
 {
 	
+	import flash.display.InteractiveObject;
 	import flash.events.EventDispatcher;
 	
 	import flight.binding.Bind;
@@ -14,10 +15,7 @@ package reflex.behaviors
 	 */
 	public class Behavior extends EventDispatcher implements IBehavior
 	{
-		
-		protected namespace reflex = "http://reflex.io";
-		
-		private var _target:Object;
+		private var _target:InteractiveObject;
 		
 		public function Behavior()
 		{
@@ -29,12 +27,12 @@ package reflex.behaviors
 		 * The object this behavior acts upon.
 		 */
 		[Bindable]
-		public function get target():Object
+		public function get target():InteractiveObject
 		{
 			return _target;
 		}
 		
-		public function set target(value:Object):void
+		public function set target(value:InteractiveObject):void
 		{
 			if (value == _target) return;
 			_target = value;

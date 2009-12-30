@@ -8,7 +8,7 @@ package reflex.core
 	import flash.events.Event;
 	
 	[DefaultProperty(name="content")]
-	public class Application extends Sprite implements IContainer
+	public class Application extends Component
 	{
 		public var background:Number = 0xEEEEEE
 		
