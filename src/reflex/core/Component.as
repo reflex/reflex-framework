@@ -4,7 +4,7 @@ package reflex.core
 	
 	import flight.list.IList;
 	
-	import reflex.behaviors.CompositeBehavior;
+	import reflex.behavior.CompositeBehavior;
 	import reflex.layout.ILayout;
 	
 	public class Component extends MovieClip implements IBehavioral, ISkinnable

@@ -1,6 +1,5 @@
 package reflex.core
 {
-	import flash.display.DisplayObject;
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
 

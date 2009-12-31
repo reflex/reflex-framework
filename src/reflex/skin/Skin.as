@@ -1,4 +1,4 @@
-package reflex.skins
+package reflex.skin
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -11,25 +11,23 @@ package reflex.skins
 	
 	import reflex.core.ISkin;
 	import reflex.core.ISkinnable;
-
+	
+	/**
+	 * Skin is a convenient base class for many skins, a swappable graphical
+	 * definition. Skins decorate a target Sprite by drawing on its surface,
+	 * adding children to the Sprite, or both.
+	 */
 	public class Skin implements ISkin
 	{
 		[Bindable]
-		public var state:String;
+		public var target:Sprite;
 		
-		private var _target:Sprite; [Bindable]
-		public function get target():Sprite { return _target; }
-		public function set target(value:Sprite):void {
-			_target = value;
-			updateChildren();
-		}
+		[Bindable]
+		public var state:String;
 		
 		public function getSkinPart(part:String):InteractiveObject
 		{
-			return null;
-		}
-		
-		protected function updateChildren():void {
+			return (part in target) ? target[part] : null;
 		}
 		
 	}

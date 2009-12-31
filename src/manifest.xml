@@ -2,16 +2,13 @@
 <componentPackage>
 	
 	<!-- Controls -->
-	<component id="Button" class="reflex.controls.Button" />
+	<component id="Button"					class="reflex.controls.Button" />
 	
 	<!-- Behaviors -->
-	<component id="ButtonStateBehavior" class="reflex.behaviors.ButtonStateBehavior" />
-	<component id="SelectableBehavior" class="reflex.behaviors.SelectableBehavior" />
-	
-	<!-- Skins -->
-	<component id="ButtonSkin" class="reflex.skins.ButtonSkin" />
+	<component id="ButtonStateBehavior"		class="reflex.behavior.ButtonBehavior" />
+	<component id="SelectableBehavior"		class="reflex.behavior.SelectableBehavior" />
 	
 	<!-- Core -->
-	<component id="Application" class="reflex.core.Application" />
+	<component id="Application"				class="reflex.core.Application" />
 	
 </componentPackage>
