@@ -1,6 +1,6 @@
 package reflex.core
 {
-	import reflex.behaviors.CompositeBehavior;
+	import reflex.behavior.CompositeBehavior;
 
 	public interface IBehavioral
 	{

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rx:Skin xmlns:rx="reflex.skins.*" xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:text="flash.text.*">
+<rx:Skin xmlns:rx="reflex.skin.*" xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:text="flash.text.*">
 	
 	<mx:Script>
 		<![CDATA[
@@ -24,17 +24,21 @@
 				}
 			}
 			
-			override protected function updateChildren():void
+			override public function set target(value:Sprite):void
 			{
-				for (var i:int = 0; i < children.length; i++) {
-					target.addChild(children[i]);
+				super.target = value;
+				if (target != null) {
+					for (var i:int = 0; i < children.length; i++) {
+						target.addChild(children[i]);
+					}
 				}
+				button = target as Button;
 			}
 			
 		]]>
 	</mx:Script>
 	<!-- obviously a temporary solution for rendering graphics -->
-	<mx:Binding source="target as Button" destination="button" />
+	<mx:Binding source="target" destination="render" />
 	<mx:Binding source="button.width" destination="render" />
 	<mx:Binding source="button.height" destination="render" />
 	<mx:Binding source="button.state" destination="render" />

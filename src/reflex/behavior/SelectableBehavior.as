@@ -1,4 +1,4 @@
-package reflex.behaviors
+package reflex.behavior
 {
 	import flash.events.MouseEvent;
 	
