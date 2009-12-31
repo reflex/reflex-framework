@@ -39,7 +39,7 @@ package reflex.layout
 			
 			if (!value) return edges;
 			
-			var numbers:Array = value.split(whitespaceRegex);
+			var numbers:Array = value.split(numberRegex);
 			var n:int = numbers.length;
 			for (var i:int = 0; i < n; i++) {
 				numbers[i] = Length.fromString(numbers[i]);

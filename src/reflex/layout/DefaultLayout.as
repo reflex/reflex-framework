@@ -5,7 +5,7 @@ package reflex.layout
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	public class DefaultLayout extends Layout2
+	public class DefaultLayout extends Layout
 	{
 		public function DefaultLayout(target:DisplayObjectContainer=null)
 		{
