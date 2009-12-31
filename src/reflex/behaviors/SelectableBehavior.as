@@ -7,15 +7,12 @@ package reflex.behaviors
 
 	public class SelectableBehavior extends Behavior implements IBehavior
 	{
-		
-		[Bindable] public var selectable:Boolean; // keep in component?
-		
 		[Alias] [Bindable] public var select:ISelectable;
 		
-		reflex function select_clickHandler(event:MouseEvent):void {
-			if(selectable) {
-				select.selected = !select.selected;
-			}
+		[EventListener(type="click")]
+		public function onClick(event:MouseEvent):void {
+			select.selected = !select.selected;
+			event.updateAfterEvent();
 		}
 		
 	}

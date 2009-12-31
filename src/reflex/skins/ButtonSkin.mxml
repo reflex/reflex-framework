@@ -3,23 +3,44 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import reflex.controls.Button;
 			
-			public function set render(value:Number):void {
-				if(graphics) {
-					graphics.beginFill(data.state == "over" ? 0x0000FF : 0x00FF00, 1);
-					graphics.drawRect(0, 0, data.width, data.height);
-					graphics.endFill();
+			[Bindable]
+			public var button:Button;
+			
+			public function set render(value:*):void {
+				button = button as Button;
+				
+				if (button) {
+					button.graphics;
+					button.graphics.clear();
+					if (button.selected) {
+						button.graphics.lineStyle(2, 0xFF0099);
+					}
+					button.graphics.beginFill(button.state == "over" ? 0xCCDDEE : (button.state == "down" ? 0x446688 : 0xAABBCC), 1);
+					button.graphics.drawRect(0, 0, button.width, button.height);
+					button.graphics.endFill();
+					button.graphics.lineStyle();
+				}
+			}
+			
+			override protected function updateChildren():void
+			{
+				for (var i:int = 0; i < children.length; i++) {
+					target.addChild(children[i]);
 				}
 			}
 			
 		]]>
 	</mx:Script>
 	<!-- obviously a temporary solution for rendering graphics -->
-	<mx:Binding source="data.width" destination="render" />
-	<mx:Binding source="data.height" destination="render" />
-	<mx:Binding source="data.state" destination="render" />
-	<rx:content>
-		<text:TextField id="label" x="{data.width/2 - label.width/2}" y="{data.height/2 - label.height/2}" width="70" height="20"
-			text="{data.label != null ? data.label : ''}" selectable="false" />
-	</rx:content>
+	<mx:Binding source="target as Button" destination="button" />
+	<mx:Binding source="button.width" destination="render" />
+	<mx:Binding source="button.height" destination="render" />
+	<mx:Binding source="button.state" destination="render" />
+	<mx:Binding source="button.selected" destination="render" />
+	<mx:Array id="children">
+		<text:TextField id="label" x="{button.width/2 - label.width/2}" y="{button.height/2 - label.height/2}" width="70" height="20"
+			text="{button.label != null ? button.label : ''}" selectable="false" />
+	</mx:Array>
 </rx:Skin>

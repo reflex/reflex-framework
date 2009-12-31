@@ -1,10 +1,11 @@
 package reflex.core
 {
-	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
-	import flash.events.Event;
+	
+	import flight.list.IList;
 	
 	import reflex.behaviors.CompositeBehavior;
+	import reflex.layout.ILayout;
 	
 	public class Component extends MovieClip implements IBehavioral, ISkinnable
 	{
@@ -15,6 +16,18 @@ package reflex.core
 		public function Component()
 		{
 		}
+		
+		[Bindable]
+		public var layout:ILayout;
+		
+		[Bindable]
+		public var state:String;
+		
+		[Bindable]
+		public var data:Object;
+		
+		[Bindable]
+		public var children:IList;
 		
 		
 		[ArrayElementType("reflex.core.IBehavior")]
@@ -32,7 +45,7 @@ package reflex.core
 		 *   </behaviors>
 		 * </Component>
 		 */
-		public function get behaviors():Object
+		public function get behaviors():CompositeBehavior
 		{
 			if(_behaviors == null) {
 				_behaviors = new CompositeBehavior(this);
@@ -53,20 +66,20 @@ package reflex.core
 			}
 		}
 		
-		private var _skin:Object; [Bindable]
-		public function get skin():Object { return _skin; }
-		public function set skin(value:Object):void {
+		private var _skin:ISkin; [Bindable]
+		public function get skin():ISkin { return _skin; }
+		public function set skin(value:ISkin):void {
 			if (_skin == value) {
 				return;
 			}
 			if (_skin != null) {
-				_skin.data = null;
+				_skin.target = null;
 			}
 			
 			_skin = value;
 			
 			if (_skin != null) {
-				_skin.data = this;
+				_skin.target = this;
 			}
 		}
 		

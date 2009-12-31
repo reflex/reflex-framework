@@ -6,8 +6,8 @@ package reflex.behaviors
 	
 	import flight.binding.Bind;
 	
-	import reflex.controls.IStateful;
 	import reflex.core.IBehavior;
+	import reflex.core.ISkinnable;
 	import reflex.events.ButtonEvent;
 	
 	public class ButtonStateBehavior extends Behavior implements IBehavior
@@ -16,7 +16,7 @@ package reflex.behaviors
 		public static const OVER:String = "over";
 		public static const DOWN:String = "down";
 		
-		[Alias] [Bindable] public var button:IStateful;
+		[Alias] [Bindable] public var button:ISkinnable;
 		
 		public function ButtonStateBehavior()
 		{
@@ -32,7 +32,7 @@ package reflex.behaviors
 			Bind.bindEventListener(ButtonEvent.RELEASE_OUTSIDE,		onReleaseOutside, this, "target");
 		}
 		
-		override public function set target(value:Object):void
+		override public function set target(value:InteractiveObject):void
 		{
 			if (value is DisplayObjectContainer) {
 				DisplayObjectContainer(value).mouseChildren = false;
@@ -58,36 +58,43 @@ package reflex.behaviors
 		public function onPress(event:MouseEvent):void
 		{
 			button.state = DOWN;
+			event.updateAfterEvent();
 		}
 		
 		private function onRollOver(event:MouseEvent):void
 		{
 			button.state = OVER;
+			event.updateAfterEvent();
 		}
 		
 		private function onRollOut(event:MouseEvent):void
 		{
 			button.state = UP;
+			event.updateAfterEvent();
 		}
 		
 		private function onDragOver(event:MouseEvent):void
 		{
 			button.state = DOWN;
+			event.updateAfterEvent();
 		}
 		
 		private function onDragOut(event:MouseEvent):void
 		{
 			button.state = OVER;
+			event.updateAfterEvent();
 		}
 		
 		private function onRelease(event:MouseEvent):void
 		{
 			button.state = OVER;
+			event.updateAfterEvent();
 		}
 		
 		private function onReleaseOutside(event:MouseEvent):void
 		{
 			button.state = UP;
+			event.updateAfterEvent();
 		}
 	}
 }
