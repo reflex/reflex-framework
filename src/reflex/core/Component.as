@@ -9,7 +9,7 @@ package reflex.core
 	
 	public class Component extends MovieClip implements IBehavioral, ISkinnable
 	{
-		[Bindable] override public var enabled:Boolean;
+		//[Bindable] override public var enabled:Boolean;
 		
 		private var _behaviors:CompositeBehavior;
 		

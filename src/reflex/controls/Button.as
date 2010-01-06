@@ -10,10 +10,6 @@ package reflex.controls
 		
 		public function Button()
 		{
-			// TEMP
-//			skin = new ButtonSkin();
-//			behaviors.buttonState = new ButtonStateBehavior();
-//			behaviors.selectable = new SelectableBehavior();
 		}
 		
 	}

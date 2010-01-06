@@ -9,7 +9,7 @@ package reflex.behavior
 	{
 		[Alias] [Bindable] public var select:ISelectable;
 		
-		[EventListener(type="click")]
+		[EventListener(type="click", target="target")]
 		public function onClick(event:MouseEvent):void {
 			select.selected = !select.selected;
 			event.updateAfterEvent();

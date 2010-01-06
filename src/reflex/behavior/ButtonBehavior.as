@@ -49,21 +49,21 @@ package reflex.behavior
 		
 		// ====== Event Listeners ====== //
 		
-		[EventListener(type="stateUp")]
+		[EventListener(type="stateUp", target="target")]
 		public function onStateUp(event:MouseEvent):void
 		{
 			button.state = UP;
 			event.updateAfterEvent();
 		}
 		
-		[EventListener(type="stateOver")]
+		[EventListener(type="stateOver", target="target")]
 		public function onStateOver(event:MouseEvent):void
 		{
 			button.state = OVER;
 			event.updateAfterEvent();
 		}
 		
-		[EventListener(type="stateDown")]
+		[EventListener(type="stateDown", target="target")]
 		private function onStateDown(event:MouseEvent):void
 		{
 			button.state = DOWN;

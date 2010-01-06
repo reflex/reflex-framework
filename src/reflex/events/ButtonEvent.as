@@ -25,10 +25,14 @@ package reflex.events
 		public static const PRESS:String = "press";
 		
 		/**
+		 */
+		public static const HOLD:String = "hold";
+		
+		/**
 		 * Defines the value of the type property of a drag event object. The drag
 		 * event is dispatched anytime the mouse moves while it is being pressed.
 		 */
-		public static const MOUSE_DRAG:String = "mouseDrag";
+		public static const DRAG:String = "drag";
 		
 		/**
 		 * Defines the value of the type property of a dragOver event object. The dragOver
@@ -53,10 +57,6 @@ package reflex.events
 		 * event is dispatched when the primary mouse button is released off of the target.
 		 */
 		public static const RELEASE_OUTSIDE:String = "releaseOutside";
-		
-		
-		
-		public static const CLICK_REPEAT:String = "clickRepeat";
 		
 		/**
 		 * Defines the value of the type property of a releaseOutside event object. The releaseOutside
@@ -83,7 +83,7 @@ package reflex.events
 		private static var pressedIndex:Dictionary = new Dictionary(true);
 		
 		private static var DELAY_INTERVAL:int = 300;
-		private static var REPEAT_INTERVAL:int = 30;
+		private static var HOLD_INTERVAL:int = 30;
 		
 		/**
 		 * The makeButton static method is the primary method of the ButtonEvent, transforming a
@@ -99,53 +99,57 @@ package reflex.events
 		 * 								"onStateUp()"). Callbacks have no parameters.
 		 * @return	Returns the object that was converted for convenience.
 		 */
-		public static function initialize(object:InteractiveObject, includeCallbacks:Boolean = false):InteractiveObject
+		public static function initialize(button:InteractiveObject, includeCallbacks:Boolean = false):InteractiveObject
 		{
-			object.addEventListener(MouseEvent.MOUSE_DOWN,	onMouseDown,	false, 0xFF);
-			object.addEventListener(MouseEvent.ROLL_OVER,	onRollOver,		false, 0xFF);
-			object.addEventListener(MouseEvent.ROLL_OUT,	onRollOut,		false, 0xFF);
-			object.addEventListener(MouseEvent.MOUSE_UP,	onMouseUp,		false, 0xFF);
+			button.addEventListener(MouseEvent.MOUSE_DOWN,	onMouseDown,	false, 0xFF);
+			button.addEventListener(MouseEvent.ROLL_OVER,	onRollOver,		false, 0xFF);
+			button.addEventListener(MouseEvent.ROLL_OUT,	onRollOut,		false, 0xFF);
+			button.addEventListener(MouseEvent.MOUSE_UP,	onMouseUp,		false, 0xFF);
 			
 			if (includeCallbacks) {
 				
-				object.addEventListener(PRESS,					onCallbackEvent);
-				object.addEventListener(MOUSE_DRAG,				onCallbackEvent);
-				object.addEventListener(MouseEvent.ROLL_OVER,	onCallbackEvent);
-				object.addEventListener(MouseEvent.ROLL_OUT,	onCallbackEvent);
-				object.addEventListener(DRAG_OVER,				onCallbackEvent);
-				object.addEventListener(DRAG_OUT,				onCallbackEvent);
-				object.addEventListener(RELEASE,				onCallbackEvent);
-				object.addEventListener(RELEASE_OUTSIDE,		onCallbackEvent);
-				object.addEventListener(CLICK_REPEAT,			onCallbackEvent);
-				object.addEventListener(STATE_UP,				onCallbackEvent);
-				object.addEventListener(STATE_OVER,				onCallbackEvent);
-				object.addEventListener(STATE_DOWN,				onCallbackEvent);
+				button.addEventListener(MouseEvent.CLICK,			onCallbackEvent);
+				button.addEventListener(MouseEvent.DOUBLE_CLICK,	onCallbackEvent);
+				button.addEventListener(MouseEvent.ROLL_OVER,		onCallbackEvent);
+				button.addEventListener(MouseEvent.ROLL_OUT,		onCallbackEvent);
+				button.addEventListener(PRESS,						onCallbackEvent);
+				button.addEventListener(DRAG,						onCallbackEvent);
+				button.addEventListener(DRAG_OVER,					onCallbackEvent);
+				button.addEventListener(DRAG_OUT,					onCallbackEvent);
+				button.addEventListener(RELEASE,					onCallbackEvent);
+				button.addEventListener(RELEASE_OUTSIDE,			onCallbackEvent);
+				button.addEventListener(HOLD,						onCallbackEvent);
+				button.addEventListener(STATE_UP,					onCallbackEvent);
+				button.addEventListener(STATE_OVER,					onCallbackEvent);
+				button.addEventListener(STATE_DOWN,					onCallbackEvent);
 			}
 			
-			return object;
+			return button;
 		}
 		
-		public static function deinitialize(object:InteractiveObject):InteractiveObject
+		public static function deinitialize(button:InteractiveObject):InteractiveObject
 		{
-			object.removeEventListener(MouseEvent.MOUSE_DOWN,	onMouseDown);
-			object.removeEventListener(MouseEvent.ROLL_OVER,	onRollOver);
-			object.removeEventListener(MouseEvent.ROLL_OUT,		onRollOut);
-			object.removeEventListener(MouseEvent.MOUSE_UP,		onMouseUp);
+			button.removeEventListener(MouseEvent.MOUSE_DOWN,	onMouseDown);
+			button.removeEventListener(MouseEvent.ROLL_OVER,	onRollOver);
+			button.removeEventListener(MouseEvent.ROLL_OUT,		onRollOut);
+			button.removeEventListener(MouseEvent.MOUSE_UP,		onMouseUp);
 			
-			object.removeEventListener(PRESS,					onCallbackEvent);
-			object.removeEventListener(MOUSE_DRAG,				onCallbackEvent);
-			object.removeEventListener(MouseEvent.ROLL_OVER,	onCallbackEvent);
-			object.removeEventListener(MouseEvent.ROLL_OUT,		onCallbackEvent);
-			object.removeEventListener(DRAG_OVER,				onCallbackEvent);
-			object.removeEventListener(DRAG_OUT,				onCallbackEvent);
-			object.removeEventListener(RELEASE,					onCallbackEvent);
-			object.removeEventListener(RELEASE_OUTSIDE,			onCallbackEvent);
-			object.removeEventListener(CLICK_REPEAT,			onCallbackEvent);
-			object.removeEventListener(STATE_UP,				onCallbackEvent);
-			object.removeEventListener(STATE_OVER,				onCallbackEvent);
-			object.removeEventListener(STATE_DOWN,				onCallbackEvent);
+			button.removeEventListener(MouseEvent.CLICK,		onCallbackEvent);
+			button.removeEventListener(MouseEvent.DOUBLE_CLICK,	onCallbackEvent);
+			button.removeEventListener(MouseEvent.ROLL_OVER,	onCallbackEvent);
+			button.removeEventListener(MouseEvent.ROLL_OUT,		onCallbackEvent);
+			button.removeEventListener(PRESS,					onCallbackEvent);
+			button.removeEventListener(DRAG,					onCallbackEvent);
+			button.removeEventListener(DRAG_OVER,				onCallbackEvent);
+			button.removeEventListener(DRAG_OUT,				onCallbackEvent);
+			button.removeEventListener(RELEASE,					onCallbackEvent);
+			button.removeEventListener(RELEASE_OUTSIDE,			onCallbackEvent);
+			button.removeEventListener(HOLD,					onCallbackEvent);
+			button.removeEventListener(STATE_UP,				onCallbackEvent);
+			button.removeEventListener(STATE_OVER,				onCallbackEvent);
+			button.removeEventListener(STATE_DOWN,				onCallbackEvent);
 			
-			return object;
+			return button;
 		}
 		
 		/**
@@ -192,19 +196,10 @@ package reflex.events
 				button.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				button.stage.addEventListener(MouseEvent.MOUSE_UP, onRelease);
 				button.stage.addEventListener(Event.MOUSE_LEAVE, onRelease);
-			
-			pressedIndex[button] = setTimeout(repeatClick, DELAY_INTERVAL, button);
+				
+			pressedIndex[button] = setTimeout(onHold, DELAY_INTERVAL, button);
 			dispatchButtonEvent(button, PRESS, event);
 			dispatchButtonEvent(button, STATE_DOWN, event);
-		}
-		
-		
-		
-		
-		private static function repeatClick(button:InteractiveObject):void
-		{
-			dispatchButtonEvent(button, CLICK_REPEAT);
-			pressedIndex[button] = setTimeout(repeatClick, REPEAT_INTERVAL, button);
 		}
 		
 		/**
@@ -214,7 +209,7 @@ package reflex.events
 		{
 			for (var i:* in pressedIndex) {
 				var button:InteractiveObject = i as InteractiveObject;
-				dispatchButtonEvent(button, MOUSE_DRAG, event);
+				dispatchButtonEvent(button, DRAG, event);
 			}
 		}
 		
@@ -230,7 +225,7 @@ package reflex.events
 			var button:InteractiveObject = event.currentTarget as InteractiveObject;
 			
 			if (pressedIndex[button] != null) {
-				pressedIndex[button] = setTimeout(repeatClick, REPEAT_INTERVAL, button);
+				pressedIndex[button] = setTimeout(onHold, HOLD_INTERVAL, button);
 				dispatchButtonEvent(button, DRAG_OVER, event);
 				dispatchButtonEvent(button, STATE_DOWN, event);
 			} else if (!event.buttonDown) {
@@ -252,7 +247,7 @@ package reflex.events
 			
 			if (pressedIndex[button] != null) {
 				clearTimeout(pressedIndex[button]);
-				pressedIndex[button] = 0;
+				pressedIndex[button] = -1;
 				dispatchButtonEvent(button, DRAG_OUT, event);
 				dispatchButtonEvent(button, STATE_OVER, event);
 			} else if (!event.buttonDown) {
@@ -271,11 +266,18 @@ package reflex.events
 		private static function onMouseUp(event:MouseEvent):void
 		{
 			var button:InteractiveObject = event.currentTarget as InteractiveObject;
-			
 			if (pressedIndex[button] == null) {
 				dispatchButtonEvent(button, MouseEvent.ROLL_OVER, event, true);
 				dispatchButtonEvent(button, STATE_OVER, event);
 			}
+		}
+		
+		/**
+		 */
+		private static function onHold(button:InteractiveObject):void
+		{
+			dispatchButtonEvent(button, HOLD);
+			pressedIndex[button] = setTimeout(onHold, HOLD_INTERVAL, button);
 		}
 		
 		/**
@@ -295,7 +297,7 @@ package reflex.events
 			for (var i:* in pressedIndex) {
 				var button:InteractiveObject = i as InteractiveObject;
 				
-				if (pressedIndex[button] != 0) {
+				if (pressedIndex[button] != -1) {
 					dispatchButtonEvent(button, RELEASE, event as MouseEvent);
 					dispatchButtonEvent(button, STATE_OVER, event as MouseEvent);
 				} else {

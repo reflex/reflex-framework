@@ -17,10 +17,10 @@ package reflex.core
 		function get layout():ILayout;
 		function set layout(value:ILayout):void;
 		
-		function get skin():ISkin;
-		function set skin(value:ISkin):void;
-		
 		function get state():String;
 		function set state(value:String):void;
+		
+		function get skin():ISkin;
+		function set skin(value:ISkin):void;
 	}
 }

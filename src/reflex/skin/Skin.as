@@ -6,6 +6,7 @@ package reflex.skin
 	import flash.display.InteractiveObject;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.EventDispatcher;
 	
 	import flight.list.IList;
 	
@@ -17,10 +18,13 @@ package reflex.skin
 	 * definition. Skins decorate a target Sprite by drawing on its surface,
 	 * adding children to the Sprite, or both.
 	 */
-	public class Skin implements ISkin
+	public class Skin extends EventDispatcher implements ISkin
 	{
 		[Bindable]
 		public var target:Sprite;
+		
+		[Bindable]
+		public var data:Object;
 		
 		[Bindable]
 		public var state:String;

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties includeAllClasses="false" version="3">
+  <includeClasses>
+    <classEntry path="FlexClasses"/>
+    <classEntry path="flight.binding.Bind"/>
+    <classEntry path="flight.binding.Binding"/>
+    <classEntry path="flight.events.ListEvent"/>
+    <classEntry path="flight.events.ListEventKind"/>
+    <classEntry path="flight.events.PropertyEvent"/>
+    <classEntry path="flight.list.ArrayList"/>
+    <classEntry path="flight.list.ArrayProxy"/>
+    <classEntry path="flight.list.IList"/>
+    <classEntry path="flight.list.MXList"/>
+    <classEntry path="flight.position.IPlayer"/>
+    <classEntry path="flight.position.IPosition"/>
+    <classEntry path="flight.position.IProgress"/>
+    <classEntry path="flight.position.Position"/>
+    <classEntry path="flight.position.Progress"/>
+    <classEntry path="flight.selection.IListSelection"/>
+    <classEntry path="flight.selection.ISelection"/>
+    <classEntry path="flight.selection.ListSelection"/>
+    <classEntry path="flight.utils.Type"/>
+    <classEntry path="flight.utils.getClassName"/>
+    <classEntry path="flight.utils.getType"/>
+    <classEntry path="reflex.behavior.Behavior"/>
+    <classEntry path="reflex.behavior.ButtonBehavior"/>
+    <classEntry path="reflex.behavior.CompositeBehavior"/>
+    <classEntry path="reflex.behavior.ListBehavior"/>
+    <classEntry path="reflex.behavior.ScrollBehavior"/>
+    <classEntry path="reflex.behavior.SelectableBehavior"/>
+    <classEntry path="reflex.controls.Button"/>
+    <classEntry path="reflex.controls.ISelectable"/>
+    <classEntry path="reflex.controls.ListBox"/>
+    <classEntry path="reflex.controls.ScrollBar"/>
+    <classEntry path="reflex.core.Application"/>
+    <classEntry path="reflex.core.Component"/>
+    <classEntry path="reflex.core.FlashComponent"/>
+    <classEntry path="reflex.core.FlexComponent"/>
+    <classEntry path="reflex.core.IBehavior"/>
+    <classEntry path="reflex.core.IBehavioral"/>
+    <classEntry path="reflex.core.IMeasurable"/>
+    <classEntry path="reflex.core.IMeasurableRange"/>
+    <classEntry path="reflex.core.IPercentSize"/>
+    <classEntry path="reflex.core.ISkin"/>
+    <classEntry path="reflex.core.ISkinnable"/>
+    <classEntry path="reflex.core.Invalidator"/>
+    <classEntry path="reflex.events.ButtonEvent"/>
+    <classEntry path="reflex.layout.ILayout"/>
+    <classEntry path="reflex.skin.GraphicSkin"/>
+    <classEntry path="reflex.skin.MXMLButtonSkin"/>
+    <classEntry path="reflex.skin.Skin"/>
+    <classEntry path="reflex.styles.IStylable"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests>
+    <namespaceManifestEntry manifest="manifest.xml" namespace="http://rx.reflex.io/2010"/>
+  </namespaceManifests>
+</flexLibProperties>

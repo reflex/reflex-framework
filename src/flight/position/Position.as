@@ -29,7 +29,7 @@ package flight.position
 			}
 			_position = value;
 			var space:Number = (_max - _positionSize - _min);
-			percent = space == 0 ? 1 : _position / space;
+			_percent = space == 0 ? 1 : _position / space;
 		}
 		
 		public function get percent():Number
