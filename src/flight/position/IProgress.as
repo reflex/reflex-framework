@@ -6,13 +6,6 @@ package flight.position
 	public interface IProgress
 	{
 		/**
-		 * The type of progression represented by this object as a string, for
-		 * example: "bytes", "packets" or "pixels".
-		 */
-		function get type():String;
-		function set type(value:String):void;
-		
-		/**
 		 * The current position in the progression, between 0 and
 		 * <code>length</code>.
 		 */

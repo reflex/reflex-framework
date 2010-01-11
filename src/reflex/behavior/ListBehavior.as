@@ -36,8 +36,6 @@ package reflex.behavior
 			hScrollBehavior.target = hScrollBar;
 			vScrollBehavior.target = vScrollBar;
 			
-			trace(hScrollBar, hScrollBehavior);
-			
 		}
 	}
 }

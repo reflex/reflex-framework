@@ -7,7 +7,7 @@ package reflex.layout
 	
 	import reflex.core.Invalidator;
 
-	public class Layout
+	public class Layout implements ILayout
 	{
 		public static const CONSTRAINT_PRIORITY:int = 2000;
 		public static const LAYOUT_PRIORITY:int = 1000;
@@ -50,13 +50,16 @@ package reflex.layout
 			}
 		}
 		
+		public function measure():void
+		{
+			
+		}
 		
 		public function layout():void
 		{
 			if (!_target) return;
 			Invalidator.uninvalidate(_target, layout);
 		}
-		
 		
 		public function invalidate():void
 		{

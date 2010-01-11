@@ -44,10 +44,6 @@ package reflex.behavior
 				return;
 			}
 			
-			if (target is ISkinnable) {
-				var skin:ISkin = ISkinnable(target).skin;
-			}
-			
 			fwdBtn = getSkinPart('fwdBtn');
 			bwdBtn = getSkinPart('bwdBtn');
 			track = getSkinPart('track');
@@ -61,9 +57,10 @@ package reflex.behavior
 			ButtonEvent.initialize(bwdBtn);
 			ButtonEvent.initialize(track);
 			ButtonEvent.initialize(thumb);
-			Bind.addListener(onPosition, this, "position.position");
+			Bind.addListener(onPosition, this, "position.position");	// TODO: replace with metadata [BindListener]
 		}
 		
+		[BindListener(target="position.position")]						// TODO: implement in favor of Bind.addListener...
 		private function onPosition(event:Event):void
 		{
 			trace(position.position);
