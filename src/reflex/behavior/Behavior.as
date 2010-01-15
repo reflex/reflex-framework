@@ -26,10 +26,13 @@ package reflex.behavior
 	 */
 	public class Behavior extends EventDispatcher implements IBehavior
 	{
-		public function Behavior()
+		public function Behavior(target:InteractiveObject = null)
 		{
 			describeEventListeners(this);
 			describeAliases(this);
+			if (target != null) {
+				this.target = target;
+			}
 		}
 		
 		/**

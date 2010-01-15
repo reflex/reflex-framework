@@ -28,12 +28,13 @@ package reflex.behavior
 		
 		private var forwardPress:Boolean;
 		
-		public function ScrollBehavior()
+		public function ScrollBehavior(target:InteractiveObject = null)
 		{
 			position = new Position();
 			position.max = 100;
 			position.stepSize = 5;
 			position.skipSize = 20;
+			super(target);
 		}
 		
 		override public function set target(value:InteractiveObject):void

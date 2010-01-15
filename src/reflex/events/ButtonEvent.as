@@ -81,6 +81,8 @@ package reflex.events
 		 * Index values track whether the mouse is over the indexed Button's at any given moment.
 		 */
 		private static var pressedIndex:Dictionary = new Dictionary(true);
+		private static var pressedX:Dictionary = new Dictionary(true);
+		private static var pressedY:Dictionary = new Dictionary(true);
 		
 		private static var DELAY_INTERVAL:int = 300;
 		private static var HOLD_INTERVAL:int = 30;
@@ -152,6 +154,9 @@ package reflex.events
 			return button;
 		}
 		
+		public var deltaX:Number = 0;
+		public var deltaY:Number = 0;
+		
 		/**
 		 * Though the ButtonEvent constructor is defined, ButtonEvents are never instantiated.
 		 * All ButtonEvent types are dispatched as MouseEvents.
@@ -159,9 +164,11 @@ package reflex.events
 		public function ButtonEvent(type:String, bubbles:Boolean = true, cancelable:Boolean = false,
 									localX:Number = NaN, localY:Number = NaN, relatedObject:InteractiveObject = null,
 									ctrlKey:Boolean = false, altKey:Boolean = false, shiftKey:Boolean = false,
-									buttonDown:Boolean = false, delta:int = 0)
+									buttonDown:Boolean = false, delta:int = 0, deltaX:Number = 0, deltaY:Number = 0)
 		{
 			super(type, bubbles, cancelable, localX, localY, relatedObject, ctrlKey, altKey, shiftKey, buttonDown, delta);
+			this.deltaX = deltaX;
+			this.deltaY = deltaY;
 		}
 		
 		/**
@@ -183,6 +190,11 @@ package reflex.events
 									   event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta);
 			}
 			
+			if (!mouseEventType && pressedIndex[button] != null) {
+				ButtonEvent(event).deltaX = button.mouseX - pressedX[button];
+				ButtonEvent(event).deltaY = button.mouseY - pressedY[button];
+			}
+			
 			button.dispatchEvent(event);
 		}
 		
@@ -198,6 +210,8 @@ package reflex.events
 				button.stage.addEventListener(Event.MOUSE_LEAVE, onRelease);
 				
 			pressedIndex[button] = setTimeout(onHold, DELAY_INTERVAL, button);
+			pressedX[button] = button.mouseX;
+			pressedY[button] = button.mouseY;
 			dispatchButtonEvent(button, PRESS, event);
 			dispatchButtonEvent(button, STATE_DOWN, event);
 		}
@@ -307,6 +321,8 @@ package reflex.events
 				
 				clearTimeout(pressedIndex[button]);
 				delete pressedIndex[button];
+				delete pressedX[button];
+				delete pressedY[button];
 			}
 		}
 		

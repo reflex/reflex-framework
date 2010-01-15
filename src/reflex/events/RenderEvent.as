@@ -151,7 +151,6 @@ package reflex.events
 
 
 import flash.display.DisplayObject;
-import flash.events.Event;
 import flash.utils.Dictionary;
 
 import reflex.events.RenderEvent;

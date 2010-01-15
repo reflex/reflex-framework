@@ -46,22 +46,19 @@
     <classEntry path="reflex.core.Invalidator"/>
     <classEntry path="reflex.events.ButtonEvent"/>
     <classEntry path="reflex.layout.Block"/>
-    <classEntry path="reflex.layout.Edges"/>
     <classEntry path="reflex.layout.ILayout"/>
     <classEntry path="reflex.layout.Layout"/>
-    <classEntry path="reflex.layout.Tile"/>
     <classEntry path="reflex.skin.GraphicSkin"/>
     <classEntry path="reflex.skin.MXMLButtonSkin"/>
     <classEntry path="reflex.skin.Skin"/>
     <classEntry path="reflex.styles.IStylable"/>
     <classEntry path="reflex.layout.IGuide"/>
-    <classEntry path="reflex.layout.ISize"/>
     <classEntry path="reflex.layout.Guide"/>
-    <classEntry path="reflex.layout.IMeasurement"/>
-    <classEntry path="reflex.display.Transform"/>
-    <classEntry path="reflex.layout.Constraint"/>
+    <classEntry path="reflex.layout.Bounds"/>
     <classEntry path="flight.utils.IMerging"/>
     <classEntry path="flight.utils.IValueObject"/>
+    <classEntry path="reflex.events.RenderEvent"/>
+    <classEntry path="reflex.layout.Box"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests>
