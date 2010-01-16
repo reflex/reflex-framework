@@ -4,7 +4,7 @@ package reflex.core
 	
 	import flight.list.IList;
 	
-	import reflex.layout.ILayout;
+	import reflex.layout.ILayoutAlgorithm;
 
 	public interface ISkinnable extends IEventDispatcher
 	{
@@ -14,8 +14,8 @@ package reflex.core
 		function get children():IList;
 		function set children(value:IList):void;
 		
-		function get layout():ILayout;
-		function set layout(value:ILayout):void;
+		function get layout():ILayoutAlgorithm;
+		function set layout(value:ILayoutAlgorithm):void;
 		
 		function get state():String;
 		function set state(value:String):void;

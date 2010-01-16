@@ -11,13 +11,12 @@ package
 	import reflex.events.ButtonEvent;
 	import reflex.layout.Block;
 	import reflex.layout.Dock;
+	import reflex.layout.Layout;
 	
 	[SWF(widthPercent="100", heightPercent="100", frameRate="12")]
 	public class reflex_dev extends Sprite
 	{
 		private var block:Block;
-		private var block1:Block;
-		private var block2:Block;
 		
 		public function reflex_dev()
 		{
@@ -28,30 +27,30 @@ package
 			stage.addEventListener(ButtonEvent.DRAG, onDrag);
 			stage.addEventListener(ButtonEvent.PRESS, onPress);
 			
-			block1 = createScroll();
-			block2 = createScroll();
-			block1.dock = Dock.BOTTOM;
-			block2.dock = Dock.LEFT;
-			block2.bounds.minHeight = 50;
-			block2.bounds.maxHeight = 300;
+			block = createComplex();
+			block.dock = Dock.BOTTOM;
+			addChild(block.target);
 			
-			block1 = createScroll();
-			block2 = createScroll();
-			block1.tile = Dock.LEFT;
-			block2.tile = Dock.LEFT;
+			block = createComplex();
+			block.dock = Dock.LEFT;
+			addChild(block.target);
 			
-			block1 = createScroll();
-			block2 = createScroll();
-			block1.dock = Dock.FILL;
-			block2.dock = Dock.RIGHT;
+			block = createComplex();
+			block.dock = Dock.TOP;
+			addChild(block.target);
+			
+			block = createComplex();
+			block.dock = Dock.RIGHT;
+			addChild(block.target);
+			
+			block = createComplex();
+			block.dock = Dock.FILL;
+			addChild(block.target);
 			
 			block = new Block(this);
 			block.padding = 30;
-			block.padding.vertical = 20;
-			block.padding.horizontal = 5;
-			
-			addChild( block1.target );
-			addChild( block2.target );
+			block.padding.vertical = 8;
+			block.padding.horizontal = 8;
 		}
 		
 		private function onResize(event:Event):void
@@ -71,38 +70,93 @@ package
 		private function onDrag(event:ButtonEvent):void
 		{
 			block.width = pressedWidth + event.deltaX;
-			block.height = pressedHeight + event.deltaY;
+			block.height = pressedHeight + event.deltaY; 
 			graphics.clear();
-			graphics.beginFill(0xEEEEEE);
+			graphics.lineStyle(0, 0xAABBDD);
+			graphics.beginFill(0xDDE6EE);
 			graphics.drawRect(0, 0, block.width, block.height);
 			graphics.endFill();
 			event.updateAfterEvent();
 		}
 		
-		private var behaviors:Dictionary = new Dictionary();
+		private function createComplex():Block
+		{
+			var sprite:Sprite = new Sprite();
+			var block:Block = new Block(sprite);
+				block.padding = 4;
+				block.padding.horizontal = block.padding.vertical = 2;
+			
+			var block1:Block;
+			var block2:Block;
+			block1 = createScroll();
+			block2 = createScroll();
+			block1.dock = Dock.BOTTOM;
+			block2.dock = Dock.LEFT;
+			sprite.addChild( block1.target );
+			sprite.addChild( block2.target );
+			
+			block1 = createScroll();
+			block2 = createScroll();
+			block1.dock = Dock.TOP;
+			block2.dock = Dock.RIGHT;
+			sprite.addChild( block1.target );
+			sprite.addChild( block2.target );
+			
+			block1 = createScroll();
+			block2 = createScroll();
+			block1.dock = Dock.TOP;
+			block2.tile = Dock.TOP;
+			block2.dock = Dock.RIGHT;
+			sprite.addChild( block1.target );
+			sprite.addChild( block2.target );
+			
+			block1 = createScroll();
+			block2 = createScroll();
+			block1.tile = Dock.TOP;
+			block1.dock = Dock.RIGHT;
+			block2.tile = Dock.TOP;
+			block2.dock = Dock.RIGHT;
+			sprite.addChild( block1.target );
+			sprite.addChild( block2.target );
+			
+			block1 = createScroll();
+			block2 = createScroll();
+			block1.dock = Dock.RIGHT;
+			block2.dock = Dock.FILL;
+			sprite.addChild( block1.target );
+			sprite.addChild( block2.target );
+			
+			return block;
+		}
+		
 		private function createScroll():Block
 		{
 			var scroll:ScrollBarGraphic = new ScrollBarGraphic();
 			var block:Block = new Block(scroll);
+			block.width = 10;
+			block.height = 10;
 			addChild(scroll);
 			for (var i:int = 0; i < scroll.numChildren; i++) {
 				block = new Block(scroll.getChildAt(i), true);
 			}
-			block = Block.blockIndex[scroll.bwdBtn];
+			block = Layout.getLayout(scroll.bwdBtn) as Block;
 			block.dock = Dock.LEFT;
 			block.margin = 1;
-			block = Block.blockIndex[scroll.fwdBtn];
+			block.width = 5;
+			block = Layout.getLayout(scroll.fwdBtn) as Block;
 			block.dock = Dock.RIGHT;
 			block.margin = 1;
-			block = Block.blockIndex[scroll.track];
+			block.width = 5;
+			block = Layout.getLayout(scroll.track) as Block;
 			block.dock = Dock.FILL;
-			block = Block.blockIndex[scroll.thumb];
-			block.dock = Dock.FILL;
-			block.margin = 2;
-			block = Block.blockIndex[scroll.background];
+			block = Layout.getLayout(scroll.thumb) as Block;
+			block.anchor.top = block.anchor.bottom = 2;
+			block.anchor.horizontal = .5;
+			block.width = 5;
+			block = Layout.getLayout(scroll.background) as Block;
 			block.dock = Dock.FILL;
 			
-			return Block.blockIndex[scroll];
+			return Layout.getLayout(scroll) as Block;
 		}
 		
 	}

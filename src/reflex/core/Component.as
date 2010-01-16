@@ -5,7 +5,7 @@ package reflex.core
 	import flight.list.IList;
 	
 	import reflex.behavior.CompositeBehavior;
-	import reflex.layout.ILayout;
+	import reflex.layout.ILayoutAlgorithm;
 	
 	public class Component extends MovieClip implements IBehavioral, ISkinnable
 	{
@@ -18,7 +18,7 @@ package reflex.core
 		}
 		
 		[Bindable]
-		public var layout:ILayout;
+		public var layout:ILayoutAlgorithm;
 		
 		[Bindable]
 		public var state:String;

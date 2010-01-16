@@ -10,24 +10,10 @@ package reflex.layout
 	
 	import reflex.events.RenderEvent;
 	
-	public class Block extends EventDispatcher
+	public class Block extends Layout
 	{
-		public static const MEASURE:String = "measure";
-		public static const LAYOUT:String = "layout";
-		
-		public static var blockIndex:Dictionary = new Dictionary(true);
-		
-		private static var measurePhase:Boolean = RenderEvent.registerPhase(MEASURE, 0x80, false);
-		private static var layoutPhase:Boolean = RenderEvent.registerPhase(LAYOUT, 0x40, true);
-		
 		[Bindable]
 		public var scale:Boolean = false;
-		
-		[Bindable]
-		public var freeform:Boolean = false;
-		
-		[Bindable]
-		public var layout:ILayout;
 		
 		[Bindable]
 		public var bounds:Bounds = new Bounds();
@@ -39,9 +25,6 @@ package reflex.layout
 		protected var defaultWidth:Number = 0;
 		protected var defaultHeight:Number = 0;
 		
-		private var validating:Boolean = false;
-		
-		private var _targetIndex:Dictionary = new Dictionary(true);
 		private var _width:Number = defaultWidth;
 		private var _height:Number = defaultHeight;
 		private var _measuredWidth:Number = 0;
@@ -50,60 +33,36 @@ package reflex.layout
 		
 		private var _margin:Box = new Box();
 		private var _padding:Box = new Box();
+		private var _anchor:Box = new Box(NaN, NaN, NaN, NaN);
 		private var _dock:String = Dock.NONE;
 		private var _tile:String = Dock.NONE;
 		
 		
 		public function Block(target:DisplayObject = null, scale:Boolean = false)
 		{
+			super(target);
 			this.scale = scale;
-			this.target = target;
 			_margin.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
 			_padding.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
-			layout = new Dock();
+			_anchor.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
+			algorithm = new Dock();
 		}
 		
-		[Bindable(event="targetChange")]
-		public function get target():DisplayObject
+		override public function set target(value:DisplayObject):void
 		{
-			for (var i:* in _targetIndex) {
-				return i;
-			}
-			return null;
-		}
-		public function set target(value:DisplayObject):void
-		{
-			var oldValue:DisplayObject = target;
-			if (oldValue == value) {
+			if (target == value) {
 				return;
 			}
 			
-			if (oldValue != null) {
-				delete blockIndex[oldValue];
-				delete _targetIndex[oldValue];
-				oldValue.removeEventListener(MEASURE, onMeasure);
-				oldValue.removeEventListener(LAYOUT, onLayout);
-			}
-			
 			if (value != null) {
-				
-				if (blockIndex[value] != null) {
-					blockIndex[value].target = null;
-				}
-				blockIndex[value] = this;
-				_targetIndex[value] = true;
-				value.addEventListener(MEASURE, onMeasure, false, 0xF, true);
-				value.addEventListener(LAYOUT, onLayout, false, 0xF, true);
-				
 				defaultWidth = value.width;
 				defaultHeight = value.height;
+				super.target = value;
 				updateWidth();
-				updateHeight();
-				invalidateSize();
-				invalidate();
+				updateHeight()
+			} else {
+				super.target = value;
 			}
-			
-			dispatchEvent( new Event("targetChange") );
 		}
 		
 		[Bindable(event="widthChange")]
@@ -154,7 +113,6 @@ package reflex.layout
 			return _measuredBounds;
 		}
 		
-		
 		[Bindable(event="marginChange")]
 		public function get margin():Box
 		{
@@ -201,6 +159,33 @@ package reflex.layout
 			dispatchEvent(new Event("paddingChange"));
 		}
 		
+		[Bindable(event="anchorChange")]
+		public function get anchor():Box
+		{
+			return _anchor;
+		}
+		public function set anchor(value:*):void
+		{
+			var anchor:Box = (value is String || value is Number) ? Box.fromString( String(value) ) : value as Box;
+			if (anchor == null) {
+				anchor = new Box();
+			}
+			if (_anchor.equals(anchor)) {
+				return;
+			}
+			
+			_anchor.left = anchor.left;
+			_anchor.top = anchor.top;
+			_anchor.right = anchor.right;
+			_anchor.bottom = anchor.bottom;
+			_anchor.offsetX = anchor.offsetX;
+			_anchor.offsetY = anchor.offsetY;
+			_anchor.horizontal = anchor.horizontal;
+			_anchor.vertical = anchor.vertical;
+			dispatchEvent(new Event("anchorChange"));
+		}
+		
+		
 		[Bindable(event="dockChange")]
 		public function get dock():String
 		{
@@ -218,9 +203,11 @@ package reflex.layout
 			}
 			
 			_dock = value;
+			
 			if (_tile != Dock.NONE && (_dock == Dock.NONE || _dock == Dock.FILL) ) {
 				tile = Dock.NONE;
 			}
+			invalidate();
 			dispatchEvent( new Event("dockChange") );
 		}
 		
@@ -245,78 +232,38 @@ package reflex.layout
 			if (_tile != Dock.NONE && (_dock == Dock.NONE || _dock == Dock.FILL) ) {
 				dock = (_tile == Dock.LEFT || _tile == Dock.RIGHT) ? Dock.TOP : Dock.LEFT;
 			}
+			invalidate();
 			dispatchEvent( new Event("tileChange") );
 		}
 		
-		
-		public function invalidate():void
+		override public function validate():void
 		{
-			var target:DisplayObject;
-			if (validating || (target = this.target) == null) {
-				return;
-			}
-			
-			RenderEvent.invalidate(target, LAYOUT);
-			// TODO: replace this method with childPropertyChange and add other property updates
-			if ( target != null && blockIndex[target.parent] != null ) {
-				var parent:Block = blockIndex[target.parent];
-					parent.invalidateSize();
-			}
-			
-		}
-		
-		public function invalidateSize():void
-		{
-			var target:DisplayObject;
-			if (validating || (target = this.target) == null) {
-				return;
-			}
-			
-			RenderEvent.invalidate(target, MEASURE);
-		}
-		
-		public function validate():void
-		{
-			var target:DisplayObject;
-			if (validating || (target = this.target) == null) {
-				return;
-			}
-			validating = true;
-			
-			if (freeform) {
-				// layout self (anchor, etc)
-			}
-			
-			if (layout != null && target is DisplayObjectContainer) {
-				// layout children
-				layout.layout( DisplayObjectContainer(target) );
-			}
+			super.validate();
 			
 			// TODO: take into account target's rotation
 			if (scale) {
 				target.width = _width;
 				target.height = _height;
 			}
-			validating = false;
 		}
 		
-		public function measure():void
+		override public function measure():void
 		{
-			var target:DisplayObjectContainer = this.target as DisplayObjectContainer;
-			if (target == null) {
+			var container:DisplayObjectContainer = target as DisplayObjectContainer;
+			if (container == null) {
 				return;
 			}
 			
-			if (layout != null) {
-				layout.measure(target);
+			if (algorithm != null) {
+				algorithm.measure(container);
 				return;
 			}
 			
 			var measurement:Bounds = new Bounds();
 			
-			for (var i:int = 0; i < target.numChildren; i++) {
-				var display:DisplayObject = target.getChildAt(i);
-				var child:Block = blockIndex[display];
+			for (var i:int = 0; i < container.numChildren; i++) {
+				var display:DisplayObject = container.getChildAt(i);
+				var child:Block = getLayout(display) as Block;
 				if (child == null || child.freeform) {
 					continue;
 				}
@@ -384,44 +331,24 @@ package reflex.layout
 			}
 		}
 		
-		
-		private function onLayout(event:Event):void
-		{
-			validate();
-		}
-		
-		private function onMeasure(event:Event):void
-		{
-			measure();
-		}
-		
 		private function onObjectChange(event:Event):void
 		{
 			switch (event.target) {
 				case _margin :
+					invalidate();
 					dispatchEvent( new Event("marginChange") );
 					break;
 				case _padding :
+					invalidate();
 					dispatchEvent( new Event("paddingChange") );
 					break;
+				case _padding :
+					if (dock == Dock.NONE) {
+						invalidate();
+					}
+					dispatchEvent( new Event("anchorChange") );
+					break;
 			}
-		}
-		
-		
-		// TODO: layouts and blocks (or block-types) can choose what properties to listen to
-		// on their children in order to invalidate (and choose which type of invalidation: layout or measure)
-		protected function propertyChange(property:String, oldValue:Object, newValue:Object):void
-		{
-			if (_targetIndex != null && blockIndex[target.parent] is Block) {
-				var parent:Block = blockIndex[target.parent];
-					parent.childPropertyChange(property, oldValue, newValue);
-			}
-			
-			PropertyEvent.dispatchChange(this, property, oldValue, newValue);
-		}
-		
-		protected function childPropertyChange(property:String, oldValue:Object, newValue:Object):void
-		{
 		}
 		
 	}

@@ -4,8 +4,8 @@ package reflex.layout
 	import flash.display.DisplayObjectContainer;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-
-	public class Dock extends Layout implements ILayout
+	
+	public class Dock implements ILayoutAlgorithm
 	{
 		public static const NONE:String = "none";
 		public static const LEFT:String = "left";
@@ -14,24 +14,19 @@ package reflex.layout
 		public static const BOTTOM:String = "bottom";
 		public static const FILL:String = "fill";
 		
-		
-		// TODO: make tile so it doesn't go to the next line, pushes out in one line
-		// otherwise measure will be impossible
-		// TODO: make Block extend guide or something - pay as you go!
-		
-		override public function layout(target:DisplayObjectContainer):void
+		public function layout(target:DisplayObjectContainer):void
 		{
-			var block:Block = Block.blockIndex[target];
+			var block:Block = Layout.getLayout(target) as Block;
 			if (block == null) {
 				return;
 			}
 			
 			var dockMargin:Box = new Box();
 			var dockArea:Rectangle = new Rectangle(0, 0, block.width, block.height);
-				dockArea.left += block.padding.left;
-				dockArea.top += block.padding.top;
-				dockArea.right -= block.padding.right;
-				dockArea.bottom -= block.padding.bottom;
+			dockArea.left += block.padding.left;
+			dockArea.top += block.padding.top;
+			dockArea.right -= block.padding.right;
+			dockArea.bottom -= block.padding.bottom;
 			
 			var tileMargin:Box;
 			var tileArea:Rectangle;
@@ -43,8 +38,13 @@ package reflex.layout
 			
 			for (var i:int = 0; i < target.numChildren; i++) {
 				var display:DisplayObject = target.getChildAt(i);
-				var child:Block = Block.blockIndex[display];
-				if (child == null || child.freeform || child.dock == NONE) {
+				var child:Block = Layout.getLayout(display) as Block;
+				if (child == null || child.freeform) {
+					continue;
+				}
+				
+				if (child.dock == NONE) {
+					updateAnchor(display, child, block);
 					continue;
 				}
 				
@@ -172,11 +172,10 @@ package reflex.layout
 					break;
 			}
 		}
-		// TODO: return if dock==NONE
 		
-		override public function measure(target:DisplayObjectContainer):void
+		public function measure(target:DisplayObjectContainer):void
 		{
-			var block:Block = Block.blockIndex[target];
+			var block:Block = Layout.getLayout(target) as Block;
 			if (block == null) {
 				return;
 			}
@@ -198,13 +197,22 @@ package reflex.layout
 			
 			for (var i:int = 0; i < target.numChildren; i++) {
 				var display:DisplayObject = target.getChildAt(i);
-				var child:Block = Block.blockIndex[display];
+				var child:Block = Layout.getLayout(display) as Block;
 				if (child == null || child.freeform || child.dock == NONE) {
 					continue;
 				}
 				
 				if (child.tile == NONE) {
-					tileMargin == null;
+					if (tileMargin != null) {
+						if (lastDock == LEFT || lastDock == RIGHT) {
+							staticWidth += tileWidth;
+							measurement.minHeight += -vPad;	// TODO: no check for top vs bottom & assumption that minHeight was effected by tile
+						} else {
+							staticHeight += tileHeight;
+							measurement.minWidth += -hPad;	// TODO: no check for left vs right & assumption that minHeight was effected by tile
+						}
+						tileMargin = null;
+					}
 					margin = dockMargin.clone().merge(child.margin);
 				} else {
 					
@@ -227,8 +235,9 @@ package reflex.layout
 							tileMargin.bottom = child.margin.top;
 							variable = margin.bottom;
 						}
-						tileWidth = tileWidth >= child.width ? tileWidth : child.width;
 						tileHeight += child.height + variable + vPad;
+						variable = child.width + (child.dock == LEFT ? margin.left : margin.right) + hPad;
+						tileWidth = tileWidth >= variable ? tileWidth : variable;
 						measurement.minWidth = measurement.constrainWidth(staticWidth + tileWidth);
 						measurement.minHeight = measurement.constrainHeight(staticHeight + tileHeight);
 					} else {
@@ -254,8 +263,9 @@ package reflex.layout
 							tileMargin.right = child.margin.left;
 							variable = margin.right;
 						}
-						tileHeight = tileHeight >= child.height ? tileHeight : child.height;
 						tileWidth += child.width + variable + hPad;
+						variable = child.height + (child.dock == TOP ? margin.top : margin.bottom) + vPad;
+						tileHeight = tileHeight >= variable ? tileHeight : variable;
 						measurement.minWidth = measurement.constrainWidth(staticWidth + tileWidth);
 						measurement.minHeight = measurement.constrainHeight(staticHeight + tileHeight);
 					} else {
@@ -285,11 +295,54 @@ package reflex.layout
 				lastDock = child.dock;
 			}
 			
-			// TODO: remove the last pad and add the last margin
-			// TODO: determine if layout is useless without block (at least measure cycle)
-			if (Block.blockIndex[target] != null) {
-				block = Block.blockIndex[target];
-				block.updateMeasurement(measurement);
+			// remove the last pad and add the last margin
+			switch (lastDock) {
+				case LEFT : measurement.minWidth += margin.right - hPad; break;
+				case TOP : measurement.minWidth += margin.bottom - hPad; break;
+				case RIGHT : measurement.minWidth += margin.left - hPad; break;
+				case BOTTOM : measurement.minWidth += margin.top - hPad; break;
+			}
+			
+			block.updateMeasurement(measurement);
+		}
+		
+		private function updateAnchor(target:DisplayObject, block:Block, parent:Block):void
+		{
+			var anchor:Box = block.anchor;
+			if ( !isNaN(anchor.left) ) {
+				if ( !isNaN(anchor.right) ) {
+					block.width = parent.width - anchor.left - anchor.right;
+				} else if (anchor.horizontal != 0) {
+					block.width = (anchor.horizontal * parent.width) - anchor.left + anchor.offsetX;
+				}
+				
+				target.x = anchor.left;
+			} else if ( !isNaN(anchor.right) ) {
+				if (anchor.horizontal != 0) {
+					block.width = (anchor.horizontal * parent.width) - anchor.right + anchor.offsetX;
+				}
+				
+				target.x = parent.width - block.width - anchor.right;
+			} else {
+				target.x = anchor.horizontal * (parent.width - block.width) + anchor.offsetX;
+			}
+			
+			if ( !isNaN(anchor.top) ) {
+				if ( !isNaN(anchor.bottom) ) {
+					block.height = parent.height - anchor.top - anchor.bottom;
+				} else if (anchor.vertical != 0) {
+					block.height = (anchor.vertical * parent.height) - anchor.top + anchor.offsetY;
+				}
+				
+				target.y = anchor.top;
+			} else if ( !isNaN(anchor.bottom) ) {
+				if (anchor.vertical != 0) {
+					block.height = (anchor.vertical * parent.height) - anchor.bottom + anchor.offsetY;
+				}
+				
+				target.y = parent.height - block.height - anchor.bottom;
+			} else {
+				target.y = anchor.vertical * (parent.height - block.height) + anchor.offsetY;
 			}
 		}
 		
