@@ -2,67 +2,83 @@ package flight.position
 {
 	import flash.events.EventDispatcher;
 	
-	[Bindable]
+	import flight.events.PropertyEvent;
+	
 	public class Position extends EventDispatcher implements IPosition
 	{
-		public var type:String = "";
-		public var stepSize:Number = 0.01;
-		public var skipSize:Number = 0.1;
+		[Bindable]
+		public var stepSize:Number = 1;
 		
+		[Bindable]
+		public var skipSize:Number = 5;
+		
+		public var precision:Number = stepSize;
 		
 		private var _position:Number = 0;
 		private var _percent:Number = 0;
 		private var _size:Number = 1;
 		private var _min:Number = 0;
-		private var _max:Number = 1;
+		private var _max:Number = 10;
 		private var _positionSize:Number = 0;
 		
+		[Bindable(event="positionChange")]
 		public function get position():Number
 		{
 			return _position;
 		}
 		public function set position(value:Number):void
 		{
-			value = Math.max(_min, Math.min(_max - _positionSize, value));
+			value = value <= _min ? _min : (value >= _max ? _max : value);
+			var p:Number = 1 / precision;
+			value = Math.round(value * p) / p;
 			if (_position == value) {
 				return;
 			}
+			
+			var oldValues:Array = [_position, _percent];
 			_position = value;
 			var space:Number = (_max - _positionSize - _min);
 			_percent = space == 0 ? 1 : _position / space;
+			
+			PropertyEvent.dispatchChangeList(this, ["position", "percent"], oldValues);
 		}
 		
+		[Bindable(event="percentChange")]
 		public function get percent():Number
 		{
 			return _percent;
 		}
 		public function set percent(value:Number):void
 		{
-			value = Math.max(0, Math.min(1, value));
 			if (_percent == value) {
 				return;
 			}
-			_percent = value;
+			
 			var space:Number = (_max - _positionSize - _min);
-			position = _min + _percent * space;
+			position = _min + value * space;
 		}
 		
+		[Bindable(event="sizeChange")]
 		public function get size():Number
 		{
 			return _size;
 		}
 		public function set size(value:Number):void
 		{
-			value = Math.max(0, value);
+			value = value <= 0 ? 0 : value;
 			if (_size == value) {
 				return;
 			}
-			_size = value;
 			
-			max = _min + _positionSize + _size;
+			var oldValues:Array = [_size, _max];
+			_size = value;
+			_max = _min + _positionSize + _size;
+			
 			position = position;
+			PropertyEvent.dispatchChangeList(this, ["size", "max"], oldValues);
 		}
 		
+		[Bindable(event="minChange")]
 		public function get min():Number
 		{
 			return _min;
@@ -72,18 +88,28 @@ package flight.position
 			if (_min == value) {
 				return;
 			}
+			
+			var properties:Array = ["min", "size"];
+			var oldValues:Array = [_min, _size];
 			_min = value;
 			
 			if (_max < _min) {
-				max = _min;
+				properties.push("max");
+				oldValues.push(_max);
+				_max = _min;
 			}
 			if (_positionSize > _max - _min) {
-				positionSize = _max - _min;
+				properties.push("positionSize");
+				oldValues.push(_positionSize);
+				_positionSize = _max - _min;
 			}
-			size = _max - _positionSize - _min;
+			_size = _max - _positionSize - _min;
+			
 			position = position;
+			PropertyEvent.dispatchChangeList(this, properties, oldValues);
 		}
 		
+		[Bindable(event="maxChange")]
 		public function get max():Number
 		{
 			return _max;
@@ -93,18 +119,28 @@ package flight.position
 			if (_max == value) {
 				return;
 			}
+			
+			var properties:Array = ["max", "size"]
+			var oldValues:Array = [_max, _size];
 			_max = value;
 			
 			if (_min > _max) {
-				min = _max;
+				properties.push("min");
+				oldValues.push(_min);
+				_min = _max;
 			}
 			if (_positionSize > _max - _min) {
-				positionSize = _max - _min;
+				properties.push("positionSize");
+				oldValues.push(_positionSize);
+				_positionSize = _max - _min;
 			}
-			size = _max - _positionSize - _min;
+			_size = _max - _positionSize - _min;
+			
 			position = position;
+			PropertyEvent.dispatchChangeList(this, properties, oldValues);
 		}
 		
+		[Bindable(event="positionSizeChange")]
 		public function get positionSize():Number
 		{
 			return _positionSize;
@@ -115,8 +151,12 @@ package flight.position
 			if (_positionSize == value) {
 				return;
 			}
+			
+			var oldValues:Array = [_positionSize, _size];
 			_positionSize = value;
-			size = _max - _positionSize - _min;
+			_size = _max - _positionSize - _min;
+			
+			PropertyEvent.dispatchChangeList(this, ["positionSize", "size"], oldValues);
 		}
 		
 		public function forward():void

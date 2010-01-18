@@ -8,10 +8,14 @@ package
 	import flash.events.Event;
 	import flash.utils.Dictionary;
 	
+	import reflex.behavior.Behavior;
+	import reflex.behavior.ScrollBehavior;
+	import reflex.controls.ScrollBar;
 	import reflex.events.ButtonEvent;
 	import reflex.layout.Block;
 	import reflex.layout.Dock;
 	import reflex.layout.Layout;
+	import reflex.skin.GraphicSkin;
 	
 	[SWF(widthPercent="100", heightPercent="100", frameRate="12")]
 	public class reflex_dev extends Sprite
@@ -23,34 +27,45 @@ package
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 //			stage.addEventListener(Event.RESIZE, onResize);
-			ButtonEvent.initialize(stage);
-			stage.addEventListener(ButtonEvent.DRAG, onDrag);
-			stage.addEventListener(ButtonEvent.PRESS, onPress);
+//			ButtonEvent.initialize(stage);
+//			stage.addEventListener(ButtonEvent.DRAG, onDrag);
+//			stage.addEventListener(ButtonEvent.PRESS, onPress);
 			
-			block = createComplex();
-			block.dock = Dock.BOTTOM;
-			addChild(block.target);
-			
-			block = createComplex();
-			block.dock = Dock.LEFT;
-			addChild(block.target);
-			
-			block = createComplex();
-			block.dock = Dock.TOP;
-			addChild(block.target);
-			
-			block = createComplex();
-			block.dock = Dock.RIGHT;
-			addChild(block.target);
-			
-			block = createComplex();
+			var scrollbar:ScrollBar = new ScrollBar();
+				scrollbar.skin = new GraphicSkin( getScrollGraphic() );
+			var scrollBehavior:ScrollBehavior = new ScrollBehavior(scrollbar);
+			block = new Block(scrollbar);
+			addChild(scrollbar);
+			block.width = 400;
+			block.height = 100;
+		}
+		
+		private function getScrollGraphic():ScrollBarGraphic
+		{
+			var scroll:ScrollBarGraphic = new ScrollBarGraphic();
+			var block:Block = new Block(scroll);
+			block.anchor = 0;
+			block = new Block(scroll.background);
+			block.scale = true;
 			block.dock = Dock.FILL;
-			addChild(block.target);
+			block = new Block(scroll.bwdBtn);
+			block.scale = true;
+			block.dock = Dock.LEFT;
+			block.margin = 1;
+			block.margin.right = 0;
+			block = new Block(scroll.fwdBtn);
+			block.scale = true;
+			block.dock = Dock.RIGHT;
+			block.margin = 1;
+			block.margin.left = 0;
+			block = new Block(scroll.track);
+			block.scale = true;
+			block.dock = Dock.FILL;
+			block = new Block(scroll.thumb);
+			block.scale = true;
+			block.anchor.top = block.anchor.bottom = 3;
 			
-			block = new Block(this);
-			block.padding = 30;
-			block.padding.vertical = 8;
-			block.padding.horizontal = 8;
+			return scroll;
 		}
 		
 		private function onResize(event:Event):void
@@ -77,86 +92,6 @@ package
 			graphics.drawRect(0, 0, block.width, block.height);
 			graphics.endFill();
 			event.updateAfterEvent();
-		}
-		
-		private function createComplex():Block
-		{
-			var sprite:Sprite = new Sprite();
-			var block:Block = new Block(sprite);
-				block.padding = 4;
-				block.padding.horizontal = block.padding.vertical = 2;
-			
-			var block1:Block;
-			var block2:Block;
-			block1 = createScroll();
-			block2 = createScroll();
-			block1.dock = Dock.BOTTOM;
-			block2.dock = Dock.LEFT;
-			sprite.addChild( block1.target );
-			sprite.addChild( block2.target );
-			
-			block1 = createScroll();
-			block2 = createScroll();
-			block1.dock = Dock.TOP;
-			block2.dock = Dock.RIGHT;
-			sprite.addChild( block1.target );
-			sprite.addChild( block2.target );
-			
-			block1 = createScroll();
-			block2 = createScroll();
-			block1.dock = Dock.TOP;
-			block2.tile = Dock.TOP;
-			block2.dock = Dock.RIGHT;
-			sprite.addChild( block1.target );
-			sprite.addChild( block2.target );
-			
-			block1 = createScroll();
-			block2 = createScroll();
-			block1.tile = Dock.TOP;
-			block1.dock = Dock.RIGHT;
-			block2.tile = Dock.TOP;
-			block2.dock = Dock.RIGHT;
-			sprite.addChild( block1.target );
-			sprite.addChild( block2.target );
-			
-			block1 = createScroll();
-			block2 = createScroll();
-			block1.dock = Dock.RIGHT;
-			block2.dock = Dock.FILL;
-			sprite.addChild( block1.target );
-			sprite.addChild( block2.target );
-			
-			return block;
-		}
-		
-		private function createScroll():Block
-		{
-			var scroll:ScrollBarGraphic = new ScrollBarGraphic();
-			var block:Block = new Block(scroll);
-			block.width = 10;
-			block.height = 10;
-			addChild(scroll);
-			for (var i:int = 0; i < scroll.numChildren; i++) {
-				block = new Block(scroll.getChildAt(i), true);
-			}
-			block = Layout.getLayout(scroll.bwdBtn) as Block;
-			block.dock = Dock.LEFT;
-			block.margin = 1;
-			block.width = 5;
-			block = Layout.getLayout(scroll.fwdBtn) as Block;
-			block.dock = Dock.RIGHT;
-			block.margin = 1;
-			block.width = 5;
-			block = Layout.getLayout(scroll.track) as Block;
-			block.dock = Dock.FILL;
-			block = Layout.getLayout(scroll.thumb) as Block;
-			block.anchor.top = block.anchor.bottom = 2;
-			block.anchor.horizontal = .5;
-			block.width = 5;
-			block = Layout.getLayout(scroll.background) as Block;
-			block.dock = Dock.FILL;
-			
-			return Layout.getLayout(scroll) as Block;
 		}
 		
 	}

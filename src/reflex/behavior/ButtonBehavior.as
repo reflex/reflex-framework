@@ -23,7 +23,8 @@ package reflex.behavior
 		public static const OVER:String = "over";
 		public static const DOWN:String = "down";
 		
-		[Alias] [Bindable] public var button:ISkinnable;
+		[Bindable]
+		public var state:String;
 		
 		public function ButtonBehavior()
 		{
@@ -52,21 +53,21 @@ package reflex.behavior
 		[EventListener(type="stateUp", target="target")]
 		public function onStateUp(event:MouseEvent):void
 		{
-			button.state = UP;
+			state = UP;
 			event.updateAfterEvent();
 		}
 		
 		[EventListener(type="stateOver", target="target")]
 		public function onStateOver(event:MouseEvent):void
 		{
-			button.state = OVER;
+			state = OVER;
 			event.updateAfterEvent();
 		}
 		
 		[EventListener(type="stateDown", target="target")]
-		private function onStateDown(event:MouseEvent):void
+		public function onStateDown(event:MouseEvent):void
 		{
-			button.state = DOWN;
+			state = DOWN;
 			event.updateAfterEvent();
 		}
 		

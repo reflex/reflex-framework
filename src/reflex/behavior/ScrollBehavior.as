@@ -27,6 +27,8 @@ package reflex.behavior
 		public var position:IPosition = new Position();
 		
 		private var forwardPress:Boolean;
+		private var dragPosition:Number;
+		private var dragPoint:Number;
 		
 		public function ScrollBehavior(target:InteractiveObject = null)
 		{
@@ -58,25 +60,24 @@ package reflex.behavior
 			ButtonEvent.initialize(bwdBtn);
 			ButtonEvent.initialize(track);
 			ButtonEvent.initialize(thumb);
-			Bind.addListener(onPosition, this, "position.position");	// TODO: replace with metadata [BindListener]
 		}
 		
-		[BindListener(target="position.position")]						// TODO: implement in favor of Bind.addListener...
-		private function onPosition(event:Event):void
+		[PropertyListener(target="position.position")]						// TODO: implement in favor of Bind.addListener...
+		public function onPosition(event:Event):void
 		{
-			trace(position.position);
+			if (thumb == null || track == null) {
+				return;
+			}
 			
-			if (thumb != null && track != null) {
-				var p:Point = new Point();
-				if (horizontal) {
-					p.x = (track.width - thumb.width) * position.percent;
-					p = thumb.parent.globalToLocal( track.localToGlobal(p) );
-					thumb.x = p.x;
-				} else {
-					p.y = (track.height - thumb.height) * position.percent;
-					p = thumb.parent.globalToLocal( track.localToGlobal(p) );
-					thumb.y = p.y;
-				}
+			var p:Point = new Point();
+			if (horizontal) {
+				p.x = (track.width - thumb.width) * position.percent + track.x;
+				p = thumb.parent.globalToLocal( track.parent.localToGlobal(p) );
+				thumb.x = Math.round(p.x);
+			} else {
+				p.y = (track.height - thumb.height) * position.percent + track.y;
+				p = thumb.parent.globalToLocal( track.parent.localToGlobal(p) );
+				thumb.y = Math.round(p.y);
 			}
 		}
 		
@@ -100,7 +101,7 @@ package reflex.behavior
 		public function onTrackPress(event:ButtonEvent):void
 		{
 			var size:Number = horizontal ? track.width : track.height;
-			forwardPress = (horizontal ? track.mouseX : track.mouseY) > (size * position.percent);
+			forwardPress = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * position.percent);
 			
 			if (forwardPress) {
 				position.skipForward();
@@ -114,7 +115,7 @@ package reflex.behavior
 		public function onTrackHold(event:ButtonEvent):void
 		{
 			var size:Number = horizontal ? track.width : track.height;
-			var forwardHold:Boolean = (horizontal ? track.mouseX : track.mouseY) > (size * position.percent);
+			var forwardHold:Boolean = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * position.percent);
 			
 			if (forwardPress != forwardHold) {
 				return;
@@ -128,14 +129,10 @@ package reflex.behavior
 			event.updateAfterEvent();
 		}
 		
-		private var dragPosition:Number;
-		private var dragPoint:Number;
-		private var dragSize:Number;
 		[EventListener(type="press", target="thumb")]
 		public function onThumbPress(event:ButtonEvent):void
 		{
-			dragSize = horizontal ? track.width - thumb.width : track.height - thumb.height;
-			dragPoint = horizontal ? track.mouseX : track.mouseY;
+			dragPoint = horizontal ? thumb.parent.mouseX - thumb.x : thumb.parent.mouseY;
 			dragPosition = position.percent;
 			event.updateAfterEvent();
 		}
@@ -143,10 +140,10 @@ package reflex.behavior
 		[EventListener(type="drag", target="thumb")]
 		public function onThumbDrag(event:ButtonEvent):void
 		{
-			var mousePoint:Number = horizontal ? track.mouseX : track.mouseY;
-			var delta:Number = (mousePoint - dragPoint) / dragSize;
+			var size:Number = horizontal ? track.width - thumb.width : track.height - thumb.height;
+			var mousePoint:Number = horizontal ? thumb.parent.mouseX : thumb.parent.mouseY;
+			var delta:Number = (mousePoint - dragPoint) / size;
 			position.percent = dragPosition + delta;
-			event.updateAfterEvent();
 		}
 		
 	}

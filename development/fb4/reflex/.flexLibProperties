@@ -3,7 +3,6 @@
   <includeClasses>
     <classEntry path="FlexClasses"/>
     <classEntry path="flight.binding.Bind"/>
-    <classEntry path="flight.binding.Binding"/>
     <classEntry path="flight.events.ListEvent"/>
     <classEntry path="flight.events.ListEventKind"/>
     <classEntry path="flight.events.PropertyEvent"/>
@@ -58,6 +57,7 @@
     <classEntry path="flight.utils.IValueObject"/>
     <classEntry path="reflex.events.RenderEvent"/>
     <classEntry path="reflex.layout.Box"/>
+    <classEntry path="flight.binding.Binding"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests>

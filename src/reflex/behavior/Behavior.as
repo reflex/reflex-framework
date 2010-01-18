@@ -26,24 +26,23 @@ package reflex.behavior
 	 */
 	public class Behavior extends EventDispatcher implements IBehavior
 	{
-		public function Behavior(target:InteractiveObject = null)
-		{
-			describeEventListeners(this);
-			describeAliases(this);
-			if (target != null) {
-				this.target = target;
-			}
-		}
-		
 		/**
 		 * The object this behavior acts upon.
 		 */
 		[Bindable]
 		public var target:InteractiveObject;
 		
+		public function Behavior(target:InteractiveObject = null)
+		{
+			this.target = target;
+			describeBindings(this);
+			describePropertyListeners(this);
+			describeEventListeners(this);
+		}
+		
 		protected function getSkinPart(part:String):InteractiveObject
 		{
-			if (target is ISkinnable) {
+			if (target is ISkinnable && ISkinnable(target).skin != null) {
 				return ISkinnable(target).skin.getSkinPart(part) as InteractiveObject;
 			} else if (part in target) {
 				return target[part] as InteractiveObject;
@@ -52,35 +51,77 @@ package reflex.behavior
 			}
 		}
 		
-		// parses [EventListener(type="eventType", path="optionalPath")] metadata
-		// and binds EventListeners in one concise method
+		protected function bindProperty(target:String, source:String):void
+		{
+			Bind.addBinding(this, target, this, source, true);
+		}
+		
+		protected function bindPropertyListener(target:String, listener:Function):void
+		{
+			Bind.addListener(listener, this, target);
+		}
+		
+		protected function bindEventListener(type:String, target:String, listener:Function,
+											 useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = true):void
+		{
+			Bind.bindEventListener(type, listener, this, target, useCapture, priority, useWeakReference);
+		}
+		
+		// parses [Binding(target="target.path")] metadata
+		public static function describeBindings(behavior:IBehavior):void
+		{
+			var desc:XMLList = Type.describeProperties(behavior, "Binding");
+			
+			for each (var prop:XML in desc) {
+				var meta:XMLList = prop.metadata.(@name == "Binding");
+				
+				// to support multiple Binding metadata tags on a single property
+				for each (var tag:XML in meta) {
+					var targ:String = ( tag.arg.(@key == "target").length() > 0 ) ?
+										tag.arg.(@key == "target").@value :
+										tag.arg.@value;
+					
+					Bind.addBinding(behavior, targ, behavior, prop.@name, true);
+				}
+			}
+		}
+		
+		// parses [PropertyListener(target="target.path)] metadata
+		public static function describePropertyListeners(behavior:IBehavior):void
+		{
+			var desc:XMLList = Type.describeMethods(behavior, "PropertyListener");
+			
+			for each (var meth:XML in desc) {
+				var meta:XMLList = meth.metadata.(@name == "PropertyListener");
+				
+				// to support multiple PropertyListener metadata tags on a single method
+				for each (var tag:XML in meta) {
+					var targ:String = ( tag.arg.(@key == "target").length() > 0 ) ?
+										tag.arg.(@key == "target").@value :
+										tag.arg.@value;
+					
+					Bind.addListener(behavior[meth.@name], behavior, targ);
+				}
+			}
+		}
+		
+		// parses [EventListener(type="eventType", target="target.path")] metadata
 		public static function describeEventListeners(behavior:IBehavior):void
 		{
 			var desc:XMLList = Type.describeMethods(behavior, "EventListener");
 			
 			for each (var meth:XML in desc) {
-				var method:String = meth.@name;
-				var eventListener:XMLList = meth.metadata.(@name == "EventListener");
+				var meta:XMLList = meth.metadata.(@name == "EventListener");
 				
 				// to support multiple EventListener metadata tags on a single method
-				for each (var listener:XML in eventListener) {
-					var type:String = (listener.arg.(@key == "type").length() > 0) ?
-									   listener.arg.(@key == "type").@value :
-									   listener.arg.@value;
-					var path:String = listener.arg.(@key == "target").@value;
+				for each (var tag:XML in meta) {
+					var type:String = ( tag.arg.(@key == "type").length() > 0 ) ?
+										tag.arg.(@key == "type").@value :
+										tag.arg.@value;
+					var targ:String = tag.arg.(@key == "target").@value;
 					
-					Bind.bindEventListener(type, behavior[method], behavior, path);
+					Bind.bindEventListener(type, behavior[meth.@name], behavior, targ);
 				}
-			}
-		}
-		
-		public static function describeAliases(behavior:IBehavior):void
-		{
-			var desc:XMLList = Type.describeProperties(behavior, "Alias");
-			
-			for each (var prop:XML in desc) {
-				var property:String = prop.@name;
-				Bind.addBinding(behavior, property, behavior, "target");
 			}
 		}
 		
