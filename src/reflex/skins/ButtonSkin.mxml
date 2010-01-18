@@ -1,24 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rx:Skin xmlns:rx="reflex.skins.*" xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:text="flash.text.*">
-	
-	<mx:Script>
-		<![CDATA[
-			
-			public function set render(value:Number):void {
-				if(graphics) {
-					graphics.beginFill(data.state == "over" ? 0x0000FF : 0x00FF00, 1);
-					graphics.drawRect(0, 0, data.width, data.height);
-					graphics.endFill();
-				}
-			}
-			
-		]]>
-	</mx:Script>
-	<!-- obviously a temporary solution for rendering graphics -->
-	<mx:Binding source="data.width" destination="render" />
-	<mx:Binding source="data.height" destination="render" />
-	<mx:Binding source="data.state" destination="render" />
+<rx:Skin xmlns:rx="reflex.skins.*" 
+	xmlns:rgx="reflex.graphics.*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:text="flash.text.*">
 	<rx:content>
+		<mx:SolidColor id="fill" color="{(data.state == 'over') ? 0x0000FF : 0x00FF00}" />
+		<rgx:Rect x="0" y="0" width="{data.width}" height="{data.height}" fill="{fill}" />
 		<text:TextField id="label" x="{data.width/2 - label.width/2}" y="{data.height/2 - label.height/2}" width="70" height="20"
 			text="{data.label != null ? data.label : ''}" selectable="false" />
 	</rx:content>

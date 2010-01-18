@@ -8,11 +8,13 @@ package reflex.behaviors
 	public class ButtonStateBehavior extends Behavior implements IBehavior
 	{
 		
-		[Alias] [Bindable] public var button:IStateful;
+		[Alias] [Bindable] public var button:IStateful; // new comment
 		
 		reflex function button_mouseUpHandler(event:MouseEvent):void {
 			button.state = "up";
 		}
+		
+		// update
 		
 		reflex function button_mouseOutHandler(event:MouseEvent):void {
 			button.state = "up";

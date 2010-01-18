@@ -18,7 +18,6 @@ package reflex.core
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
-		
 		[ArrayElementType("reflex.core.IBehavior")]
 		/**
 		 * A dynamic object or hash map of behavior objects. <code>behaviors</code>
