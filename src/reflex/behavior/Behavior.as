@@ -32,6 +32,11 @@ package reflex.behavior
 		[Bindable]
 		public var target:InteractiveObject;
 		
+		// TODO: add SkinParts with support for adding child behaviors to them
+		// registration of Behavior instances (via styling?) for instantiation
+		// skins ability to pull behavior data for state and other use
+		// skins also need data such as labels and images? (localization?)
+		// and dynamic data for it's content-area (component children)
 		public function Behavior(target:InteractiveObject = null)
 		{
 			this.target = target;

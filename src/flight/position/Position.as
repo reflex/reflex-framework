@@ -10,37 +10,36 @@ package flight.position
 		public var stepSize:Number = 1;
 		
 		[Bindable]
-		public var skipSize:Number = 5;
+		public var skipSize:Number = 2;
 		
 		public var precision:Number = stepSize;
 		
-		private var _position:Number = 0;
+		private var _value:Number = 0;
 		private var _percent:Number = 0;
-		private var _size:Number = 1;
+		private var _size:Number = 10;
 		private var _min:Number = 0;
-		private var _max:Number = 10;
-		private var _positionSize:Number = 0;
+		private var _max:Number = _size;
+		private var _space:Number = 0;
 		
-		[Bindable(event="positionChange")]
-		public function get position():Number
+		[Bindable(event="valueChange")]
+		public function get value():Number
 		{
-			return _position;
+			return _value;
 		}
-		public function set position(value:Number):void
+		public function set value(value:Number):void
 		{
-			value = value <= _min ? _min : (value >= _max ? _max : value);
+			value = value <= _min ? _min : (value >= _max - _space ? _max - _space : value);
 			var p:Number = 1 / precision;
 			value = Math.round(value * p) / p;
-			if (_position == value) {
+			if (_value == value) {
 				return;
 			}
 			
-			var oldValues:Array = [_position, _percent];
-			_position = value;
-			var space:Number = (_max - _positionSize - _min);
-			_percent = space == 0 ? 1 : _position / space;
+			var oldValues:Array = [_value, _percent];
+			_value = value;
+			_percent = _size == 0 ? 1 : (_value - _min) / _size;
 			
-			PropertyEvent.dispatchChangeList(this, ["position", "percent"], oldValues);
+			PropertyEvent.dispatchChangeList(this, ["value", "percent"], oldValues);
 		}
 		
 		[Bindable(event="percentChange")]
@@ -54,8 +53,7 @@ package flight.position
 				return;
 			}
 			
-			var space:Number = (_max - _positionSize - _min);
-			position = _min + value * space;
+			this.value = _min + value * _size;
 		}
 		
 		[Bindable(event="sizeChange")]
@@ -66,15 +64,17 @@ package flight.position
 		public function set size(value:Number):void
 		{
 			value = value <= 0 ? 0 : value;
+			var p:Number = 1 / precision;
+			value = Math.round(value * p) / p;
 			if (_size == value) {
 				return;
 			}
 			
 			var oldValues:Array = [_size, _max];
 			_size = value;
-			_max = _min + _positionSize + _size;
+			_max = _min + _space + _size;
 			
-			position = position;
+			value = value;
 			PropertyEvent.dispatchChangeList(this, ["size", "max"], oldValues);
 		}
 		
@@ -85,6 +85,8 @@ package flight.position
 		}
 		public function set min(value:Number):void
 		{
+			var p:Number = 1 / precision;
+			value = Math.round(value * p) / p;
 			if (_min == value) {
 				return;
 			}
@@ -98,14 +100,14 @@ package flight.position
 				oldValues.push(_max);
 				_max = _min;
 			}
-			if (_positionSize > _max - _min) {
-				properties.push("positionSize");
-				oldValues.push(_positionSize);
-				_positionSize = _max - _min;
+			if (_space > _max - _min) {
+				properties.push("space");
+				oldValues.push(_space);
+				_space = _max - _min;
 			}
-			_size = _max - _positionSize - _min;
+			_size = _max - _space - _min;
 			
-			position = position;
+			value = value;
 			PropertyEvent.dispatchChangeList(this, properties, oldValues);
 		}
 		
@@ -116,6 +118,8 @@ package flight.position
 		}
 		public function set max(value:Number):void
 		{
+			var p:Number = 1 / precision;
+			value = Math.round(value * p) / p;
 			if (_max == value) {
 				return;
 			}
@@ -129,54 +133,57 @@ package flight.position
 				oldValues.push(_min);
 				_min = _max;
 			}
-			if (_positionSize > _max - _min) {
-				properties.push("positionSize");
-				oldValues.push(_positionSize);
-				_positionSize = _max - _min;
+			if (_space > _max - _min) {
+				properties.push("space");
+				oldValues.push(_space);
+				_space = _max - _min;
 			}
-			_size = _max - _positionSize - _min;
+			_size = _max - _space - _min;
 			
-			position = position;
+			value = value;
 			PropertyEvent.dispatchChangeList(this, properties, oldValues);
 		}
 		
-		[Bindable(event="positionSizeChange")]
-		public function get positionSize():Number
+		[Bindable(event="spaceChange")]
+		public function get space():Number
 		{
-			return _positionSize;
+			return _space;
 		}
-		public function set positionSize(value:Number):void
+		public function set space(value:Number):void
 		{
-			value = Math.min(_max - _min, value);
-			if (_positionSize == value) {
+			var maxSize:Number = _max - _min;
+			value = value >= maxSize ? maxSize : value;
+			var p:Number = 1 / precision;
+			value = Math.round(value * p) / p;
+			if (_space == value) {
 				return;
 			}
 			
-			var oldValues:Array = [_positionSize, _size];
-			_positionSize = value;
-			_size = _max - _positionSize - _min;
+			var oldValues:Array = [_space, _size];
+			_space = value;
+			_size = _max - _space - _min;
 			
-			PropertyEvent.dispatchChangeList(this, ["positionSize", "size"], oldValues);
+			PropertyEvent.dispatchChangeList(this, ["space", "size"], oldValues);
 		}
 		
 		public function forward():void
 		{
-			position += stepSize;
+			value += stepSize;
 		}
 		
 		public function backward():void
 		{
-			position -= stepSize;
+			value -= stepSize;
 		}
 		
 		public function skipForward():void
 		{
-			position += skipSize;
+			value += skipSize;
 		}
 		
 		public function skipBackward():void
 		{
-			position -= skipSize;
+			value -= skipSize;
 		}
 	}
 }

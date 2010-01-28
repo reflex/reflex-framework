@@ -1,43 +1,104 @@
 package
 {
+	import display.Containment;
+	
 	import flame.controls.ScrollBarGraphic;
 	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.geom.Matrix;
 	import flash.utils.Dictionary;
+	import flash.utils.setInterval;
+	
+	import flight.binding.Bind;
+	import flight.position.IPosition;
 	
 	import reflex.behavior.Behavior;
+	import reflex.behavior.ButtonBehavior;
 	import reflex.behavior.ScrollBehavior;
+	import reflex.behavior.SelectableBehavior;
+	import reflex.controls.Button;
 	import reflex.controls.ScrollBar;
 	import reflex.events.ButtonEvent;
+	import reflex.events.RenderEvent;
 	import reflex.layout.Block;
 	import reflex.layout.Dock;
 	import reflex.layout.Layout;
 	import reflex.skin.GraphicSkin;
+	import reflex.skin.MXMLButtonSkin;
 	
 	[SWF(widthPercent="100", heightPercent="100", frameRate="12")]
 	public class reflex_dev extends Sprite
 	{
 		private var block:Block;
+		private var containment:Containment;
 		
 		public function reflex_dev()
 		{
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-//			stage.addEventListener(Event.RESIZE, onResize);
-//			ButtonEvent.initialize(stage);
+			stage.addEventListener(Event.RESIZE, onResize);
+			ButtonEvent.initialize(stage);
 //			stage.addEventListener(ButtonEvent.DRAG, onDrag);
 //			stage.addEventListener(ButtonEvent.PRESS, onPress);
 			
+//			var button:Button = new Button();
+//				button.label = "HI WORLD";
+//			addChild(button);
+//			block = new Block(button);
+//			block.dock = Dock.RIGHT;
+			
+//			var buttonSkin:MXMLButtonSkin = new MXMLButtonSkin();
+//				buttonSkin.target = button;
+//				buttonSkin.button = button;
+//			var buttonBehavior:ButtonBehavior = new ButtonBehavior(button);
+//			var selectableBehavior:SelectableBehavior = new SelectableBehavior(button);
+			
+			containment = new Containment();
+			
+			// one
 			var scrollbar:ScrollBar = new ScrollBar();
 				scrollbar.skin = new GraphicSkin( getScrollGraphic() );
 			var scrollBehavior:ScrollBehavior = new ScrollBehavior(scrollbar);
-			block = new Block(scrollbar);
+			scrollBehavior.position = containment.hPosition;
 			addChild(scrollbar);
-			block.width = 400;
+			
+			block = new Block(scrollbar);
+			block.dock = Dock.BOTTOM;
+			
+			// two
+			scrollbar = new ScrollBar();
+			scrollbar.skin = new GraphicSkin( getScrollGraphic() );
+			scrollBehavior = new ScrollBehavior(scrollbar);
+			scrollBehavior.position = containment.vPosition;
+			addChild(scrollbar);
+			
+			block = new Block(scrollbar);
+			block.dock = Dock.RIGHT;
 			block.height = 100;
+			block.rotation = -90;
+			scrollbar.scaleX = -1;
+			
+			// three
+			scrollbar = new ScrollBar();
+			scrollbar.skin = new GraphicSkin( getScrollGraphic() );
+			scrollBehavior = new ScrollBehavior(scrollbar);
+			addChild(scrollbar);
+			
+			block = new Block(scrollbar);
+			block.dock = Dock.FILL;
+			
+//			containment.target = scrollbar;
+//			Bind.addBinding(containment, "hPosition.size", block, "width");
+//			Bind.addBinding(containment, "vPosition.size", block, "height");
+			
+			block = new Block(this);
+			block.padding = 20;
+			block.padding.horizontal = block.padding.vertical = 10;
+			
+			onResize(null);
 		}
 		
 		private function getScrollGraphic():ScrollBarGraphic
@@ -72,25 +133,22 @@ package
 		{
 			block.width = stage.stageWidth;
 			block.height = stage.stageHeight;
+			containment.hPosition.space = stage.stageWidth/2;
+			containment.vPosition.space = stage.stageHeight/2;
 		}
 		
 		private var pressedWidth:Number = 0;
 		private var pressedHeight:Number = 0;
 		private function onPress(event:ButtonEvent):void
 		{
-			pressedWidth = block.width;
-			pressedHeight = block.height;
+			pressedWidth = containment.hPosition.value;
+			pressedHeight = containment.vPosition.value;
 		}
 		
 		private function onDrag(event:ButtonEvent):void
 		{
-			block.width = pressedWidth + event.deltaX;
-			block.height = pressedHeight + event.deltaY; 
-			graphics.clear();
-			graphics.lineStyle(0, 0xAABBDD);
-			graphics.beginFill(0xDDE6EE);
-			graphics.drawRect(0, 0, block.width, block.height);
-			graphics.endFill();
+			containment.hPosition.value = pressedWidth + event.deltaX;
+			containment.vPosition.value = pressedHeight + event.deltaY;
 			event.updateAfterEvent();
 		}
 		

@@ -58,6 +58,7 @@
     <classEntry path="reflex.events.RenderEvent"/>
     <classEntry path="reflex.layout.Box"/>
     <classEntry path="flight.binding.Binding"/>
+    <classEntry path="display.Containment"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests>

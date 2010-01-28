@@ -22,7 +22,7 @@ package reflex.layout
 			}
 			
 			var dockMargin:Box = new Box();
-			var dockArea:Rectangle = new Rectangle(0, 0, block.width, block.height);
+			var dockArea:Rectangle = new Rectangle(0, 0, block.displayWidth, block.displayHeight);
 			dockArea.left += block.padding.left;
 			dockArea.top += block.padding.top;
 			dockArea.right -= block.padding.right;
@@ -44,13 +44,13 @@ package reflex.layout
 				}
 				
 				if (child.dock == NONE) {
-					updateAnchor(display, child, block);
+					updateAnchor(child, block);
 					continue;
 				}
 				
 				if (child.tile == NONE) {
-					dockChild(display, child, child.dock, dockArea, dockMargin.clone().merge(child.margin), hPad, vPad);
-					updateArea(display, child, child.dock, dockArea, dockMargin, hPad, vPad);
+					dockChild(child, child.dock, dockArea, dockMargin.clone().merge(child.margin), hPad, vPad);
+					updateArea(child, child.dock, dockArea, dockMargin, hPad, vPad);
 					tileMargin = null;				// TODO: reuse rectangle/box objects (cache)
 				} else {
 					
@@ -79,9 +79,9 @@ package reflex.layout
 						}
 					}
 					
-					dockChild(display, child, child.tile, tileArea, margin, hPad, vPad);
-					updateArea(display, child, child.tile, tileArea, tileMargin, hPad, vPad);
-					updateArea(display, child, child.dock, dockArea, dockMargin, hPad, vPad);
+					dockChild(child, child.tile, tileArea, margin, hPad, vPad);
+					updateArea(child, child.tile, tileArea, tileMargin, hPad, vPad);
+					updateArea(child, child.dock, dockArea, dockMargin, hPad, vPad);
 				}
 				
 				lastDock = child.dock;
@@ -89,30 +89,30 @@ package reflex.layout
 			}
 		}
 		
-		private function updateArea(display:DisplayObject, child:Block, dock:String, area:Rectangle, margin:Box, hPad:Number, vPad:Number):void
+		private function updateArea(child:Block, dock:String, area:Rectangle, margin:Box, hPad:Number, vPad:Number):void
 		{
 			var pos:Number;
 			switch (dock) {
 				case LEFT :
-					if (area.left < (pos = display.x + child.width + hPad) ) {
+					if (area.left < (pos = child.x + child.width + hPad) ) {
 						area.left = pos;
 						margin.left = child.margin.right;
 					}
 					break;
 				case TOP :
-					if (area.top < (pos = display.y + child.height + vPad) ) {
+					if (area.top < (pos = child.y + child.height + vPad) ) {
 						area.top = pos;
 						margin.top = child.margin.bottom;
 					}
 					break;
 				case RIGHT :
-					if (area.right > (pos = display.x - hPad) ) {
+					if (area.right > (pos = child.x - hPad) ) {
 						area.right = pos;
 						margin.right = child.margin.left;
 					}
 					break;
 				case BOTTOM :
-					if (area.bottom > (pos = display.y - vPad) ) {
+					if (area.bottom > (pos = child.y - vPad) ) {
 						area.bottom = pos;
 						margin.bottom = child.margin.top;
 					}
@@ -123,48 +123,48 @@ package reflex.layout
 		/**
 		 * 
 		 */
-		private function dockChild(display:DisplayObject, child:Block, dock:String, area:Rectangle, margin:Box, hPad:Number, vPad:Number):void
+		private function dockChild(child:Block, dock:String, area:Rectangle, margin:Box, hPad:Number, vPad:Number):void
 		{
 			switch (dock) {
 				case LEFT :
-					display.x = area.x + margin.left;
-					display.y = area.y + margin.top;
+					child.x = area.x + margin.left;
+					child.y = area.y + margin.top;
 					if (child.tile == NONE) {
 						child.height = area.height - margin.top - margin.bottom;
 					} else if (child.dock == BOTTOM) {
-						display.y = area.y + area.height - child.height - margin.bottom;
+						child.y = area.y + area.height - child.height - margin.bottom;
 					}
 					break;
 				case TOP :
-					display.x = area.x + margin.left;
-					display.y = area.y + margin.top;
+					child.x = area.x + margin.left;
+					child.y = area.y + margin.top;
 					if (child.tile == NONE) {
 						child.width = area.width - margin.left - margin.right;
 					} else if (child.dock == RIGHT) {
-						display.x = area.x + area.width - child.width - margin.right;
+						child.x = area.x + area.width - child.width - margin.right;
 					}
 					break;
 				case RIGHT :
-					display.x = area.x + area.width - child.width - margin.right;
-					display.y = area.y + margin.top;
+					child.x = area.x + area.width - child.width - margin.right;
+					child.y = area.y + margin.top;
 					if (child.tile == NONE) {
 						child.height = area.height - margin.top - margin.bottom;
 					} else if (child.dock == BOTTOM) {
-						display.y = area.y + area.height - child.height - margin.bottom;
+						child.y = area.y + area.height - child.height - margin.bottom;
 					}
 					break;
 				case BOTTOM :
-					display.x = area.x + margin.left;
-					display.y = area.y + area.height - child.height - margin.bottom;
+					child.x = area.x + margin.left;
+					child.y = area.y + area.height - child.height - margin.bottom;
 					if (child.tile == NONE) {
 						child.width = area.width - margin.left - margin.right;
 					} else if (child.dock == RIGHT) {
-						display.x = area.x + area.width - child.width - margin.right;
+						child.x = area.x + area.width - child.width - margin.right;
 					}
 					break;
 				case FILL :
-					display.x = area.x + margin.left;
-					display.y = area.y + margin.top;
+					child.x = area.x + margin.left;
+					child.y = area.y + margin.top;
 					if (child.tile == NONE) {
 						child.height = area.height - margin.top - margin.bottom;
 						child.width = area.width - margin.left - margin.right;
@@ -306,43 +306,43 @@ package reflex.layout
 			block.updateMeasurement(measurement);
 		}
 		
-		private function updateAnchor(target:DisplayObject, block:Block, parent:Block):void
+		private function updateAnchor(block:Block, parent:Block):void
 		{
 			var anchor:Box = block.anchor;
 			if ( !isNaN(anchor.left) ) {
 				if ( !isNaN(anchor.right) ) {
-					block.width = parent.width - anchor.left - anchor.right;
+					block.width = parent.displayWidth - anchor.left - anchor.right;
 				} else if (anchor.horizontal != 0) {
-					block.width = (anchor.horizontal * parent.width) - anchor.left + anchor.offsetX;
+					block.width = (anchor.horizontal * parent.displayWidth) - anchor.left + anchor.offsetX;
 				}
 				
-				target.x = anchor.left;
+				block.x = anchor.left;
 			} else if ( !isNaN(anchor.right) ) {
 				if (anchor.horizontal != 0) {
-					block.width = (anchor.horizontal * parent.width) - anchor.right + anchor.offsetX;
+					block.width = (anchor.horizontal * parent.displayWidth) - anchor.right + anchor.offsetX;
 				}
 				
-				target.x = parent.width - block.width - anchor.right;
-			} else {
-				target.x = anchor.horizontal * (parent.width - block.width) + anchor.offsetX;
+				block.x = parent.displayWidth - block.width - anchor.right;
+			} else if ( !isNaN(anchor.horizontal) ) {
+				block.x = anchor.horizontal * (parent.displayWidth - block.width) + anchor.offsetX;
 			}
 			
 			if ( !isNaN(anchor.top) ) {
 				if ( !isNaN(anchor.bottom) ) {
-					block.height = parent.height - anchor.top - anchor.bottom;
+					block.height = parent.displayHeight - anchor.top - anchor.bottom;
 				} else if (anchor.vertical != 0) {
-					block.height = (anchor.vertical * parent.height) - anchor.top + anchor.offsetY;
+					block.height = (anchor.vertical * parent.displayHeight) - anchor.top + anchor.offsetY;
 				}
 				
-				target.y = anchor.top;
+				block.y = anchor.top;
 			} else if ( !isNaN(anchor.bottom) ) {
 				if (anchor.vertical != 0) {
-					block.height = (anchor.vertical * parent.height) - anchor.bottom + anchor.offsetY;
+					block.height = (anchor.vertical * parent.displayHeight) - anchor.bottom + anchor.offsetY;
 				}
 				
-				target.y = parent.height - block.height - anchor.bottom;
-			} else {
-				target.y = anchor.vertical * (parent.height - block.height) + anchor.offsetY;
+				block.y = parent.displayHeight - block.height - anchor.bottom;
+			} else if ( !isNaN(anchor.vertical) ) {
+				block.y = anchor.vertical * (parent.displayHeight - block.height) + anchor.offsetY;
 			}
 		}
 		

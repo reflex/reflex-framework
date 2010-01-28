@@ -9,8 +9,8 @@ package flight.position
 		 * The current position in the progression, between 0 and
 		 * <code>length</code>.
 		 */
-		function get position():Number;
-		function set position(value:Number):void;
+		function get value():Number;
+		function set value(value:Number):void;
 		
 		/**
 		 * The percent complete in the progress, as a number between 0 and 1

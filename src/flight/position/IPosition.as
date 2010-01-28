@@ -8,8 +8,8 @@ package flight.position
 		function get max():Number;
 		function set max(value:Number):void;
 		
-		function get positionSize():Number;
-		function set positionSize(value:Number):void;
+		function get space():Number;
+		function set space(value:Number):void;
 		
 		function get stepSize():Number;
 		function set stepSize(value:Number):void;

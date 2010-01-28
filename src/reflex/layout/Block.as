@@ -4,6 +4,7 @@ package reflex.layout
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.geom.Matrix;
 	import flash.utils.Dictionary;
 	
 	import flight.events.PropertyEvent;
@@ -25,11 +26,17 @@ package reflex.layout
 		protected var defaultWidth:Number = 0;
 		protected var defaultHeight:Number = 0;
 		
+		protected var direction:int = 0;
+		protected var inverted:Boolean;
+		
+		private var _x:Number;
+		private var _y:Number;
 		private var _width:Number = defaultWidth;
 		private var _height:Number = defaultHeight;
 		private var _measuredWidth:Number = 0;
 		private var _measuredHeight:Number = 0;
 		private var _measuredBounds:Bounds = bounds;
+		private var _rotation:Number;
 		
 		private var _margin:Box = new Box();
 		private var _padding:Box = new Box();
@@ -45,6 +52,7 @@ package reflex.layout
 			_margin.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
 			_padding.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
 			_anchor.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
+			_anchor.horizontal = _anchor.vertical = NaN;
 			algorithm = new Dock();
 		}
 		
@@ -57,12 +65,57 @@ package reflex.layout
 			if (value != null) {
 				defaultWidth = value.width;
 				defaultHeight = value.height;
+				rotation = value.rotation;
+				var m:Matrix = value.transform.matrix;
+				inverted = Math.abs( Math.atan2(m.b, m.a) - Math.atan2(-m.c, m.d) ) > (Math.PI / 2);
 				super.target = value;
 				updateWidth();
-				updateHeight()
+				updateHeight();
 			} else {
 				super.target = value;
 			}
+		}
+		
+		[Bindable(event="xChange")]
+		public function get x():Number
+		{
+			return _x;
+		}
+		public function set x(value:Number):void
+		{
+			if (_x == value) {
+				return;
+			}
+			
+			_x = value;
+			var d:int;
+			
+			if ( !isNaN(_x) ) {
+				d = (inverted ? 5 - direction : direction) % 4;
+				target.x = _x//(d == 1 || d == 2) ? _width + _x : _x;
+			}
+			dispatchEvent(new Event("xChange"));
+		}
+		
+		[Bindable(event="yChange")]
+		public function get y():Number
+		{
+			return _y;
+		}
+		public function set y(value:Number):void
+		{
+			if (_y == value) {
+				return;
+			}
+			
+			_y = value;
+			var d:int;
+			
+			if ( !isNaN(_y) ) {
+				d = (inverted ? 6 - direction : direction) % 4;
+				target.y = _y//(d == 2 || d == 3) ? _height + _y : _y;
+			}
+			dispatchEvent(new Event("yChange"));
 		}
 		
 		[Bindable(event="widthChange")]
@@ -93,6 +146,43 @@ package reflex.layout
 			
 			explicitHeight = value;
 			updateHeight();
+		}
+		
+		public function get rotation():Number
+		{
+			return _rotation;
+		}
+		public function set rotation(value:Number):void
+		{
+			var shift:Number = value < 0 ? -180 : 179;
+			value = (value + shift) % 360 - shift;
+			
+			if (_rotation == value) {
+				return;
+			}
+			
+			_rotation = value;
+			direction = Math.round(_rotation / 90);
+			if (direction < 0) {
+				direction += 4;
+			}
+			
+			var w:Number = defaultWidth;
+			var h:Number = defaultHeight;
+			defaultWidth = direction % 2 ? defaultHeight : defaultWidth;
+			defaultHeight = direction % 2 ? defaultWidth : defaultHeight;
+			
+			invalidate();
+		}
+		
+		public function get displayWidth():Number
+		{
+			return direction % 2 ? _height : _width;
+		}
+		
+		public function get displayHeight():Number
+		{
+			return direction % 2 ? _width : _height;
 		}
 		
 		[Bindable("measuredWidthChange")]
@@ -239,12 +329,7 @@ package reflex.layout
 		override public function validate():void
 		{
 			super.validate();
-			
-			// TODO: take into account target's rotation
-			if (scale) {
-				target.width = _width;
-				target.height = _height;
-			}
+			updateDisplay();
 		}
 		
 		override public function measure():void
@@ -299,6 +384,24 @@ package reflex.layout
 			updateHeight();
 		}
 		
+		public function updateDisplay():void
+		{
+			if (target == null) {
+				return;
+			}
+			
+			if (scale) {
+				target.width = displayWidth;
+				target.height = displayHeight;
+			}
+			
+			if ( !isNaN(_rotation) ) {
+				target.rotation = _rotation;
+			}
+			if (target.name) {
+				trace(target.name, target.x, target.y, target.width, target.height);
+			}
+		}
 		
 		
 		protected function updateWidth():void

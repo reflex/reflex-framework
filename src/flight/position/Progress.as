@@ -43,11 +43,11 @@ package flight.position
 		 * The current position in the progression, between 0 and
 		 * <code>size</code>.
 		 */
-		public function get position():Number
+		public function get value():Number
 		{
 			return _position;
 		}
-		public function set position(value:Number):void
+		public function set value(value:Number):void
 		{
 			value = Math.max(0, Math.min(_size, value));
 			if (_position == value) {
@@ -72,7 +72,7 @@ package flight.position
 				return;
 			}
 			_percent = value;
-			position = _percent * _size;
+			value = _percent * _size;
 		}
 		
 		/**
@@ -91,7 +91,7 @@ package flight.position
 			_size = value;
 			
 			if (_position > _size) {
-				position = _size;
+				value = _size;
 			} else if (_position > 0) {
 				percent = _position / _size;
 			}
@@ -103,7 +103,7 @@ package flight.position
 		private function onProgress(event:ProgressEvent):void
 		{
 			size = event.bytesTotal;
-			position = event.bytesLoaded;
+			value = event.bytesLoaded;
 		}
 		
 	}

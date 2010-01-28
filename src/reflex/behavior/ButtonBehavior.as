@@ -24,22 +24,22 @@ package reflex.behavior
 		public static const DOWN:String = "down";
 		
 		[Bindable]
+		[Binding(target="target.state")]
 		public var state:String;
 		
-		public function ButtonBehavior()
+		public function ButtonBehavior(target:InteractiveObject = null)
 		{
-			// manual linking event listeners to the target (for a Flash Pro workflow)
-			Bind.bindEventListener(ButtonEvent.STATE_UP,			onStateUp, this, "target");
-			Bind.bindEventListener(ButtonEvent.STATE_OVER,			onStateOver, this, "target");
-			Bind.bindEventListener(ButtonEvent.STATE_DOWN,			onStateDown, this, "target");
+			super(target);
 		}
 		
 		override public function set target(value:InteractiveObject):void
 		{
-			if (value is DisplayObjectContainer) {
-				DisplayObjectContainer(value).mouseChildren = false;
+			if (value != null) {
+				if (value is DisplayObjectContainer) {
+					DisplayObjectContainer(value).mouseChildren = false;
+				}
+				ButtonEvent.initialize(value);
 			}
-			ButtonEvent.initialize(value as InteractiveObject);
 			super.target = value;
 		}
 		
