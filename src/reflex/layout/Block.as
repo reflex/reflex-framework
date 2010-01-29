@@ -3,13 +3,10 @@ package reflex.layout
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 	import flash.geom.Matrix;
-	import flash.utils.Dictionary;
+	import flash.geom.Rectangle;
 	
 	import flight.events.PropertyEvent;
-	
-	import reflex.events.RenderEvent;
 	
 	public class Block extends Layout
 	{
@@ -26,17 +23,16 @@ package reflex.layout
 		protected var defaultWidth:Number = 0;
 		protected var defaultHeight:Number = 0;
 		
-		protected var direction:int = 0;
-		protected var inverted:Boolean;
-		
 		private var _x:Number;
 		private var _y:Number;
 		private var _width:Number = defaultWidth;
 		private var _height:Number = defaultHeight;
+		private var _displayWidth:Number = defaultWidth;
+		private var _displayHeight:Number = defaultHeight;
 		private var _measuredWidth:Number = 0;
 		private var _measuredHeight:Number = 0;
 		private var _measuredBounds:Bounds = bounds;
-		private var _rotation:Number;
+		private var _blockBounds:Bounds = bounds;
 		
 		private var _margin:Box = new Box();
 		private var _padding:Box = new Box();
@@ -52,6 +48,7 @@ package reflex.layout
 			_margin.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
 			_padding.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
 			_anchor.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
+			bounds.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
 			_anchor.horizontal = _anchor.vertical = NaN;
 			algorithm = new Dock();
 		}
@@ -63,14 +60,11 @@ package reflex.layout
 			}
 			
 			if (value != null) {
-				defaultWidth = value.width;
-				defaultHeight = value.height;
-				rotation = value.rotation;
-				var m:Matrix = value.transform.matrix;
-				inverted = Math.abs( Math.atan2(m.b, m.a) - Math.atan2(-m.c, m.d) ) > (Math.PI / 2);
+				var rect:Rectangle = value.getRect(value);
+				defaultWidth = rect.right;
+				defaultHeight = rect.bottom;
 				super.target = value;
-				updateWidth();
-				updateHeight();
+				updateSize();
 			} else {
 				super.target = value;
 			}
@@ -88,11 +82,10 @@ package reflex.layout
 			}
 			
 			_x = value;
-			var d:int;
-			
-			if ( !isNaN(_x) ) {
-				d = (inverted ? 5 - direction : direction) % 4;
-				target.x = _x//(d == 1 || d == 2) ? _width + _x : _x;
+			if (target != null && !isNaN(_x) ) {
+				var m:Matrix = target.transform.matrix;
+				var d:Number = m.a * _displayWidth + m.c * _displayHeight;
+				target.x = d < 0 ? _x - d : _x;
 			}
 			dispatchEvent(new Event("xChange"));
 		}
@@ -109,11 +102,10 @@ package reflex.layout
 			}
 			
 			_y = value;
-			var d:int;
-			
-			if ( !isNaN(_y) ) {
-				d = (inverted ? 6 - direction : direction) % 4;
-				target.y = _y//(d == 2 || d == 3) ? _height + _y : _y;
+			if (target != null && !isNaN(_y) ) {
+				var m:Matrix = target.transform.matrix;
+				var d:Number = m.d * _displayHeight + m.b * _displayWidth;
+				target.y = d < 0 ? _y - d : _y;
 			}
 			dispatchEvent(new Event("yChange"));
 		}
@@ -125,12 +117,32 @@ package reflex.layout
 		}
 		public function set width(value:Number):void
 		{
-			if (explicitWidth == value) {
-				return;
+			if (target == null) {		// TODO: or if scaling and rotation are default
+				displayWidth = value;
+			} else {
+				var m:Matrix = target.transform.matrix;
+				if (scale) {
+					// set scale back to 1 but keep rotation
+					var skewY:Number = Math.atan2(m.b, m.a);
+					m.a = Math.cos(skewY);
+					m.b = Math.sin(skewY);
+					var skewX:Number = Math.atan2(-m.c, m.d);
+					m.c = -Math.sin(skewX);
+					m.d = Math.cos(skewX);
+				}
+				m.invert();
+				
+				var w:Number = Math.abs(m.a * value + m.c * _height);
+				var h:Number = Math.abs(m.d * _height + m.b * value);
+				
+				if (w != _displayWidth) {
+					explicitWidth = w;
+				}
+				if (h != _displayHeight) {
+					explicitHeight = h;
+				}
+				updateSize();
 			}
-			
-			explicitWidth = value;
-			updateWidth();
 		}
 		
 		[Bindable(event="heightChange")]
@@ -140,49 +152,59 @@ package reflex.layout
 		}
 		public function set height(value:Number):void
 		{
+			if (target == null) {		// TODO: or if scaling and rotation are default
+				displayHeight = value;
+			} else {
+				var m:Matrix = target.transform.matrix;
+				if (scale) {
+					// set scale back to 1 but keep rotation
+					var skewY:Number = Math.atan2(m.b, m.a);
+					m.a = Math.cos(skewY);
+					m.b = Math.sin(skewY);
+					var skewX:Number = Math.atan2(-m.c, m.d);
+					m.c = -Math.sin(skewX);
+					m.d = Math.cos(skewX);
+				}
+				m.invert();
+				
+				var h:Number = Math.abs(m.d * value + m.b * _width);
+				var w:Number = Math.abs(m.a * _width + m.c * value);
+				if (h != _displayHeight) {
+					explicitHeight = h;
+				}
+				if (w != _displayWidth) {
+					explicitWidth = w;
+				}
+				updateSize();
+			}
+		}
+		
+		public function get displayWidth():Number
+		{
+			return _displayWidth;
+		}
+		public function set displayWidth(value:Number):void
+		{
+			if (explicitWidth == value) {
+				return;
+			}
+			
+			explicitWidth = value;
+			updateSize();
+		}
+		
+		public function get displayHeight():Number
+		{
+			return _displayHeight;
+		}
+		public function set displayHeight(value:Number):void
+		{
 			if (explicitHeight == value) {
 				return;
 			}
 			
 			explicitHeight = value;
-			updateHeight();
-		}
-		
-		public function get rotation():Number
-		{
-			return _rotation;
-		}
-		public function set rotation(value:Number):void
-		{
-			var shift:Number = value < 0 ? -180 : 179;
-			value = (value + shift) % 360 - shift;
-			
-			if (_rotation == value) {
-				return;
-			}
-			
-			_rotation = value;
-			direction = Math.round(_rotation / 90);
-			if (direction < 0) {
-				direction += 4;
-			}
-			
-			var w:Number = defaultWidth;
-			var h:Number = defaultHeight;
-			defaultWidth = direction % 2 ? defaultHeight : defaultWidth;
-			defaultHeight = direction % 2 ? defaultWidth : defaultHeight;
-			
-			invalidate();
-		}
-		
-		public function get displayWidth():Number
-		{
-			return direction % 2 ? _height : _width;
-		}
-		
-		public function get displayHeight():Number
-		{
-			return direction % 2 ? _width : _height;
+			updateSize();
 		}
 		
 		[Bindable("measuredWidthChange")]
@@ -201,6 +223,11 @@ package reflex.layout
 		public function get measuredBounds():Bounds
 		{
 			return _measuredBounds;
+		}
+		
+		public function get blockBounds():Bounds
+		{
+			return _blockBounds;
 		}
 		
 		[Bindable(event="marginChange")]
@@ -366,6 +393,24 @@ package reflex.layout
 		public function updateMeasurement(measuredBounds:Bounds, measuredWidth:Number = 0, measuredHeight:Number = 0):void
 		{
 			measuredBounds.merge(bounds);
+			_blockBounds = measuredBounds.clone();
+			
+			if (target != null) {		// TODO: and if scaling and rotation are not default
+				var m:Matrix = target.transform.matrix;
+				if (scale) {
+					// set scale back to 1 but keep rotation
+					var skewY:Number = Math.atan2(m.b, m.a);
+					m.a = Math.cos(skewY);
+					m.b = Math.sin(skewY);
+					var skewX:Number = Math.atan2(-m.c, m.d);
+					m.c = -Math.sin(skewX);
+					m.d = Math.cos(skewX);
+				}
+				_blockBounds.minWidth = Math.abs(m.a * measuredBounds.minWidth + m.c * measuredBounds.minHeight);
+				_blockBounds.minHeight = Math.abs(m.d * measuredBounds.minHeight + m.b * measuredBounds.minWidth);
+				_blockBounds.maxWidth = Math.abs(m.a * measuredBounds.maxWidth + m.c * measuredBounds.maxHeight);
+				_blockBounds.maxHeight = Math.abs(m.d * measuredBounds.maxHeight + m.b * measuredBounds.maxWidth);
+			}
 			
 			if (_measuredWidth != measuredWidth) {
 				_measuredWidth = measuredWidth;
@@ -380,8 +425,7 @@ package reflex.layout
 				dispatchEvent( new Event("measuredBoundsChange") );
 			}
 			
-			updateWidth();
-			updateHeight();
+			updateSize();
 		}
 		
 		public function updateDisplay():void
@@ -394,41 +438,45 @@ package reflex.layout
 				target.width = displayWidth;
 				target.height = displayHeight;
 			}
-			
-			if ( !isNaN(_rotation) ) {
-				target.rotation = _rotation;
-			}
-			if (target.name) {
-				trace(target.name, target.x, target.y, target.width, target.height);
-			}
 		}
 		
-		
-		protected function updateWidth():void
+		protected function updateSize():void
 		{
-			var value:Number = explicitWidth;
-			if ( isNaN(value) ) {
-				value = defaultWidth >= _measuredWidth ? defaultWidth : _measuredWidth;
+			var oldWidth:Number = _width;
+			var oldHeight:Number = _height;
+			
+			_displayWidth = !isNaN(explicitWidth) ? explicitWidth :
+							(_measuredWidth >= defaultWidth ? _measuredWidth : defaultWidth);
+			_displayHeight = !isNaN(explicitHeight) ? explicitHeight :
+							 (defaultHeight >= _measuredHeight ? defaultHeight : _measuredHeight);
+			
+			_displayWidth = measuredBounds.constrainWidth(_displayWidth);
+			_displayHeight = measuredBounds.constrainHeight(_displayHeight);
+			
+			if (target == null) {		// TODO: or if scaling and rotation are default
+				_width = _displayWidth;
+				_height = _displayHeight;
+			} else {
+				var m:Matrix = target.transform.matrix;
+				if (scale) {
+					// reset scale while retaining rotation
+					var skewY:Number = Math.atan2(m.b, m.a);
+					m.a = Math.cos(skewY);
+					m.b = Math.sin(skewY);
+					var skewX:Number = Math.atan2(-m.c, m.d);
+					m.c = -Math.sin(skewX);
+					m.d = Math.cos(skewX);
+				}
+				
+				_width = Math.abs(m.a * _displayWidth + m.c * _displayHeight);
+				_height = Math.abs(m.d * _displayHeight + m.b * _displayWidth);
 			}
 			
-			var oldValue:Number = _width;
-			_width = measuredBounds.constrainWidth(value);
-			if (_width != oldValue) {
+			if (_width != oldWidth) {
 				invalidate();
 				dispatchEvent(new Event("widthChange"));
 			}
-		}
-		
-		protected function updateHeight():void
-		{
-			var value:Number = explicitHeight;
-			if ( isNaN(value) ) {
-				value = !isNaN(measuredHeight) && measuredHeight > defaultHeight ? measuredHeight : defaultHeight;
-			}
-			
-			var oldValue:Number = _height;
-			_height = measuredBounds.constrainHeight(value);
-			if (_height != oldValue) {
+			if (_height != oldHeight) {
 				invalidate();
 				dispatchEvent(new Event("heightChange"));
 			}
@@ -450,6 +498,10 @@ package reflex.layout
 						invalidate();
 					}
 					dispatchEvent( new Event("anchorChange") );
+					break;
+				case bounds :
+					invalidate(true);
+					dispatchEvent( new Event("boundsChange") );
 					break;
 			}
 		}

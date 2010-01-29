@@ -24,7 +24,7 @@ package flight.list
 		
 		public function ArrayList(source:* = null)
 		{
-			this.source = source;
+			this.source = source || [];
 		}
 		
 		[Bindable(event="listChange")]
