@@ -16,6 +16,8 @@ package reflex.layout
 		[Bindable]
 		public var bounds:Bounds = new Bounds();
 		
+		public var snapToPixel:Boolean;
+		
 		// holds explicitly set value from setting width/height
 		protected var explicitWidth:Number;
 		protected var explicitHeight:Number;
@@ -81,7 +83,7 @@ package reflex.layout
 				return;
 			}
 			
-			_x = value;
+			_x = snapToPixel ? Math.round(value) : value;
 			if (target != null && !isNaN(_x) ) {
 				var m:Matrix = target.transform.matrix;
 				var d:Number = m.a * _displayWidth + m.c * _displayHeight;
@@ -101,7 +103,7 @@ package reflex.layout
 				return;
 			}
 			
-			_y = value;
+			_y = snapToPixel ? Math.round(value) : value;
 			if (target != null && !isNaN(_y) ) {
 				var m:Matrix = target.transform.matrix;
 				var d:Number = m.d * _displayHeight + m.b * _displayWidth;
@@ -189,7 +191,7 @@ package reflex.layout
 				return;
 			}
 			
-			explicitWidth = value;
+			explicitWidth = snapToPixel ? Math.round(value) : value;
 			updateSize();
 		}
 		
@@ -203,7 +205,7 @@ package reflex.layout
 				return;
 			}
 			
-			explicitHeight = value;
+			explicitHeight = snapToPixel ? Math.round(value) : value;
 			updateSize();
 		}
 		
@@ -452,6 +454,10 @@ package reflex.layout
 			
 			_displayWidth = measuredBounds.constrainWidth(_displayWidth);
 			_displayHeight = measuredBounds.constrainHeight(_displayHeight);
+			if (snapToPixel) {
+				_displayWidth = Math.round(_displayWidth);
+				_displayHeight = Math.round(_displayHeight);
+			}
 			
 			if (target == null) {		// TODO: or if scaling and rotation are default
 				_width = _displayWidth;
@@ -470,6 +476,10 @@ package reflex.layout
 				
 				_width = Math.abs(m.a * _displayWidth + m.c * _displayHeight);
 				_height = Math.abs(m.d * _displayHeight + m.b * _displayWidth);
+				if (snapToPixel) {
+					_width = Math.round(_width);
+					_height = Math.round(_height);
+				}
 			}
 			
 			if (_width != oldWidth) {
