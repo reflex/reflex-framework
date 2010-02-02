@@ -1,6 +1,7 @@
 package display
 {
 	import flash.display.DisplayObject;
+	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
 	
 	import flight.binding.Bind;
@@ -8,7 +9,7 @@ package display
 	import flight.position.IPosition;
 	import flight.position.Position;
 
-	public class Containment
+	public class Containment extends EventDispatcher
 	{
 		[Bindable]
 		public var hPosition:IPosition = new Position();		// TODO: implement lazy instantiation of Position
