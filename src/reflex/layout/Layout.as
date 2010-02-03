@@ -81,22 +81,21 @@ package reflex.layout
 			propertyChange("target", oldValue, _target);
 		}
 		
-		public function invalidate(measure:Boolean = false):void
+		public function invalidate(children:Boolean = false):void
 		{
 			if (validating || _target == null) {
 				return;
 			}
 			
-			if (measure) {
-				RenderEvent.invalidate(_target, MEASURE);
-				return;
-			}
-			
 			RenderEvent.invalidate(_target, LAYOUT);
 			
-			var parent:Layout = getLayout(_target.parent);
-			if (parent != null ) {
-				parent.invalidate(true);
+			if (children) {
+				RenderEvent.invalidate(_target, MEASURE);
+			} else {
+				var parent:Layout = getLayout(_target.parent);
+				if (parent != null ) {
+					parent.invalidate(true);
+				}
 			}
 		}
 		
