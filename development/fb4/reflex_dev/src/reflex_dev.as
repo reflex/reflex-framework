@@ -1,60 +1,31 @@
 package
 {
-	import display.Containment;
-	
 	import flame.controls.ScrollBarGraphic;
 	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import flash.geom.Matrix;
-	import flash.utils.Dictionary;
-	import flash.utils.setInterval;
 	
 	import flight.binding.Bind;
-	import flight.position.IPosition;
 	
-	import reflex.behavior.Behavior;
-	import reflex.behavior.ButtonBehavior;
-	import reflex.behavior.ScrollBehavior;
-	import reflex.behavior.SelectableBehavior;
-	import reflex.controls.Button;
+	import reflex.behaviors.ScrollBehavior;
+	import reflex.component.Application;
 	import reflex.controls.ScrollBar;
+	import reflex.display.Containment;
 	import reflex.events.ButtonEvent;
-	import reflex.events.RenderEvent;
 	import reflex.layout.Block;
 	import reflex.layout.Dock;
-	import reflex.layout.Layout;
-	import reflex.skin.GraphicSkin;
-	import reflex.skin.MXMLButtonSkin;
+	import reflex.skins.GraphicSkin;
 	
-	[SWF(widthPercent="100", heightPercent="100", frameRate="12")]
-	public class reflex_dev extends Sprite
+	[SWF(widthPercent="100%", heightPercent="100%", frameRate="12")]
+	public class reflex_dev extends Application
 	{
-		private var block:Block;
 		private var containment:Containment;
 		
 		public function reflex_dev()
 		{
-			stage.align = StageAlign.TOP_LEFT;
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.addEventListener(Event.RESIZE, onResize);
-			ButtonEvent.initialize(stage);
-//			stage.addEventListener(ButtonEvent.DRAG, onDrag);
-//			stage.addEventListener(ButtonEvent.PRESS, onPress);
-			
-//			var button:Button = new Button();
-//				button.label = "HI WORLD";
-//			addChild(button);
-//			block = new Block(button);
-//			block.dock = Dock.RIGHT;
-			
-//			var buttonSkin:MXMLButtonSkin = new MXMLButtonSkin();
-//				buttonSkin.target = button;
-//				buttonSkin.button = button;
-//			var buttonBehavior:ButtonBehavior = new ButtonBehavior(button);
-//			var selectableBehavior:SelectableBehavior = new SelectableBehavior(button);
+			background = 0xAABBCC;
 			
 			containment = new Containment();
 			
@@ -65,8 +36,7 @@ package
 			scrollBehavior.position = containment.hPosition;
 			addChild(scrollbar);
 			
-			block = new Block(scrollbar);
-			block.dock = Dock.BOTTOM;
+			scrollbar.dock = Dock.BOTTOM;
 			
 			// two
 			scrollbar = new ScrollBar();
@@ -75,10 +45,9 @@ package
 			scrollBehavior.position = containment.vPosition;
 			addChild(scrollbar);
 			
-			block = new Block(scrollbar);
-			block.dock = Dock.RIGHT;
-			block.height = 100;
-			block.rotation = -90;
+			scrollbar.dock = Dock.RIGHT;
+			scrollbar.height = 50;
+			scrollbar.rotation = -90;
 			scrollbar.scaleX = -1;
 			
 			// three
@@ -87,18 +56,16 @@ package
 			scrollBehavior = new ScrollBehavior(scrollbar);
 			addChild(scrollbar);
 			
-			block = new Block(scrollbar);
-			block.dock = Dock.FILL;
+			scrollbar.dock = Dock.FILL;
 			
-//			containment.target = scrollbar;
-//			Bind.addBinding(containment, "hPosition.size", block, "width");
-//			Bind.addBinding(containment, "vPosition.size", block, "height");
+			containment.target = scrollbar;
+			containment.hPosition.space = 400;
+			containment.vPosition.space = 300;
+			Bind.addBinding(containment, "hPosition.size", scrollbar, "width");
+			Bind.addBinding(containment, "vPosition.size", scrollbar, "height");
 			
-			block = new Block(this);
-			block.padding = 20;
-			block.padding.horizontal = block.padding.vertical = 10;
-			
-			onResize(null);
+			padding = 20;
+			padding.horizontal = padding.vertical = 10;
 		}
 		
 		private function getScrollGraphic():ScrollBarGraphic
@@ -129,26 +96,18 @@ package
 			return scroll;
 		}
 		
-		private function onResize(event:Event):void
-		{
-			block.width = stage.stageWidth;
-			block.height = stage.stageHeight;
-			containment.hPosition.space = stage.stageWidth/2;
-			containment.vPosition.space = stage.stageHeight/2;
-		}
-		
 		private var pressedWidth:Number = 0;
 		private var pressedHeight:Number = 0;
 		private function onPress(event:ButtonEvent):void
 		{
-			pressedWidth = containment.hPosition.value;
-			pressedHeight = containment.vPosition.value;
+			pressedWidth = containment.hPosition.space;
+			pressedHeight = containment.vPosition.space;
 		}
 		
 		private function onDrag(event:ButtonEvent):void
 		{
-			containment.hPosition.value = pressedWidth + event.deltaX;
-			containment.vPosition.value = pressedHeight + event.deltaY;
+			containment.hPosition.space = pressedWidth + event.deltaX;
+			containment.vPosition.space = pressedHeight + event.deltaY;
 			event.updateAfterEvent();
 		}
 		

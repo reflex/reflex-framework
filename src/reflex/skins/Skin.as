@@ -1,4 +1,4 @@
-package reflex.skin
+package reflex.skins
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -10,8 +10,6 @@ package reflex.skin
 	
 	import flight.list.IList;
 	
-	import reflex.core.ISkin;
-	import reflex.core.ISkinnable;
 	
 	/**
 	 * Skin is a convenient base class for many skins, a swappable graphical

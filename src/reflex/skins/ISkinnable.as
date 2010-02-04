@@ -1,4 +1,4 @@
-package reflex.core
+package reflex.skins
 {
 	import flash.events.IEventDispatcher;
 	

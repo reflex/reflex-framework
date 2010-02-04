@@ -1,4 +1,4 @@
-package reflex.behavior
+package reflex.behaviors
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.InteractiveObject;
@@ -6,8 +6,7 @@ package reflex.behavior
 	
 	import flight.binding.Bind;
 	
-	import reflex.core.IBehavior;
-	import reflex.core.ISkinnable;
+	import reflex.skins.ISkinnable;
 	import reflex.events.ButtonEvent;
 	
 	// needed? If they help contribute to documentation or make the state workflow easier

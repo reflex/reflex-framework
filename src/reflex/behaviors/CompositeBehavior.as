@@ -1,4 +1,4 @@
-package reflex.behavior
+package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
@@ -8,7 +8,6 @@ package reflex.behavior
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
 	
-	import reflex.core.IBehavior;
 
 	use namespace flash_proxy;
 	

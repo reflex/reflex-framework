@@ -1,4 +1,4 @@
-package reflex.behavior
+package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
@@ -11,8 +11,8 @@ package reflex.behavior
 	
 	import mx.controls.Button;
 	
-	import reflex.core.ISkin;
-	import reflex.core.ISkinnable;
+	import reflex.skins.ISkin;
+	import reflex.skins.ISkinnable;
 	import reflex.events.ButtonEvent;
 	
 	[Bindable]

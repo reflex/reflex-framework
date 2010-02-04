@@ -1,10 +1,9 @@
-package reflex.skin
+package reflex.skins
 {
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
 	import flash.events.EventDispatcher;
 	
-	import reflex.core.ISkin;
 
 	public class GraphicSkin extends EventDispatcher implements ISkin
 	{

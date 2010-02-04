@@ -1,13 +1,18 @@
-package reflex.core
+package reflex.component
 {
 	import flash.display.MovieClip;
 	
 	import flight.list.IList;
 	
-	import reflex.behavior.CompositeBehavior;
+	import reflex.behaviors.CompositeBehavior;
+	import reflex.behaviors.IBehavior;
+	import reflex.behaviors.IBehavioral;
+	import reflex.display.BlockDisplay;
 	import reflex.layout.ILayoutAlgorithm;
+	import reflex.skins.ISkin;
+	import reflex.skins.ISkinnable;
 	
-	public class Component extends MovieClip implements IBehavioral, ISkinnable
+	public class Component extends BlockDisplay implements IBehavioral, ISkinnable
 	{
 		//[Bindable] override public var enabled:Boolean;
 		
@@ -17,8 +22,8 @@ package reflex.core
 		{
 		}
 		
-		[Bindable]
-		public var layout:ILayoutAlgorithm;
+//		[Bindable]
+//		public var layout:ILayoutAlgorithm;
 		
 		[Bindable]
 		public var state:String;
@@ -30,7 +35,7 @@ package reflex.core
 		public var children:IList;
 		
 		
-		[ArrayElementType("reflex.core.IBehavior")]
+		[ArrayElementType("reflex.behaviors.IBehavior")]
 		/**
 		 * A dynamic object or hash map of behavior objects. <code>behaviors</code>
 		 * is effectively read-only, but setting either an IBehavior or array of

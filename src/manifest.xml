@@ -5,10 +5,10 @@
 	<component id="Button"					class="reflex.controls.Button" />
 	
 	<!-- Behaviors -->
-	<component id="ButtonStateBehavior"		class="reflex.behavior.ButtonBehavior" />
-	<component id="SelectableBehavior"		class="reflex.behavior.SelectableBehavior" />
+	<component id="ButtonStateBehavior"		class="reflex.behaviors.ButtonBehavior" />
+	<component id="SelectableBehavior"		class="reflex.behaviors.SelectableBehavior" />
 	
 	<!-- Core -->
-	<component id="Application"				class="reflex.core.Application" />
+	<component id="Application"				class="reflex.component.Application" />
 	
 </componentPackage>

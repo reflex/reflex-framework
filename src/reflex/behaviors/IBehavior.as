@@ -1,4 +1,4 @@
-package reflex.core
+package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
 

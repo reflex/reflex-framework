@@ -1,6 +1,6 @@
 package reflex.controls
 {
-	import reflex.core.Component;
+	import reflex.component.Component;
 
 	public class ListBox extends Component
 	{

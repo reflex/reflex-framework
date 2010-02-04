@@ -1,4 +1,4 @@
-package reflex.behavior
+package reflex.behaviors
 {
 	
 	import flash.display.InteractiveObject;
@@ -7,8 +7,7 @@ package reflex.behavior
 	import flight.binding.Bind;
 	import flight.utils.Type;
 	
-	import reflex.core.IBehavior;
-	import reflex.core.ISkinnable;
+	import reflex.skins.ISkinnable;
 	
 	/**
 	 * Behavior is a convenient base class for various behavior implementations.

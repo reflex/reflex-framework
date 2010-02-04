@@ -1,9 +1,9 @@
-package reflex.behavior
+package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
 	
-	import reflex.core.ISkin;
-	import reflex.core.ISkinnable;
+	import reflex.skins.ISkin;
+	import reflex.skins.ISkinnable;
 
 	public class ListBehavior extends Behavior
 	{
