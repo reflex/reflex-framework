@@ -15,12 +15,12 @@ package reflex.skins
 		function set children(value:IList):void;
 		
 		function get layout():ILayoutAlgorithm;
-		function set layout(value:ILayoutAlgorithm):void;
+		function set layout(value:*):void;
 		
 		function get state():String;
 		function set state(value:String):void;
 		
 		function get skin():ISkin;
-		function set skin(value:ISkin):void;
+		function set skin(value:*):void;
 	}
 }
