@@ -114,21 +114,6 @@ package reflex.display
 			block.bounds = value;
 		}
 		
-		public function get measuredWidth():Number
-		{
-			return block.measuredWidth;
-		}
-		
-		public function get measuredHeight():Number
-		{
-			return block.measuredHeight;
-		}
-		
-		public function get measuredBounds():Bounds
-		{
-			return block.measuredBounds;
-		}
-		
 		public function get margin():Box
 		{
 			return block.margin;
@@ -184,11 +169,6 @@ package reflex.display
 		public function validate():void
 		{
 			block.validate();
-		}
-		
-		public function measure():void
-		{
-			block.measure();
 		}
 		
 		
