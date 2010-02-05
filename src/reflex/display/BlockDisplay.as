@@ -100,7 +100,7 @@ package reflex.display
 		{
 			return block.algorithm;
 		}
-		public function set layout(value:ILayoutAlgorithm):void
+		public function set layout(value:*):void
 		{
 			block.algorithm = value;
 		}
