@@ -1,5 +1,6 @@
 package reflex.skins
 {
+	import flash.display.InteractiveObject;
 	import flash.events.IEventDispatcher;
 	
 	import flight.list.IList;
@@ -22,5 +23,8 @@ package reflex.skins
 		
 		function get skin():ISkin;
 		function set skin(value:ISkin):void;
+    
+    function addSkinPart(part:Object):void;
+    function removeSkinPart(part:Object):void;
 	}
 }

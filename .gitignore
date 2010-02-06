@@ -4,4 +4,4 @@ bin-*
 bin
 html-template
 *.swf
-
+generated
