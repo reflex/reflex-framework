@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties includeAllClasses="false" version="3">
   <includeClasses>
     <classEntry path="FlexClasses"/>
@@ -49,11 +49,17 @@
     <classEntry path="reflex.layout.ILayout"/>
     <classEntry path="reflex.layout.ILayoutAlgorithm"/>
     <classEntry path="reflex.layout.Layout"/>
+    <classEntry path="reflex.skins.ComponentSkin"/>
     <classEntry path="reflex.skins.GraphicSkin"/>
     <classEntry path="reflex.skins.ISkin"/>
     <classEntry path="reflex.skins.ISkinnable"/>
     <classEntry path="reflex.skins.Skin"/>
     <classEntry path="reflex.styles.IStylable"/>
+    <classEntry path="reflex.tools.flash.SWFPreloader"/>
+    <classEntry path="reflex.tools.flash.SWFPreloaderSkin"/>
+    <classEntry path="reflex.tools.flashbuilder.ReflexApplicationLoader"/>
+    <classEntry path="reflex.tools.flash.ISWFPreloaderSkin"/>
+    <classEntry path="reflex.tools.flash.ReflexFlashLoader"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests>

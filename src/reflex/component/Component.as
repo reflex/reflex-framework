@@ -1,7 +1,9 @@
 package reflex.component
 {
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	
+	import flight.list.ArrayList;
 	import flight.list.IList;
 	
 	import reflex.behaviors.CompositeBehavior;
@@ -12,6 +14,8 @@ package reflex.component
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
 	
+  [DefaultProperty("skin")]
+  
 	public class Component extends BlockDisplay implements IBehavioral, ISkinnable
 	{
 		//[Bindable] override public var enabled:Boolean;
@@ -87,6 +91,22 @@ package reflex.component
 				_skin.target = this;
 			}
 		}
-		
+    
+    public function addSkinPart(part:Object):void
+    {
+      if(part is DisplayObject)
+      {
+        addChild(DisplayObject(part))
+      }
+      if(part is ISkin)
+      {
+        ISkin(part).target = this;
+      }
+    }
+    
+    public function removeSkinPart(part:Object):void
+    {
+      
+    }
 	}
 }

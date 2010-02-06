@@ -11,4 +11,7 @@
 	<!-- Core -->
 	<component id="Application"				class="reflex.component.Application" />
 	
+	<!-- Skin -->
+	<component id="ComponentSkin" class="reflex.skins.ComponentSkin" />
+	
 </componentPackage>
