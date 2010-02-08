@@ -28,19 +28,28 @@ package flight.position
 		}
 		public function set value(value:Number):void
 		{
-			value = value <= _min ? _min : (value > _max - _space ? _max - _space : value);
+			var space:Number = _space >= _size ? _size : _space;
+			value = value <= _min ? _min : (value > _max - space ? _max - space : value);
 			var p:Number = 1 / precision;
 			value = Math.round(value * p) / p;
-			if (_value == value) {
-				return;
+			
+			var properties:Array = [];
+			var oldValues:Array = [];
+			
+			if (_value != value) {
+				properties.push("value");
+				oldValues.push(_value);
+				_value = value;
+			}
+			var area:Number = _size - space;
+			value = area == 0 ? 1 : (_value - _min) / area;
+			if (_percent != value) {
+				properties.push("percent");
+				oldValues.push(_percent);
+				_percent = value;
 			}
 			
-			var oldValues:Array = [_value, _percent];
-			_value = value;
-			var area:Number = _size - _space;
-			_percent = area == 0 ? 1 : (_value - _min) / area;
-			
-			PropertyEvent.dispatchChangeList(this, ["value", "percent"], oldValues);
+			PropertyEvent.dispatchChangeList(this, properties, oldValues);
 		}
 		
 		[Bindable(event="percentChange")]
@@ -54,7 +63,8 @@ package flight.position
 				return;
 			}
 			
-			var area:Number = _size - _space;
+			var space:Number = _space >= _size ? _size : _space;
+			var area:Number = _size - space;
 			this.value = _min + value * area;
 		}
 		
@@ -77,13 +87,7 @@ package flight.position
 			_size = value;
 			_max = _min + _size;
 			
-			if (_space > _size) {
-				properties.push("space");
-				oldValues.push(_space);
-				_space = _size;
-			}
-			
-			value = value;
+			this.value = _value;
 			PropertyEvent.dispatchChangeList(this, properties, oldValues);
 		}
 		
@@ -110,12 +114,6 @@ package flight.position
 				_max = _min;
 			}
 			_size = _max - _min;
-			
-			if (_space > _size) {
-				properties.push("space");
-				oldValues.push(_space);
-				_space = _size;
-			}
 			
 			value = value;
 			PropertyEvent.dispatchChangeList(this, properties, oldValues);
@@ -145,12 +143,6 @@ package flight.position
 			}
 			_size = _max - _min;
 			
-			if (_space > _size) {
-				properties.push("space");
-				oldValues.push(_space);
-				_space = _size;
-			}
-			
 			value = value;
 			PropertyEvent.dispatchChangeList(this, properties, oldValues);
 		}
@@ -162,7 +154,6 @@ package flight.position
 		}
 		public function set space(value:Number):void
 		{
-			value = value >= _size ? _size : value;
 			var p:Number = 1 / precision;
 			value = Math.round(value * p) / p;
 			if (_space == value) {
@@ -172,6 +163,7 @@ package flight.position
 			var oldValue:Object = _space;
 			_space = value;
 			
+			this.value = _value;
 			PropertyEvent.dispatchChange(this, "space", oldValue, _space);
 		}
 		

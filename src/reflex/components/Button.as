@@ -1,9 +1,8 @@
-package reflex.controls
+package reflex.components
 {
-	import reflex.component.Component;
 	
 	[DefaultProperty("label")]
-	public class Button extends Component implements ISelectable
+	public class Button extends Component
 	{
 		[Bindable] public var label:String;
 		[Bindable] public var selected:Boolean;

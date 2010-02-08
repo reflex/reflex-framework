@@ -1,4 +1,4 @@
-package reflex.component
+package reflex.components
 {
 	import flash.display.MovieClip;
 	

@@ -8,6 +8,8 @@ package reflex.layout
 	
 	import flight.events.PropertyEvent;
 	
+	import mx.events.PropertyChangeEvent;
+	
 	public class Block extends Layout
 	{
 		[Bindable]
@@ -47,10 +49,10 @@ package reflex.layout
 		{
 			super(target);
 			this.scale = scale;
-			_margin.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
-			_padding.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
-			_anchor.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
-			bounds.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
+			_margin.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
+			_padding.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
+			_anchor.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
+			bounds.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
 			_anchor.horizontal = _anchor.vertical = NaN;
 			algorithm = new Dock();
 		}

@@ -70,7 +70,7 @@ package reflex.behaviors
 			updatePosition();
 		}
 		
-		[PropertyListener(target="position.value")]						// TODO: implement in favor of Bind.addListener...
+		[PropertyListener(target="position.percent")]
 		public function onPosition(event:Event):void
 		{
 			if (thumb == null || track == null) {

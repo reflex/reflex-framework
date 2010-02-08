@@ -1,4 +1,4 @@
-package reflex.component
+package reflex.components
 {
 	import flash.display.StageAlign;
 	import flash.display.StageQuality;

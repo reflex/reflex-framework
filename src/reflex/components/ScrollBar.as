@@ -1,8 +1,7 @@
-package reflex.controls
+package reflex.components
 {
 	import flight.position.IPosition;
 	
-	import reflex.component.Component;
 
 	public class ScrollBar extends Component
 	{
