@@ -238,7 +238,7 @@ package flight.binding
 				source = source[prop];
 			}
 			
-			_resolved = Boolean(pathIndex == _sourcePath.length || source != null);
+			_resolved = Boolean(pathIndex == len && source != null);
 			if (!_resolved) {
 				return;
 			}

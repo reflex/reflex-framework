@@ -4,9 +4,15 @@ package reflex.skins
 	import flash.display.Sprite;
 	import flash.events.EventDispatcher;
 	
+	import reflex.layout.Block;
+	import reflex.layout.ILayoutAlgorithm;
+	
 
 	public class GraphicSkin extends EventDispatcher implements ISkin
 	{
+		[Bindable]
+		public var layout:ILayoutAlgorithm;
+		
 		[Bindable]
 		public var data:Object;
 		
@@ -19,6 +25,8 @@ package reflex.skins
 		public function GraphicSkin(graphic:Sprite)
 		{
 			this.graphic = graphic;
+			var block:Block = new Block(graphic);
+			block.anchor = 0;
 		}
 		
 		[Bindable]

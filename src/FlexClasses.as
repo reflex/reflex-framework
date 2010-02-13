@@ -29,7 +29,7 @@ package
 		import mx.binding.IWatcherSetupUtil;			IWatcherSetupUtil;
 		// Required class for Flash Buider 4 binding in AS3 projects
 		import mx.binding.IBindingClient;				IBindingClient;
-//		import mx.binding.IWatcherSetupUtil2;			IWatcherSetupUtil2;
+		import mx.binding.IWatcherSetupUtil2;			IWatcherSetupUtil2;
 		import mx.binding.ArrayElementWatcher;			ArrayElementWatcher;
 		import mx.binding.FunctionReturnWatcher;		FunctionReturnWatcher;
 		import mx.binding.PropertyWatcher;				PropertyWatcher;

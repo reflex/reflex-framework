@@ -17,6 +17,12 @@ package reflex.display
 		[Bindable]
 		public var vPosition:IPosition = new Position();
 		
+		[Bindable]
+		public var width:Number;
+		
+		[Bindable]
+		public var height:Number;
+		
 		private var _target:DisplayObject;
 		
 		public function Containment(target:DisplayObject = null)
@@ -25,6 +31,12 @@ package reflex.display
 			Bind.addListener(onPositionChange, this, "vPosition.value");
 			Bind.addListener(onSizeChange, this, "hPosition.space");
 			Bind.addListener(onSizeChange, this, "vPosition.space");
+			
+			Bind.addBinding(this, "width", this, "hPosition.space", true);
+			Bind.addBinding(this, "height", this, "vPosition.space", true);
+			
+			Bind.addBinding(this, "hPosition.size", this, "target.width");
+			Bind.addBinding(this, "vPosition.size", this, "target.height");
 			
 			hPosition.stepSize = vPosition.stepSize = 10;
 			hPosition.skipSize = vPosition.skipSize = 100;

@@ -1,8 +1,15 @@
 package reflex.display
 {
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.utils.setTimeout;
+	
+	import flight.events.ListEvent;
+	import flight.events.ListEventKind;
+	import flight.events.PropertyEvent;
+	import flight.list.ArrayList;
+	import flight.list.IList;
 	
 	import reflex.layout.Block;
 	import reflex.layout.Bounds;
@@ -10,15 +17,35 @@ package reflex.display
 	import reflex.layout.ILayoutAlgorithm;
 	import reflex.layout.Layout;
 	
-	public class BlockDisplay extends MovieClip
+	[DefaultProperty("children")]
+	public class Container extends MovieClip
 	{
 		protected var block:Block;
 		
+		private var _children:IList = new ArrayList();
+		
 		// TODO: add propertyChange updates (via Block as well)
-		public function BlockDisplay()
+		public function Container()
 		{
 			block = new Block();
-			addEventListener(Event.ADDED_TO_STAGE, onInit);
+			addEventListener(Event.ADDED, onInit);
+			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+		}
+		
+		public function get children():IList
+		{
+			return _children;
+		}
+		public function set children(value:*):void
+		{
+			if (value is DisplayObject) {
+				_children.addItem(value);
+			} else if (value is Array) {
+				_children.removeItems();
+				_children.addItems(value);
+			} else if (value is IList) {
+				_children.addItems( IList(value).getItems() );
+			}
 		}
 		
 		override public function get x():Number
@@ -123,13 +150,16 @@ package reflex.display
 			block.margin = value;
 		}
 		
+		[Bindable("paddingChange")]
 		public function get padding():Box
 		{
 			return block.padding;
 		}
 		public function set padding(value:*):void
 		{
+			var oldValue:Object = block.padding;
 			block.padding = value;
+			PropertyEvent.dispatchChange(this, "padding", oldValue, block.padding);
 		}
 		
 		public function get anchor():Box
@@ -180,6 +210,36 @@ package reflex.display
 		{
 			block.target = this;
 			init();
+		}
+		
+		private function onChildrenChange(event:ListEvent):void
+		{
+			var child:DisplayObject;
+			var loc:int = event.location1;
+			switch (event.kind) {
+				case ListEventKind.ADD :
+					for each (child in event.items) {
+						addChildAt(child, loc++);
+					}
+					break;
+				case ListEventKind.REMOVE :
+					for each (child in event.items) {
+						removeChild(child);
+					}
+					break;
+				case ListEventKind.REPLACE :
+					removeChild(event.items[1]);
+					addChildAt(event.items[0], loc);
+					break;
+				case ListEventKind.RESET :
+					while (numChildren) {
+						removeChildAt(numChildren-1);
+					}
+					for (var i:int = 0; i < _children.length; i++) {
+						addChildAt(_children.getItemAt(i) as DisplayObject, i);
+					}
+					break;
+			}
 		}
 		
 	}

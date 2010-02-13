@@ -24,7 +24,10 @@ package reflex.behaviors
 		public var track:InteractiveObject;
 		public var thumb:InteractiveObject;
 		
+		[Binding(target="target.horizontal")]
 		public var horizontal:Boolean = false;
+		
+		[Binding(target="target.position")]
 		public var position:IPosition = new Position();		// TODO: implement lazy instantiation of position
 		
 		private var _percent:Number = 0;

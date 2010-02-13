@@ -249,10 +249,7 @@ package reflex.layout
 				return;
 			}
 			
-			_margin.left = margin.left;
-			_margin.top = margin.top;
-			_margin.right = margin.right;
-			_margin.bottom = margin.bottom;
+			_margin = margin;
 			dispatchEvent(new Event("marginChange"));
 		}
 		
@@ -271,12 +268,7 @@ package reflex.layout
 				return;
 			}
 			
-			_padding.left = padding.left;
-			_padding.top = padding.top;
-			_padding.right = padding.right;
-			_padding.bottom = padding.bottom;
-			_padding.horizontal = padding.horizontal;
-			_padding.vertical = padding.vertical;
+			_padding = padding;
 			dispatchEvent(new Event("paddingChange"));
 		}
 		
@@ -295,14 +287,7 @@ package reflex.layout
 				return;
 			}
 			
-			_anchor.left = anchor.left;
-			_anchor.top = anchor.top;
-			_anchor.right = anchor.right;
-			_anchor.bottom = anchor.bottom;
-			_anchor.offsetX = anchor.offsetX;
-			_anchor.offsetY = anchor.offsetY;
-			_anchor.horizontal = anchor.horizontal;
-			_anchor.vertical = anchor.vertical;
+			_anchor = anchor;
 			dispatchEvent(new Event("anchorChange"));
 		}
 		

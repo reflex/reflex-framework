@@ -33,7 +33,7 @@ package flight.events
 		
 		
 		private static var changes:Dictionary = new Dictionary(true);
-		public static function change(source:IEventDispatcher, property:Object, oldValue:*, newValue:*):void
+		public static function change(source:IEventDispatcher, property:Object, oldValue:*, newValue:*):*
 		{
 			if (oldValue === newValue) {
 				return;
@@ -48,6 +48,7 @@ package flight.events
 				change.next = changes[source];
 			}
 			changes[source] = change;
+			return newValue;
 		}
 		
 		public static function dispatch(source:IEventDispatcher):void

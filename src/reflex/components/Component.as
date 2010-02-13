@@ -1,38 +1,37 @@
 package reflex.components
 {
-	import flash.display.MovieClip;
-	
-	import flight.list.IList;
-	
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
-	import reflex.display.BlockDisplay;
+	import reflex.display.Container;
 	import reflex.layout.ILayoutAlgorithm;
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
 	
-	public class Component extends BlockDisplay implements IBehavioral, ISkinnable
+	public class Component extends Container implements IBehavioral, ISkinnable
 	{
-		//[Bindable] override public var enabled:Boolean;
-		
-		private var _behaviors:CompositeBehavior;
-		
-		public function Component()
-		{
-		}
-		
-//		[Bindable]
-//		public var layout:ILayoutAlgorithm;
-		
 		[Bindable]
 		public var state:String;
 		
 		[Bindable]
 		public var data:Object;
 		
-		[Bindable]
-		public var children:IList;
+		private var _skin:ISkin; 
+		private var _behaviors:CompositeBehavior;
+		private var _layout:ILayoutAlgorithm;
+		
+		public function Component()
+		{
+		}
+		
+		override public function get layout():ILayoutAlgorithm
+		{
+			return _skin.layout;
+		}
+		override public function set layout(value:ILayoutAlgorithm):void
+		{
+			_skin.layout = value;
+		}
 		
 		
 		[ArrayElementType("reflex.behaviors.IBehavior")]
@@ -57,7 +56,6 @@ package reflex.components
 			}
 			return _behaviors;
 		}
-		
 		public function set behaviors(value:*):void
 		{
 			if(_behaviors == null) {
@@ -71,9 +69,13 @@ package reflex.components
 			}
 		}
 		
-		private var _skin:ISkin; [Bindable]
-		public function get skin():ISkin { return _skin; }
-		public function set skin(value:ISkin):void {
+		[Bindable]
+		public function get skin():ISkin
+		{
+			return _skin;
+		}
+		public function set skin(value:ISkin):void
+		{
 			if (_skin == value) {
 				return;
 			}
