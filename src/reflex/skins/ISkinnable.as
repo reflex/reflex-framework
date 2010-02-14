@@ -4,15 +4,11 @@ package reflex.skins
 	
 	import flight.list.IList;
 	
+	import reflex.display.IContainer;
 	import reflex.layout.ILayoutAlgorithm;
 	
-	public interface ISkinnable extends IEventDispatcher
+	public interface ISkinnable extends IContainer
 	{
-		function get children():IList;
-		
-		function get layout():ILayoutAlgorithm;
-		function set layout(value:ILayoutAlgorithm):void;
-		
 		function get data():Object;
 		function set data(value:Object):void;
 		

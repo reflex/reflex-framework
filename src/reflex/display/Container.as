@@ -5,6 +5,7 @@ package reflex.display
 	import flash.events.Event;
 	import flash.utils.setTimeout;
 	
+	import flight.binding.Bind;
 	import flight.events.ListEvent;
 	import flight.events.ListEventKind;
 	import flight.events.PropertyEvent;
@@ -20,6 +21,9 @@ package reflex.display
 	[DefaultProperty("children")]
 	public class Container extends MovieClip
 	{
+		[Bindable]
+		public var freeform:Boolean = false;
+		
 		protected var block:Block;
 		
 		private var _children:IList = new ArrayList();
@@ -27,9 +31,23 @@ package reflex.display
 		// TODO: add propertyChange updates (via Block as well)
 		public function Container()
 		{
-			block = new Block();
 			addEventListener(Event.ADDED, onInit);
 			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			block = new Block();
+			block.addEventListener("xChange", forwardEvent);
+			block.addEventListener("yChange", forwardEvent);
+			block.addEventListener("displayWidthChange", forwardEvent);
+			block.addEventListener("displayWidthChange", onWidthChange);
+			block.addEventListener("displayHeightChange", forwardEvent);
+			block.addEventListener("displayHeightChange", onHeightChange);
+			block.addEventListener("snapToPixelChange", forwardEvent);
+			block.addEventListener("layoutChange", forwardEvent);
+			block.addEventListener("boundsChange", forwardEvent);
+			block.addEventListener("marginChange", forwardEvent);
+			block.addEventListener("paddingChange", forwardEvent);
+			block.addEventListener("dockChange", forwardEvent);
+			block.addEventListener("tileChange", forwardEvent);
+			Bind.addBinding(block, "freeform", this, "freeform", true);
 		}
 		
 		public function get children():IList
@@ -48,6 +66,7 @@ package reflex.display
 			}
 		}
 		
+		[Bindable(event="xChange")]
 		override public function get x():Number
 		{
 			return super.x;
@@ -62,6 +81,7 @@ package reflex.display
 			block.x = value;
 		}
 		
+		[Bindable(event="yChange")]
 		override public function get y():Number
 		{
 			return block.y;
@@ -76,6 +96,7 @@ package reflex.display
 			block.y = value;
 		}
 		
+		[Bindable(event="widthChange")]
 		override public function get width():Number
 		{
 			return displayWidth * scaleX;
@@ -85,6 +106,7 @@ package reflex.display
 			displayWidth = value / scaleY;
 		}
 		
+		[Bindable(event="heightChange")]
 		override public function get height():Number
 		{
 			return displayHeight * scaleY;
@@ -95,6 +117,7 @@ package reflex.display
 		}
 		
 		
+		[Bindable(event="displayWidthChange")]
 		public function get displayWidth():Number
 		{
 			return block.displayWidth;
@@ -104,6 +127,7 @@ package reflex.display
 			block.displayWidth = value;
 		}
 		
+		[Bindable(event="displayHeightChange")]
 		public function get displayHeight():Number
 		{
 			return block.displayHeight;
@@ -113,6 +137,7 @@ package reflex.display
 			block.displayHeight = value;
 		}
 		
+		[Bindable(event="snapToPixelChange")]
 		public function get snapToPixel():Boolean
 		{
 			return block.snapToPixel;
@@ -123,6 +148,7 @@ package reflex.display
 		}
 		
 		
+		[Bindable(event="layoutChange")]
 		public function get layout():ILayoutAlgorithm
 		{
 			return block.algorithm;
@@ -132,6 +158,7 @@ package reflex.display
 			block.algorithm = value;
 		}
 		
+		[Bindable(event="boundsChange")]
 		public function get bounds():Bounds
 		{
 			return block.bounds;
@@ -141,6 +168,7 @@ package reflex.display
 			block.bounds = value;
 		}
 		
+		[Bindable(event="marginChange")]
 		public function get margin():Box
 		{
 			return block.margin;
@@ -150,18 +178,17 @@ package reflex.display
 			block.margin = value;
 		}
 		
-		[Bindable("paddingChange")]
+		[Bindable(event="paddingChange")]
 		public function get padding():Box
 		{
 			return block.padding;
 		}
 		public function set padding(value:*):void
 		{
-			var oldValue:Object = block.padding;
 			block.padding = value;
-			PropertyEvent.dispatchChange(this, "padding", oldValue, block.padding);
 		}
 		
+		[Bindable(event="anchorChange")]
 		public function get anchor():Box
 		{
 			return block.anchor;
@@ -171,6 +198,7 @@ package reflex.display
 			block.anchor = value;
 		}
 		
+		[Bindable(event="dockChange")]
 		public function get dock():String
 		{
 			return block.dock;
@@ -180,6 +208,7 @@ package reflex.display
 			block.dock = value;
 		}
 		
+		[Bindable(event="tileChange")]
 		public function get tile():String
 		{
 			return block.tile;
@@ -242,5 +271,19 @@ package reflex.display
 			}
 		}
 		
+		private function forwardEvent(event:Event):void
+		{
+			dispatchEvent(event);
+		}
+		
+		private function onWidthChange(event:Event):void
+		{
+			dispatchEvent( new Event("widthChange") );
+		}
+		
+		private function onHeightChange(event:Event):void
+		{
+			dispatchEvent( new Event("heightChange") );
+		}
 	}
 }

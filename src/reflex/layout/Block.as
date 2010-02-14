@@ -41,8 +41,8 @@ package reflex.layout
 		private var _margin:Box = new Box();
 		private var _padding:Box = new Box();
 		private var _anchor:Box = new Box(NaN, NaN, NaN, NaN);
-		private var _dock:String = Dock.NONE;
-		private var _tile:String = Dock.NONE;
+		private var _dock:String = Align.NONE;
+		private var _tile:String = Align.NONE;
 		
 		
 		public function Block(target:DisplayObject = null, scale:Boolean = false)
@@ -183,6 +183,7 @@ package reflex.layout
 			}
 		}
 		
+		[Bindable(event="displayWidthChange")]
 		public function get displayWidth():Number
 		{
 			return _displayWidth;
@@ -197,6 +198,7 @@ package reflex.layout
 			updateSize();
 		}
 		
+		[Bindable(event="displayHeightChange")]
 		public function get displayHeight():Number
 		{
 			return _displayHeight;
@@ -299,9 +301,9 @@ package reflex.layout
 		}
 		public function set dock(value:String):void
 		{
-			if (value != Dock.NONE && value != Dock.LEFT && value != Dock.TOP &&
-				value != Dock.RIGHT && value != Dock.BOTTOM && value != Dock.FILL) {
-				value = Dock.NONE;
+			if (value != Align.NONE && value != Align.LEFT && value != Align.TOP &&
+				value != Align.RIGHT && value != Align.BOTTOM && value != Align.FILL) {
+				value = Align.NONE;
 			}
 			
 			if (_dock == value) {
@@ -310,8 +312,8 @@ package reflex.layout
 			
 			_dock = value;
 			
-			if (_tile != Dock.NONE && (_dock == Dock.NONE || _dock == Dock.FILL) ) {
-				tile = Dock.NONE;
+			if (_tile != Align.NONE && (_dock == Align.NONE || _dock == Align.FILL) ) {
+				tile = Align.NONE;
 			}
 			invalidate();
 			dispatchEvent( new Event("dockChange") );
@@ -324,9 +326,9 @@ package reflex.layout
 		}
 		public function set tile(value:String):void
 		{
-			if (value != Dock.NONE && value != Dock.LEFT && value != Dock.TOP &&
-				value != Dock.RIGHT && value != Dock.BOTTOM) {
-				value = Dock.NONE;
+			if (value != Align.NONE && value != Align.LEFT && value != Align.TOP &&
+				value != Align.RIGHT && value != Align.BOTTOM) {
+				value = Align.NONE;
 			}
 			
 			if (_tile == value) {
@@ -335,8 +337,8 @@ package reflex.layout
 			
 			_tile = value;
 			// TODO: ensure dock is in the right axis (ie. if tile==LEFT then dock cannot equal LEFT or RIGHT)
-			if (_tile != Dock.NONE && (_dock == Dock.NONE || _dock == Dock.FILL) ) {
-				dock = (_tile == Dock.LEFT || _tile == Dock.RIGHT) ? Dock.TOP : Dock.LEFT;
+			if (_tile != Align.NONE && (_dock == Align.NONE || _dock == Align.FILL) ) {
+				dock = (_tile == Align.LEFT || _tile == Align.RIGHT) ? Align.TOP : Align.LEFT;
 			}
 			invalidate();
 			dispatchEvent( new Event("tileChange") );
@@ -433,6 +435,8 @@ package reflex.layout
 		{
 			var oldWidth:Number = _width;
 			var oldHeight:Number = _height;
+			var oldDisplayWidth:Number = _displayWidth;
+			var oldDisplayHeight:Number = _displayHeight;
 			
 			_displayWidth = !isNaN(explicitWidth) ? explicitWidth :
 							(_measuredWidth >= defaultWidth ? _measuredWidth : defaultWidth);
@@ -477,6 +481,13 @@ package reflex.layout
 				invalidate();
 				dispatchEvent(new Event("heightChange"));
 			}
+			
+			if (_displayWidth != oldDisplayWidth) {
+				dispatchEvent(new Event("displayWidthChange"));
+			}
+			if (_displayHeight != oldDisplayHeight) {
+				dispatchEvent(new Event("displayHeightChange"));
+			}
 		}
 		
 		private function onObjectChange(event:Event):void
@@ -491,7 +502,7 @@ package reflex.layout
 					dispatchEvent( new Event("paddingChange") );
 					break;
 				case _padding :
-					if (dock == Dock.NONE) {
+					if (dock == Align.NONE) {
 						invalidate();
 					}
 					dispatchEvent( new Event("anchorChange") );

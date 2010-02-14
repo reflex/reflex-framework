@@ -36,6 +36,12 @@ package reflex.layout
 		[Bindable]
 		public var algorithm:ILayoutAlgorithm;
 		
+		[Bindable]
+		public var shift:Number = 0;
+		
+		[Bindable]
+		public var shiftSize:Number = 0;
+		
 		protected var dispatcher:IEventDispatcher;
 		
 		private var validating:Boolean = false;

@@ -2,33 +2,18 @@ package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import flight.binding.Bind;
-	import flight.position.IPosition;
-	import flight.position.Position;
-	
-	import mx.controls.Button;
-	
-	import reflex.skins.ISkin;
-	import reflex.skins.ISkinnable;
 	import reflex.events.ButtonEvent;
 	
-	[Bindable]
-	public class ScrollBehavior extends Behavior
+	public class ScrollBehavior extends StepperBehavior
 	{
-		
-		public var fwdBtn:InteractiveObject;
-		public var bwdBtn:InteractiveObject;
 		public var track:InteractiveObject;
 		public var thumb:InteractiveObject;
 		
+		[Bindable]
 		[Binding(target="target.horizontal")]
 		public var horizontal:Boolean = false;
-		
-		[Binding(target="target.position")]
-		public var position:IPosition = new Position();		// TODO: implement lazy instantiation of position
 		
 		private var _percent:Number = 0;
 		private var dragPercent:Number;
@@ -38,7 +23,6 @@ package reflex.behaviors
 		
 		public function ScrollBehavior(target:InteractiveObject = null)
 		{
-			position = new Position();
 			super(target);
 		}
 		
@@ -56,19 +40,14 @@ package reflex.behaviors
 				return;
 			}
 			
-			fwdBtn = getSkinPart('fwdBtn');
-			bwdBtn = getSkinPart('bwdBtn');
-			track = getSkinPart('track');
-			thumb = getSkinPart('thumb');
+			track = getSkinPart("track");
+			thumb = getSkinPart("thumb");
+			ButtonEvent.initialize(track);
+			ButtonEvent.initialize(thumb);
 			
 			if (track.width > track.height) {
 				horizontal = true;
 			}
-			
-			ButtonEvent.initialize(fwdBtn);
-			ButtonEvent.initialize(bwdBtn);
-			ButtonEvent.initialize(track);
-			ButtonEvent.initialize(thumb);
 			
 			updatePosition();
 		}
@@ -85,22 +64,6 @@ package reflex.behaviors
 				updatePosition();
 				dispatchEvent(new Event("percentChange"));
 			}
-		}
-		
-		[EventListener(type="press", target="fwdBtn")]
-		[EventListener(type="hold", target="fwdBtn")]
-		public function onFwdPress(event:ButtonEvent):void
-		{
-			position.forward();
-			event.updateAfterEvent();
-		}
-		
-		[EventListener(type="press", target="bwdBtn")]
-		[EventListener(type="hold", target="bwdBtn")]
-		public function onBwdPress(event:ButtonEvent):void
-		{
-			position.backward();
-			event.updateAfterEvent();
 		}
 		
 		[EventListener(type="press", target="track")]

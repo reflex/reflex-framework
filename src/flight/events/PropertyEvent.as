@@ -36,7 +36,7 @@ package flight.events
 		public static function change(source:IEventDispatcher, property:Object, oldValue:*, newValue:*):*
 		{
 			if (oldValue === newValue) {
-				return;
+				return newValue;
 			}
 			
 			var change:Change = Change.getChange();

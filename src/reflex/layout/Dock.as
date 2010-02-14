@@ -6,13 +6,6 @@ package reflex.layout
 	
 	public class Dock implements ILayoutAlgorithm
 	{
-		public static const NONE:String = "none";
-		public static const LEFT:String = "left";
-		public static const TOP:String = "top";
-		public static const RIGHT:String = "right";
-		public static const BOTTOM:String = "bottom";
-		public static const FILL:String = "fill";
-		
 		public function layout(target:DisplayObjectContainer):void
 		{
 			var block:Block = Layout.getLayout(target) as Block;
@@ -33,7 +26,7 @@ package reflex.layout
 			
 			var hPad:Number = block.padding.horizontal;
 			var vPad:Number = block.padding.vertical;
-			var lastDock:String = NONE;
+			var lastDock:String = Align.NONE;
 			
 			for (var i:int = 0; i < target.numChildren; i++) {
 				var display:DisplayObject = target.getChildAt(i);
@@ -42,12 +35,12 @@ package reflex.layout
 					continue;
 				}
 				
-				if (child.dock == NONE) {
+				if (child.dock == Align.NONE) {
 					updateAnchor(child, block);
 					continue;
 				}
 				
-				if (child.tile == NONE) {
+				if (child.tile == Align.NONE) {
 					dockChild(child, child.dock, dockArea, dockMargin.clone().merge(child.margin), hPad, vPad);
 					updateArea(child, child.dock, dockArea, dockMargin, hPad, vPad);
 					tileMargin = null;				// TODO: reuse rectangle/box objects (cache)
@@ -61,7 +54,7 @@ package reflex.layout
 						
 						// reset tiling if child doesn't fit inline
 						margin = tileMargin.clone().merge(child.margin);
-						if (child.tile == LEFT || child.tile == RIGHT) {
+						if (child.tile == Align.LEFT || child.tile == Align.RIGHT) {
 							if (tileArea.width < child.width + margin.left + margin.right) {
 								tileMargin = dockMargin.clone();
 								tileArea = dockArea.clone();
@@ -69,7 +62,7 @@ package reflex.layout
 							}
 						}
 						
-						if (child.tile == TOP || child.tile == BOTTOM) {
+						if (child.tile == Align.TOP || child.tile == Align.BOTTOM) {
 							if (tileArea.height < child.height + margin.top + margin.bottom) {
 								tileMargin = dockMargin.clone();
 								tileArea = dockArea.clone();
@@ -92,25 +85,25 @@ package reflex.layout
 		{
 			var pos:Number;
 			switch (dock) {
-				case LEFT :
+				case Align.LEFT :
 					if (area.left < (pos = child.x + child.width + hPad) ) {
 						area.left = pos;
 						margin.left = child.margin.right;
 					}
 					break;
-				case TOP :
+				case Align.TOP :
 					if (area.top < (pos = child.y + child.height + vPad) ) {
 						area.top = pos;
 						margin.top = child.margin.bottom;
 					}
 					break;
-				case RIGHT :
+				case Align.RIGHT :
 					if (area.right > (pos = child.x - hPad) ) {
 						area.right = pos;
 						margin.right = child.margin.left;
 					}
 					break;
-				case BOTTOM :
+				case Align.BOTTOM :
 					if (area.bottom > (pos = child.y - vPad) ) {
 						area.bottom = pos;
 						margin.bottom = child.margin.top;
@@ -125,46 +118,46 @@ package reflex.layout
 		private function dockChild(child:Block, dock:String, area:Rectangle, margin:Box, hPad:Number, vPad:Number):void
 		{
 			switch (dock) {
-				case LEFT :
+				case Align.LEFT :
 					child.x = area.x + margin.left;
 					child.y = area.y + margin.top;
-					if (child.tile == NONE) {
+					if (child.tile == Align.NONE) {
 						child.height = area.height - margin.top - margin.bottom;
-					} else if (child.dock == BOTTOM) {
+					} else if (child.dock == Align.BOTTOM) {
 						child.y = area.y + area.height - child.height - margin.bottom;
 					}
 					break;
-				case TOP :
+				case Align.TOP :
 					child.x = area.x + margin.left;
 					child.y = area.y + margin.top;
-					if (child.tile == NONE) {
+					if (child.tile == Align.NONE) {
 						child.width = area.width - margin.left - margin.right;
-					} else if (child.dock == RIGHT) {
+					} else if (child.dock == Align.RIGHT) {
 						child.x = area.x + area.width - child.width - margin.right;
 					}
 					break;
-				case RIGHT :
+				case Align.RIGHT :
 					child.x = area.x + area.width - child.width - margin.right;
 					child.y = area.y + margin.top;
-					if (child.tile == NONE) {
+					if (child.tile == Align.NONE) {
 						child.height = area.height - margin.top - margin.bottom;
-					} else if (child.dock == BOTTOM) {
+					} else if (child.dock == Align.BOTTOM) {
 						child.y = area.y + area.height - child.height - margin.bottom;
 					}
 					break;
-				case BOTTOM :
+				case Align.BOTTOM :
 					child.x = area.x + margin.left;
 					child.y = area.y + area.height - child.height - margin.bottom;
-					if (child.tile == NONE) {
+					if (child.tile == Align.NONE) {
 						child.width = area.width - margin.left - margin.right;
-					} else if (child.dock == RIGHT) {
+					} else if (child.dock == Align.RIGHT) {
 						child.x = area.x + area.width - child.width - margin.right;
 					}
 					break;
-				case FILL :
+				case Align.FILL :
 					child.x = area.x + margin.left;
 					child.y = area.y + margin.top;
-					if (child.tile == NONE) {
+					if (child.tile == Align.NONE) {
 						child.height = area.height - margin.top - margin.bottom;
 						child.width = area.width - margin.left - margin.right;
 					}
@@ -194,7 +187,7 @@ package reflex.layout
 			
 			var hPad:Number = block.padding.horizontal;
 			var vPad:Number = block.padding.vertical;
-			var lastDock:String = NONE;
+			var lastDock:String = Align.NONE;
 			
 			for (var i:int = 0; i < target.numChildren; i++) {
 				var display:DisplayObject = target.getChildAt(i);
@@ -203,14 +196,14 @@ package reflex.layout
 					continue;
 				}
 				
-				if (child.dock == NONE) {
+				if (child.dock == Align.NONE) {
 					measureAnchored(child, anchored);
 					continue;
 				}
 				
-				if (child.tile == NONE) {
+				if (child.tile == Align.NONE) {
 					if (tileMargin != null) {
-						if (lastDock == LEFT || lastDock == RIGHT) {
+						if (lastDock == Align.LEFT || lastDock == Align.RIGHT) {
 							staticWidth += tileWidth;
 							measurement.minHeight += -vPad;	// TODO: no check for top vs bottom & assumption that minHeight was effected by tile
 						} else {
@@ -232,9 +225,9 @@ package reflex.layout
 					margin = tileMargin.clone().merge(child.margin);
 				}
 				
-				if (child.dock == LEFT || child.dock == RIGHT) {
-					if (child.tile != NONE) {
-						if (child.tile == TOP) {
+				if (child.dock == Align.LEFT || child.dock == Align.RIGHT) {
+					if (child.tile != Align.NONE) {
+						if (child.tile == Align.TOP) {
 							tileMargin.top = child.margin.bottom;
 							space = margin.top;
 						} else {
@@ -242,12 +235,12 @@ package reflex.layout
 							space = margin.bottom;
 						}
 						tileHeight += child.height + space + vPad;
-						space = child.width + (child.dock == LEFT ? margin.left : margin.right) + hPad;
+						space = child.width + (child.dock == Align.LEFT ? margin.left : margin.right) + hPad;
 						tileWidth = tileWidth >= space ? tileWidth : space;
 						measurement.minWidth = measurement.constrainWidth(staticWidth + tileWidth);
 						measurement.minHeight = measurement.constrainHeight(staticHeight + tileHeight);
 					} else {
-						if (child.dock == LEFT) {
+						if (child.dock == Align.LEFT) {
 							dockMargin.left = child.margin.right;
 							space = margin.left;
 						} else {
@@ -260,9 +253,9 @@ package reflex.layout
 						measurement.minHeight = measurement.constrainHeight(space + child.blockBounds.minHeight);
 						measurement.maxHeight = measurement.constrainHeight(space + child.blockBounds.maxHeight);
 					}
-				} else if (child.dock == TOP || child.dock == BOTTOM) {
-					if (child.tile != NONE) {
-						if (child.dock == LEFT) {
+				} else if (child.dock == Align.TOP || child.dock == Align.BOTTOM) {
+					if (child.tile != Align.NONE) {
+						if (child.dock == Align.LEFT) {
 							tileMargin.left = child.margin.right;
 							space = margin.left;
 						} else {
@@ -270,12 +263,12 @@ package reflex.layout
 							space = margin.right;
 						}
 						tileWidth += child.width + space + hPad;
-						space = child.height + (child.dock == TOP ? margin.top : margin.bottom) + vPad;
+						space = child.height + (child.dock == Align.TOP ? margin.top : margin.bottom) + vPad;
 						tileHeight = tileHeight >= space ? tileHeight : space;
 						measurement.minWidth = measurement.constrainWidth(staticWidth + tileWidth);
 						measurement.minHeight = measurement.constrainHeight(staticHeight + tileHeight);
 					} else {
-						if (child.dock == TOP) {
+						if (child.dock == Align.TOP) {
 							dockMargin.top = child.margin.bottom;
 							space = margin.top;
 						} else {
@@ -303,10 +296,10 @@ package reflex.layout
 			
 			// remove the last pad and add the last margin
 			switch (lastDock) {
-				case LEFT : measurement.minWidth += margin.right - hPad; break;
-				case TOP : measurement.minWidth += margin.bottom - hPad; break;
-				case RIGHT : measurement.minWidth += margin.left - hPad; break;
-				case BOTTOM : measurement.minWidth += margin.top - hPad; break;
+				case Align.LEFT : measurement.minWidth += margin.right - hPad; break;
+				case Align.TOP : measurement.minWidth += margin.bottom - hPad; break;
+				case Align.RIGHT : measurement.minWidth += margin.left - hPad; break;
+				case Align.BOTTOM : measurement.minWidth += margin.top - hPad; break;
 			}
 			
 			measurement.merge(anchored);
