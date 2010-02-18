@@ -42,7 +42,7 @@ package flight.position
 			
 			_value = PropertyEvent.change(this, "value", _value, value);
 			var area:Number = _size - space;
-			value = area == 0 ? 1 : (_value - _min) / area;
+			value = area == 0 ? 0 : (_value - _min) / area;
 			_percent = PropertyEvent.change(this, "percent", _percent, value);
 			
 			PropertyEvent.dispatch(this);

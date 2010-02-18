@@ -41,7 +41,7 @@ package reflex.layout
 				}
 				
 				if (child.tile == Align.NONE) {
-					dockChild(child, child.dock, dockArea, dockMargin.clone().merge(child.margin), hPad, vPad);
+					dockChild(child, child.dock, dockArea, dockMargin.clone().merge(child.margin));
 					updateArea(child, child.dock, dockArea, dockMargin, hPad, vPad);
 					tileMargin = null;				// TODO: reuse rectangle/box objects (cache)
 				} else {
@@ -71,7 +71,7 @@ package reflex.layout
 						}
 					}
 					
-					dockChild(child, child.tile, tileArea, margin, hPad, vPad);
+					dockChild(child, child.tile, tileArea, margin);
 					updateArea(child, child.tile, tileArea, tileMargin, hPad, vPad);
 					updateArea(child, child.dock, dockArea, dockMargin, hPad, vPad);
 				}
@@ -88,26 +88,26 @@ package reflex.layout
 				case Align.LEFT :
 					if (area.left < (pos = child.x + child.width + hPad) ) {
 						area.left = pos;
-						margin.left = child.margin.right;
 					}
+					margin.left = child.margin.right;
 					break;
 				case Align.TOP :
 					if (area.top < (pos = child.y + child.height + vPad) ) {
 						area.top = pos;
-						margin.top = child.margin.bottom;
 					}
+					margin.top = child.margin.bottom;
 					break;
 				case Align.RIGHT :
 					if (area.right > (pos = child.x - hPad) ) {
 						area.right = pos;
-						margin.right = child.margin.left;
 					}
+					margin.right = child.margin.left;
 					break;
 				case Align.BOTTOM :
 					if (area.bottom > (pos = child.y - vPad) ) {
 						area.bottom = pos;
-						margin.bottom = child.margin.top;
 					}
+					margin.bottom = child.margin.top;
 					break;
 			}
 		}
@@ -115,7 +115,7 @@ package reflex.layout
 		/**
 		 * 
 		 */
-		private function dockChild(child:Block, dock:String, area:Rectangle, margin:Box, hPad:Number, vPad:Number):void
+		private function dockChild(child:Block, dock:String, area:Rectangle, margin:Box):void
 		{
 			switch (dock) {
 				case Align.LEFT :
@@ -297,9 +297,9 @@ package reflex.layout
 			// remove the last pad and add the last margin
 			switch (lastDock) {
 				case Align.LEFT : measurement.minWidth += margin.right - hPad; break;
-				case Align.TOP : measurement.minWidth += margin.bottom - hPad; break;
+				case Align.TOP : measurement.minHeight += margin.bottom - vPad; break;
 				case Align.RIGHT : measurement.minWidth += margin.left - hPad; break;
-				case Align.BOTTOM : measurement.minWidth += margin.top - hPad; break;
+				case Align.BOTTOM : measurement.minHeight += margin.top - vPad; break;
 			}
 			
 			measurement.merge(anchored);

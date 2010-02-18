@@ -12,7 +12,7 @@ package reflex.display
 		
 		[Bindable]
 		public var vPosition:IPosition;
-		 
+		
 		private var clipRect:ScrollRect;
 		private var _container:Container;
 		

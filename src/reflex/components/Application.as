@@ -8,6 +8,7 @@ package reflex.components
 	
 	import reflex.layout.Layout;
 	
+	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
 	public class Application extends Component
 	{
 		[Bindable]

@@ -89,6 +89,11 @@ package reflex.skins
 				}
 			}
 			PropertyEvent.dispatchChange(this, "target", oldValue, _target);
+			init();
+		}
+		
+		protected function init():void
+		{
 		}
 		
 		public function get children():IList
