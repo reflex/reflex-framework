@@ -1,6 +1,7 @@
 package reflex.components
 {
 	import flight.binding.Bind;
+	import flight.events.PropertyEvent;
 	
 	import reflex.behaviors.ButtonBehavior;
 	import reflex.behaviors.SelectableBehavior;
@@ -15,7 +16,7 @@ package reflex.components
 		
 		public function Button()
 		{
-			var graphic:ButtonGraphic = new ButtonGraphic();
+			graphic = new ButtonGraphic();
 			var block:Block = new Block(graphic.background);
 			block.scale = true;
 			block.anchor = 0;
@@ -33,8 +34,14 @@ package reflex.components
 			skin = new GraphicSkin(graphic);
 			new ButtonBehavior(this);
 			new SelectableBehavior(this);
-//			Bind.addBinding(buttonGraphic.label, "text", graphicSkin, "data");
+			
+			Bind.addListener(setLabel, this, "label");
 		}
 		
+		private var graphic:ButtonGraphic;
+		private function setLabel(event:PropertyEvent):void
+		{
+			graphic.label.text = label || "";
+		}
 	}
 }

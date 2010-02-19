@@ -14,6 +14,7 @@ package reflex.display
 	import flight.position.Position;
 	
 	import reflex.components.Button;
+	import reflex.layout.Layout;
 	
 	/**
 	 * A replicator can create any inanimate matter, as long as the desired
@@ -28,19 +29,22 @@ package reflex.display
 		[Bindable]
 		public var dataProvider:IList = new ArrayList();
 		
+		public var children:IList = new ArrayList();
+		
+		// TODO: replicating subject
+		// 1) single template defined on component
+		// 2) template tied to data type
+		// 3) template retrieved through data inspection
+		
+		// TODO: get rid of the hard-coded reference to button
 		public var template:Class = Button;
 		
-		/*
-		replicating subject
-		1) single template defined on component
-		2) template tied to data type
-		3) template retrieved through data inspection
+		[Bindable]
+		public var coverageSize:Number = 177;	// size of coverage area (viewport)
+		[Bindable]
+		public var itemSize:Number = 22;		// assumed size of all items		// TOOD: implement begin/end padding and in-between pad
 		
-		data discovered by template (both scenarios provide property mapping)
-		1) (pull) data property assigned and template coded to it
-		2) (push) data automatically assigned to template properties (injection)
-		*/
-		
+		private var cap:int = 0;
 		private var _target:DisplayObjectContainer;
 		
 		public function Replicator(target:DisplayObjectContainer = null)
@@ -48,7 +52,10 @@ package reflex.display
 			Bind.addListener(onPositionChange, this, "position.percent");
 			this.target = target;
 			
-			dataProvider.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			dataProvider.addEventListener(ListEvent.LIST_CHANGE, onVirtualChange);
+			
+			position.stepSize = 10;
+			position.skipSize = 100;
 		}
 		
 		[Bindable(event="targetChange")]
@@ -74,9 +81,100 @@ package reflex.display
 			PropertyEvent.dispatchChange(this, "target", oldValue, _target);
 		}
 		
+		private var shift:int;
 		private function onPositionChange(event:PropertyEvent):void
 		{
+			var layout:Layout = Layout.getLayout(_target);
+			if (layout == null) {
+				return;
+			}
 			
+			layout.shift = position.value % (itemSize*4);
+			layout.invalidate(true);
+			var oldShift:int = shift;
+			shift = Math.floor(position.value / itemSize / 4)*4;
+			
+			if (shift == oldShift) {
+				return;
+			}
+			
+			// TODO: get rid of the hard-coded reference to button
+			// TODO: reduce loops though something called logic - I'll do it later
+			var i:int, button:Button;
+			var reshuffle:int = shift - oldShift;
+			if (Math.abs(reshuffle) < _target.numChildren) {
+				if (reshuffle < 0) {
+					for (i = 0; i > reshuffle; i--) {
+						button = _target.getChildAt(_target.numChildren-1) as Button;
+						_target.addChildAt(button, 0);
+						button.label = String( dataProvider.getItemAt(shift-1 - reshuffle + i) );
+					}
+				} else {
+					for (i = 0; i < reshuffle; i++) {
+						button = _target.getChildAt(0) as Button;
+						_target.addChildAt(button, _target.numChildren);
+						button.label = String( dataProvider.getItemAt(shift + _target.numChildren - reshuffle + i) );
+					}
+				}
+				
+			} else {
+				for (i = 0; i < _target.numChildren; i++) {
+					button = _target.getChildAt(i) as Button;
+					button.label = String( dataProvider.getItemAt(shift + i) );
+				}
+			}
+		}
+		
+		private function onVirtualChange(event:ListEvent):void
+		{
+			if (_target  == null) {
+				return;
+			}
+			
+			// measure
+			cap = Math.ceil(coverageSize / itemSize) + 10;
+			position.size = itemSize * dataProvider.length;
+			position.space = coverageSize;
+			
+			var data:Object;
+			var child:DisplayObject;
+			var loc:int = event.location1;
+			switch (event.kind) {
+				case ListEventKind.ADD :
+					for each (data in event.items) {
+						if (children.length < cap) {
+							child = new template() as DisplayObject;
+							// TODO: assign data to child
+							child["label"] = String( dataProvider.getItemAt(loc + shift) );
+							children.addItemAt(child, loc);
+							_target.addChildAt(child, loc++);
+						}
+					}
+					break;
+				case ListEventKind.REMOVE :
+					for each (data in event.items) {
+						_target.removeChildAt(loc);
+					}
+					break;
+				case ListEventKind.REPLACE :
+					child = _target.getChildAt(loc);
+					// TODO: assign data to child
+					break;
+				case ListEventKind.RESET :
+					while (_target.numChildren > dataProvider.length) {
+						_target.removeChildAt(_target.numChildren-1);
+					}
+					for (var i:int = 0; i < dataProvider.length; i++) {
+						if (children.length < cap) {
+							child = i < _target.numChildren ? _target.getChildAt(i) : new template() as DisplayObject;
+							// TODO: assign data to child
+							child["label"] = String( dataProvider.getItemAt(loc + shift) );
+							children.addItemAt(child, i);
+							_target.addChildAt(child, i);
+						}
+					}
+					break;
+			}
 		}
 		
 		private function onChildrenChange(event:ListEvent):void
@@ -114,30 +212,6 @@ package reflex.display
 						// TODO: assign data to child
 						_target.addChildAt(child, i);
 					}
-					break;
-			}
-		}
-		
-		private function onVirtualChange(event:ListEvent):void
-		{
-			if (_target  == null) {
-				return;
-			}
-			
-			var child:DisplayObject;
-			var loc:int = event.location1;
-			switch (event.kind) {
-				case ListEventKind.ADD :
-					
-					break;
-				case ListEventKind.REMOVE :
-					
-					break;
-				case ListEventKind.REPLACE :
-					
-					break;
-				case ListEventKind.RESET :
-					
 					break;
 			}
 		}

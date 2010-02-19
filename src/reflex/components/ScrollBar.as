@@ -1,10 +1,14 @@
 package reflex.components
 {
+	import flash.events.Event;
+	
+	import flight.binding.Bind;
 	import flight.position.IPosition;
 	
 	import reflex.behaviors.ScrollBehavior;
 	import reflex.layout.Align;
 	import reflex.layout.Block;
+	import reflex.layout.Layout;
 	import reflex.skins.GraphicSkin;
 	
 	public class ScrollBar extends Component
@@ -14,7 +18,7 @@ package reflex.components
 		
 		public function ScrollBar()
 		{
-			var graphic:ScrollBarGraphic = new ScrollBarGraphic();
+			graphic = new ScrollBarGraphic();
 			var block:Block;
 			block = new Block(graphic.background);
 			block.scale = true;
@@ -35,9 +39,20 @@ package reflex.components
 			block = new Block(graphic.thumb);
 			block.scale = true;
 			block.anchor.top = block.anchor.bottom = 3;
+			block.bounds.minWidth = 10;
 			
 			skin = new GraphicSkin(graphic);
 			new ScrollBehavior(this);
+			Bind.addListener(onSizeChange, this, "position.size");
+			Bind.addListener(onSizeChange, this, "position.space");
 		}
+		
+		private var graphic:ScrollBarGraphic;
+		private function onSizeChange(event:Event):void
+		{
+			var block:Block = Layout.getLayout(graphic.thumb) as Block;
+			block.width = graphic.track.width/position.size * position.space;
+		}
+		
 	}
 }

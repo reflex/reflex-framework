@@ -3,12 +3,10 @@ package reflex.display
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.events.Event;
-	import flash.utils.setTimeout;
 	
 	import flight.binding.Bind;
 	import flight.events.ListEvent;
 	import flight.events.ListEventKind;
-	import flight.events.PropertyEvent;
 	import flight.list.ArrayList;
 	import flight.list.IList;
 	
@@ -16,7 +14,6 @@ package reflex.display
 	import reflex.layout.Bounds;
 	import reflex.layout.Box;
 	import reflex.layout.ILayoutAlgorithm;
-	import reflex.layout.Layout;
 	
 	[DefaultProperty("children")]
 	public class Container extends MovieClip
@@ -24,7 +21,7 @@ package reflex.display
 		[Bindable]
 		public var freeform:Boolean = false;
 		
-		protected var block:Block;
+		public var block:Block;
 		
 		private var _children:IList = new ArrayList();
 		
@@ -33,21 +30,7 @@ package reflex.display
 		{
 			addEventListener(Event.ADDED, onInit);
 			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
-			block = new Block();
-			block.addEventListener("xChange", forwardEvent);
-			block.addEventListener("yChange", forwardEvent);
-			block.addEventListener("displayWidthChange", forwardEvent);
-			block.addEventListener("displayWidthChange", onWidthChange);
-			block.addEventListener("displayHeightChange", forwardEvent);
-			block.addEventListener("displayHeightChange", onHeightChange);
-			block.addEventListener("snapToPixelChange", forwardEvent);
-			block.addEventListener("layoutChange", forwardEvent);
-			block.addEventListener("boundsChange", forwardEvent);
-			block.addEventListener("marginChange", forwardEvent);
-			block.addEventListener("paddingChange", forwardEvent);
-			block.addEventListener("dockChange", forwardEvent);
-			block.addEventListener("tileChange", forwardEvent);
-			Bind.addBinding(block, "freeform", this, "freeform", true);
+			initLayout();
 		}
 		
 		public function get children():IList
@@ -208,14 +191,14 @@ package reflex.display
 			block.dock = value;
 		}
 		
-		[Bindable(event="tileChange")]
-		public function get tile():String
+		[Bindable(event="alignChange")]
+		public function get align():String
 		{
-			return block.tile;
+			return block.align;
 		}
-		public function set tile(value:String):void
+		public function set align(value:String):void
 		{
-			block.tile = value;
+			block.align = value;
 		}
 		
 		
@@ -235,13 +218,26 @@ package reflex.display
 		{
 		}
 		
-		private function onInit(event:Event):void
+		protected function initLayout():void
 		{
-			block.target = this;
-			init();
+			block = new Block();
+			block.addEventListener("xChange", forwardEvent);
+			block.addEventListener("yChange", forwardEvent);
+			block.addEventListener("displayWidthChange", forwardEvent);
+			block.addEventListener("displayWidthChange", onWidthChange);
+			block.addEventListener("displayHeightChange", forwardEvent);
+			block.addEventListener("displayHeightChange", onHeightChange);
+			block.addEventListener("snapToPixelChange", forwardEvent);
+			block.addEventListener("layoutChange", forwardEvent);
+			block.addEventListener("boundsChange", forwardEvent);
+			block.addEventListener("marginChange", forwardEvent);
+			block.addEventListener("paddingChange", forwardEvent);
+			block.addEventListener("dockChange", forwardEvent);
+			block.addEventListener("alignChange", forwardEvent);
+			Bind.addBinding(block, "freeform", this, "freeform", true);
 		}
 		
-		private function onChildrenChange(event:ListEvent):void
+		protected function onChildrenChange(event:ListEvent):void
 		{
 			var child:DisplayObject;
 			var loc:int = event.location1;
@@ -269,6 +265,12 @@ package reflex.display
 					}
 					break;
 			}
+		}
+		
+		private function onInit(event:Event):void
+		{
+			block.target = this;
+			init();
 		}
 		
 		private function forwardEvent(event:Event):void

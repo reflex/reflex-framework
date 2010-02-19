@@ -42,7 +42,7 @@ package reflex.layout
 		private var _padding:Box = new Box();
 		private var _anchor:Box = new Box(NaN, NaN, NaN, NaN);
 		private var _dock:String = Align.NONE;
-		private var _tile:String = Align.NONE;
+		private var _align:String = Align.NONE;
 		
 		
 		public function Block(target:DisplayObject = null, scale:Boolean = false)
@@ -312,36 +312,36 @@ package reflex.layout
 			
 			_dock = value;
 			
-			if (_tile != Align.NONE && (_dock == Align.NONE || _dock == Align.FILL) ) {
-				tile = Align.NONE;
+			if (_align != Align.NONE && (_dock == Align.NONE || _dock == Align.FILL) ) {
+				align = Align.NONE;
 			}
 			invalidate();
 			dispatchEvent( new Event("dockChange") );
 		}
 		
-		[Bindable(event="tileChange")]
-		public function get tile():String
+		[Bindable(event="alignChange")]
+		public function get align():String
 		{
-			return _tile;
+			return _align;
 		}
-		public function set tile(value:String):void
+		public function set align(value:String):void
 		{
 			if (value != Align.NONE && value != Align.LEFT && value != Align.TOP &&
 				value != Align.RIGHT && value != Align.BOTTOM) {
 				value = Align.NONE;
 			}
 			
-			if (_tile == value) {
+			if (_align == value) {
 				return;
 			}
 			
-			_tile = value;
-			// TODO: ensure dock is in the right axis (ie. if tile==LEFT then dock cannot equal LEFT or RIGHT)
-			if (_tile != Align.NONE && (_dock == Align.NONE || _dock == Align.FILL) ) {
-				dock = (_tile == Align.LEFT || _tile == Align.RIGHT) ? Align.TOP : Align.LEFT;
+			_align = value;
+			// TODO: ensure dock is in the right axis (ie. if align==LEFT then dock cannot equal LEFT or RIGHT)
+			if (_align != Align.NONE && (_dock == Align.NONE || _dock == Align.FILL) ) {
+				dock = (_align == Align.LEFT || _align == Align.RIGHT) ? Align.TOP : Align.LEFT;
 			}
 			invalidate();
-			dispatchEvent( new Event("tileChange") );
+			dispatchEvent( new Event("alignChange") );
 		}
 		
 		override public function validate():void

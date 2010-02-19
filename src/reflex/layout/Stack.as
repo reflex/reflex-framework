@@ -6,6 +6,7 @@ package reflex.layout
 	
 	public class Stack implements ILayoutAlgorithm
 	{
+		// TODO: implement horizontal, 'tsall vert right now
 		public var horizontal:Boolean;
 		
 		public function measure(target:DisplayObjectContainer):void
@@ -79,12 +80,13 @@ package reflex.layout
 				
 				child.x = stackArea.x + margin.left;
 				child.y = stackArea.y + margin.top;
+				// TODO: implement alignment, not always stretch (fill)
 				child.width = stackArea.width - margin.left - margin.right;
 				if (stackArea.top < (pos = child.y + child.height + vPad) ) {
 					stackArea.top = pos;
 					stackMargin.top = child.margin.bottom;
 				}
-				
+				child.y -= block.shift;
 			}
 		}
 		

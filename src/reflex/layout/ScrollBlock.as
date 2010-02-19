@@ -1,15 +1,14 @@
-package reflex.display
+package reflex.layout
 {
 	import flash.display.DisplayObject;
-	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
 	
 	import flight.binding.Bind;
 	import flight.events.PropertyEvent;
 	import flight.position.IPosition;
 	import flight.position.Position;
-
-	public class ScrollRect extends EventDispatcher
+	
+	public class ScrollBlock extends Block
 	{
 		[Bindable]
 		public var hPosition:IPosition = new Position();		// TODO: implement lazy instantiation of Position
@@ -17,59 +16,73 @@ package reflex.display
 		[Bindable]
 		public var vPosition:IPosition = new Position();
 		
-		[Bindable]
-		public var x:Number;
+		private var _width:Number = 0;
+		private var _height:Number = 0;
 		
-		[Bindable]
-		public var y:Number;
-		
-		[Bindable]
-		public var width:Number;
-		
-		[Bindable]
-		public var height:Number;
-		
-		private var _target:DisplayObject;
-		
-		public function ScrollRect(target:DisplayObject = null)
+		public function ScrollBlock(target:DisplayObject=null, scale:Boolean=false)
 		{
-			Bind.addBinding(this, "x", this, "hPosition.value", true);
-			Bind.addBinding(this, "y", this, "vPosition.value", true);
-			Bind.addBinding(this, "width", this, "hPosition.space", true);
-			Bind.addBinding(this, "height", this, "vPosition.space", true);
+			Bind.addBinding(this, "hPosition.space", this, "width", true);
+			Bind.addBinding(this, "vPosition.space", this, "height", true);
+			Bind.addBinding(this, "hPosition.size", this, "displayWidth");
+			Bind.addBinding(this, "vPosition.size", this, "displayHeight");
 			
 			Bind.addListener(onPositionChange, this, "hPosition.value");
 			Bind.addListener(onPositionChange, this, "vPosition.value");
 			Bind.addListener(onSizeChange, this, "hPosition.space");
 			Bind.addListener(onSizeChange, this, "vPosition.space");
 			
-			Bind.addBinding(this, "hPosition.size", this, "target.width");
-			Bind.addBinding(this, "vPosition.size", this, "target.height");
-			
 			hPosition.stepSize = vPosition.stepSize = 10;
 			hPosition.skipSize = vPosition.skipSize = 100;
-			this.target = target;
+			
+			super(target, scale);
 		}
 		
-		[Bindable(event="targetChange")]
-		public function get target():DisplayObject
+		override public function set target(value:DisplayObject):void
 		{
-			return _target;
-		}
-		public function set target(value:DisplayObject):void
-		{
-			if (_target == value) {
+			if (target == value) {
 				return;
 			}
 			
-			if (_target != null) {
-				_target.scrollRect = null;
+			if (target != null) {
+				target.scrollRect = null;
 			}
 			
-			var oldValue:Object = _target;
-			_target = value;
+			super.target = value;
+		}
+		
+		override public function get width():Number
+		{
+			return _width;
+		}
+		override public function set width(value:Number):void
+		{
+			if (_width == value) {
+				return;
+			}
 			
-			PropertyEvent.dispatchChange(this, "target", oldValue, _target);
+			super.width = value;
+			_width = PropertyEvent.change(this, "width", _width, value);
+			PropertyEvent.dispatch(this);
+		}
+		
+		override public function get height():Number
+		{
+			return _height;
+		}
+		override public function set height(value:Number):void
+		{
+			if (_height == value) {
+				return;
+			}
+			
+			super.height = value;
+			_height = PropertyEvent.change(this, "height", _height, value);
+			PropertyEvent.dispatch(this);
+		}
+		
+		override public function get blockBounds():Bounds
+		{
+			return bounds;
 		}
 		
 		private function onPositionChange(event:PropertyEvent):void
