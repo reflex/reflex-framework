@@ -13,7 +13,7 @@ package reflex.component
   public class Application extends Component
   {
     [Bindable]
-    public var background:int = 0xEEEEEE;
+		public var background:int = 0xFFFFFF;
     
     public function Application()
     {

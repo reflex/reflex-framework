@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <componentPackage>
 	
+<<<<<<< HEAD
 	<!-- Controls -->
 	<component id="Button"					class="reflex.controls.Button" />
 	
@@ -14,4 +15,6 @@
 	<!-- Skin -->
 	<component id="ComponentSkin" class="reflex.skins.ComponentSkin" />
 	
+=======
+>>>>>>> 01e98b558c2fba7770eec89e90cb0a75a4b00016
 </componentPackage>

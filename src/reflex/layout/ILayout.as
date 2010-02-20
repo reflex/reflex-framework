@@ -13,6 +13,12 @@ package reflex.layout
 		function get freeform():Boolean;				// if false, constrain using ILayout algorithm,
 		function set freeform(value:Boolean):void;		// otherwise allow to do its own thing
 		
+		function get shift():Number;
+		function set shift(value:Number):void;
+		
+		function get shiftSize():Number;
+		function set shiftSize(value:Number):void;
+		
 		function invalidate(measure:Boolean = false):void;
 		
 		function validate():void;

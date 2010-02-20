@@ -8,6 +8,8 @@ package reflex.layout
 	
 	import flight.events.PropertyEvent;
 	
+	import mx.events.PropertyChangeEvent;
+	
 	public class Block extends Layout
 	{
 		[Bindable]
@@ -39,18 +41,18 @@ package reflex.layout
 		private var _margin:Box = new Box();
 		private var _padding:Box = new Box();
 		private var _anchor:Box = new Box(NaN, NaN, NaN, NaN);
-		private var _dock:String = Dock.NONE;
-		private var _tile:String = Dock.NONE;
+		private var _dock:String = Align.NONE;
+		private var _align:String = Align.NONE;
 		
 		
 		public function Block(target:DisplayObject = null, scale:Boolean = false)
 		{
 			super(target);
 			this.scale = scale;
-			_margin.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
-			_padding.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
-			_anchor.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
-			bounds.addEventListener(PropertyEvent.PROPERTY_CHANGE, onObjectChange);
+			_margin.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
+			_padding.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
+			_anchor.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
+			bounds.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
 			_anchor.horizontal = _anchor.vertical = NaN;
 			algorithm = new Dock();
 		}
@@ -181,6 +183,7 @@ package reflex.layout
 			}
 		}
 		
+		[Bindable(event="displayWidthChange")]
 		public function get displayWidth():Number
 		{
 			return _displayWidth;
@@ -195,6 +198,7 @@ package reflex.layout
 			updateSize();
 		}
 		
+		[Bindable(event="displayHeightChange")]
 		public function get displayHeight():Number
 		{
 			return _displayHeight;
@@ -247,10 +251,7 @@ package reflex.layout
 				return;
 			}
 			
-			_margin.left = margin.left;
-			_margin.top = margin.top;
-			_margin.right = margin.right;
-			_margin.bottom = margin.bottom;
+			_margin = margin;
 			dispatchEvent(new Event("marginChange"));
 		}
 		
@@ -269,12 +270,7 @@ package reflex.layout
 				return;
 			}
 			
-			_padding.left = padding.left;
-			_padding.top = padding.top;
-			_padding.right = padding.right;
-			_padding.bottom = padding.bottom;
-			_padding.horizontal = padding.horizontal;
-			_padding.vertical = padding.vertical;
+			_padding = padding;
 			dispatchEvent(new Event("paddingChange"));
 		}
 		
@@ -293,14 +289,7 @@ package reflex.layout
 				return;
 			}
 			
-			_anchor.left = anchor.left;
-			_anchor.top = anchor.top;
-			_anchor.right = anchor.right;
-			_anchor.bottom = anchor.bottom;
-			_anchor.offsetX = anchor.offsetX;
-			_anchor.offsetY = anchor.offsetY;
-			_anchor.horizontal = anchor.horizontal;
-			_anchor.vertical = anchor.vertical;
+			_anchor = anchor;
 			dispatchEvent(new Event("anchorChange"));
 		}
 		
@@ -312,9 +301,9 @@ package reflex.layout
 		}
 		public function set dock(value:String):void
 		{
-			if (value != Dock.NONE && value != Dock.LEFT && value != Dock.TOP &&
-				value != Dock.RIGHT && value != Dock.BOTTOM && value != Dock.FILL) {
-				value = Dock.NONE;
+			if (value != Align.NONE && value != Align.LEFT && value != Align.TOP &&
+				value != Align.RIGHT && value != Align.BOTTOM && value != Align.FILL) {
+				value = Align.NONE;
 			}
 			
 			if (_dock == value) {
@@ -323,36 +312,36 @@ package reflex.layout
 			
 			_dock = value;
 			
-			if (_tile != Dock.NONE && (_dock == Dock.NONE || _dock == Dock.FILL) ) {
-				tile = Dock.NONE;
+			if (_align != Align.NONE && (_dock == Align.NONE || _dock == Align.FILL) ) {
+				align = Align.NONE;
 			}
 			invalidate();
 			dispatchEvent( new Event("dockChange") );
 		}
 		
-		[Bindable(event="tileChange")]
-		public function get tile():String
+		[Bindable(event="alignChange")]
+		public function get align():String
 		{
-			return _tile;
+			return _align;
 		}
-		public function set tile(value:String):void
+		public function set align(value:String):void
 		{
-			if (value != Dock.NONE && value != Dock.LEFT && value != Dock.TOP &&
-				value != Dock.RIGHT && value != Dock.BOTTOM) {
-				value = Dock.NONE;
+			if (value != Align.NONE && value != Align.LEFT && value != Align.TOP &&
+				value != Align.RIGHT && value != Align.BOTTOM) {
+				value = Align.NONE;
 			}
 			
-			if (_tile == value) {
+			if (_align == value) {
 				return;
 			}
 			
-			_tile = value;
-			// TODO: ensure dock is in the right axis (ie. if tile==LEFT then dock cannot equal LEFT or RIGHT)
-			if (_tile != Dock.NONE && (_dock == Dock.NONE || _dock == Dock.FILL) ) {
-				dock = (_tile == Dock.LEFT || _tile == Dock.RIGHT) ? Dock.TOP : Dock.LEFT;
+			_align = value;
+			// TODO: ensure dock is in the right axis (ie. if align==LEFT then dock cannot equal LEFT or RIGHT)
+			if (_align != Align.NONE && (_dock == Align.NONE || _dock == Align.FILL) ) {
+				dock = (_align == Align.LEFT || _align == Align.RIGHT) ? Align.TOP : Align.LEFT;
 			}
 			invalidate();
-			dispatchEvent( new Event("tileChange") );
+			dispatchEvent( new Event("alignChange") );
 		}
 		
 		override public function validate():void
@@ -446,6 +435,8 @@ package reflex.layout
 		{
 			var oldWidth:Number = _width;
 			var oldHeight:Number = _height;
+			var oldDisplayWidth:Number = _displayWidth;
+			var oldDisplayHeight:Number = _displayHeight;
 			
 			_displayWidth = !isNaN(explicitWidth) ? explicitWidth :
 							(_measuredWidth >= defaultWidth ? _measuredWidth : defaultWidth);
@@ -490,6 +481,13 @@ package reflex.layout
 				invalidate();
 				dispatchEvent(new Event("heightChange"));
 			}
+			
+			if (_displayWidth != oldDisplayWidth) {
+				dispatchEvent(new Event("displayWidthChange"));
+			}
+			if (_displayHeight != oldDisplayHeight) {
+				dispatchEvent(new Event("displayHeightChange"));
+			}
 		}
 		
 		private function onObjectChange(event:Event):void
@@ -504,7 +502,7 @@ package reflex.layout
 					dispatchEvent( new Event("paddingChange") );
 					break;
 				case _padding :
-					if (dock == Dock.NONE) {
+					if (dock == Align.NONE) {
 						invalidate();
 					}
 					dispatchEvent( new Event("anchorChange") );

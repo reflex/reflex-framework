@@ -4,13 +4,14 @@ package reflex.layout
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 	
 	import flight.events.PropertyEvent;
 	
 	import reflex.events.RenderEvent;
 	
-	public class Layout extends EventDispatcher implements ILayout
+	public class Layout implements IEventDispatcher, ILayout
 	{
 		public static const MEASURE:String = "measure";
 		public static const LAYOUT:String = "layout";
@@ -34,6 +35,14 @@ package reflex.layout
 		
 		[Bindable]
 		public var algorithm:ILayoutAlgorithm;
+		
+		[Bindable]
+		public var shift:Number = 0;
+		
+		[Bindable]
+		public var shiftSize:Number = 0;
+		
+		protected var dispatcher:IEventDispatcher;
 		
 		private var validating:Boolean = false;
 		private var reference:Dictionary = new Dictionary(true);
@@ -78,7 +87,7 @@ package reflex.layout
 				invalidate();
 			}
 			
-			propertyChange("target", oldValue, _target);
+			PropertyEvent.dispatchChange(this, "target", oldValue, _target);
 		}
 		
 		public function invalidate(children:Boolean = false):void
@@ -143,21 +152,48 @@ package reflex.layout
 			measure();
 		}
 		
-		// TODO: layouts and layouts (or layout-types) can choose what properties to listen to
-		// on their children in order to invalidate (and choose which type of invalidation: layout or measure)
-		protected function propertyChange(property:String, oldValue:Object, newValue:Object):void
+		public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void
 		{
-			if (_target != null && layoutIndex[_target.parent] is Layout) {
-				var parent:Layout = layoutIndex[_target.parent];
-				parent.childPropertyChange(property, oldValue, newValue);
+			if (dispatcher == null) {
+				dispatcher = new EventDispatcher(this);
 			}
 			
-			PropertyEvent.dispatchChange(this, property, oldValue, newValue);
+			dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);
 		}
 		
-		protected function childPropertyChange(property:String, oldValue:Object, newValue:Object):void
+		public function removeEventListener(type:String, listener:Function, useCapture:Boolean=false):void
 		{
+			if (dispatcher != null) {
+				dispatcher.removeEventListener(type, listener, useCapture);
+			}
 		}
 		
+		public function dispatchEvent(event:Event):Boolean
+		{
+			var result:Boolean = false;
+			if (_target != null && _target.hasEventListener(event.type)) {
+				result = _target.dispatchEvent(event);
+			}
+			if (dispatcher != null && dispatcher.hasEventListener(event.type)) {
+				result = dispatcher.dispatchEvent(event);
+			}
+			return result;
+		}
+		
+		public function hasEventListener(type:String):Boolean
+		{
+			if (dispatcher != null) {
+				return dispatcher.hasEventListener(type);
+			}
+			return false;
+		}
+		
+		public function willTrigger(type:String):Boolean
+		{
+			if (dispatcher != null) {
+				return dispatcher.willTrigger(type);
+			}
+			return false;
+		}
 	}
 }
