@@ -20,6 +20,13 @@ package flight.position
 		private var _min:Number = 0;
 		private var _max:Number = _size;
 		private var _space:Number = 0;
+		private var _filled:Boolean = false;
+		
+		[Bindable(event="filledChange")]
+		public function get filled():Boolean
+		{
+			return _filled;
+		}
 		
 		[Bindable(event="valueChange")]
 		public function get value():Number
@@ -28,19 +35,17 @@ package flight.position
 		}
 		public function set value(value:Number):void
 		{
-			value = value <= _min ? _min : (value > _max - _space ? _max - _space : value);
+			var space:Number = _space >= _size ? _size : _space;
+			value = value <= _min ? _min : (value > _max - space ? _max - space : value);
 			var p:Number = 1 / precision;
 			value = Math.round(value * p) / p;
-			if (_value == value) {
-				return;
-			}
 			
-			var oldValues:Array = [_value, _percent];
-			_value = value;
-			var area:Number = _size - _space;
-			_percent = area == 0 ? 1 : (_value - _min) / area;
+			_value = PropertyEvent.change(this, "value", _value, value);
+			var area:Number = _size - space;
+			value = area == 0 ? 0 : (_value - _min) / area;
+			_percent = PropertyEvent.change(this, "percent", _percent, value);
 			
-			PropertyEvent.dispatchChangeList(this, ["value", "percent"], oldValues);
+			PropertyEvent.dispatch(this);
 		}
 		
 		[Bindable(event="percentChange")]
@@ -54,7 +59,8 @@ package flight.position
 				return;
 			}
 			
-			var area:Number = _size - _space;
+			var space:Number = _space >= _size ? _size : _space;
+			var area:Number = _size - space;
 			this.value = _min + value * area;
 		}
 		
@@ -72,19 +78,12 @@ package flight.position
 				return;
 			}
 			
-			var properties:Array = ["size", "max"];
-			var oldValues:Array = [_size, _max];
-			_size = value;
-			_max = _min + _size;
+			_size = PropertyEvent.change(this, "size", _size, value);
+			_max = PropertyEvent.change(this, "max", _max, _min + _size);
+			_filled = PropertyEvent.change(this, "filled", _filled, _space >= _size);
 			
-			if (_space > _size) {
-				properties.push("space");
-				oldValues.push(_space);
-				_space = _size;
-			}
-			
-			value = value;
-			PropertyEvent.dispatchChangeList(this, properties, oldValues);
+			this.value = _value;
+			PropertyEvent.dispatch(this);
 		}
 		
 		[Bindable(event="minChange")]
@@ -100,25 +99,15 @@ package flight.position
 				return;
 			}
 			
-			var properties:Array = ["min", "size"];
-			var oldValues:Array = [_min, _size];
-			_min = value;
-			
+			_min = PropertyEvent.change(this, "min", _min, value);
 			if (_max < _min) {
-				properties.push("max");
-				oldValues.push(_max);
-				_max = _min;
+				_max = PropertyEvent.change(this, "max", _size, _min);
 			}
-			_size = _max - _min;
+			_size = PropertyEvent.change(this, "size", _size, _max - _min);
+			_filled = PropertyEvent.change(this, "filled", _filled, _space >= _size);
 			
-			if (_space > _size) {
-				properties.push("space");
-				oldValues.push(_space);
-				_space = _size;
-			}
-			
-			value = value;
-			PropertyEvent.dispatchChangeList(this, properties, oldValues);
+			this.value = _value;
+			PropertyEvent.dispatch(this);
 		}
 		
 		[Bindable(event="maxChange")]
@@ -134,25 +123,15 @@ package flight.position
 				return;
 			}
 			
-			var properties:Array = ["max", "size"]
-			var oldValues:Array = [_max, _size];
-			_max = value;
-			
+			_max = PropertyEvent.change(this, "max", _max, value);
 			if (_min > _max) {
-				properties.push("min");
-				oldValues.push(_min);
-				_min = _max;
+				_min = PropertyEvent.change(this, "min", _min, _max);
 			}
-			_size = _max - _min;
+			_size = PropertyEvent.change(this, "size", _size, _max - _min);
+			_filled = PropertyEvent.change(this, "filled", _filled, _space >= _size);
 			
-			if (_space > _size) {
-				properties.push("space");
-				oldValues.push(_space);
-				_space = _size;
-			}
-			
-			value = value;
-			PropertyEvent.dispatchChangeList(this, properties, oldValues);
+			this.value = _value;
+			PropertyEvent.dispatch(this);
 		}
 		
 		[Bindable(event="spaceChange")]
@@ -162,17 +141,17 @@ package flight.position
 		}
 		public function set space(value:Number):void
 		{
-			value = value >= _size ? _size : value;
 			var p:Number = 1 / precision;
 			value = Math.round(value * p) / p;
 			if (_space == value) {
 				return;
 			}
 			
-			var oldValue:Object = _space;
-			_space = value;
+			_space = PropertyEvent.change(this, "space", _space, value);
+			_filled = PropertyEvent.change(this, "filled", _filled, _space >= _size);
 			
-			PropertyEvent.dispatchChange(this, "space", oldValue, _space);
+			this.value = _value;
+			PropertyEvent.dispatch(this);
 		}
 		
 		public function forward():void

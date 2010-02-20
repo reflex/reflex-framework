@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <flexLibProperties includeAllClasses="false" version="3">
   <includeClasses>
     <classEntry path="FlexClasses"/>
@@ -32,12 +32,11 @@
     <classEntry path="reflex.behaviors.ListBehavior"/>
     <classEntry path="reflex.behaviors.ScrollBehavior"/>
     <classEntry path="reflex.behaviors.SelectableBehavior"/>
-    <classEntry path="reflex.component.Application"/>
-    <classEntry path="reflex.component.Component"/>
-    <classEntry path="reflex.controls.Button"/>
-    <classEntry path="reflex.controls.ISelectable"/>
-    <classEntry path="reflex.controls.ListBox"/>
-    <classEntry path="reflex.controls.ScrollBar"/>
+    <classEntry path="reflex.components.Application"/>
+    <classEntry path="reflex.components.Component"/>
+    <classEntry path="reflex.components.Button"/>
+    <classEntry path="reflex.components.ListBox"/>
+    <classEntry path="reflex.components.ScrollBar"/>
     <classEntry path="reflex.display.BlockDisplay"/>
     <classEntry path="reflex.display.Containment"/>
     <classEntry path="reflex.events.ButtonEvent"/>
@@ -49,7 +48,6 @@
     <classEntry path="reflex.layout.ILayout"/>
     <classEntry path="reflex.layout.ILayoutAlgorithm"/>
     <classEntry path="reflex.layout.Layout"/>
-    <classEntry path="reflex.skins.ComponentSkin"/>
     <classEntry path="reflex.skins.GraphicSkin"/>
     <classEntry path="reflex.skins.ISkin"/>
     <classEntry path="reflex.skins.ISkinnable"/>

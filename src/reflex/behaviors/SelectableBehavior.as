@@ -2,8 +2,6 @@ package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
 	import flash.events.MouseEvent;
-	
-	import reflex.controls.ISelectable;
 
 	public class SelectableBehavior extends Behavior implements IBehavior
 	{
