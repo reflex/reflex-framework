@@ -1,14 +1,14 @@
-package reflex.component
+package reflex.components
 {
 	import flash.display.StageAlign;
 	import flash.display.StageQuality;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	
-	import flight.binding.Bind;
+	import flash.ui.ContextMenu;
 	
 	import reflex.layout.Layout;
 	
+	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
 	public class Application extends Component
 	{
 		[Bindable]
@@ -16,14 +16,16 @@ package reflex.component
 		
 		public function Application()
 		{
-			stage.align = StageAlign.TOP_LEFT;
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			// TODO: "bitmaps are always smoothed" vs "bitmaps are smoothed if the movie is static"
-			// ... is this a noticable quality improvement?
-			stage.quality = StageQuality.BEST;
-			stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
+			if (stage != null) {
+				contextMenu = new ContextMenu();
+				contextMenu.hideBuiltInItems();
+				stage.scaleMode = StageScaleMode.NO_SCALE;
+				stage.align = StageAlign.TOP_LEFT;
+				stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
+				onStageResize(null);
+			}
 			
-			addEventListener(Layout.LAYOUT, redraw);
+			addEventListener(Layout.LAYOUT, onLayout);
 		}
 		
 		protected function draw():void
@@ -40,7 +42,7 @@ package reflex.component
 			block.height = stage.stageHeight;
 		}
 		
-		private function redraw(event:Event):void
+		private function onLayout(event:Event):void
 		{
 			draw();
 		}

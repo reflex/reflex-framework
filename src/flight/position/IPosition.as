@@ -2,6 +2,8 @@ package flight.position
 {
 	public interface IPosition extends IProgress
 	{
+		function get filled():Boolean;
+		
 		function get min():Number;
 		function set min(value:Number):void;
 		

@@ -10,8 +10,8 @@ package
 	import flight.binding.Bind;
 	
 	import reflex.behaviors.ScrollBehavior;
-	import reflex.component.Application;
-	import reflex.controls.ScrollBar;
+	import reflex.components.Application;
+	import reflex.components.ScrollBar;
 	import reflex.display.Containment;
 	import reflex.events.ButtonEvent;
 	import reflex.layout.Block;
@@ -94,21 +94,6 @@ package
 			block.anchor.top = block.anchor.bottom = 3;
 			
 			return scroll;
-		}
-		
-		private var pressedWidth:Number = 0;
-		private var pressedHeight:Number = 0;
-		private function onPress(event:ButtonEvent):void
-		{
-			pressedWidth = containment.hPosition.space;
-			pressedHeight = containment.vPosition.space;
-		}
-		
-		private function onDrag(event:ButtonEvent):void
-		{
-			containment.hPosition.space = pressedWidth + event.deltaX;
-			containment.vPosition.space = pressedHeight + event.deltaY;
-			event.updateAfterEvent();
 		}
 		
 	}
