@@ -7,7 +7,7 @@ package reflex.behaviors
 	
 	import reflex.events.ButtonEvent;
 	
-	public class StepperBehavior extends Behavior
+	public class StepBehavior extends Behavior
 	{
 		public var fwdBtn:InteractiveObject;
 		public var bwdBtn:InteractiveObject;
@@ -16,7 +16,7 @@ package reflex.behaviors
 		[Binding(target="target.position")]
 		public var position:IPosition = new Position();		// TODO: implement lazy instantiation of position
 		
-		public function StepperBehavior(target:InteractiveObject = null)
+		public function StepBehavior(target:InteractiveObject = null)
 		{
 			super(target);
 		}

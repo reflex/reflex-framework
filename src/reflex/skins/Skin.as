@@ -14,6 +14,8 @@ package reflex.skins
 	import flight.list.ArrayList;
 	import flight.list.IList;
 	
+	import reflex.display.IContainer;
+	import reflex.layout.Block;
 	import reflex.layout.ILayoutAlgorithm;
 	import reflex.layout.Layout;
 	
@@ -23,7 +25,7 @@ package reflex.skins
 	 * adding children to the Sprite, or both.
 	 */
 	[DefaultProperty("children")]
-	public class Skin extends EventDispatcher implements ISkin
+	public class Skin extends EventDispatcher implements ISkin, IContainer
 	{
 		[Bindable]
 		public var layout:ILayoutAlgorithm;
@@ -42,7 +44,6 @@ package reflex.skins
 		public function Skin()
 		{
 			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
-			Bind.bindEventListener(ListEvent.LIST_CHANGE, onContentChange, this, "target.children");
 			Bind.addListener(onLayoutChange, this, "target.layout");
 			Bind.addListener(onLayoutChange, this, "layout");
 			Bind.addBinding(this, "data", this, "target.data");
@@ -60,14 +61,17 @@ package reflex.skins
 				return;
 			}
 			
+			var skinnable:ISkinnable;
+			if (_target != null && _target is ISkinnable) {
+				skinnable = _target as ISkinnable;
+				skinnable.children.removeEventListener(ListEvent.LIST_CHANGE, onContentChange);
+			}
+			
 			var oldValue:Object = _target;
 			_target = value;
 			
 			if (_target != null) {
 				var i:int;
-				while (_target.numChildren) {
-					_target.removeChildAt(_target.numChildren-1);
-				}
 				for (i = 0; i < _children.length; i++) {
 					_target.addChildAt(_children.getItemAt(i) as DisplayObject, i);
 				}
@@ -75,15 +79,16 @@ package reflex.skins
 				containerPart = getSkinPart("container") as DisplayObjectContainer;
 				if (_target is ISkinnable && containerPart != null) {
 					
-					var skinnable:ISkinnable = _target as ISkinnable;
+					skinnable = _target as ISkinnable;
+					skinnable.children.addEventListener(ListEvent.LIST_CHANGE, onContentChange, false, 0xF);
 					if (skinnable.children.length > 0) {
 						defaultContainer = false;
 						Bind.addBinding(containerPart, "padding", this, "target.padding");
 						while (containerPart.numChildren) {
-							containerPart.removeChildAt(containerPart.numChildren-1);
+							removeContainerChildAt(containerPart.numChildren-1);
 						}
 						for (i = 0; i < skinnable.children.length; i++) {
-							containerPart.addChildAt(skinnable.children.getItemAt(i) as DisplayObject, i);
+							addContainerChildAt(skinnable.children.getItemAt(i) as DisplayObject, i);
 						}
 					}
 				}
@@ -96,6 +101,7 @@ package reflex.skins
 		{
 		}
 		
+		[ArrayElementType("flash.display.DisplayObject")]
 		public function get children():IList
 		{
 			return _children;
@@ -152,15 +158,13 @@ package reflex.skins
 		
 		private function onContentChange(event:ListEvent):void
 		{
-			if (containerPart == null || !(_target is ISkinnable)) {
-				return;
-			}
+			event.stopImmediatePropagation();
 			var skinnable:ISkinnable = _target as ISkinnable;
 			if (defaultContainer) {
 				defaultContainer = false;
 				Bind.addBinding(containerPart, "padding", this, "target.padding");
 				while (containerPart.numChildren) {
-					containerPart.removeChildAt(containerPart.numChildren-1);
+					removeContainerChildAt(containerPart.numChildren-1);
 				}
 			}
 			
@@ -169,26 +173,53 @@ package reflex.skins
 			switch (event.kind) {
 				case ListEventKind.ADD :
 					for each (child in event.items) {
-					containerPart.addChildAt(child, loc++);
+					addContainerChildAt(child, loc++);
 				}
 					break;
 				case ListEventKind.REMOVE :
 					for each (child in event.items) {
-					containerPart.removeChild(child);
+					removeContainerChild(child);
 				}
 					break;
 				case ListEventKind.REPLACE :
-					containerPart.removeChild(event.items[1]);
-					containerPart.addChildAt(event.items[0], loc);
+					removeContainerChild(event.items[1]);
+					addContainerChildAt(event.items[0], loc);
 					break;
 				case ListEventKind.RESET :
 					while (containerPart.numChildren) {
-						containerPart.removeChildAt(containerPart.numChildren-1);
+						removeContainerChildAt(containerPart.numChildren-1);
 					}
 					for (var i:int = 0; i < skinnable.children.length; i++) {
-						containerPart.addChildAt(skinnable.children.getItemAt(i) as DisplayObject, i);
+						addContainerChildAt(skinnable.children.getItemAt(i) as DisplayObject, i);
 					}
 					break;
+			}
+		}
+		
+		protected function addContainerChildAt(child:DisplayObject, index:int):DisplayObject
+		{
+			if (containerPart is IContainer) {
+				return IContainer(containerPart).children.addItemAt(child, index) as DisplayObject;
+			} else {
+				return containerPart.addChildAt(child, index);
+			}
+		}
+		
+		protected function removeContainerChildAt(index:int):DisplayObject
+		{
+			if (containerPart is IContainer) {
+				return IContainer(containerPart).children.removeItemAt(index) as DisplayObject;
+			} else {
+				return containerPart.removeChildAt(index);
+			}
+		}
+		
+		protected function removeContainerChild(child:DisplayObject):DisplayObject
+		{
+			if (containerPart is IContainer) {
+				return IContainer(containerPart).children.removeItem(child) as DisplayObject;
+			} else {
+				return containerPart.removeChild(child);
 			}
 		}
 		
