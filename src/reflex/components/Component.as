@@ -90,5 +90,10 @@ package reflex.components
 			}
 		}
 		
+		override protected function constructChildren():void
+		{
+			// load skin from CSS, etc
+		}
+		
 	}
 }
