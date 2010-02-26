@@ -9,33 +9,21 @@ package reflex.component
 	import reflex.behaviors.IBehavioral;
 	import reflex.display.BlockDisplay;
 	import reflex.layout.ILayoutAlgorithm;
-	import reflex.observers.CheckSameObserver;
-	import reflex.observers.ClassObserver;
-	import reflex.observers.IPropertyObservable;
-	import reflex.observers.IPropertyObserver;
-	import reflex.observers.PropertyObservable;
-	import reflex.observers.SetTargetObserver;
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
 	
-	public class Component extends BlockDisplay implements IBehavioral, ISkinnable, IPropertyObservable
+	public class Component extends BlockDisplay implements IBehavioral, ISkinnable
 	{
 		//[Bindable] override public var enabled:Boolean;
-		private var propertyObservable:PropertyObservable;
+		
 		private var _behaviors:CompositeBehavior;
 		
 		public function Component()
 		{
-			propertyObservable = new PropertyObservable(this);
-			addPropertyObserver(ClassObserver.instance);
-			addPropertyObserver(CheckSameObserver.instance);
-			addPropertyObserver(SetTargetObserver.instance);
 		}
 		
-		override public function set layout(value:*):void
-		{
-			super.layout = changeProperty("layout", super.layout, value);
-		}
+//		[Bindable]
+//		public var layout:ILayoutAlgorithm;
 		
 		[Bindable]
 		public var state:String;
@@ -83,32 +71,22 @@ package reflex.component
 			}
 		}
 		
-		private var _skin:ISkin;
-		
-		[Bindable]
-		public function get skin():ISkin
-		{
-			return _skin;
+		private var _skin:ISkin; [Bindable]
+		public function get skin():ISkin { return _skin; }
+		public function set skin(value:ISkin):void {
+			if (_skin == value) {
+				return;
+			}
+			if (_skin != null) {
+				_skin.target = null;
+			}
+			
+			_skin = value;
+			
+			if (_skin != null) {
+				_skin.target = this;
+			}
 		}
 		
-		public function set skin(value:*):void
-		{
-			_skin = changeProperty("skin", _skin, value);
-		}
-		
-		public function addPropertyObserver(observer:IPropertyObserver):void
-		{
-			propertyObservable.addPropertyObserver(observer);
-		}
-		
-		public function removePropertyObserver(observer:IPropertyObserver):void
-		{
-			propertyObservable.removePropertyObserver(observer);
-		}
-		
-		protected function changeProperty(name:String, oldValue:*, newValue:*):*
-		{
-			propertyObservable.changeProperty(name, oldValue, newValue);
-		}
 	}
 }
