@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<flexLibProperties includeAllClasses="true" version="3">
+<flexLibProperties includeAllClasses="false" version="3">
   <includeClasses>
     <classEntry path="FlexClasses"/>
     <classEntry path="flight.binding.Bind"/>
@@ -30,17 +30,29 @@
     <classEntry path="reflex.behaviors.IBehavior"/>
     <classEntry path="reflex.behaviors.IBehavioral"/>
     <classEntry path="reflex.behaviors.ListBehavior"/>
+    <classEntry path="reflex.behaviors.ListSelectBehavior"/>
+    <classEntry path="reflex.behaviors.PopoutBehavior"/>
     <classEntry path="reflex.behaviors.ScrollBehavior"/>
     <classEntry path="reflex.behaviors.SelectableBehavior"/>
+    <classEntry path="reflex.behaviors.StepBehavior"/>
     <classEntry path="reflex.components.Application"/>
-    <classEntry path="reflex.components.Component"/>
     <classEntry path="reflex.components.Button"/>
+    <classEntry path="reflex.components.CheckBox"/>
+    <classEntry path="reflex.components.ComboBox"/>
+    <classEntry path="reflex.components.Component"/>
+    <classEntry path="reflex.components.DataGrid"/>
     <classEntry path="reflex.components.ListBox"/>
+    <classEntry path="reflex.components.Stepper"/>
+    <classEntry path="reflex.components.ProgressBar"/>
+    <classEntry path="reflex.components.RadioButton"/>
     <classEntry path="reflex.components.ScrollBar"/>
-    <classEntry path="reflex.display.BlockDisplay"/>
-    <classEntry path="reflex.display.Containment"/>
+    <classEntry path="reflex.components.Slider"/>
+    <classEntry path="reflex.components.TabBar"/>
+    <classEntry path="reflex.display.Container"/>
+    <classEntry path="reflex.display.Replicator"/>
     <classEntry path="reflex.events.ButtonEvent"/>
     <classEntry path="reflex.events.RenderEvent"/>
+    <classEntry path="reflex.layout.Align"/>
     <classEntry path="reflex.layout.Block"/>
     <classEntry path="reflex.layout.Bounds"/>
     <classEntry path="reflex.layout.Box"/>
@@ -48,11 +60,19 @@
     <classEntry path="reflex.layout.ILayout"/>
     <classEntry path="reflex.layout.ILayoutAlgorithm"/>
     <classEntry path="reflex.layout.Layout"/>
+    <classEntry path="reflex.layout.Stack"/>
     <classEntry path="reflex.skins.GraphicSkin"/>
     <classEntry path="reflex.skins.ISkin"/>
     <classEntry path="reflex.skins.ISkinnable"/>
     <classEntry path="reflex.skins.Skin"/>
     <classEntry path="reflex.styles.IStylable"/>
+    <classEntry path="reflex.display.IContainer"/>
+    <classEntry path="reflex.layout.ScrollBlock"/>
+    <classEntry path="reflex.display.ScrollContainer"/>
+    <classEntry path="reflex.components.ScrollPane"/>
+    <classEntry path="reflex.skins.ScrollBarSkin"/>
+    <classEntry path="reflex.skins.ButtonSkin"/>
+    <classEntry path="reflex.skins.StepperSkin"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

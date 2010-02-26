@@ -1,6 +1,7 @@
 package reflex.layout
 {
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.geom.Rectangle;
 	
 	import flight.binding.Bind;
@@ -28,8 +29,10 @@ package reflex.layout
 			
 			Bind.addListener(onPositionChange, this, "hPosition.value");
 			Bind.addListener(onPositionChange, this, "vPosition.value");
-			Bind.addListener(onSizeChange, this, "hPosition.space");
-			Bind.addListener(onSizeChange, this, "vPosition.space");
+			Bind.addListener(onPositionChange, this, "hPosition.space");
+			Bind.addListener(onPositionChange, this, "vPosition.space");
+			Bind.addListener(onPositionChange, this, "hPosition.filled");
+			Bind.addListener(onPositionChange, this, "vPosition.filled");
 			
 			hPosition.stepSize = vPosition.stepSize = 10;
 			hPosition.skipSize = vPosition.skipSize = 100;
@@ -85,6 +88,36 @@ package reflex.layout
 			return bounds;
 		}
 		
+		override public function measure():void
+		{
+			var container:DisplayObjectContainer = target as DisplayObjectContainer;
+			if (container == null) {
+				return;
+			}
+			
+			if (algorithm != null) {
+				algorithm.measure(container);
+			}
+			
+			var measurement:Bounds = new Bounds();
+			
+			for (var i:int = 0; i < container.numChildren; i++) {
+				var display:DisplayObject = container.getChildAt(i);
+				var child:Block = getLayout(display) as Block;
+				if (child == null || child.freeform) {
+					continue;
+				}
+				
+				measurement.minWidth = measurement.constrainWidth(
+					display.x + child.width + padding.right + child.margin.right);
+				
+				measurement.minHeight = measurement.constrainHeight(
+					display.y + child.height + padding.bottom + child.margin.bottom);
+			}
+			
+			updateMeasurement(measurement);
+		}
+		
 		private function onPositionChange(event:PropertyEvent):void
 		{
 			if (target == null) {
@@ -94,25 +127,15 @@ package reflex.layout
 			if (hPosition.filled && vPosition.filled) {
 				target.scrollRect = null;
 			} else {
-				var rect:Rectangle = target.scrollRect || new Rectangle(hPosition.value, vPosition.value, hPosition.space, vPosition.space);
-				rect.x = hPosition.value;
-				rect.y = vPosition.value;
-				target.scrollRect = rect;
-			}
-		}
-		
-		private function onSizeChange(event:PropertyEvent):void
-		{
-			if (target == null) {
-				return;
-			}
-			
-			if (hPosition.filled && vPosition.filled) {
-				target.scrollRect = null;
-			} else {
-				var rect:Rectangle = target.scrollRect || new Rectangle(hPosition.value, vPosition.value, hPosition.space, vPosition.space);
-				rect.width = hPosition.space;
-				rect.height = vPosition.space;
+				var rect:Rectangle = target.scrollRect;
+				if (rect == null) {
+					rect = new Rectangle(hPosition.value, vPosition.value, hPosition.space, vPosition.space);
+				} else {
+					rect.x = hPosition.value;
+					rect.y = vPosition.value;
+					rect.width = hPosition.space;
+					rect.height = vPosition.space;
+				}
 				target.scrollRect = rect;
 			}
 		}

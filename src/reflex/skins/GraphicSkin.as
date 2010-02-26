@@ -1,62 +1,83 @@
 package reflex.skins
 {
+	import flash.display.DisplayObject;
+	import flash.display.FrameLabel;
 	import flash.display.InteractiveObject;
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.EventDispatcher;
 	
+	import flight.binding.Bind;
+	import flight.events.PropertyEvent;
+	
 	import reflex.layout.Block;
 	import reflex.layout.ILayoutAlgorithm;
+	import reflex.layout.Layout;
 	
 
-	public class GraphicSkin extends EventDispatcher implements ISkin
+	public class GraphicSkin extends Skin
 	{
-		[Bindable]
-		public var layout:ILayoutAlgorithm;
-		
-		[Bindable]
-		public var data:Object;
-		
-		[Bindable]
-		public var state:String;
-		
-		protected var graphic:Sprite;
-		private var _target:Sprite;
+		private var _graphic:Sprite;
+		private var _graphicBlock:Block;
 		
 		public function GraphicSkin(graphic:Sprite)
 		{
-			this.graphic = graphic;
-			var block:Block = new Block(graphic);
-			block.anchor = 0;
+			_graphic = graphic;
+			_graphicBlock = new Block(graphic);
+			if ("defaultSize" in graphic) {
+				trace(graphic, graphic["defaultSize"].width, graphic["defaultSize"].height);
+				var defaultSize:DisplayObject = graphic["defaultSize"] as DisplayObject;
+				_graphicBlock.defaultWidth = defaultSize.width;
+				_graphicBlock.defaultHeight = defaultSize.height;
+			}
+			
+			if (_graphic is MovieClip) {
+				Bind.addListener(onStateChange, this, "state");
+			}
 		}
 		
-		[Bindable]
-		public function get target():Sprite
+		override public function set target(value:Sprite):void
 		{
-			return _target;
-		}
-		public function set target(value:Sprite):void
-		{
-			if (_target == value) {
+			if (target == value) {
 				return;
 			}
 			
-			if (_target != null) {
-				_target.removeChild(graphic);
+			if (target != null && target != graphic) {
+				target.removeChild(graphic);
+				_graphicBlock.anchor = null;
 			}
 			
-			_target = value;
+			super.target = value;
+			var targetBlock:Block = Layout.getLayout(target) as Block;
+			if (targetBlock != null) {
+				targetBlock.defaultWidth = _graphicBlock.defaultWidth;
+				targetBlock.defaultHeight = _graphicBlock.defaultHeight;
+			}
 			
-			if (_target != null) {
-				_target.addChild(graphic);
+			if (target != null && target != graphic) {
+				target.addChild(graphic);
+				_graphicBlock.anchor = 0;
 			}
 		}
 		
-		public function getSkinPart(part:String):InteractiveObject
+		public function get graphic():Sprite
 		{
-			return (part in graphic) ? graphic[part] : null;
+			return _graphic;
 		}
 		
+		public function get graphicBlock():Block
+		{
+			return _graphicBlock;
+		}
 		
+		override public function getSkinPart(part:String):InteractiveObject
+		{
+			return (part in graphic) ? graphic[part] : (part in target) ? target[part] : null;
+		}
 		
+		private function onStateChange(event:PropertyEvent):void
+		{
+			MovieClip(_graphic).gotoAndPlay(state);
+		}
 	}
 }

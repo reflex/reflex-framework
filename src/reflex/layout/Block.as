@@ -24,11 +24,10 @@ package reflex.layout
 		protected var explicitWidth:Number;
 		protected var explicitHeight:Number;
 		
-		protected var defaultWidth:Number = 0;
-		protected var defaultHeight:Number = 0;
-		
 		private var _x:Number;
 		private var _y:Number;
+		private var _defaultWidth:Number = 0;
+		private var _defaultHeight:Number = 0;
 		private var _width:Number = defaultWidth;
 		private var _height:Number = defaultHeight;
 		private var _displayWidth:Number = defaultWidth;
@@ -68,7 +67,6 @@ package reflex.layout
 				defaultWidth = rect.right;
 				defaultHeight = rect.bottom;
 				super.target = value;
-				updateSize();
 			} else {
 				super.target = value;
 			}
@@ -213,6 +211,38 @@ package reflex.layout
 			updateSize();
 		}
 		
+		[Bindable(event="defaultWidthChange")]
+		public function get defaultWidth():Number
+		{
+			return _defaultWidth;
+		}
+		public function set defaultWidth(value:Number):void
+		{
+			if (_defaultWidth == value) {
+				return;
+			}
+			
+			_defaultWidth = PropertyEvent.change(this, "defaultWidth", _defaultWidth, snapToPixel ? Math.round(value) : value);
+			updateSize();
+			PropertyEvent.dispatch(this);
+		}
+		
+		[Bindable(event="defaultHeightChange")]
+		public function get defaultHeight():Number
+		{
+			return _defaultHeight;
+		}
+		public function set defaultHeight(value:Number):void
+		{
+			if (_defaultHeight == value) {
+				return;
+			}
+			
+			_defaultHeight = PropertyEvent.change(this, "defaultHeight", _defaultHeight, snapToPixel ? Math.round(value) : value);
+			updateSize();
+			PropertyEvent.dispatch(this);
+		}
+		
 		[Bindable("measuredWidthChange")]
 		public function get measuredWidth():Number
 		{
@@ -283,7 +313,7 @@ package reflex.layout
 		{
 			var anchor:Box = (value is String || value is Number) ? Box.fromString( String(value) ) : value as Box;
 			if (anchor == null) {
-				anchor = new Box();
+				anchor = new Box(NaN, NaN, NaN, NaN);
 			}
 			if (_anchor.equals(anchor)) {
 				return;

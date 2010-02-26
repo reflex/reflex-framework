@@ -1,8 +1,12 @@
 package reflex.components
 {
-	public class ComboBox
+	public class ComboBox extends Component
 	{
 		public function ComboBox()
+		{
+		}
+		
+		override protected function init():void
 		{
 		}
 	}
