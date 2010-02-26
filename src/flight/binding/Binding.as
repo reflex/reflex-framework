@@ -238,7 +238,7 @@ package flight.binding
 				source = source[prop];
 			}
 			
-			_resolved = Boolean(pathIndex == _sourcePath.length || source != null);
+			_resolved = Boolean(pathIndex == len && source != null);
 			if (!_resolved) {
 				return;
 			}
@@ -347,14 +347,14 @@ package flight.binding
 		
 		private static function getBindingEvents(target:Object, property:String):Array
 		{
-			var bindings:Array = describeBindings(target);
+			var bindings:Object = describeBindings(target);
 			if (bindings[property] == null) {
 				bindings[property] = [property + "Change"];
 			}
 			return bindings[property];
 		}
 		
-		private static function describeBindings(value:Object):Array
+		private static function describeBindings(value:Object):Object
 		{
 			if ( !(value is Class) ) {
 				value = value.constructor;
@@ -362,7 +362,7 @@ package flight.binding
 			
 			if (descCache[value] == null) {
 				var desc:XMLList = Type.describeProperties(value, "Bindable");
-				var bindings:Array = descCache[value] = [];
+				var bindings:Object = descCache[value] = {};
 				
 				for each (var prop:XML in desc) {
 					var property:String = prop.@name;

@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <componentPackage>
 	
-	<!-- Controls -->
-	<component id="Button"					class="reflex.controls.Button" />
-	
-	<!-- Behaviors -->
-	<component id="ButtonStateBehavior"		class="reflex.behaviors.ButtonBehavior" />
-	<component id="SelectableBehavior"		class="reflex.behaviors.SelectableBehavior" />
-	
-	<!-- Core -->
-	<component id="Application"				class="reflex.component.Application" />
-	
 </componentPackage>

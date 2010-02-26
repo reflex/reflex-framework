@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<flexLibProperties includeAllClasses="false" version="3">
+<flexLibProperties includeAllClasses="true" version="3">
   <includeClasses>
     <classEntry path="FlexClasses"/>
     <classEntry path="flight.binding.Bind"/>
@@ -32,12 +32,11 @@
     <classEntry path="reflex.behaviors.ListBehavior"/>
     <classEntry path="reflex.behaviors.ScrollBehavior"/>
     <classEntry path="reflex.behaviors.SelectableBehavior"/>
-    <classEntry path="reflex.component.Application"/>
-    <classEntry path="reflex.component.Component"/>
-    <classEntry path="reflex.controls.Button"/>
-    <classEntry path="reflex.controls.ISelectable"/>
-    <classEntry path="reflex.controls.ListBox"/>
-    <classEntry path="reflex.controls.ScrollBar"/>
+    <classEntry path="reflex.components.Application"/>
+    <classEntry path="reflex.components.Component"/>
+    <classEntry path="reflex.components.Button"/>
+    <classEntry path="reflex.components.ListBox"/>
+    <classEntry path="reflex.components.ScrollBar"/>
     <classEntry path="reflex.display.BlockDisplay"/>
     <classEntry path="reflex.display.Containment"/>
     <classEntry path="reflex.events.ButtonEvent"/>
@@ -56,7 +55,5 @@
     <classEntry path="reflex.styles.IStylable"/>
   </includeClasses>
   <includeResources/>
-  <namespaceManifests>
-    <namespaceManifestEntry manifest="manifest.xml" namespace="http://rx.reflex.io/2010"/>
-  </namespaceManifests>
+  <namespaceManifests/>
 </flexLibProperties>
