@@ -10,28 +10,31 @@ package reflex.components
 	
 	public class Component extends Container implements IBehavioral, ISkinnable
 	{
+		//[Bindable] override public var enabled:Boolean;
+		
+		private var _behaviors:CompositeBehavior;
+		
+		public function Component()
+		{
+			propertyObservable = new PropertyObservable(this);
+			addPropertyObserver(ClassObserver.instance);
+			addPropertyObserver(CheckSameObserver.instance);
+			addPropertyObserver(SetTargetObserver.instance);
+		}
+		
+		override public function set layout(value:*):void
+		{
+			super.layout = changeProperty("layout", super.layout, value);
+		}
+		
 		[Bindable]
 		public var state:String;
 		
 		[Bindable]
 		public var data:Object;
 		
-		private var _skin:ISkin; 
-		private var _behaviors:CompositeBehavior;
-		private var _layout:ILayoutAlgorithm;
-		
-		public function Component()
-		{
-		}
-		
-		override public function get layout():ILayoutAlgorithm
-		{
-			return _skin.layout;
-		}
-		override public function set layout(value:ILayoutAlgorithm):void
-		{
-			_skin.layout = value;
-		}
+		[Bindable]
+		public var children:IList;
 		
 		
 		[ArrayElementType("reflex.behaviors.IBehavior")]
@@ -56,6 +59,7 @@ package reflex.components
 			}
 			return _behaviors;
 		}
+		
 		public function set behaviors(value:*):void
 		{
 			if(_behaviors == null) {
@@ -69,25 +73,27 @@ package reflex.components
 			}
 		}
 		
+		private var _skin:ISkin;
+		
 		[Bindable]
 		public function get skin():ISkin
 		{
 			return _skin;
 		}
-		public function set skin(value:ISkin):void
+		
+		public function set skin(value:*):void
 		{
-			if (_skin == value) {
-				return;
-			}
-			if (_skin != null) {
-				_skin.target = null;
+			_skin = changeProperty("skin", _skin, value);
 			}
 			
-			_skin = value;
-			
-			if (_skin != null) {
-				_skin.target = this;
+		public function addPropertyObserver(observer:IPropertyObserver):void
+		{
+			propertyObservable.addPropertyObserver(observer);
 			}
+			
+		public function removePropertyObserver(observer:IPropertyObserver):void
+		{
+			propertyObservable.removePropertyObserver(observer);
 		}
 		
 	}
