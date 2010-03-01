@@ -15,11 +15,39 @@ package reflex.display
 		[Bindable]
 		public var vPosition:IPosition;
 		
+		override public function set background(value:Number):void
+		{
+			super.background = value;
+			opaqueBackground = background;
+			cacheAsBitmap = !isNaN(background);
+		}
+		
+		override public function get width():Number
+		{
+			return block.width;
+		}
+		override public function set width(value:Number):void
+		{
+			block.width = value;
+		}
+		
+		override public function get height():Number
+		{
+			return block.height;
+		}
+		override public function set height(value:Number):void
+		{
+			block.height = value;
+		}
+		
 		override protected function initLayout():void
 		{
 			var scrollBlock:ScrollBlock = new ScrollBlock();
 			hPosition = scrollBlock.hPosition;
 			vPosition = scrollBlock.vPosition;
+			Bind.addBinding(scrollBlock, "hPosition", this, "hPosition");
+			Bind.addBinding(scrollBlock, "vPosition", this, "vPosition");
+			Bind.addBinding(scrollBlock, "freeform", this, "freeform", true);
 			scrollBlock.addEventListener("xChange", forwardEvent);
 			scrollBlock.addEventListener("yChange", forwardEvent);
 			scrollBlock.addEventListener("displayWidthChange", forwardEvent);
@@ -33,7 +61,6 @@ package reflex.display
 			scrollBlock.addEventListener("paddingChange", forwardEvent);
 			scrollBlock.addEventListener("dockChange", forwardEvent);
 			scrollBlock.addEventListener("alignChange", forwardEvent);
-			Bind.addBinding(scrollBlock, "freeform", this, "freeform", true);
 			
 			block = scrollBlock;
 		}

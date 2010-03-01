@@ -6,7 +6,7 @@ package reflex.behaviors
 	
 	import reflex.events.ButtonEvent;
 	
-	public class ScrollBehavior extends StepperBehavior
+	public class ScrollBehavior extends StepBehavior
 	{
 		public var track:InteractiveObject;
 		public var thumb:InteractiveObject;

@@ -96,5 +96,10 @@ package reflex.components
 			propertyObservable.removePropertyObserver(observer);
 		}
 		
+		override protected function constructChildren():void
+		{
+			// load skin from CSS, etc
+		}
+		
 	}
 }

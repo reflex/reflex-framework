@@ -7,6 +7,7 @@ package reflex.display
 	import flight.binding.Bind;
 	import flight.events.ListEvent;
 	import flight.events.ListEventKind;
+	import flight.events.PropertyEvent;
 	import flight.list.ArrayList;
 	import flight.list.IList;
 	
@@ -14,25 +15,49 @@ package reflex.display
 	import reflex.layout.Bounds;
 	import reflex.layout.Box;
 	import reflex.layout.ILayoutAlgorithm;
+	import reflex.layout.Layout;
 	
 	[DefaultProperty("children")]
-	public class Container extends MovieClip
+	public class Container extends MovieClip implements IContainer
 	{
 		[Bindable]
 		public var freeform:Boolean = false;
 		
 		public var block:Block;
 		
+		private var _background:Number;
 		private var _children:IList = new ArrayList();
 		
 		// TODO: add propertyChange updates (via Block as well)
 		public function Container()
 		{
+			initLayout();
 			addEventListener(Event.ADDED, onInit);
 			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
-			initLayout();
 		}
 		
+		[Bindable(event="backgroundChange")]
+		public function get background():Number
+		{
+			return _background;
+		}
+		public function set background(value:Number):void
+		{
+			if (_background == value) {
+				return;
+			}
+			
+			_background = PropertyEvent.change(this, "background", _background, value);
+			if ( isNaN(_background) ) {
+				removeEventListener(Layout.LAYOUT, onRender);
+			} else {
+				addEventListener(Layout.LAYOUT, onRender);
+				draw();
+			}
+			PropertyEvent.dispatch(this);
+		}
+		
+		[ArrayElementType("flash.display.DisplayObject")]
 		public function get children():IList
 		{
 			return _children;
@@ -214,7 +239,19 @@ package reflex.display
 		}
 		
 		
+		protected function draw():void
+		{
+			graphics.clear();
+			graphics.beginFill(background);
+			graphics.drawRect(0, 0, displayWidth, displayHeight);
+			graphics.endFill();
+		}
+		
 		protected function init():void
+		{
+		}
+		
+		protected function constructChildren():void
 		{
 		}
 		
@@ -237,7 +274,24 @@ package reflex.display
 			Bind.addBinding(block, "freeform", this, "freeform", true);
 		}
 		
-		protected function onChildrenChange(event:ListEvent):void
+		private function onRender(event:Event):void
+		{
+			draw();
+		}
+		
+		private function onInit(event:Event):void
+		{
+			if (event.target != this) {
+				return;
+			}
+			removeEventListener(Event.ADDED, onInit);
+			
+			block.target = this;
+			constructChildren();
+			init();
+		}
+		
+		private function onChildrenChange(event:ListEvent):void
 		{
 			var child:DisplayObject;
 			var loc:int = event.location1;
@@ -265,12 +319,7 @@ package reflex.display
 					}
 					break;
 			}
-		}
-		
-		private function onInit(event:Event):void
-		{
-			block.target = this;
-			init();
+			invalidate(true);
 		}
 		
 		private function forwardEvent(event:Event):void
