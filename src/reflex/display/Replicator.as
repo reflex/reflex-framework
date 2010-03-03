@@ -49,7 +49,7 @@ package reflex.display
 		
 		public function Replicator(target:DisplayObjectContainer = null)
 		{
-			Bind.addListener(onPositionChange, this, "position.percent");
+			Bind.addListener(this, onPositionChange, this, "position.percent");
 			this.target = target;
 			
 			dataProvider.addEventListener(ListEvent.LIST_CHANGE, onVirtualChange);
@@ -82,7 +82,7 @@ package reflex.display
 		}
 		
 		private var shift:int;
-		private function onPositionChange(event:PropertyEvent):void
+		private function onPositionChange(percent:Number):void
 		{
 			var layout:Layout = Layout.getLayout(_target);
 			if (layout == null) {
