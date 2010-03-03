@@ -27,12 +27,12 @@ package reflex.layout
 			Bind.addBinding(this, "hPosition.size", this, "displayWidth");
 			Bind.addBinding(this, "vPosition.size", this, "displayHeight");
 			
-			Bind.addListener(onPositionChange, this, "hPosition.value");
-			Bind.addListener(onPositionChange, this, "vPosition.value");
-			Bind.addListener(onPositionChange, this, "hPosition.space");
-			Bind.addListener(onPositionChange, this, "vPosition.space");
-			Bind.addListener(onPositionChange, this, "hPosition.filled");
-			Bind.addListener(onPositionChange, this, "vPosition.filled");
+			Bind.addListener(this, onPositionChange, this, "hPosition.value");
+			Bind.addListener(this, onPositionChange, this, "vPosition.value");
+			Bind.addListener(this, onPositionChange, this, "hPosition.space");
+			Bind.addListener(this, onPositionChange, this, "vPosition.space");
+			Bind.addListener(this, onPositionChange, this, "hPosition.filled");
+			Bind.addListener(this, onPositionChange, this, "vPosition.filled");
 			
 			hPosition.stepSize = vPosition.stepSize = 10;
 			hPosition.skipSize = vPosition.skipSize = 100;
@@ -118,7 +118,7 @@ package reflex.layout
 			updateMeasurement(measurement);
 		}
 		
-		private function onPositionChange(event:PropertyEvent):void
+		private function onPositionChange(percent:Number):void
 		{
 			if (target == null) {
 				return;

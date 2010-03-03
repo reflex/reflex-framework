@@ -3,6 +3,7 @@ package reflex.behaviors
 	
 	import flash.display.InteractiveObject;
 	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 	
 	import flight.binding.Bind;
 	import flight.utils.Type;
@@ -62,7 +63,7 @@ package reflex.behaviors
 		
 		protected function bindPropertyListener(target:String, listener:Function):void
 		{
-			Bind.addListener(listener, this, target);
+			Bind.addListener(this, listener, this, target);
 		}
 		
 		protected function bindEventListener(type:String, target:String, listener:Function,
@@ -104,7 +105,7 @@ package reflex.behaviors
 										tag.arg.(@key == "target").@value :
 										tag.arg.@value;
 					
-					Bind.addListener(behavior[meth.@name], behavior, targ);
+					Bind.addListener(behavior as IEventDispatcher, behavior[meth.@name], behavior, targ);
 				}
 			}
 		}

@@ -35,10 +35,10 @@ package reflex.skins
 			block.anchor.left = block.anchor.right = 0;
 			block.anchor.vertical = .5;
 			
-			Bind.addListener(setLabel, this, "label");
+			Bind.addListener(this, setLabel, this, "label");
 		}
 		
-		private function setLabel(event:PropertyEvent):void
+		private function setLabel(label:String):void
 		{
 			buttonGraphic.label.text = label || "";
 		}

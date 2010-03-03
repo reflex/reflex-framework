@@ -32,7 +32,7 @@ package reflex.skins
 			}
 			
 			if (_graphic is MovieClip) {
-				Bind.addListener(onStateChange, this, "state");
+				Bind.addListener(this, onStateChange, this, "state");
 			}
 		}
 		
@@ -75,7 +75,7 @@ package reflex.skins
 			return (part in graphic) ? graphic[part] : (part in target) ? target[part] : null;
 		}
 		
-		private function onStateChange(event:PropertyEvent):void
+		private function onStateChange(state:String):void
 		{
 			MovieClip(_graphic).gotoAndPlay(state);
 		}

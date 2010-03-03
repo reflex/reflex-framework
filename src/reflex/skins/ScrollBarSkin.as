@@ -41,8 +41,8 @@ package reflex.skins
 			block.anchor.top = block.anchor.bottom = 0;
 			block.bounds.minWidth = block.bounds.minHeight = 10;
 			
-			Bind.addListener(onSizeChange, this, "position.size");
-			Bind.addListener(onSizeChange, this, "position.space");
+			Bind.addListener(this, onSizeChange, this, "position.size");
+			Bind.addListener(this, onSizeChange, this, "position.space");
 		}
 		
 		private function onSizeChange(event:Event):void

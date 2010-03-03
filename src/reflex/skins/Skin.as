@@ -44,8 +44,8 @@ package reflex.skins
 		public function Skin()
 		{
 			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
-			Bind.addListener(onLayoutChange, this, "target.layout");
-			Bind.addListener(onLayoutChange, this, "layout");
+			Bind.addListener(this, onLayoutChange, this, "target.layout");
+			Bind.addListener(this, onLayoutChange, this, "layout");
 			Bind.addBinding(this, "data", this, "target.data");
 			Bind.addBinding(this, "state", this, "target.state");
 		}

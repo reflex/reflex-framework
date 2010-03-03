@@ -1,351 +1,385 @@
 package flight.binding
 {
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
-	import flash.utils.getQualifiedClassName;
 	
-	import flight.events.PropertyEvent;
+	import flight.observers.Observe;
 	import flight.utils.Type;
+	import flight.utils.getClassName;
+	import flight.utils.getType;
 	
-	import mx.core.IMXMLObject;
+	import mx.events.PropertyChangeEvent;
 	
-	public class Binding extends EventDispatcher implements IMXMLObject
+	[ExcludeClass]
+	
+	/**
+	 * Binding will bind two properties together. They can be shallow or deep
+	 * and one way or two way.
+	 */
+	public class Binding
 	{
-		public var applyOnly:Boolean = false;
+		protected static const SOURCE:String = "source";
+		protected static const TARGET:String = "target";
 		
-		private var indicesIndex:Dictionary = new Dictionary(true);
-		private var bindIndex:Dictionary = new Dictionary(true);
+		protected var sourceIndices:Dictionary = new Dictionary(true);
+		protected var targetIndices:Dictionary = new Dictionary(true);
 		
-		private var explicitValue:Object;
-		private var updating:Boolean;
-		private var _value:*;
-		private var _property:String;
-		private var _sourcePath:Array;
-		private var _resolved:Boolean;
+		protected var _sourcePath:Array;
+		protected var _targetPath:Array;
 		
-		public function Binding(source:Object = null, sourcePath:String = null)
+		protected var _twoWay:Boolean;
+		protected var _value:*;
+		
+		protected var sourceResolved:Boolean;
+		protected var targetResolved:Boolean;
+		protected var updating:Boolean;
+		
+		protected var changeFunction:Function = propertyChange;
+		
+		/**
+		 * 
+		 */
+		public function Binding(target:Object = null, targetPath:Object = null, source:Object = null, sourcePath:Object = null, twoWay:Boolean = false)
 		{
-			reset(source, sourcePath);
+			if (target && targetPath && source && sourcePath) {
+				reset(target, targetPath, source, sourcePath, twoWay);
+			}
 		}
 		
-		public function get property():String
+		/**
+		 * Indicates whether this binding has dropped either the source or the
+		 * target. If either were dropped out of memory the binding is no longer
+		 * valid and shoudl be released appropriatly.
+		 */
+		public function get isInvalid():Boolean
 		{
-			return _property;
+			var i:Object;
+			for (i in sourceIndices) {
+				for (i in targetIndices) return false;
+			}
+			return true;
 		}
 		
-		public function get resolved():Boolean
+		public function get target():Object
 		{
-			return _resolved;
+			for (var i:Object in targetIndices) {
+				if (targetIndices[i] == 0) return i;
+			}
+			return null;
+		}
+		
+		public function get source():Object
+		{
+			for (var i:Object in sourceIndices) {
+				if (sourceIndices[i] == 0) return i;
+			}
+			return null;
+		}
+		
+		public function get targetPath():String
+		{
+			return _targetPath.join(".");
 		}
 		
 		public function get sourcePath():String
 		{
 			return _sourcePath.join(".");
 		}
-		public function set sourcePath(value:String):void
+		
+		public function get twoWay():Boolean
 		{
-			reset(getSource(0), value);
+			return _twoWay;
 		}
 		
-		[Bindable(event="valueChange")]
 		public function get value():*
 		{
 			return _value;
 		}
-		public function set value(value:*):void
-		{
-			if (_value == value || value === undefined) {
-				return;
-			}
-			
-			var oldValue:Object = _value;
-			explicitValue = value;
-			
-			var source:Object = getSource(_sourcePath.length - 1);
-			if (source == null) {
-				return;
-			}
-			
-			if (_property in source) {
-				if (!applyOnly) {
-					explicitValue = null;
-				}
-				source[_property] = value;
-				
-				if (_value == oldValue) {
-					_value = value;
-					PropertyEvent.dispatchChange(this, "value", oldValue, _value);
-				}
-			} else {
-				var className:String = getQualifiedClassName(source).split("::").pop();
-				trace("Warning: Binding access of undefined property '" + _property + "' in " + className + ".");
-			}
-		}
 		
-		public function bind(target:Object, property:String):Boolean
-		{
-			var bindList:Array = bindIndex[target];
-			if (bindList == null) {
-				bindList = bindIndex[target] = [];
-			}
-			
-			if (bindList.indexOf(property) != -1) {
-				return false;
-			}
-			
-			bindList.push(property);
-			target[property] = _value;
-			return true;
-		}
-		
-		public function unbind(target:Object, property:String):Boolean
-		{
-			var bindList:Array = bindIndex[target];
-			if (bindList == null) {
-				return false;
-			}
-			
-			var i:int = bindList.indexOf(property);
-			if (i == -1) {
-				return false;
-			}
-			
-			bindList.splice(i, 1);
-			if (bindList.length == 0) {
-				delete bindIndex[target];
-			}
-			return true;
-		}
-		
-		public function bindListener(listener:Function, useWeakReference:Boolean = true):Boolean
-		{
-			addEventListener("valueChange", listener, false, 0, useWeakReference);
-			PropertyEvent.dispatchChange(this, "value", _value, _value);
-			return true;
-		}
-		
-		public function unbindListener(listener:Function):Boolean
-		{
-			removeEventListener("valueChange", listener);
-			return true;
-		}
-		
-		public function hasBinds():Boolean
-		{
-			for (var target:* in bindIndex) {
-				return true;
-			}
-			
-			return hasEventListener("valueChange");
-		}
-		
+		/**
+		 * 
+		 */
 		public function release():void
 		{
-			unbindPath(0);
+			unbindPath(SOURCE, 0);
+			unbindPath(TARGET, 0);
+			_sourcePath = null;
+			_targetPath = null;
+			_twoWay = false;
+			sourceResolved = false;
+			targetResolved = false;
+			_value = undefined;
 		}
 		
-		public function reset(source:Object, sourcePath:String = null):void
+		public function reset(target:Object, targetPath:Object, source:Object, sourcePath:Object, twoWay:Boolean):void
 		{
-			unbindPath(0);
+			release();
+			_twoWay = twoWay;
 			
-			if (sourcePath != null) {
-				_sourcePath = sourcePath.split(".");
-				_property = _sourcePath[ _sourcePath.length-1 ];
+			_sourcePath = makePath(sourcePath);
+			_targetPath = makePath(targetPath);
+			
+			bindPath(TARGET, target, 0);
+			update(SOURCE, source, 0);
+		}
+		
+		protected function update(type:String, item:Object, pathIndex:int = 0):void
+		{
+			var indices:Dictionary = this[type + "Indices"];
+			var path:Array = this["_" + type + "Path"];
+			
+			var oldValue:* = _value;
+			_value = bindPath(type, item, pathIndex);		// udpate full path
+			
+			if (oldValue === _value) return;
+			
+			updating = true;
+			var otherType:String = (type == SOURCE ? TARGET : SOURCE);
+			var resolved:Boolean = this[otherType + "Resolved"];
+			if (resolved) {
+				var otherPath:Array = this["_" + otherType + "Path"];
+				var otherItem:Object = getItem(otherType, otherPath.length - 1); // item + path.length
+				if (otherItem) {
+					var prop:Object = otherPath[otherPath.length - 1];
+					setProp(otherItem, prop, oldValue, _value);
+				}
+			}
+			updating = false;
+		}
+		
+		/**
+		 * Bind a path up starting from the given index.
+		 */
+		protected function bindPath(type:String, item:Object, pathIndex:int):*
+		{
+			var indices:Dictionary = this[type + "Indices"];
+			var path:Array = this["_" + type + "Path"];
+			var onPropertyChange:Function = this[type + "ChangeHandler"];
+			
+			unbindPath(type, pathIndex);
+			
+			var resolved:Boolean;
+			var prop:Object;
+			var len:int = path.length;
+			for (pathIndex; pathIndex < len; pathIndex++) {
+				
+				if (item == null) {
+					break;
+				}
+				
+				indices[item] = pathIndex;
+				
+				prop = path[pathIndex];
+				var propName:String = getPropName(prop);
+				
+				if (propName && _twoWay || type == SOURCE || pathIndex < len-1) {
+					var changeEvents:Array = getBindingEvents(item, propName);
+					if (changeEvents[0] == "observable") {
+						Observe.addObserver(item, propName, null, propertyChange);
+					} else if (item is IEventDispatcher) {
+						for each (var changeEvent:String in changeEvents) {
+							IEventDispatcher(item).addEventListener(changeEvent, onPropertyChange, false, 100, true);
+						}
+					} else {
+						trace("Warning: Property '" + propName + "' is not bindable in " + getClassName(item) + ".");
+					}
+				}
+				
+				try {
+					item = getProp(item, prop);
+				} catch (e:Error) {
+					item = null;
+				}
 			}
 			
-			update(source, 0);
+			// if we've reached the end of the chain successfully (item + path - 1)
+			this[type + "Resolved"] = resolved = Boolean(pathIndex == len || item != null);
+			if (!resolved) {
+				return null;
+			}
+			
+			return item;
 		}
 		
-		private function getSource(pathIndex:int = 0):Object
+		/**
+		 * Removes all event listeners from a certain point (index) in the path
+		 * on up. A pathIndex of 0 will remove all listeners for the given type.
+		 */
+		protected function unbindPath(type:String, pathIndex:int):void
 		{
-			for (var source:* in indicesIndex) {
-				if (indicesIndex[source] != pathIndex) {
+			var indices:Dictionary = this[type + "Indices"];
+			var path:Array = this["_" + type + "Path"];
+			var onPropertyChange:Function = this[type + "ChangeHandler"];
+			
+			for (var item:* in indices) {
+				var index:int = indices[item];
+				if (index < pathIndex) {
 					continue;
 				}
-				return source;
+				
+				var propName:String = getPropName(path[index]);
+				var changeEvents:Array = getBindingEvents(item, propName);
+				if (changeEvents[0] == "observable") {
+					Observe.removeObserver(item, propName, propertyChange);
+				} else if (item is IEventDispatcher) {
+					for each (var changeEvent:String in changeEvents) {
+						IEventDispatcher(item).removeEventListener(changeEvent, onPropertyChange);
+					}
+				}
+				delete indices[item];
+			}
+		}
+		
+		
+		protected function getItem(type:String, pathIndex:int = 0):Object
+		{
+			var indices:Dictionary = this[type + "Indices"];
+			
+			for (var item:* in indices) {
+				if (indices[item] != pathIndex) {
+					continue;
+				}
+				return item;
 			}
 			
 			return null;
 		}
 		
-		private function update(source:Object, pathIndex:int = 0):void
+		protected function makePath(value:Object):Array
 		{
-			if (updating) {
+			if (value is String) {
+				return String(value).split(".");
+			} else if (value is Array) {
+				return value as Array;
+			} else if (value != null) {
+				return [value];
+			}
+			return [];
+		}
+		
+		protected function getPropName(prop:Object):String
+		{
+			if (prop is String) return prop as String;
+			if ("name" in prop) return prop.name;
+			return null;
+		}
+		
+		protected function getProp(item:Object, prop:Object):*
+		{
+			var func:Function;
+			
+			if ((func = prop as Function)
+				|| ("getter" in prop && (func = prop.getter as Function))
+				|| (prop in item && (func = item[prop] as Function)))
+			{
+				var params:Array = [item];
+				params.length = Math.min(func.length, 1);
+				return func.apply(null, params);
+			}
+			
+			try {
+				return item[prop];
+			} catch (e:Error){}
+			
+			return null;
+		}
+		
+		protected function setProp(item:Object, prop:Object, oldValue:*, value:*):void
+		{
+			var func:Function;
+			
+			if ((func = prop as Function)
+				|| ("getter" in prop && (func = prop.getter as Function))
+				|| (prop in item && (func = item[prop] as Function)))
+			{
+				var params:Array = [_value, oldValue, item, this];
+				params.length = Math.min(func.length, 4);
+				func.apply(null, params.reverse());
 				return;
 			}
 			
-			updating = true;
-			
-			var oldValue:Object = _value;
-			_value = bindPath(source, pathIndex);		// udpate full path
-			
-			if (oldValue != _value) {
-				
-				// update bound targets
-				for (var target:* in bindIndex) {
-					
-					var bindList:Array = bindIndex[target];
-					for (var i:int = 0; i < bindList.length; i++) {
-						
-						var prop:String = bindList[i];
-						target[prop] = _value;
-					}
-				}
-				// update bound listeners
-				PropertyEvent.dispatchChange(this, "value", oldValue, _value);
-			}
-			
-			updating = false;
+			try {
+				item[prop] = value;
+			} catch (e:Error){}
 		}
 		
-		private function bindPath(source:Object, pathIndex:int):*
+		public function propertyChange(target:Object, name:String, oldValue:*, newValue:*):void
 		{
-			if (_sourcePath.length == 0) {
-				return source;
-			}
+			if (updating) return;
+			var pathIndex:int, prop:String;
 			
-			unbindPath(pathIndex);
-			
-			var prop:String;
-			var len:int = (applyOnly && explicitValue != null) ? _sourcePath.length - 1 : _sourcePath.length;
-			for (pathIndex; pathIndex < len; pathIndex++) {
-				
-				if (source == null) {
-					break;
-				}
-				
+			if (target in sourceIndices) {
+				pathIndex = sourceIndices[target];
 				prop = _sourcePath[pathIndex];
-				if ( !(prop in source) ) {
-					var className:String = getQualifiedClassName(source).split("::").pop();
-					trace("Warning: Binding access of undefined property '" + prop + "' in " + className + ".");
-					break;
+				if (prop == name) {
+					update(SOURCE, target[prop], pathIndex + 1);
+					return; // done
 				}
-				
-				indicesIndex[source] = pathIndex;
-				
-				if (source is IEventDispatcher) {
-					var changeEvents:Array = getBindingEvents(source, prop);
-					for each (var changeEvent:String in changeEvents) {
-						IEventDispatcher(source).addEventListener(changeEvent, onPropertyChange, false, 100, true);
-					}
-				} else {
-					className = getQualifiedClassName(source).split("::").pop();
-					trace("Warning: Property '" + prop + "' is not bindable in " + className + ".");
-				}
-				
-				source = source[prop];
 			}
 			
-			_resolved = Boolean(pathIndex == len && source != null);
-			if (!_resolved) {
+			if (target in targetIndices) {
+				pathIndex = targetIndices[target];
+				prop = _targetPath[pathIndex];
+				
+				if (prop == name) {
+					if (_twoWay) {
+						update(TARGET, target[prop], pathIndex + 1);
+					} else {
+						bindPath(TARGET, target[prop], pathIndex + 1);
+						if (sourceResolved && targetResolved) {
+							target = getItem(TARGET, _targetPath.length - 1);
+							prop = _targetPath[_targetPath.length - 1];
+							try {
+								target[prop] = _value;
+							} catch (e:Error) {}
+						}
+					}
+				}
+			}
+		}
+		
+		protected function sourceChangeHandler(event:Event):void
+		{
+			if (updating) return;
+			var source:Object = event.target;
+			var pathIndex:int = sourceIndices[source];
+			var prop:String = _sourcePath[pathIndex];
+			if (event is PropertyChangeEvent && PropertyChangeEvent(event).property != prop) {
 				return;
 			}
 			
-			if (explicitValue != null) {
-				var tmpValue:Object = explicitValue;
-				
-				if (applyOnly && pathIndex == len) {
-					indicesIndex[source] = pathIndex;
-				} else {
-					source = getSource(_sourcePath.length-1);
-					if (!applyOnly) {
-						explicitValue = null;
-					}
+			update(SOURCE, source[prop], pathIndex + 1);
+		}
+		
+		protected function targetChangeHandler(event:Event):void
+		{
+			if (updating) return;
+			var target:Object = event.target;
+			var pathIndex:int = targetIndices[target];
+			var prop:String = _targetPath[pathIndex];
+			if (event is PropertyChangeEvent && PropertyChangeEvent(event).property != prop) {
+				return;
+			}
+			
+			if (_twoWay) {
+				update(TARGET, target[prop], pathIndex + 1);
+			} else {
+				bindPath(TARGET, target[prop], pathIndex + 1);
+				if (sourceResolved && targetResolved) {
+					target = getItem(TARGET, _targetPath.length - 1);
+					prop = _targetPath[_targetPath.length - 1];
+					try {
+						target[prop] = _value;
+					} catch (e:Error) {}
 				}
-				
-				prop = _sourcePath[_sourcePath.length-1];
-				if (prop in source) {
-					source = source[prop] = tmpValue;
-				} else {
-					trace("Warning: Binding access of undefined property '" + prop + "' in " + source + ".");
-				}
-			}
-			
-			return source;
-		}
-		
-		private function unbindPath(pathIndex:int):void
-		{
-			for (var source:* in indicesIndex) {
-				var index:int = indicesIndex[source];
-				if (index < pathIndex) {
-					continue;
-				}
-				
-				if (source is IEventDispatcher) {
-					var changeEvents:Array = getBindingEvents(source, _sourcePath[index]);
-					for each (var changeEvent:String in changeEvents) {
-						IEventDispatcher(source).removeEventListener(changeEvent, onPropertyChange);
-					}
-				}
-				delete indicesIndex[source];
 			}
 		}
 		
-		private function onPropertyChange(event:Event):void
-		{
-			var source:Object = event.target;
-			var pathIndex:int = indicesIndex[source];
-			var prop:String = _sourcePath[pathIndex];
-			update(source[prop], pathIndex+1);
-		}
 		
+		protected static var descCache:Dictionary = new Dictionary();
 		
-		// ====== STATIC MEMEBERS ====== //
-		
-		private static var descCache:Dictionary = new Dictionary();
-		private static var bindingIndex:Dictionary = new Dictionary();
-		
-		public static function getBinding(source:Object, sourcePath:String):Binding
-		{
-			var bindingList:Array = bindingIndex[source];
-			if (bindingList == null) {
-				bindingList = bindingIndex[source] = [];
-			}
-			
-			var binding:Binding = bindingList[sourcePath];
-			if (binding == null) {
-				binding = new Binding(source, sourcePath);
-				bindingList[sourcePath] = binding;
-			}
-			
-			return binding;
-		}
-		
-		public static function releaseBinding(binding:Binding):Boolean
-		{
-			var source:Object = binding.getSource(0);
-			var sourcePath:String = binding.sourcePath;
-			
-			return release(source, sourcePath);
-		}
-		
-		public static function release(source:Object, sourcePath:String):Boolean
-		{
-			var bindingList:Array = bindingIndex[source];
-			if (bindingList == null) {
-				return false;
-			}
-			
-			var binding:Binding = bindingList[sourcePath];
-			if (binding == null) {
-				return false;
-			}
-			
-			delete bindingList[sourcePath];
-			binding.release();
-			
-			return true;
-		}
-		
-		public function initialized(document:Object, id:String):void
-		{
-			reset(document, sourcePath);
-		}
-		
-		private static function getBindingEvents(target:Object, property:String):Array
+		protected static function getBindingEvents(target:Object, property:String):Array
 		{
 			var bindings:Object = describeBindings(target);
 			if (bindings[property] == null) {
@@ -354,10 +388,10 @@ package flight.binding
 			return bindings[property];
 		}
 		
-		private static function describeBindings(value:Object):Object
+		protected static function describeBindings(value:Object):Object
 		{
 			if ( !(value is Class) ) {
-				value = value.constructor;
+				value = getType(value);
 			}
 			
 			if (descCache[value] == null) {
@@ -370,11 +404,17 @@ package flight.binding
 					var bindable:XMLList = prop.metadata.(@name == "Bindable");
 					
 					for each (var bind:XML in bindable) {
-						var changeEvent:String = (bind.arg.(@key == "event").length() != 0) ?
-							bind.arg.(@key == "event").@value :
-							changeEvent = bind.arg.@value;
-						
-						changeEvents.push(changeEvent);
+						if (bind.arg.(@value == "observable").length()) {
+							changeEvents.length = 0;
+							changeEvents.push("observable");
+							break;
+						} else {
+							var changeEvent:String = (bind.arg.(@key == "event").length() != 0) ?
+								bind.arg.(@key == "event").@value :
+								changeEvent = bind.arg.@value;
+							
+							changeEvents.push(changeEvent);
+						}
 					}
 					
 					bindings[property] = changeEvents;
