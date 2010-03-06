@@ -22,7 +22,6 @@ package reflex.components
 			skin = buttonSkin;
 			
 			new ButtonBehavior(this);
-			new SelectableBehavior(this);
 		}
 	}
 }

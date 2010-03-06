@@ -1,5 +1,7 @@
 package reflex.skins
 {
+	import flash.display.FrameLabel;
+	
 	import flight.binding.Bind;
 	import flight.events.PropertyEvent;
 	
@@ -21,6 +23,11 @@ package reflex.skins
 			graphic = buttonGraphic = graphic || new ButtonGraphic()
 			super(buttonGraphic);
 			
+			Bind.addBinding(this, "selected", this, "target.selected");
+			removeStatefulChild(graphic);
+			addStatefulChild(graphic.background);
+			addStatefulChild(graphic.foreground);
+			
 			var block:Block = new Block(graphic.background);
 			block.scale = true;
 			block.anchor = 0;
@@ -38,7 +45,7 @@ package reflex.skins
 			Bind.addListener(this, setLabel, this, "label");
 		}
 		
-		private function setLabel(label:String):void
+		protected function setLabel(label:String):void
 		{
 			buttonGraphic.label.text = label || "";
 		}

@@ -17,6 +17,7 @@ package reflex.skins
 
 	public class GraphicSkin extends Skin
 	{
+		private var _statefulChildren:Array = [];
 		private var _graphic:Sprite;
 		private var _graphicBlock:Block;
 		
@@ -33,6 +34,7 @@ package reflex.skins
 			
 			if (_graphic is MovieClip) {
 				Bind.addListener(this, onStateChange, this, "state");
+				addStatefulChild(_graphic as MovieClip);
 			}
 		}
 		
@@ -75,9 +77,33 @@ package reflex.skins
 			return (part in graphic) ? graphic[part] : (part in target) ? target[part] : null;
 		}
 		
-		private function onStateChange(state:String):void
+		public function addStatefulChild(child:MovieClip):void
 		{
-			MovieClip(_graphic).gotoAndPlay(state);
+			if (_statefulChildren.indexOf(child) != -1) return;
+			
+			_statefulChildren.push(child);
+			
+			// each label should be for a state.
+			var labels:Array = child.currentLabels;
+			for each (var label:FrameLabel in labels) {
+				child.addFrameScript(label.frame - 1, child.stop);
+			}
+			child.addFrameScript(child.totalFrames - 1, child.stop);
+		}
+		
+		public function removeStatefulChild(child:MovieClip):void
+		{
+			var index:int = _statefulChildren.indexOf(child);
+			if (index != -1) {
+				_statefulChildren.splice(index, 1);
+			}
+		}
+		
+		private function onStateChange(oldState:String, state:String):void
+		{
+			for each (var child:MovieClip in _statefulChildren) {
+				child.gotoAndStop(state);
+			}
 		}
 	}
 }
