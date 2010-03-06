@@ -1,5 +1,8 @@
 package reflex.components
 {
+	import flight.events.PropertyEvent;
+	import flight.observers.Observe;
+	
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
@@ -10,13 +13,9 @@ package reflex.components
 	
 	public class Component extends Container implements IBehavioral, ISkinnable
 	{
-		[Bindable]
-		public var state:String;
-		
-		[Bindable]
-		public var data:Object;
-		
-		private var _skin:ISkin; 
+		private var _state:String;
+		private var _data:Object;
+		private var _skin:ISkin;
 		private var _behaviors:CompositeBehavior;
 		private var _layout:ILayoutAlgorithm;
 		
@@ -31,6 +30,30 @@ package reflex.components
 		override public function set layout(value:ILayoutAlgorithm):void
 		{
 			_skin.layout = value;
+		}
+		
+		
+		[Bindable]
+		public function get state():String
+		{
+			return _state;
+		}
+		public function set state(value:String):void
+		{
+			_state = Observe.change(this, "state", _state, value);
+			Observe.notify();
+		}
+		
+		
+		[Bindable]
+		public function get data():Object
+		{
+			return _data;
+		}
+		public function set data(value:Object):void
+		{
+			_data = Observe.change(this, "data", _data, value);
+			Observe.notify();
 		}
 		
 		
@@ -83,11 +106,13 @@ package reflex.components
 				_skin.target = null;
 			}
 			
-			_skin = value;
+			var oldValue:ISkin = _skin;
+			_skin = Observe.change(this, "skin", _skin, value);
 			
-			if (_skin != null) {
+			if (oldValue != _skin && _skin != null) {
 				_skin.target = this;
 			}
+			Observe.notify();
 		}
 		
 		override protected function constructChildren():void

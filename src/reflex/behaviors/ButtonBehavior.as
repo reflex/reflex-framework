@@ -24,7 +24,7 @@ package reflex.behaviors
 		
 		[Bindable]
 		[Binding(target="target.state")]
-		public var state:String;
+		public var state:String = UP;
 		
 		public function ButtonBehavior(target:InteractiveObject = null)
 		{
