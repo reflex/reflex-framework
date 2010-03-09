@@ -97,6 +97,7 @@ package reflex.layout
 			
 			if (algorithm != null) {
 				algorithm.measure(container);
+				return;
 			}
 			
 			var measurement:Bounds = new Bounds();
@@ -118,7 +119,7 @@ package reflex.layout
 			updateMeasurement(measurement);
 		}
 		
-		private function onPositionChange(percent:Number):void
+		private function onPositionChange(prop:String, olVal:Number, percent:Number):void
 		{
 			if (target == null) {
 				return;

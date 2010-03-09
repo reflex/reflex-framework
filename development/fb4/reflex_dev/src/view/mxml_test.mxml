@@ -2,6 +2,9 @@
 <skins:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:display="reflex.display.*" xmlns:components="reflex.components.*" xmlns:skins="reflex.skins.*" xmlns:layout="reflex.layout.*">
 	<fx:Declarations>
+		
+		<display:Replicator target="{container}"/>
+		
 	</fx:Declarations>
 	
 	<fx:Script>
