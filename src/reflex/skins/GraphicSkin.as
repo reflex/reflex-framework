@@ -74,7 +74,7 @@ package reflex.skins
 		
 		override public function getSkinPart(part:String):InteractiveObject
 		{
-			return (part in graphic) ? graphic[part] : (part in target) ? target[part] : null;
+			return (part in graphic) ? graphic[part] : (part in this) ? this[part] : (part in target) ? target[part] : null;
 		}
 		
 		public function addStatefulChild(child:MovieClip):void

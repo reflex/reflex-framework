@@ -45,7 +45,7 @@ package reflex.skins
 			Bind.addListener(this, onSizeChange, this, "position.space");
 		}
 		
-		private function onSizeChange(event:Event):void
+		private function onSizeChange(size:Number):void
 		{
 			if (position == null) {
 				return;

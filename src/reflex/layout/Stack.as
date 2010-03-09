@@ -44,7 +44,9 @@ package reflex.layout
 				measurement.maxWidth = measurement.constrainWidth(space + child.blockBounds.maxWidth);
 			}
 			
-			measurement.minWidth += margin.bottom - hPad;
+			if (margin != null) {
+				measurement.minWidth += margin.bottom - hPad;
+			}
 			block.updateMeasurement(measurement);
 		}
 		

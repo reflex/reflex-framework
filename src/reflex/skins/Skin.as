@@ -194,6 +194,12 @@ package reflex.skins
 					}
 					break;
 			}
+			
+			trace("invalidate");
+			var containerLayout:Layout = Layout.getLayout(containerPart);
+			if (containerLayout != null) {
+				containerLayout.invalidate(true);
+			}
 		}
 		
 		protected function addContainerChildAt(child:DisplayObject, index:int):DisplayObject
@@ -223,8 +229,12 @@ package reflex.skins
 			}
 		}
 		
-		private function onLayoutChange(event:Event):void
+		private function onLayoutChange(value:ILayoutAlgorithm):void
 		{
+			if (_target == null) {
+				return;
+			}
+			
 			var targetLayout:Layout = Layout.getLayout(_target);
 			
 			if (containerPart != null && _target is ISkinnable) {
