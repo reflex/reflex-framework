@@ -31,6 +31,8 @@ package reflex.ui
 	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
+	
+	import reflex.events.ButtonEvent;
 
 	/**
 	 * Cursor is a helper class to use custom cursors registered with it in your flash application.
@@ -165,6 +167,7 @@ package reflex.ui
 				objects[interactiveObject] = cursor;
 				interactiveObject.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
 				interactiveObject.addEventListener(MouseEvent.ROLL_OUT, onRollOut);
+				interactiveObject.addEventListener(ButtonEvent.RELEASE_OUTSIDE, onRollOut);
 			}
 		}
 		
@@ -218,7 +221,7 @@ package reflex.ui
 		private function showObjectCursor(interactiveObject:InteractiveObject):void
 		{
 			if (stack.length) {
-				removeCursor(stack[stack.length - 1].object);
+				removeCursor(stack[stack.length - 1].target);
 			}
 			stack.push(TargetDepth.get(interactiveObject));
 			stack.sortOn("depth");
@@ -237,7 +240,7 @@ package reflex.ui
 			}
 			
 			if (stack.length) {
-				addCursor(stack[stack.length - 1].object);
+				addCursor(stack[stack.length - 1].target);
 			}
 		}
 		

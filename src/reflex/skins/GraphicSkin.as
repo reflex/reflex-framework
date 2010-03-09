@@ -99,7 +99,7 @@ package reflex.skins
 			}
 		}
 		
-		private function onStateChange(oldState:String, state:String):void
+		protected function onStateChange(state:String):void
 		{
 			for each (var child:MovieClip in _statefulChildren) {
 				child.gotoAndStop(state);

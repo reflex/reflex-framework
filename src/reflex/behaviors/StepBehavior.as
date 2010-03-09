@@ -1,7 +1,9 @@
 package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
+	import flash.display.MovieClip;
 	
+	import flight.binding.Bind;
 	import flight.position.IPosition;
 	import flight.position.Position;
 	
@@ -9,7 +11,12 @@ package reflex.behaviors
 	
 	public class StepBehavior extends Behavior
 	{
+		public var fwdBehavior:ButtonBehavior;
+		public var bwdBehavior:ButtonBehavior;
+		
+		[Bindable]
 		public var fwdBtn:InteractiveObject;
+		[Bindable]
 		public var bwdBtn:InteractiveObject;
 		
 		[Bindable]
@@ -31,8 +38,14 @@ package reflex.behaviors
 			
 			fwdBtn = getSkinPart("fwdBtn");
 			bwdBtn = getSkinPart("bwdBtn");
-			ButtonEvent.initialize(fwdBtn);
-			ButtonEvent.initialize(bwdBtn);
+			fwdBehavior = new ButtonBehavior(fwdBtn);
+			bwdBehavior = new ButtonBehavior(bwdBtn);
+			if (fwdBtn is MovieClip) {
+				Bind.addListener(this, onFwdStateChange, fwdBehavior, "state");
+			}
+			if (bwdBtn is MovieClip) {
+				Bind.addListener(this, onBwdStateChange, bwdBehavior, "state");
+			}
 		}
 		
 		[EventListener(type="press", target="fwdBtn")]
@@ -51,6 +64,14 @@ package reflex.behaviors
 			event.updateAfterEvent();
 		}
 		
+		protected function onFwdStateChange(state:String):void
+		{
+			MovieClip(fwdBtn).gotoAndStop(state);
+		}
 		
+		protected function onBwdStateChange(state:String):void
+		{
+			MovieClip(bwdBtn).gotoAndStop(state);
+		}
 	}
 }

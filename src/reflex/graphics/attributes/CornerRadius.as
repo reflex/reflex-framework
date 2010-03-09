@@ -8,6 +8,9 @@ package reflex.graphics.attributes
 		public var bottomLeft:Number;
 		public var bottomRight:Number;
 		
+		private static var pool:CornerRadius;
+		private var next:CornerRadius;
+		
 		public function CornerRadius(topLeft:Number = 0, topRight:Number = 0, bottomLeft:Number = 0, bottomRight:Number = 0)
 		{
 			this.topLeft = topLeft;
@@ -42,12 +45,23 @@ package reflex.graphics.attributes
 			return new CornerRadius(topLeft, topRight, bottomLeft, bottomRight);
 		}
 		
+		public function dispose():void
+		{
+			topLeft = 0;
+			topRight = 0;
+			bottomLeft = 0;
+			bottomRight = 0;
+			next = pool;
+			pool = this;
+		}
+		
 		
 		private static var numberRegex:RegExp = new RegExp("\\s+", "g");
 		
 		public static function fromString(value:String):CornerRadius
 		{
-			var corners:CornerRadius = new CornerRadius();
+			var corners:CornerRadius = pool || new CornerRadius();
+			pool = corners.next;
 			
 			if (!value) return corners;
 			
