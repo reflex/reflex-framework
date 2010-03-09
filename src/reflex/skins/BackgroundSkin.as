@@ -18,13 +18,13 @@ package reflex.skins
 		public var backgroundColors:String;
 		public var backgroundAlphas:String;
 		public var backgroundRatios:String;
-		public var backgroundAngle:String = "90";
+		public var backgroundAngle:String;
 		public var borderColors:String;
 		public var borderAlphas:String;
 		public var borderRatios:String;
-		public var borderAngle:String = "90";
-		public var borderWidth:Number = 1;
-		public var radius:String = "0";
+		public var borderAngle:String;
+		public var borderWidth:Number;
+		public var radius:String;
 		
 		public function BackgroundSkin()
 		{
@@ -58,21 +58,22 @@ package reflex.skins
 			var fill:GraphicsGradientFill;
 			var m:Matrix = new Matrix();
 			
-			if (borderColors && borderWidth > 0) {
+			if (borderColors) {
 				colors = getColors(borderColors);
 				alphas = getAlphas(borderAlphas, colors.length);
 				ratios = getRatios(borderRatios, colors.length);
-				angle = Angle.fromString(borderAngle);
+				angle = Angle.fromString(borderAngle || "90");
+				var bwidth:Number = borderWidth || 1;
 				m.createGradientBox(w, h, angle, x, y);
 				fill = new GraphicsGradientFill("linear", colors, alphas, ratios, m);
 				d[0] = fill;
 				g.drawGraphicsData(d);
 				g.drawRoundRectComplex(x, y, w, h, r.topLeft, r.topRight, r.bottomLeft, r.bottomRight);
-				x += borderWidth;
-				y += borderWidth;
-				w -= borderWidth*2;
-				h -= borderWidth*2;
-				r.inset(borderWidth);
+				x += bwidth;
+				y += bwidth;
+				w -= bwidth*2;
+				h -= bwidth*2;
+				r.inset(bwidth);
 				g.drawRoundRectComplex(x, y, w, h, r.topLeft, r.topRight, r.bottomLeft, r.bottomRight);
 				g.endFill();
 			}
@@ -81,13 +82,15 @@ package reflex.skins
 				colors = getColors(backgroundColors);
 				alphas = getAlphas(backgroundAlphas, colors.length);
 				ratios = getRatios(backgroundRatios, colors.length);
-				angle = Angle.fromString(borderAngle);
+				angle = Angle.fromString(backgroundAngle || "90");
 				m.createGradientBox(w, h, angle, x, y);
 				fill = new GraphicsGradientFill("linear", colors, alphas, ratios, m);
 				d[0] = fill;
 				g.drawGraphicsData(d);
 				g.drawRoundRectComplex(x, y, w, h, r.topLeft, r.topRight, r.bottomLeft, r.bottomRight);
 			}
+			
+			r.dispose();
 		}
 		
 		protected function getColors(colors:String):Array

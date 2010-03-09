@@ -23,6 +23,7 @@
 	<component id="Skin" class="reflex.skins.Skin"/>
 	<component id="StatefulBackgroundSkin" class="reflex.skins.StatefulBackgroundSkin"/>
 	<component id="StepperSkin" class="reflex.skins.StepperSkin"/>
+	<component id="DragStepperSkin" class="reflex.skins.DragStepperSkin"/>
 	
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
 	<component id="CursorBehavior" class="reflex.behaviors.CursorBehavior"/>
@@ -33,5 +34,6 @@
 	<component id="ScrollBehavior" class="reflex.behaviors.ScrollBehavior"/>
 	<component id="SelectableBehavior" class="reflex.behaviors.SelectableBehavior"/>
 	<component id="StepBehavior" class="reflex.behaviors.StepBehavior"/>
+	<component id="DragStepBehavior" class="reflex.behaviors.DragStepBehavior"/>
 	
 </componentPackage>

@@ -50,5 +50,9 @@ package reflex.skins
 			buttonGraphic.label.text = label || "";
 		}
 		
+		override protected function onStateChange(state:String):void
+		{
+			super.onStateChange(selected ? "down" : state);
+		}
 	}
 }

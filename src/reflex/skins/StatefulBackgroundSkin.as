@@ -3,17 +3,17 @@ package reflex.skins
 	import flight.binding.Bind;
 
 	[DefaultProperty("backgrounds")]
-	public class StatefulBackgroundSkin extends Skin
+	public class StatefulBackgroundSkin extends BackgroundSkin
 	{
 		protected var _backgrounds:Object = {};
 		protected var currentBackground:BackgroundSkin;
 		
 		public function StatefulBackgroundSkin()
 		{
-			Bind.addListener(this, onPropChange, this, "state");
+			Bind.addListener(this, onStateChange, this, "state");
 		}
 		
-		protected function onPropChange(state:String):void
+		protected function onStateChange(state:String):void
 		{
 			if (currentBackground) {
 				currentBackground.target = null;
@@ -25,9 +25,17 @@ package reflex.skins
 			}
 		}
 		
+		private var props:Array = ["backgroundColors", "backgroundAlphas", "backgroundRatios", "backgroundAngle",
+				"borderColors", "borderAlphas", "borderRatios", "borderAngle", "borderWidth", "radius"];
 		public function set backgrounds(value:Vector.<BackgroundSkin>):void
 		{
 			for each (var background:BackgroundSkin in value) {
+				for each (var prop:String in props) {
+					if (this[prop] && !background[prop]) {
+						background[prop] = this[prop];
+					}
+				}
+				
 				_backgrounds[background.state] = background;
 			}
 			
