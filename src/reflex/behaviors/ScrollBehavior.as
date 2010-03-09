@@ -53,7 +53,7 @@ package reflex.behaviors
 		}
 		
 		[PropertyListener(target="position.percent")]
-		public function onPosition(event:Event):void
+		public function onPosition(percent:Number):void
 		{
 			if (thumb == null || track == null) {
 				return;
@@ -104,7 +104,6 @@ package reflex.behaviors
 			dragging = true;
 			dragPoint = horizontal ? thumb.parent.mouseX : thumb.parent.mouseY;
 			dragPercent = _percent;
-			event.updateAfterEvent();
 		}
 		
 		[EventListener(type="drag", target="thumb")]
@@ -131,7 +130,7 @@ package reflex.behaviors
 		
 		[PropertyListener(target="target.width")]
 		[PropertyListener(target="target.height")]
-		public function onResize(event:Event):void
+		public function onResize(size:Number):void
 		{
 			updatePosition();
 		}
