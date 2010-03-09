@@ -6,7 +6,7 @@ package
 	
 	import view.mxml_test;
 	
-	[SWF(widthPercent="100%", heightPercent="100%", frameRate="12")]
+	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
 	public class reflex_dev extends Application
 	{
 		
@@ -16,11 +16,8 @@ package
 			padding.horizontal = padding.vertical = 5;
 			
 			var listBox:ListBox;
-			var mxml:mxml_test;
 			
 			listBox = new ListBox();
-			mxml = new mxml_test();
-			listBox.skin = mxml;
 			listBox.dock = "top";
 			addChild(listBox);
 			
@@ -30,8 +27,6 @@ package
 //			listBox.children.addItem(btn);
 			
 			listBox = new ListBox();
-			mxml = new mxml_test();
-			listBox.skin = mxml;
 			listBox.dock = "top";
 			addChild(listBox);
 			

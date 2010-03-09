@@ -36,15 +36,17 @@ package reflex.display
 		// 2) template tied to data type
 		// 3) template retrieved through data inspection
 		
-		// TODO: get rid of the hard-coded reference to button
+		[Bindable]
 		public var template:Class = Button;
 		
 		[Bindable]
-		public var coverageSize:Number = 177;	// size of coverage area (viewport)
+		public var coverageSize:Number = 0;	// size of coverage area (viewport)
+		
 		[Bindable]
-		public var itemSize:Number = 22;		// assumed size of all items		// TOOD: implement begin/end padding and in-between pad
+		public var itemSize:Number = 20;		// assumed size of all items		// TOOD: implement begin/end padding and in-between pad
 		
 		private var cap:int = 0;
+		private var shift:int = 0;
 		private var _target:DisplayObjectContainer;
 		
 		public function Replicator(target:DisplayObjectContainer = null)
@@ -52,7 +54,8 @@ package reflex.display
 			Bind.addListener(this, onPositionChange, this, "position.percent");
 			this.target = target;
 			
-			dataProvider.addEventListener(ListEvent.LIST_CHANGE, onVirtualChange);
+			Bind.bindEventListener(ListEvent.LIST_CHANGE, onChildrenChange, this, "dataProvider");
+			Bind.addListener(this, onDataProviderChange, this, "dataProvider");
 			
 			position.stepSize = 10;
 			position.skipSize = 100;
@@ -81,7 +84,6 @@ package reflex.display
 			PropertyEvent.dispatchChange(this, "target", oldValue, _target);
 		}
 		
-		private var shift:int;
 		private function onPositionChange(percent:Number):void
 		{
 			var layout:Layout = Layout.getLayout(_target);
@@ -121,6 +123,24 @@ package reflex.display
 				for (i = 0; i < _target.numChildren; i++) {
 					button = _target.getChildAt(i) as Button;
 					button.label = String( dataProvider.getItemAt(shift + i) );
+				}
+			}
+		}
+		
+		private function onDataProviderChange(dp:IList):void
+		{
+			var data:Object;
+			var child:DisplayObject;
+			while (_target.numChildren > dataProvider.length) {
+				_target.removeChildAt(_target.numChildren-1);
+			}
+			for (var i:int = 0; i < dataProvider.length; i++) {
+				if (children.length < cap) {
+					child = i < _target.numChildren ? _target.getChildAt(i) : new template() as DisplayObject;
+					// TODO: assign data to child
+					child["label"] = String( dataProvider.getItemAt(shift) );
+					children.addItemAt(child, i);
+					_target.addChildAt(child, i);
 				}
 			}
 		}
@@ -168,7 +188,7 @@ package reflex.display
 						if (children.length < cap) {
 							child = i < _target.numChildren ? _target.getChildAt(i) : new template() as DisplayObject;
 							// TODO: assign data to child
-							child["label"] = String( dataProvider.getItemAt(loc + shift) );
+							child["label"] = String( dataProvider.getItemAt(shift) );
 							children.addItemAt(child, i);
 							_target.addChildAt(child, i);
 						}
