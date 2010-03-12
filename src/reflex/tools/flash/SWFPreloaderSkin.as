@@ -80,7 +80,6 @@ package reflex.tools.flash
     
     public function validate():void
     {
-      trace("preloader skin update");
       
       var g:Graphics = graphics;
       g.clear();
