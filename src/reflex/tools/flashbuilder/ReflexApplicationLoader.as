@@ -94,8 +94,6 @@ package reflex.tools.flashbuilder
       // on our part.
       if(!app)
       {
-        trace("no app");
-        trace("currentFrame: " + currentFrame);
         return;
       }
       

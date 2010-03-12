@@ -1,8 +1,6 @@
 package reflex.tools.flash
 {
-  import flash.display.DisplayObject;
   import flash.display.DisplayObjectContainer;
-  import flash.display.Graphics;
   import flash.display.MovieClip;
   import flash.display.Stage;
   import flash.display.StageAlign;
@@ -14,29 +12,27 @@ package reflex.tools.flash
   public class ReflexFlashLoader extends MovieClip
   {
     protected var preloader:SWFPreloader;
-    protected var preloaderSkin:Class;
+    protected var preloaderSkin:Object;
     protected var loadingComplete:Boolean = false;
     
-    public function ReflexFlashLoader(root:MovieClip, useLoader:Boolean = true, loaderSkinClass:Class = null)
+    public function ReflexFlashLoader(root:MovieClip, useLoader:Boolean = true, loaderSkinOrClass:Object = null)
     {
-      var _root:MovieClip = root;
+      if(root.stage)
+        initStage(root.stage);
       
-      if(_root.stage)
-        initStage(_root.stage);
+      if(loaderSkinOrClass == null)
+        loaderSkinOrClass = SWFPreloaderSkin;
       
-      if(loaderSkinClass == null)
-        loaderSkinClass = SWFPreloaderSkin;
-      
-      preloaderSkin = loaderSkinClass;
+      preloaderSkin = loaderSkinOrClass;
       
       // If this is a multi-frame movie, stop on frame 1
       // so we can show progress of RSLs and the rest of
       // the movie. If it's a single frame movie, stopping
       // here is no problem.
-      _root.stop();
+      root.stop();
       
-      if(_root.totalFrames > 1 && _root && _root.loaderInfo)
-        _root.loaderInfo.addEventListener(Event.INIT, initHandler);
+      if(root.totalFrames > 1 && root && root.loaderInfo)
+        root.loaderInfo.addEventListener(Event.INIT, initHandler);
     }
     
     /**
@@ -116,9 +112,6 @@ package reflex.tools.flash
     
     protected function initHandler(event:Event):void
     {
-      trace("init handler");
-      trace("stage: (" + stage.stageWidth + ", " + stage.stageHeight + ")");
-      
       width = stage.stageWidth;
       height = stage.stageHeight;
       
@@ -136,7 +129,6 @@ package reflex.tools.flash
     
     protected function preloaderCompleteHandler(event:Event):void
     {
-      trace("complete handler");
       preloader.removeEventListener(Event.COMPLETE, preloaderCompleteHandler);
       loadingComplete = true;
       
@@ -156,7 +148,6 @@ package reflex.tools.flash
       
       if(currentFrame + 1 <= framesLoaded)
       {
-        trace("moving to the next frame");
         nextFrame();
       }
       else
@@ -174,7 +165,6 @@ package reflex.tools.flash
     
     protected function initializeApplication():void
     {
-      trace("init application");
     }
   }
 }

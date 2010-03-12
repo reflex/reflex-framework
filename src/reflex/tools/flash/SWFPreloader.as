@@ -2,6 +2,7 @@ package reflex.tools.flash
 {
   import flash.display.DisplayObject;
   import flash.display.LoaderInfo;
+  import flash.display.MovieClip;
   import flash.display.Sprite;
   import flash.display.Stage;
   import flash.events.ErrorEvent;
@@ -9,8 +10,6 @@ package reflex.tools.flash
   import flash.events.ProgressEvent;
   import flash.events.TimerEvent;
   import flash.utils.Timer;
-  
-  import flight.utils.Type;
   
   import mx.core.RSLItem;
   import mx.core.RSLListLoader;
@@ -23,29 +22,29 @@ package reflex.tools.flash
     protected var rslList:RSLListLoader;
     protected var rslDone:Boolean = false;
     protected var targetsLoaded:Boolean = false;
-    protected var skin:ISWFPreloaderSkin;
+    protected var skin:DisplayObject;
     
     public function SWFPreloader()
     {
       super();
     }
     
-    public function initialize(skinClass:Class = null, targets:Array = null):void
+    public function initialize(skinValue:Object = null, targets:Array = null):void
     {
-      initSkin(skinClass);
+      initSkin(skinValue);
       initTarget(targets);
     }
     
     /**
-    * Positions the skin relative to the Stage. If the skin exists,
+    * Positions the skin relative to the Stage. If the skin is an ISWFPreloaderSkin,
     * allow him to position himself. If not, set the x and y of the
     * ApplicationLoader to the center of the screen
     */
     public function positionLoader(stage:Stage):void
     {
-      if(skin)
+      if(skin is ISWFPreloaderSkin)
       {
-        skin.position(stage);
+        ISWFPreloaderSkin(skin).position(stage);
       }
       else
       {
@@ -80,19 +79,22 @@ package reflex.tools.flash
     * 
     * @param clazz Class that implements IApplicationLoaderSkin
     */
-    protected function initSkin(clazz:Class):void
+    protected function initSkin(skinValue:Object = null):void
     {
       // Don't initialize the skin twice.
       if(skin)
         return;
       
-      if(clazz == null)
-        clazz = SWFPreloaderSkin;
+      if(skinValue == null)
+        skinValue = SWFPreloaderSkin;
       
-      if(!Type.isType(clazz, ISWFPreloaderSkin))
-        throw new ArgumentError("Class " + clazz + " does not implement IApplicationLoaderSkin, and cannot be used as an ApplicationLoader skin.");
+      if(skinValue is Class)
+        skin = new (skinValue as Class)();
+      else if(skinValue is DisplayObject)
+        skin = skinValue as DisplayObject;
+      else
+        throw new ArgumentError("The skin for a SWFLoader must be a DisplayObject.");
       
-      skin = ISWFPreloaderSkin(new clazz());
       addChild(DisplayObject(skin));
     }
     
@@ -107,11 +109,19 @@ package reflex.tools.flash
     protected function checkProgressHandler(event:TimerEvent):void
     {
       var bytes:Object = getByteValues();
-      skin.progress = bytes.progress;
-      skin.total = bytes.total;
-      skin.validate();
-      
-      trace("progress handler: " + bytes.progress + " of " + bytes.total);
+      if(skin is ISWFPreloaderSkin)
+      {
+        ISWFPreloaderSkin(skin).progress = bytes.progress;
+        ISWFPreloaderSkin(skin).total = bytes.total;
+        ISWFPreloaderSkin(skin).validate();
+      }
+      else if(skin is MovieClip)
+      {
+        if(MovieClip(skin).totalFrames > 1)
+          MovieClip(skin).gotoAndStop(Math.round((bytes.progress / bytes.total) * 100));
+        else
+          MovieClip(skin).play();
+      }
       
       if(rslDone && bytes.progress >= bytes.total)
       {
