@@ -37,7 +37,7 @@ package flight.observers
 		 * To alter the new property value return the desired value.
 		 * 
 		 * If no value is returned at all, the process will continue as if that
-		 * hook hadn't run. This will also be the case if <code>newValue</code>
+		 * hook hadn't run. This will also be the case if newValue
 		 * is returned unchanged.
 		 * 
 		 * Hooks are run in the order in which they were added.
@@ -47,33 +47,33 @@ package flight.observers
 		 * will utilize the hook.
 		 * 
 		 * @param The name of the property which the hook should attempt to
-		 * alter. <code>"*"</code> may be used to indicate any property. A comma
+		 * alter. "*" may be used to indicate any property. A comma
 		 * delimited string of properties may be used to add one hook to
 		 * multiple properties in one call.
 		 * 
 		 * @param The hook host is the object which the hook method belongs to.
 		 * It is needed to ensure a weak-referenced system. If the hook does not
-		 * have an <code>IEventDispatcher</code> it belongs to, <code>null</code>
+		 * have an IEventDispatcher it belongs to, null
 		 * may be passed in, but the hook must be referenced directly by a
 		 * property due to how weak-referenced dictionaries hold functions.
 		 * Example:
-		 * <code>
+		 * &lt;code&gt;
 		 * private function theHook(...):* {...}
 		 * private var myHook:Function = theHook; // reference to method
-		 * </code>
-		 * This is only needed if <code>hookHost</code> is null;
+		 * &lt;/code&gt;
+		 * This is only needed if hookHost is null;
 		 * 
 		 * @param The hook is a method with one of the following signatures or
 		 * something similar (e.g. if you know only strings will be processed,
-		 * you can type <code>oldValue</code>, <code>newValue</code>, and the
-		 * return type to String rather than <code>*</code>).
+		 * you can type oldValue, newValue, and the
+		 * return type to String rather than *).
 		 * 
-		 * <code>
+		 * &lt;code&gt;
 		 * function hook(newValue:*):*;
 		 * function hook(currentValue:*, newValue:*):*;
 		 * function hook(property:String, currentValue:*, newValue:*):*;
 		 * function hook(target:Object, property:String, currentValue:*, newValue:*):*;
-		 * </code>
+		 * &lt;/code&gt;
 		 */
 		public static function addHook(target:Object, property:String, hookHost:IEventDispatcher, hook:Function):void
 		{
@@ -81,13 +81,13 @@ package flight.observers
 		}
 		
 		/**
-		 * Remove a hook which was previously added via <code>addHook</code>.
+		 * Remove a hook which was previously added via addHook.
 		 * 
-		 * @param The same target that was provided in <code>addHook</code>. If
+		 * @param The same target that was provided in addHook. If
 		 * a class object was used an instance of that class cannot be provided
 		 * to remove it for that instance only.
 		 * 
-		 * @param The name of the property as added in <code>addHook</code>. The
+		 * @param The name of the property as added in addHook. The
 		 * exception is if a comma-delimited string was used you can remove a
 		 * subset of those.
 		 * 
@@ -109,34 +109,34 @@ package flight.observers
 		 * subclass will utilize the observer.
 		 * 
 		 * @param The name of the property which the observer will be notified
-		 * about. <code>"*"</code> may be used to indicate any property. A comma
+		 * about. "*" may be used to indicate any property. A comma
 		 * delimited string of properties may be used to add one observer to
 		 * multiple properties in one call.
 		 * 
 		 * @param The observer host is the object which the observer method
 		 * belongs to. It is needed to ensure a weak-referenced system. If the
-		 * observer does not have an <code>IEventDispatcher</code> it belongs
-		 * to, <code>null</code> may be passed in, but the observer must be
+		 * observer does not have an IEventDispatcher it belongs
+		 * to, null may be passed in, but the observer must be
 		 * referenced directly by a property due to how weak-referenced
 		 * dictionaries hold functions.
 		 * Example:
-		 * <code>
+		 * &lt;code&gt;
 		 * private function theObserver(...):* {...}
 		 * private var myObserver:Function = theObserver; // reference to method
-		 * </code>
-		 * This is only needed if <code>observerHost</code> is null;
+		 * &lt;/code&gt;
+		 * This is only needed if observerHost is null;
 		 * 
 		 * @param The observer is a method with one of the following signatures
 		 * or something similar (e.g. if you know only strings will be used,
-		 * you can type <code>oldValue</code> and <code>newValue</code> to
-		 * String rather than <code>*</code>).
+		 * you can type oldValue and <code>newValue</code> to
+		 * String rather than *).
 		 * 
-		 * <code>
+		 * &lt;code&gt;
 		 * function hook(newValue:*):void;
 		 * function hook(oldValue:*, newValue:*):void;
 		 * function hook(property:String, oldValue:*, newValue:*):void;
 		 * function hook(target:Object, property:String, oldValue:*, newValue:*):void;
-		 * </code>
+		 * &lt;/code&gt;
 		 */
 		public static function addObserver(target:Object, property:String, observerHost:IEventDispatcher, observer:Function):void
 		{
@@ -145,13 +145,13 @@ package flight.observers
 		
 		/**
 		 * Remove an observer which was previously added via
-		 * <code>addObserver</code>.
+		 * addObserver.
 		 * 
-		 * @param The same target that was provided in <code>addObserver</code>.
+		 * @param The same target that was provided in addObserver.
 		 * If a class object was used an instance of that class cannot be
 		 * provided to remove it for that instance only.
 		 * 
-		 * @param The name of the property as added in <code>addObserver</code>.
+		 * @param The name of the property as added in addObserver.
 		 * The exception is if a comma-delimited string was used you can remove a
 		 * subset of those.
 		 * 
@@ -190,11 +190,11 @@ package flight.observers
 		 * Allow a new property's value to be modified by the hook system before
 		 * being set. This should be called from within a setter. The'
 		 * private/protected property which holds the actual value should be set
-		 * to the result of <code>change</code>.
+		 * to the result of change.
 		 * 
-		 * <code>notify()</code> starts a new transaction as it were which is
-		 * finished by the resulting <code>notify()</code> call.
-		 * <code>notify()</code> MUST be called after each <code>change()</code>
+		 * notify() starts a new transaction as it were which is
+		 * finished by the resulting notify() call.
+		 * notify() MUST be called after each change()
 		 * has been called in order to close the loop. If it is not called
 		 * notifications will be displaced.
 		 * 
@@ -205,7 +205,7 @@ package flight.observers
 		 *     Observe.notify();
 		 * }
 		 * 
-		 * @param The target, should be <code>this</code> in a setter.
+		 * @param The target, should be this in a setter.
 		 * @param The name of the property being changed.
 		 * @param The current value of the property.
 		 * @param The new value which the property is being set to.
@@ -230,9 +230,9 @@ package flight.observers
 		
 		/**
 		 * Notify observers that a property which has called
-		 * <code>change()</code> previously has finished a change. If the
+		 * change() previously has finished a change. If the
 		 * value has not changed no observers will be notified, but notify()
-		 * must still be called to close the previous <code>change()</code>
+		 * must still be called to close the previous change()
 		 * transaction.
 		 * 
 		 * Example:
@@ -243,7 +243,7 @@ package flight.observers
 		 * }
 		 * 
 		 * All current transactions are stored temporarily, and will be
-		 * dispatched in first-in-last-out order. If <code>change()</code> is
+		 * dispatched in first-in-last-out order. If change() is
 		 * called more than once in a setter (for different properties that are
 		 * being affected) be sure to call notify the same number of times.
 		 * 

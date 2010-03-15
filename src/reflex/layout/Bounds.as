@@ -1,7 +1,7 @@
 package reflex.layout
 {
-	import flight.utils.IMerging;
-	import flight.utils.IValueObject;
+	//import flight.utils.IMerging;
+	//import flight.utils.IValueObject;
 
 	[Bindable]
 	public class Bounds
