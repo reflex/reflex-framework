@@ -1,102 +1,134 @@
 package reflex.behaviors
 {
 	
-	import flash.events.Event;
+	import flash.display.InteractiveObject;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-	import flash.system.ApplicationDomain;
 	
-	import reflex.metadata.Alias;
-	import reflex.metadata.ClassDirectives;
-	import reflex.metadata.EventHandler;
-	import reflex.utils.MetaUtil;
+	import flight.binding.Bind;
+	import flight.utils.Type;
+	
+	import reflex.skins.ISkinnable;
 	
 	/**
-	 * A base behavior class. Provides functionality for setting up listeners
-	 * automatically with metadata.
+	 * Behavior is a convenient base class for various behavior implementations.
+	 * These classes represent added features and functionality to a target
+	 * InteractiveObject. Behavior takes advantage of the skin of an ISkinnable
+	 * target by syncing skin parts and setting state.
+	 * 
+	 * Reflex component behaviors can be broken into 3 types -
+	 * 1) a components single base behavior - core implementation with which the
+	 * particular component would be useless without (eg ScrollBarBehavior)
+	 * 2) a components addon behaviors - additional functionality specefic to
+	 * the component (eg ReorderTabBehavior)
+	 * 3) common addon behaviors - general solutions for all components, or all
+	 * components of a type (eg TooltipBehavior)
 	 */
-	public class Behavior extends EventDispatcher
+	public class Behavior extends EventDispatcher implements IBehavior
 	{
-		
-		protected namespace reflex = "http://reflex.io";
-		
-		private var _target:Object;
-		
-		[Bindable("targetChange")]
 		/**
 		 * The object this behavior acts upon.
 		 */
-		public function get target():Object
+		[Bindable]
+		public var target:InteractiveObject;
+		
+		// TODO: add SkinParts with support for adding child behaviors to them
+		// registration of Behavior instances (via styling?) for instantiation
+		// skins ability to pull behavior data for state and other use
+		// skins also need data such as labels and images? (localization?)
+		// and dynamic data for it's content-area (component children)
+		public function Behavior(target:InteractiveObject = null)
 		{
-			return _target;
+			this.target = target;
+			describeBindings(this);
+			describePropertyListeners(this);
+			describeEventListeners(this);
 		}
 		
-		public function set target(value:Object):void
+		protected function getSkinPart(part:String):InteractiveObject
 		{
-			if (value == _target) return;
-			detach(_target);
-			removeAliases();
-			_target = value;
-			applyAliases(_target);
-			attach(_target);
-			dispatch("targetChange");
+			if (target is ISkinnable && ISkinnable(target).skin != null) {
+				return ISkinnable(target).skin.getSkinPart(part) as InteractiveObject;
+			} else if (part in target) {
+				return target[part] as InteractiveObject;
+			} else {
+				return null;
+			}
 		}
 		
+		protected function bindProperty(target:String, source:String):void
+		{
+			Bind.addBinding(this, target, this, source, true);
+		}
 		
-		////// Other base behavior methods which handle metadata etc. //////////
+		protected function bindPropertyListener(target:String, listener:Function):void
+		{
+			Bind.addListener(this, listener, this, target);
+		}
 		
-		private function attach(instance:Object):void {
-			if(instance is IEventDispatcher) {
-				var directives:ClassDirectives = MetaUtil.resolveDirectives(this);
-				for each(var directive:EventHandler in directives.eventHandlers) {
-					var f:Function = this.reflex::[directive.handler] as Function;
-					var d:IEventDispatcher = this[directive.dispatcher] as IEventDispatcher;
-					//dispatcher.addEventListener(directive.event, f, false, 0, true);
-					if(d) {d.addEventListener(directive.event, f, false, 0, true); }
+		protected function bindEventListener(type:String, target:String, listener:Function,
+											 useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = true):void
+		{
+			Bind.bindEventListener(type, listener, this, target, useCapture, priority, useWeakReference);
+		}
+		
+		// parses [Binding(target="target.path")] metadata
+		public static function describeBindings(behavior:IBehavior):void
+		{
+			var desc:XMLList = Type.describeProperties(behavior, "Binding");
+			
+			for each (var prop:XML in desc) {
+				var meta:XMLList = prop.metadata.(@name == "Binding");
+				
+				// to support multiple Binding metadata tags on a single property
+				for each (var tag:XML in meta) {
+					var targ:String = ( tag.arg.(@key == "target").length() > 0 ) ?
+										tag.arg.(@key == "target").@value :
+										tag.arg.@value;
+					
+					Bind.addBinding(behavior, targ, behavior, prop.@name, true);
 				}
 			}
 		}
 		
-		private function detach(instance:Object):void {
-			if(instance is IEventDispatcher) {
-				var directives:ClassDirectives = MetaUtil.resolveDirectives(this);
-				for each(var directive:EventHandler in directives.eventHandlers) {
-					var f:Function = this.reflex::[directive.handler] as Function;
-					(instance as IEventDispatcher).removeEventListener(directive.event, f, false);
-				}
-			}
-		}
-		
-		private function applyAliases(instance:Object):void {
-			var directives:ClassDirectives = MetaUtil.resolveDirectives(this);
-			for each(var alias:Alias in directives.aliases) {
-				var type:Class = ApplicationDomain.currentDomain.getDefinition(alias.type) as Class;
-				if(instance is type) {
-					this[alias.property] = instance;
-				}
-			}
-		}
-		
-		private function removeAliases():void {
-			var directives:ClassDirectives = MetaUtil.resolveDirectives(this);
-			for each(var alias:Alias in directives.aliases) {
-				//var type:Class = ApplicationDomain.currentDomain.getDefinition(alias.type) as Class;
-				//if(_target is type) {
-					this[alias.property] = null;
-				//}
-			}
-		}
-		
-		/**
-		 * Easier event dispatching with better performance if no one is
-		 * listening.
-		 */
-		public function dispatch(type:String):Boolean
+		// parses [PropertyListener(target="target.path)] metadata
+		public static function describePropertyListeners(behavior:IBehavior):void
 		{
-			if (hasEventListener(type)) {
-				return super.dispatchEvent( new Event(type) );
+			var desc:XMLList = Type.describeMethods(behavior, "PropertyListener");
+			
+			for each (var meth:XML in desc) {
+				var meta:XMLList = meth.metadata.(@name == "PropertyListener");
+				
+				// to support multiple PropertyListener metadata tags on a single method
+				for each (var tag:XML in meta) {
+					var targ:String = ( tag.arg.(@key == "target").length() > 0 ) ?
+										tag.arg.(@key == "target").@value :
+										tag.arg.@value;
+					
+					Bind.addListener(behavior as IEventDispatcher, behavior[meth.@name], behavior, targ);
+				}
 			}
-			return false;
 		}
+		
+		// parses [EventListener(type="eventType", target="target.path")] metadata
+		public static function describeEventListeners(behavior:IBehavior):void
+		{
+			var desc:XMLList = Type.describeMethods(behavior, "EventListener");
+			
+			for each (var meth:XML in desc) {
+				var meta:XMLList = meth.metadata.(@name == "EventListener");
+				
+				// to support multiple EventListener metadata tags on a single method
+				for each (var tag:XML in meta) {
+					var type:String = ( tag.arg.(@key == "type").length() > 0 ) ?
+										tag.arg.(@key == "type").@value :
+										tag.arg.@value;
+					var targ:String = tag.arg.(@key == "target").@value;
+					
+					Bind.bindEventListener(type, behavior[meth.@name], behavior, targ);
+				}
+			}
+		}
+		
 	}
 }

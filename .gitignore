@@ -1,8 +1,10 @@
 Thumbs.db
-.DS_Store
-.project
-.actionScriptProperties
-.flexLibProperties
-.settings
+.*
+bin-*
 bin
-bin/*
+html-template
+*.swf
+docs
+build/build.properties
+reports/link-report.xml
+reports/link-report.html
