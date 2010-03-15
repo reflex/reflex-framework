@@ -1,21 +1,27 @@
 package reflex.behaviors
 {
+	import flash.display.InteractiveObject;
 	import flash.events.MouseEvent;
 	
-	import reflex.controls.ISelectable;
-	import reflex.core.IBehavior;
+	import flight.observers.Observe;
 
 	public class SelectableBehavior extends Behavior implements IBehavior
 	{
+		[Bindable]
+		[Binding(target="target.selected")]
+		public var selected:Boolean;
 		
-		[Bindable] public var selectable:Boolean; // keep in component?
+		public function SelectableBehavior(target:InteractiveObject = null)
+		{
+			super(target);
+		}
 		
-		[Alias] [Bindable] public var select:ISelectable;
 		
-		reflex function select_clickHandler(event:MouseEvent):void {
-			if(selectable) {
-				select.selected = !select.selected;
-			}
+		[EventListener(type="click", target="target")]
+		public function onClick(event:MouseEvent):void
+		{
+			selected = !selected;
+			event.updateAfterEvent();
 		}
 		
 	}
