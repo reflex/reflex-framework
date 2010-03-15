@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="as3syndicationlib" basedir="../" default="lib">
+<project name="Reflex Build" basedir="../" default="lib">
 
 	<!-- Define variables/paths used in this build script -->
 	<property file="./build/build.properties" />
