@@ -2,8 +2,8 @@ package reflex.layout
 {
 	import flash.events.EventDispatcher;
 	
-	import flight.utils.IMerging;
-	import flight.utils.IValueObject;
+	//import flight.utils.IMerging;
+	//import flight.utils.IValueObject;
 	
 	[Bindable]
 	public class Box extends EventDispatcher

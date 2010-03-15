@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<project name="as3syndicationlib" basedir="../" default="lib">
+
+	<!-- Define variables/paths used in this build script -->
+	<property file="./build/build.properties" />
+
+	<!--
+		Have you edit the properties file to make sure the paths are right oo your system?
+	-->
+	<target name="properties">
+		<fail unless="asdoc.exe">The "asdoc.exe" property must be set in ${build.dir}/build.properties.</fail>
+		<fail unless="compc.exe">The "compc.exe" property must be set in ${build.dir}/build.properties.</fail>
+		<fail unless="mxmlc.exe">The "mxmlc.exe" property must be set in ${build.dir}/build.properties.</fail>
+	</target>
+	
+	<!--
+		Compile all of the classes under the "src" tree into a .swc file
+	-->
+	
+	<target name="lib" depends="properties">
+		<exec executable="${compc.exe}" dir="${basedir}">
+			<!-- Specify the name of the output file -->
+			<arg line="-o '${bin.dir}/${library.name}.swc'" />
+		
+			<!-- Include the necessary framework libraries as external libraries -->
+			<arg line="-el '${flex-sdk.lib.dir}'" />
+			<arg line="-el '${flex-sdk.player.dir}'" />
+			
+			<!-- Include any libs as an external library -->
+			<arg line="-el 'libs'" />
+			
+			<!-- Specify the main source path as "src" -->
+			<arg line="-sp ${src.dir}" />
+			
+			<!-- Include all of the classes in the "src" tree -->
+			<arg line="-is ${src.dir}" />
+			
+			<arg line="-link-report='${reports.dir}/link-report.xml'" />
+		</exec>
+	</target>
+	
+	<!--
+		Generate ASDoc output for the library
+	-->
+	<target name="docs" depends="properties">
+		<!-- Clean out the contents of the doc directory, without delete "docs" -->
+		
+		<delete includeemptydirs="true">
+			<fileset dir="${docs.dir}" includes="**/*" />
+		</delete>
+		
+		<exec executable="${asdoc.exe}" spawn="no">
+			<!-- Place the documentation in the "docs" directory -->
+			<arg line="-o ${docs.dir}" />
+			
+			<!-- Include in the corelib.swc in the class path -->
+			<arg line="-l libs" />
+			<arg line="-l '${flex-sdk.lib.dir}'" />
+			
+			<!-- Specify the main source path as "src" -->
+			<arg line="-sp ${src.dir}" />
+			
+			<!-- Document all of the classes in the "src" tree -->
+			<arg line="-ds ${src.dir} " />
+			
+			<!-- Include the library name in the window title -->
+			<arg line="-window-title '${library.name}' "/>
+		</exec>
+	</target>
+	
+	<target name="generate-link-report">
+	  <xslt
+	       in="${reports.dir}/link-report.xml"
+	      out="${reports.dir}/link-report.html"
+	    style="${reports.dir}/link-report.xsl"
+	  />
+	</target>
+</project>

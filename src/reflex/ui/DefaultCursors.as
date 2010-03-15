@@ -25,6 +25,7 @@ package reflex.ui
 {
 	public class DefaultCursors
 	{
+		/*
 		[Embed(source="assets/cursors.swf", symbol="Help")]
 		public static const HELP:Class;
 		
@@ -111,5 +112,6 @@ package reflex.ui
 		
 		[Embed(source="assets/cursors.swf", symbol="None")]
 		public static const NONE:Class;
+		*/
 	}
 }
