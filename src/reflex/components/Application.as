@@ -8,23 +8,28 @@ package reflex.components
 	
 	import reflex.layout.Layout;
 	
+	[Frame(factoryClass="reflex.tools.flashbuilder.ReflexApplicationLoader")]
+	
 	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
 	public class Application extends Component
 	{
+		[Bindable]
+		public var background:int = 0xFFFFFF;
+		
 		public function Application()
 		{
 			if (stage == null) {
 				return;
 			}
 			
-			contextMenu = new ContextMenu();
-			contextMenu.hideBuiltInItems();
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.align = StageAlign.TOP_LEFT;
-			stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
-			onStageResize(null);
-		}
-		
+				contextMenu = new ContextMenu();
+				contextMenu.hideBuiltInItems();
+				stage.scaleMode = StageScaleMode.NO_SCALE;
+				stage.align = StageAlign.TOP_LEFT;
+				stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
+				onStageResize(null);
+			}
+			
 		private function onStageResize(event:Event):void
 		{
 			block.width = stage.stageWidth;
