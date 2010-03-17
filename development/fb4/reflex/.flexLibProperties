@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<flexLibProperties includeAllClasses="false" version="3">
+<flexLibProperties includeAllClasses="true" version="3">
   <includeClasses>
     <classEntry path="FlexClasses"/>
     <classEntry path="flight.binding.Bind"/>
@@ -73,7 +73,12 @@
     <classEntry path="reflex.skins.ScrollBarSkin"/>
     <classEntry path="reflex.skins.ButtonSkin"/>
     <classEntry path="reflex.skins.StepperSkin"/>
-  </includeClasses>
+    <classEntry path="reflex.tools.flash.SWFPreloader"/>
+    <classEntry path="reflex.tools.flash.SWFPreloaderSkin"/>
+    <classEntry path="reflex.tools.flashbuilder.ReflexApplicationLoader"/>
+    <classEntry path="reflex.tools.flash.ISWFPreloaderSkin"/>
+    <classEntry path="reflex.tools.flash.ReflexFlashLoader"/>
+    </includeClasses>
   <includeResources/>
   <namespaceManifests/>
 </flexLibProperties>
