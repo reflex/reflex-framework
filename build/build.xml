@@ -51,17 +51,17 @@
 		
 		<exec executable="${asdoc.exe}" spawn="no">
 			<!-- Place the documentation in the "docs" directory -->
-			<arg line="-o ${docs.dir}" />
+			<arg line="-o '${docs.dir}'" />
 			
 			<!-- Include in the corelib.swc in the class path -->
-			<arg line="-l libs" />
+			<arg line="-l 'libs'" />
 			<arg line="-l '${flex-sdk.lib.dir}'" />
 			
 			<!-- Specify the main source path as "src" -->
-			<arg line="-sp ${src.dir}" />
+			<arg line="-sp '${src.dir}'" />
 			
 			<!-- Document all of the classes in the "src" tree -->
-			<arg line="-ds ${src.dir} " />
+			<arg line="-ds '${src.dir}'" />
 			
 			<!-- Include the library name in the window title -->
 			<arg line="-window-title '${library.name}' "/>
