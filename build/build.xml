@@ -30,10 +30,10 @@
 			<arg line="-el 'libs'" />
 			
 			<!-- Specify the main source path as "src" -->
-			<arg line="-sp ${src.dir}" />
+			<arg line="-sp '${src.dir}'" />
 			
 			<!-- Include all of the classes in the "src" tree -->
-			<arg line="-is ${src.dir}" />
+			<arg line="-is '${src.dir}'" />
 			
 			<arg line="-link-report='${reports.dir}/link-report.xml'" />
 		</exec>
