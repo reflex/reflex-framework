@@ -3,7 +3,7 @@
 
 	<!-- Define variables/paths used in this build script -->
 	<property file="./build/build.properties" />
-
+	<taskdef resource="flexTasks.tasks" classpath="${flex-sdk.dir}/ant/lib/flexTasks.jar"/>
 	<!--
 		Have you edit the properties file to make sure the paths are right oo your system?
 	-->
@@ -75,4 +75,45 @@
 	    style="${reports.dir}/link-report.xsl"
 	  />
 	</target>
+	
+	<taskdef name="metrics" classname="com.adobe.ac.pmd.metrics.ant.FlexMetricsAntTask" 
+		classpath="${flexpmd.libs}/flex-pmd-metrics-ant-task-${flexpmd.version}.jar">
+		<classpath>
+			<pathelement location="${flexpmd.libs}/flex-pmd-files-${flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/flex-pmd-metrics-${flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/as3-plugin-utils-${flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/as3-parser-${flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/as3-parser-api-${flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/commons-lang-2.4.jar" />
+			<pathelement location="${flexpmd.libs}/flex-pmd-ruleset-api-${flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/pmd-4.2.5.jar" />
+			<pathelement location="${flexpmd.libs}/dom4j-1.6.1.jar"/>
+		</classpath>
+	</taskdef> 
+	
+	<target name="metrics">
+		<metrics sourcedirectory="${src.dir}" outputfile="${flexpmd.output}/javancss.xml"/>
+	</target>
+	
+	<taskdef name="cpd" classname="com.adobe.ac.cpd.ant.FlexCpdAntTask" 
+		classpath="${flexpmd.libs}/flex-pmd-cpd-ant-task-${flexpmd.version}.jar">
+		<classpath>
+			<pathelement location="${flexpmd.libs}/flex-pmd-files-${flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/flex-pmd-cpd-${flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/as3-plugin-utils-${flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/as3-parser-${flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/as3-parser-api$-{flexpmd.version}.jar" />
+			<pathelement location="${flexpmd.libs}/pmd-4.2.5.jar" />
+		</classpath>
+	</taskdef>
+	
+	<target name="cpd">
+		<cpd minimumTokenCount="50" outputFile="${flexpmd.output}/cpd.xml">
+			<fileset dir="${src.dir}">
+				<include name="**/*.as"/>
+				<include name="**/*.mxml"/>
+			</fileset>
+		</cpd>
+	</target>
+	
 </project>
