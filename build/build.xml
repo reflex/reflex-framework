@@ -68,52 +68,59 @@
 		</exec>
 	</target>
 	
-	<target name="generate-link-report">
+	<target name="link-report">
 	  <xslt
 	       in="${reports.dir}/link-report.xml"
-	      out="${reports.dir}/link-report.html"
+	      out="${linkreport.dir}/link-report.html"
 	    style="${reports.dir}/link-report.xsl"
 	  />
 	</target>
 	
-	<taskdef name="metrics" classname="com.adobe.ac.pmd.metrics.ant.FlexMetricsAntTask" 
-		classpath="${flexpmd.libs}/flex-pmd-metrics-ant-task-${flexpmd.version}.jar">
-		<classpath>
-			<pathelement location="${flexpmd.libs}/flex-pmd-files-${flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/flex-pmd-metrics-${flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/as3-plugin-utils-${flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/as3-parser-${flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/as3-parser-api-${flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/commons-lang-2.4.jar" />
-			<pathelement location="${flexpmd.libs}/flex-pmd-ruleset-api-${flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/pmd-4.2.5.jar" />
-			<pathelement location="${flexpmd.libs}/dom4j-1.6.1.jar"/>
-		</classpath>
-	</taskdef> 
-	
-	<target name="metrics">
-		<metrics sourcedirectory="${src.dir}" outputfile="${flexpmd.output}/javancss.xml"/>
+	<target name="pmd-report">
+		<pmd 
+			sourceDirectory="${src.dir}"
+			outputDirectory="${reports.dir}"/>
 	</target>
 	
-	<taskdef name="cpd" classname="com.adobe.ac.cpd.ant.FlexCpdAntTask" 
-		classpath="${flexpmd.libs}/flex-pmd-cpd-ant-task-${flexpmd.version}.jar">
-		<classpath>
-			<pathelement location="${flexpmd.libs}/flex-pmd-files-${flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/flex-pmd-cpd-${flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/as3-plugin-utils-${flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/as3-parser-${flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/as3-parser-api$-{flexpmd.version}.jar" />
-			<pathelement location="${flexpmd.libs}/pmd-4.2.5.jar" />
-		</classpath>
-	</taskdef>
-	
-	<target name="cpd">
-		<cpd minimumTokenCount="50" outputFile="${flexpmd.output}/cpd.xml">
+	<target name="cpd-report">
+		<cpd minimumTokenCount="50" outputFile="${reports.dir}/cpd.xml">
 			<fileset dir="${src.dir}">
 				<include name="**/*.as"/>
 				<include name="**/*.mxml"/>
 			</fileset>
 		</cpd>
 	</target>
+	
+	<target name="metrics-report">
+		<metrics sourcedirectory="${src.dir}" outputfile="${reports.dir}/javancss.xml"/>
+	</target>
+	
+	<taskdef name="cpd" classname="com.adobe.ac.cpd.ant.FlexCpdAntTask" 
+		classpath="${flexpmd.cpd}/flex-pmd-cpd-ant-task-${flexpmd.version}.jar">
+		<classpath>
+			<fileset dir="${flexpmd.cpd}">
+				<include name="**/*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+	
+	<taskdef name="pmd"
+		classname="com.adobe.ac.pmd.ant.FlexPmdAntTask"
+		classpath="${flexpmd.pmd}/flex-pmd-ant-task-${flexpmd.version}.jar">
+		<classpath>
+			<fileset dir="${flexpmd.pmd}">
+				<include name="**/*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+	
+	<taskdef name="metrics" classname="com.adobe.ac.pmd.metrics.ant.FlexMetricsAntTask" 
+		classpath="${flexpmd.metrics}/flex-pmd-metrics-ant-task-${flexpmd.version}.jar">
+		<classpath>
+			<fileset dir="${flexpmd.metrics}">
+				<include name="**/*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
 	
 </project>
