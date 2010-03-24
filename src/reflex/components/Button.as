@@ -1,7 +1,7 @@
 package reflex.components
 {
 	import reflex.behaviors.ButtonBehavior;
-	import reflex.behaviors.SelectableBehavior;
+	//import reflex.behaviors.SelectableBehavior;
 	import reflex.skins.ButtonSkin;
 	
 	public class Button extends Component

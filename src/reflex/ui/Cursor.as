@@ -92,6 +92,7 @@ package reflex.ui
 		protected function init():void
 		{
 			trace(ALIAS);
+			/*
 			registerCursor(ALIAS, DefaultCursors.ALIAS);
 			registerCursor(CELL, DefaultCursors.CELL);
 			registerCursor(COLUMN, DefaultCursors.COLUMN);
@@ -121,6 +122,7 @@ package reflex.ui
 			registerCursor(WEST, DefaultCursors.WEST);
 			registerCursor(ZOOM_IN, DefaultCursors.ZOOM_IN);
 			registerCursor(ZOOM_OUT, DefaultCursors.ZOOM_OUT);
+			*/
 		}
 		
 		

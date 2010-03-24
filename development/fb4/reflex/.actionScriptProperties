@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <actionScriptProperties mainApplicationPath="reflex.as" projectUUID="56e4ec3c-bb76-4b03-9c3e-d3d0c0849966" version="6">
-  <compiler additionalCompilerArguments="-keep-as3-metadata+=Binding,PropertyListener,EventListener" autoRSLOrdering="true" copyDependentFiles="false" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderLocation="REFLEX/bin" outputFolderPath="bin-debug" sourceFolderPath="[source path] src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+  <compiler additionalCompilerArguments="-keep-as3-metadata+=Binding,PropertyListener,EventListener" autoRSLOrdering="true" copyDependentFiles="false" flexSDK="Flex 4.0" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderLocation="REFLEX/bin" outputFolderPath="bin-debug" sourceFolderPath="[source path] src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath>
       <compilerSourcePathEntry kind="1" linkType="1" path="${REFLEX}/src"/>
     </compilerSourcePath>
