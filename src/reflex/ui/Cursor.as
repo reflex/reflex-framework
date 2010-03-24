@@ -147,6 +147,7 @@ package reflex.ui
 			}
 			
 			if (cursor is InteractiveObject) {
+				InteractiveObject(cursor).cacheAsBitmap = true;
 				InteractiveObject(cursor).mouseEnabled = false;
 				if (cursor is DisplayObjectContainer) {
 					DisplayObjectContainer(cursor).mouseChildren = false;

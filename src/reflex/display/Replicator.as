@@ -51,7 +51,7 @@ package reflex.display
 		
 		public function Replicator(target:DisplayObjectContainer = null)
 		{
-			Bind.addListener(this, onPositionChange, this, "position.percent");
+//			Bind.addListener(this, onPositionChange, this, "position.percent");
 			this.target = target;
 			
 			Bind.bindEventListener(ListEvent.LIST_CHANGE, onChildrenChange, this, "dataProvider");
@@ -211,6 +211,7 @@ package reflex.display
 					for each (data in event.items) {
 						child = new template() as DisplayObject;
 						// TODO: assign data to child
+						child["data"] = data;
 						_target.addChildAt(child, loc++);
 					}
 					break;
@@ -230,6 +231,7 @@ package reflex.display
 					for (var i:int = 0; i < dataProvider.length; i++) {
 						child = i < _target.numChildren ? _target.getChildAt(i) : new template() as DisplayObject;
 						// TODO: assign data to child
+						child["data"] = data;
 						_target.addChildAt(child, i);
 					}
 					break;
