@@ -65,12 +65,12 @@ package reflex.components
 		 * object/map.
 		 * 
 		 * To set behaviors in MXML:
-		 * <Component...>
-		 *   <behaviors>
-		 *     <SelectBehavior/>
-		 *     <ButtonBehavior/>
-		 *   </behaviors>
-		 * </Component>
+		 * &lt;Component...&gt;
+		 *   &lt;behaviors&gt;
+		 *     &lt;SelectBehavior/&gt;
+		 *     &lt;ButtonBehavior/&gt;
+		 *   &lt;/behaviors&gt;
+		 * &lt;/Component&gt;
 		 */
 		public function get behaviors():CompositeBehavior
 		{
