@@ -9,7 +9,6 @@ package reflex.behaviors
 	import reflex.skins.ISkinnable;
 	import reflex.events.ButtonEvent;
 	
-	// needed? If they help contribute to documentation or make the state workflow easier
 	[SkinState("up")]
 	[SkinState("over")]
 	[SkinState("down")]

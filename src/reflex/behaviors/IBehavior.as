@@ -6,9 +6,5 @@ package reflex.behaviors
 	{
 		function get target():InteractiveObject;
 		function set target(value:InteractiveObject):void;
-		/*
-		function get name():String;
-		function set name(value:String):void;
-		*/
 	}
 }

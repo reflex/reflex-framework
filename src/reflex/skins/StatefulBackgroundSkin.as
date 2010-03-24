@@ -1,10 +1,23 @@
 package reflex.skins
 {
+	import flash.display.Sprite;
+	
 	import flight.binding.Bind;
 
 	[DefaultProperty("backgrounds")]
-	public class StatefulBackgroundSkin extends BackgroundSkin
+	public class StatefulBackgroundSkin extends Skin
 	{
+		public var backgroundColors:String;
+		public var backgroundAlphas:String;
+		public var backgroundRatios:String;
+		public var backgroundAngle:String;
+		public var borderColors:String;
+		public var borderAlphas:String;
+		public var borderRatios:String;
+		public var borderAngle:String;
+		public var borderWidth:Number;
+		public var radius:String;
+		
 		protected var _backgrounds:Object = {};
 		protected var currentBackground:BackgroundSkin;
 		

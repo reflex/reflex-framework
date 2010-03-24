@@ -22,6 +22,7 @@ package reflex.skins
 		{
 			graphic = buttonGraphic = graphic || new ButtonGraphic()
 			super(buttonGraphic);
+			graphic.cacheAsBitmap = true;
 			
 			Bind.addBinding(this, "selected", this, "target.selected");
 			removeStatefulChild(graphic);
@@ -43,6 +44,7 @@ package reflex.skins
 			block.anchor.vertical = .5;
 			
 			Bind.addListener(this, setLabel, this, "label");
+			Bind.addListener(this, onSelectedChange, this, "selected");
 		}
 		
 		protected function setLabel(label:String):void
@@ -52,7 +54,12 @@ package reflex.skins
 		
 		override protected function onStateChange(state:String):void
 		{
-			super.onStateChange(selected ? "down" : state);
+			super.onStateChange(selected ? "selected" : state);
+		}
+		
+		protected function onSelectedChange(selected:Boolean):void
+		{
+			super.onStateChange(selected ? "selected" : state);
 		}
 	}
 }
