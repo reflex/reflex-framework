@@ -7,8 +7,9 @@ package reflex.graphics
 	import flash.geom.Rectangle;
 	
 	import mx.events.PropertyChangeEvent;
-	import mx.graphics.IFill;
-	import mx.graphics.IStroke;
+	// TODO: create a reflex IFill and IStroke - Flex3 & Flex4 Interfaces are incompatible
+//	import mx.graphics.IFill;
+//	import mx.graphics.IStroke;
 	
 	import reflex.utils.GraphicsUtil;
 	
@@ -32,18 +33,20 @@ package reflex.graphics
 			render();
 		}
 		
-		private var _fill:IFill;
-		public function get fill():IFill { return _fill; }
-		public function set fill(value:IFill):void {
+		// TODO: create a reflex IFill and IStroke - Flex3 & Flex4 Interfaces are incompatible
+		private var _fill:*;
+		public function get fill():* { return _fill; }
+		public function set fill(value:*):void {
 			_fill = value;
 			// update this to use binding correctly
 			(_fill as IEventDispatcher).addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, propertyChangeHandler);
 			render();
 		}
 		
-		private var _stroke:IStroke;
-		public function get stroke():IStroke { return _stroke; }
-		public function set stroke(value:IStroke):void {
+		// TODO: create a reflex IFill and IStroke - Flex3 & Flex4 Interfaces are incompatible
+		private var _stroke:*;
+		public function get stroke():* { return _stroke; }
+		public function set stroke(value:*):void {
 			_stroke = value;
 			render();
 		}

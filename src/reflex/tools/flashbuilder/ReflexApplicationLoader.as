@@ -24,7 +24,8 @@ package reflex.tools.flashbuilder
   import reflex.tools.flash.ReflexFlashLoader;
   import reflex.tools.flash.SWFPreloader;
   
-  public class ReflexApplicationLoader extends ReflexFlashLoader implements IFlexModuleFactory
+  // TODO: resolve error in Flex4: 1144: Interface method callInContext in namespace mx.core:IFlexModuleFactory is implemented with an incompatible signature in class reflex.tools.flashbuilder:ReflexApplicationLoader.
+  public class ReflexApplicationLoader extends ReflexFlashLoader// implements IFlexModuleFactory
   {
     public function ReflexApplicationLoader()
     {

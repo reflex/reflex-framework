@@ -15,6 +15,10 @@ package
 			padding = 20;
 			padding.horizontal = padding.vertical = 5;
 			
+			var button:Button = new Button();
+			button.label = "hello world";		// TODO: make this work :)
+			addChild(button);
+			
 			var listBox:ListBox;
 			
 			listBox = new ListBox();

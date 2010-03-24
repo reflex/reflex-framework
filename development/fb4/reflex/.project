@@ -22,7 +22,7 @@
 			<locationURI>REFLEX/src</locationURI>
 		</link>
 		<link>
-			<name>bin-debug</name>
+			<name>bin</name>
 			<type>2</type>
 			<locationURI>REFLEX/bin</locationURI>
 		</link>
