@@ -3,9 +3,37 @@
 
 	<!-- Define variables/paths used in this build script -->
 	<property file="./build/build.properties" />
+	<property name="FLEX_HOME" value="${flex-sdk.dir}" />
+	
+	<!-- Define tasks used in this build script -->
 	<taskdef resource="flexTasks.tasks" classpath="${flex-sdk.dir}/ant/lib/flexTasks.jar"/>
+	
+	<taskdef name="pmd" classname="com.adobe.ac.pmd.ant.FlexPmdAntTask" classpath="${flex-pmd.pmd}/flex-pmd-ant-task-${flex-pmd.version}.jar">
+		<classpath>
+			<fileset dir="${flex-pmd.pmd}">
+				<include name="**/*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+	
+	<taskdef name="cpd" classname="com.adobe.ac.cpd.ant.FlexCpdAntTask" classpath="${flex-pmd.cpd}/flex-pmd-cpd-ant-task-${flex-pmd.version}.jar">
+		<classpath>
+			<fileset dir="${flex-pmd.cpd}">
+				<include name="**/*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+	
+	<taskdef name="metrics" classname="com.adobe.ac.pmd.metrics.ant.FlexMetricsAntTask" classpath="${flex-pmd.metrics}/flex-pmd-metrics-ant-task-${flex-pmd.version}.jar">
+		<classpath>
+			<fileset dir="${flex-pmd.metrics}">
+				<include name="**/*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+	
 	<!--
-		Have you edit the properties file to make sure the paths are right oo your system?
+		Have you edited the properties file to make sure the paths are right on your system?
 	-->
 	<target name="properties">
 		<fail unless="asdoc.exe">The "asdoc.exe" property must be set in ${build.dir}/build.properties.</fail>
@@ -13,38 +41,51 @@
 		<fail unless="mxmlc.exe">The "mxmlc.exe" property must be set in ${build.dir}/build.properties.</fail>
 	</target>
 	
+	<target name="clean">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${bin.dir}" defaultexcludes="false">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="${docs.dir}" defaultexcludes="false">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="${reports.dir}" defaultexcludes="false">
+				<include name="**/*"/>
+			</fileset>
+		</delete>
+	</target>
+	
 	<!--
 		Compile all of the classes under the "src" tree into a .swc file
 	-->
-	
 	<target name="lib" depends="properties">
-		<exec executable="${compc.exe}" dir="${basedir}">
-			<!-- Specify the name of the output file -->
-			<arg line="-o '${bin.dir}/${library.name}.swc'" />
-		
-			<!-- Include the necessary framework libraries as external libraries -->
-			<arg line="-el '${flex-sdk.lib.dir}'" />
-			<arg line="-el '${flex-sdk.player.dir}'" />
-			
-			<!-- Include any libs as an external library -->
-			<arg line="-el 'libs'" />
-			
-			<!-- Specify the main source path as "src" -->
-			<arg line="-sp '${src.dir}'" />
-			
-			<!-- Include all of the classes in the "src" tree -->
-			<arg line="-is '${src.dir}'" />
-			
-			<arg line="-link-report='${reports.dir}/link-report.xml'" />
-		</exec>
+		<compc output="${bin.dir}/${library.name}.swc" link-report="${reports.dir}/link-report.xml">
+			<!--<load-config filename="${basedir}/build/build-config.xml"/>-->
+			<source-path path-element="${src.dir}"/>
+			<namespace uri="http://reflex.io/2010" manifest="${src.dir}/manifest.xml" />
+			<include-namespaces>http://reflex.io/2010</include-namespaces>
+			<strict>true</strict>
+			<optimize>true</optimize>
+			<warnings>true</warnings>
+			<external-library-path dir="${flex-sdk.dir}/frameworks/libs/player/${flex-sdk.player}" append="true">
+				<include name="playerglobal.swc" />
+			</external-library-path>
+			<library-path dir="${flex-sdk.dir}/frameworks" append="true">
+				<include name="libs/*.swc" />
+				<include name="locale/${flex-sdk.locale}/*.swc" />
+			</library-path>
+			<library-path dir="libs" append="true">
+				<include name="*.swc" />
+			</library-path>
+		</compc>
 	</target>
 	
 	<!--
 		Generate ASDoc output for the library
 	-->
 	<target name="docs" depends="properties">
-		<!-- Clean out the contents of the doc directory, without delete "docs" -->
 		
+		<!-- Clean out the contents of the doc directory, without delete "docs" -->
 		<delete includeemptydirs="true">
 			<fileset dir="${docs.dir}" includes="**/*" />
 		</delete>
@@ -55,7 +96,7 @@
 			
 			<!-- Include in the corelib.swc in the class path -->
 			<arg line="-l 'libs'" />
-			<arg line="-l '${flex-sdk.lib.dir}'" />
+			<arg line="-l '${flex-sdk.dir}/frameworks/libs'" />
 			
 			<!-- Specify the main source path as "src" -->
 			<arg line="-sp '${src.dir}'" />
@@ -69,21 +110,15 @@
 	</target>
 	
 	<target name="link-report">
-	  <xslt
-	       in="${reports.dir}/link-report.xml"
-	      out="${linkreport.dir}/link-report.html"
-	    style="${reports.dir}/link-report.xsl"
-	  />
+		<xslt in="${link-report.dir}/${link-report.name}.xml" out="${link-report.dir}/${link-report.name}.html" style="${link-report.xsl}" />
 	</target>
 	
 	<target name="pmd-report">
-		<pmd 
-			sourceDirectory="${src.dir}"
-			outputDirectory="${reports.dir}"/>
+		<pmd sourceDirectory="${src.dir}" outputDirectory="${pmd-report.dir}" />
 	</target>
 	
 	<target name="cpd-report">
-		<cpd minimumTokenCount="50" outputFile="${reports.dir}/cpd.xml">
+		<cpd minimumTokenCount="50" outputFile="${cpd-report.dir}/{cpd-report.name}.xml">
 			<fileset dir="${src.dir}">
 				<include name="**/*.as"/>
 				<include name="**/*.mxml"/>
@@ -92,35 +127,7 @@
 	</target>
 	
 	<target name="metrics-report">
-		<metrics sourcedirectory="${src.dir}" outputfile="${reports.dir}/javancss.xml"/>
+		<metrics sourcedirectory="${src.dir}" outputfile="${metrics-report.dir}/{metrics-report.name}.xml" />
 	</target>
-	
-	<taskdef name="cpd" classname="com.adobe.ac.cpd.ant.FlexCpdAntTask" 
-		classpath="${flexpmd.cpd}/flex-pmd-cpd-ant-task-${flexpmd.version}.jar">
-		<classpath>
-			<fileset dir="${flexpmd.cpd}">
-				<include name="**/*.jar" />
-			</fileset>
-		</classpath>
-	</taskdef>
-	
-	<taskdef name="pmd"
-		classname="com.adobe.ac.pmd.ant.FlexPmdAntTask"
-		classpath="${flexpmd.pmd}/flex-pmd-ant-task-${flexpmd.version}.jar">
-		<classpath>
-			<fileset dir="${flexpmd.pmd}">
-				<include name="**/*.jar" />
-			</fileset>
-		</classpath>
-	</taskdef>
-	
-	<taskdef name="metrics" classname="com.adobe.ac.pmd.metrics.ant.FlexMetricsAntTask" 
-		classpath="${flexpmd.metrics}/flex-pmd-metrics-ant-task-${flexpmd.version}.jar">
-		<classpath>
-			<fileset dir="${flexpmd.metrics}">
-				<include name="**/*.jar" />
-			</fileset>
-		</classpath>
-	</taskdef>
 	
 </project>

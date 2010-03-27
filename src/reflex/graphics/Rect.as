@@ -12,6 +12,7 @@ package reflex.graphics
 //	import mx.graphics.IStroke;
 	
 	import reflex.utils.GraphicsUtil;
+	import flash.geom.Point;
 	
 	public class Rect implements IDrawable
 	{
@@ -72,8 +73,8 @@ package reflex.graphics
 		private function drawTo(graphics:Graphics):void {
 			if(width > 0 && height > 0) {
 				var rectangle:Rectangle = new Rectangle(0, 0, width, height);
-				if(stroke != null) { stroke.apply(graphics); }
-				if(fill != null) { fill.begin(graphics, rectangle); }
+				if(stroke != null) { stroke.apply(graphics, rectangle, new Point()); }
+				if(fill != null) { fill.begin(graphics, rectangle, new Point()); }
 				graphics.drawRect(x, y, width, height);
 				if(fill != null) { fill.end(graphics); }
 			}

@@ -3,21 +3,13 @@
 	
 	<component id="Container" class="reflex.display.Container"/>
 	<component id="ScrollContainer" class="reflex.display.ScrollContainer"/>
-	
 	<component id="Application" class="reflex.components.Application"/>
 	<component id="Button" class="reflex.components.Button"/>
-	<!--<component id="CheckBox" class="reflex.components.CheckBox"/>-->
-	<!--<component id="ComboBox" class="reflex.components.ComboBox"/>-->
 	<component id="Component" class="reflex.components.Component"/>
-	<!--<component id="DataGrid" class="reflex.components.DataGrid"/>-->
 	<component id="ListBox" class="reflex.components.ListBox"/>
-	<!--<component id="ProgressBar" class="reflex.components.ProgressBar"/>-->
-	<!--<component id="RadioButton" class="reflex.components.RadioButton"/>-->
 	<component id="ScrollBar" class="reflex.components.ScrollBar"/>
 	<component id="ScrollPane" class="reflex.components.ScrollPane"/>
-	<!--<component id="Slider" class="reflex.components.Slider"/>-->
 	<component id="Stepper" class="reflex.components.Stepper"/>
-	<!--<component id="TabBar" class="reflex.components.TabBar"/>-->
 	
 	<component id="BackgroundSkin" class="reflex.skins.BackgroundSkin"/>
 	<component id="ButtonSkin" class="reflex.skins.ButtonSkin"/>
