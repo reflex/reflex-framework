@@ -1,7 +1,7 @@
 package reflex.components
 {
 	import flight.events.PropertyEvent;
-	import flight.observers.Observe;
+	import flight.observers.PropertyChange;
 	
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
@@ -21,6 +21,8 @@ package reflex.components
 		
 		public function Component()
 		{
+			_behaviors = new CompositeBehavior(this);
+			PropertyChange.addHook(this, "skin", this, setTarget);
 		}
 		
 		override public function get layout():ILayoutAlgorithm
@@ -29,7 +31,9 @@ package reflex.components
 		}
 		override public function set layout(value:ILayoutAlgorithm):void
 		{
-			_skin.layout = value;
+			var change:PropertyChange = PropertyChange.begin();
+			_skin.layout = change.add(this, "layout", _skin.layout, value);
+			change.commit();
 		}
 		
 		
@@ -40,8 +44,9 @@ package reflex.components
 		}
 		public function set state(value:String):void
 		{
-			_state = Observe.change(this, "state", _state, value);
-			Observe.notify();
+			var change:PropertyChange = PropertyChange.begin();
+			_state = change.add(this, "state", _state, value);
+			change.commit();
 		}
 		
 		
@@ -52,8 +57,9 @@ package reflex.components
 		}
 		public function set data(value:Object):void
 		{
-			_data = Observe.change(this, "data", _data, value);
-			Observe.notify();
+			var change:PropertyChange = PropertyChange.begin();
+			_data = change.add(this, "data", _data, value);
+			change.commit();
 		}
 		
 		
@@ -74,22 +80,19 @@ package reflex.components
 		 */
 		public function get behaviors():CompositeBehavior
 		{
-			if(_behaviors == null) {
-				_behaviors = new CompositeBehavior(this);
-			}
 			return _behaviors;
 		}
 		public function set behaviors(value:*):void
 		{
-			if(_behaviors == null) {
-				_behaviors = new CompositeBehavior(this);
-			}
+			var change:PropertyChange = PropertyChange.begin();
+			value = change.add(this, "behaviors", _behaviors, value);
 			_behaviors.clear();
 			if (value is Array) {
 				_behaviors.add(value);
 			} else if (value is IBehavior) {
 				_behaviors.add([value]);
 			}
+			change.commit();
 		}
 		
 		[Bindable]
@@ -99,20 +102,20 @@ package reflex.components
 		}
 		public function set skin(value:ISkin):void
 		{
-			if (_skin == value) {
-				return;
-			}
-			if (_skin != null) {
-				_skin.target = null;
+			var change:PropertyChange = PropertyChange.begin();
+			_skin = change.add(this, "skin", _skin, value);
+			change.commit();
+		}
+		
+		protected function setTarget(oldValue:*, newValue:*):void
+		{
+			if (oldValue != null) {
+				oldValue.target = null;
 			}
 			
-			var oldValue:ISkin = _skin;
-			_skin = Observe.change(this, "skin", _skin, value);
-			
-			if (oldValue != _skin && _skin != null) {
-				_skin.target = this;
+			if (newValue != null) {
+				newValue.target = this;
 			}
-			Observe.notify();
 		}
 		
 		override protected function constructChildren():void

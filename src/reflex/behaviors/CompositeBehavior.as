@@ -12,8 +12,8 @@ package reflex.behaviors
 	use namespace flash_proxy;
 	
 	/**
-	 * A dynamic proxy for compositing multiple behaviors. The CompositeBehavior may be
-	 * iterated through just as an Array might be.
+	 * A dynamic proxy for compositing multiple behaviors. The CompositeBehavior
+	 * may be iterated through just as an Array might be.
 	 */
 	public dynamic class CompositeBehavior extends Proxy implements IBehavior, IEventDispatcher
 	{

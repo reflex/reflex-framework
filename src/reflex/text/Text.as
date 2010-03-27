@@ -11,8 +11,7 @@ package reflex.text
 	import flash.text.TextLineMetrics;
 	
 	import flight.binding.Bind;
-	import flight.observers.Change;
-	import flight.observers.Observe;
+	import flight.observers.PropertyChange;
 	
 	import mx.events.ScrollEvent;
 	
@@ -81,9 +80,10 @@ package reflex.text
 		public function set editable(value:Boolean):void
 		{
 			if (value == (type == TextFieldType.INPUT)) return;
-			value = Observe.change(this, "editable", (type == TextFieldType.INPUT), value);
+			var change:PropertyChange = PropertyChange.begin();
+			value = change.add(this, "editable", (type == TextFieldType.INPUT), value);
 			type = value ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
-			Observe.notify();
+			change.commit();
 		}
 		
 		public function get lineHeight():Number
@@ -98,16 +98,20 @@ package reflex.text
 		
 		public function set lineHeight(value:Number):void
 		{
-			_lineHeight = Observe.change(this, "lineHeight", _lineHeight, value);
+			var change:PropertyChange = PropertyChange.begin();
+			_lineHeight = change.add(this, "lineHeight", _lineHeight, value);
 			
-			if (isNaN(_lineHeight)) {
-				format.leading = 0;
-				super.y = y;
-				defaultTextFormat = format;
-				setTextFormat(format);
-			} else {
-				updateLineHeight();
+			if (change.hasChanged()) {
+				if (isNaN(_lineHeight)) {
+					format.leading = 0;
+					super.y = y;
+					defaultTextFormat = format;
+					setTextFormat(format);
+				} else {
+					updateLineHeight();
+				}
 			}
+			change.commit();
 		}
 		
 		protected function updateLineHeight():void

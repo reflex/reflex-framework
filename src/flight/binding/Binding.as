@@ -4,7 +4,7 @@ package flight.binding
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 	
-	import flight.observers.Observe;
+	import flight.observers.PropertyChange;
 	import flight.utils.Type;
 	import flight.utils.getClassName;
 	import flight.utils.getType;
@@ -175,8 +175,8 @@ package flight.binding
 				
 				if (propName && _twoWay || type == SOURCE || pathIndex < len-1) {
 					var changeEvents:Array = getBindingEvents(item, propName);
-					if (changeEvents[0] == "observable") {
-						Observe.addObserver(item, propName, null, propertyChange);
+					if (changeEvents == null || changeEvents[0] == "observable") {
+						PropertyChange.addObserver(item, propName, null, propertyChange);
 					} else if (item is IEventDispatcher) {
 						for each (var changeEvent:String in changeEvents) {
 							IEventDispatcher(item).addEventListener(changeEvent, onPropertyChange, false, 100, true);
@@ -220,8 +220,8 @@ package flight.binding
 				
 				var propName:String = getPropName(path[index]);
 				var changeEvents:Array = getBindingEvents(item, propName);
-				if (changeEvents[0] == "observable") {
-					Observe.removeObserver(item, propName, propertyChange);
+				if (changeEvents == null || changeEvents[0] == "observable") {
+					PropertyChange.removeObserver(item, propName, propertyChange);
 				} else if (item is IEventDispatcher) {
 					for each (var changeEvent:String in changeEvents) {
 						IEventDispatcher(item).removeEventListener(changeEvent, onPropertyChange);
@@ -382,9 +382,6 @@ package flight.binding
 		protected static function getBindingEvents(target:Object, property:String):Array
 		{
 			var bindings:Object = describeBindings(target);
-			if (bindings[property] == null) {
-				bindings[property] = [property + "Change"];
-			}
 			return bindings[property];
 		}
 		
