@@ -119,8 +119,9 @@ package reflex.tools.flashbuilder
     public function allowInsecureDomain(... parameters):void
     {
     }
+	
     //callInContext(fn:Function, thisArg:*, argArray:*, returns:Boolean=true):*;
-    public function callInContext(fn:Function, thisArg:*, argArray:*, returns:Boolean = true):*
+    public function callInContext(fn:Function, thisArg:Object, argArray:Array, returns:Boolean = true):*
     {
       return null;
     }
