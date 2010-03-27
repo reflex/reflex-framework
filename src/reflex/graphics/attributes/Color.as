@@ -19,6 +19,7 @@ package reflex.graphics.attributes
 		public static function fromString(color:String):uint
 		{
 			color = color.replace(/\s/g, "");
+			var result:uint;
 			var matches:Array;
 			
 			// traditional #FFFFFF representation of the color
@@ -37,7 +38,7 @@ package reflex.graphics.attributes
 				// remove the % group in the array for simplicity
 				matches.splice(2, 1);
 				
-				var result:uint = 0;
+				result = 0;
 				
 				for (var i:uint = 1; i <= 3; i++) {
 					var part:uint = isPercent ? Number(matches[i])/100*255 : Number(matches[i]);
@@ -51,6 +52,8 @@ package reflex.graphics.attributes
 				return result;
 			} else if (color.toLowerCase() in colorNames) {
 				return colorNames[color.toLowerCase()];
+			} else if ( !isNaN(result = parseInt(color)) ) {
+				return result;
 			}
 			
 			return 0;

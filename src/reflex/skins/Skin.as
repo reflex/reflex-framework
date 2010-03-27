@@ -15,7 +15,7 @@ package reflex.skins
 	import flight.list.IList;
 	
 	import reflex.display.IContainer;
-	//import reflex.layout.Block;
+	import reflex.events.RenderEvent;
 	import reflex.layout.ILayoutAlgorithm;
 	import reflex.layout.Layout;
 	
@@ -27,6 +27,8 @@ package reflex.skins
 	[DefaultProperty("children")]
 	public class Skin extends EventDispatcher implements ISkin, IContainer
 	{
+		public static const DRAW:String = "draw";
+		
 		[Bindable]
 		public var layout:ILayoutAlgorithm;
 		
@@ -41,6 +43,8 @@ package reflex.skins
 		private var _target:Sprite;
 		private var _children:IList = new ArrayList();
 		
+		RenderEvent.registerPhase(DRAW);
+		
 		public function Skin()
 		{
 			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
@@ -48,6 +52,9 @@ package reflex.skins
 			Bind.addListener(this, onLayoutChange, this, "layout");
 			Bind.addBinding(this, "data", this, "target.data");
 			Bind.addBinding(this, "state", this, "target.state");
+			Bind.addListener(this, invalidateRedraw, this, "target");
+			Bind.addListener(this, invalidateRedraw, this, "state");
+			Bind.bindEventListener(DRAW, onDraw, this, "target");
 		}
 		
 		[Bindable]
@@ -98,6 +105,17 @@ package reflex.skins
 		}
 		
 		protected function init():void
+		{
+		}
+		
+		public function invalidateRedraw():void
+		{
+			if (target) {
+				RenderEvent.invalidate(target, DRAW);
+			}
+		}
+		
+		public function redraw():void
 		{
 		}
 		
@@ -227,6 +245,11 @@ package reflex.skins
 			} else {
 				return containerPart.removeChild(child);
 			}
+		}
+		
+		protected function onDraw(event:RenderEvent):void
+		{
+			redraw();
 		}
 		
 		private function onLayoutChange(value:ILayoutAlgorithm):void

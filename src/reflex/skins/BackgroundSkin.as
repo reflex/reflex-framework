@@ -14,7 +14,7 @@ package reflex.skins
 
 	public class BackgroundSkin extends Skin
 	{
-		protected static var splitter:RegExp = /\s*,\s/;
+		protected static var splitter:RegExp = /\s*,\s*/;
 		public var backgroundColors:String;
 		public var backgroundAlphas:String;
 		public var backgroundRatios:String;
@@ -28,16 +28,11 @@ package reflex.skins
 		
 		public function BackgroundSkin()
 		{
-			Bind.addListener(this, onPropChange, this, "target.width");
-			Bind.addListener(this, onPropChange, this, "target.height");
+			Bind.addListener(this, invalidateRedraw, this, "target.width");
+			Bind.addListener(this, invalidateRedraw, this, "target.height");
 		}
 		
-		protected function onPropChange():void
-		{
-			redraw();
-		}
-		
-		protected function redraw():void
+		override public function redraw():void
 		{
 			if (target == null) return;
 			
