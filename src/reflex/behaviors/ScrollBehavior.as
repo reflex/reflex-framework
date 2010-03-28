@@ -12,7 +12,6 @@ package reflex.behaviors
 		public var thumb:InteractiveObject;
 		
 		[Bindable]
-		[Binding(target="target.horizontal")]
 		public var horizontal:Boolean = false;
 		
 		private var _percent:Number = 0;
@@ -24,6 +23,16 @@ package reflex.behaviors
 		public function ScrollBehavior(target:InteractiveObject = null)
 		{
 			super(target);
+			bindProperty("horizontal", "target.horizontal");
+			bindPropertyListener(onPosition, "position.percent");
+			bindEventListener("press", onTrackPress, "track");
+			bindEventListener("hold", onTrackHold, "track");
+			bindEventListener("press", onThumbPress, "thumb");
+			bindEventListener("drag", onThumbDrag, "thumb");
+			bindEventListener("release", onThumbRelease, "thumb");
+			bindEventListener("releaseOutside", onThumbRelease, "thumb");
+			bindPropertyListener(onResize, "target.width");
+			bindPropertyListener(onResize, "target.height");
 		}
 		
 		[Bindable(event="percentChange")]
@@ -52,8 +61,7 @@ package reflex.behaviors
 			updatePosition();
 		}
 		
-		[PropertyListener(target="position.percent")]
-		public function onPosition(percent:Number):void
+		protected function onPosition(percent:Number):void
 		{
 			if (thumb == null || track == null) {
 				return;
@@ -66,8 +74,7 @@ package reflex.behaviors
 			}
 		}
 		
-		[EventListener(type="press", target="track")]
-		public function onTrackPress(event:ButtonEvent):void
+		protected function onTrackPress(event:ButtonEvent):void
 		{
 			var size:Number = horizontal ? track.width : track.height;
 			forwardPress = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * position.percent);
@@ -80,8 +87,7 @@ package reflex.behaviors
 			event.updateAfterEvent();
 		}
 		
-		[EventListener(type="hold", target="track")]
-		public function onTrackHold(event:ButtonEvent):void
+		protected function onTrackHold(event:ButtonEvent):void
 		{
 			var size:Number = horizontal ? track.width : track.height;
 			var forwardHold:Boolean = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * position.percent);
@@ -98,16 +104,14 @@ package reflex.behaviors
 			event.updateAfterEvent();
 		}
 		
-		[EventListener(type="press", target="thumb")]
-		public function onThumbPress(event:ButtonEvent):void
+		protected function onThumbPress(event:ButtonEvent):void
 		{
 			dragging = true;
 			dragPoint = horizontal ? thumb.parent.mouseX : thumb.parent.mouseY;
 			dragPercent = _percent;
 		}
 		
-		[EventListener(type="drag", target="thumb")]
-		public function onThumbDrag(event:ButtonEvent):void
+		protected function onThumbDrag(event:ButtonEvent):void
 		{
 			var mousePoint:Number = horizontal ? thumb.parent.mouseX : thumb.parent.mouseY;
 			var size:Number = horizontal ? track.width - thumb.width : track.height - thumb.height;
@@ -121,16 +125,12 @@ package reflex.behaviors
 			event.updateAfterEvent();
 		}
 		
-		[EventListener(type="release", target="thumb")]
-		[EventListener(type="releaseOutside", target="thumb")]
-		public function onThumbRelease(event:ButtonEvent):void
+		protected function onThumbRelease(event:ButtonEvent):void
 		{
 			dragging = false;
 		}
 		
-		[PropertyListener(target="target.width")]
-		[PropertyListener(target="target.height")]
-		public function onResize(size:Number):void
+		protected function onResize(size:Number):void
 		{
 			updatePosition();
 		}

@@ -6,17 +6,17 @@ package reflex.behaviors
 	public class SelectableBehavior extends Behavior implements IBehavior
 	{
 		[Bindable]
-		[Binding(target="target.selected")]
 		public var selected:Boolean;
 		
 		public function SelectableBehavior(target:InteractiveObject = null)
 		{
 			super(target);
+			bindProperty("selected", "target.selected");
+			bindEventListener("click", onClick, "target");
 		}
 		
 		
-		[EventListener(type="click", target="target")]
-		public function onClick(event:MouseEvent):void
+		protected function onClick(event:MouseEvent):void
 		{
 			selected = !selected;
 			event.updateAfterEvent();

@@ -22,12 +22,15 @@ package reflex.behaviors
 		public static const DOWN:String = "down";
 		
 		[Bindable]
-		[Binding(target="target.state")]
 		public var state:String = UP;
 		
 		public function ButtonBehavior(target:InteractiveObject = null)
 		{
 			super(target);
+			bindProperty("state", "target.state");
+			bindEventListener("stateUp", onStateUp, "target");
+			bindEventListener("stateOver", onStateOver, "target");
+			bindEventListener("stateDown", onStateDown, "target");
 		}
 		
 		override public function set target(value:InteractiveObject):void
@@ -48,22 +51,19 @@ package reflex.behaviors
 		
 		// ====== Event Listeners ====== //
 		
-		[EventListener(type="stateUp", target="target")]
-		public function onStateUp(event:MouseEvent):void
+		protected function onStateUp(event:MouseEvent):void
 		{
 			state = UP;
 			event.updateAfterEvent();
 		}
 		
-		[EventListener(type="stateOver", target="target")]
-		public function onStateOver(event:MouseEvent):void
+		protected function onStateOver(event:MouseEvent):void
 		{
 			state = OVER;
 			event.updateAfterEvent();
 		}
 		
-		[EventListener(type="stateDown", target="target")]
-		public function onStateDown(event:MouseEvent):void
+		protected function onStateDown(event:MouseEvent):void
 		{
 			state = DOWN;
 			event.updateAfterEvent();
