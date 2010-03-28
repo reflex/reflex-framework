@@ -17,6 +17,8 @@ package reflex.display
 	import reflex.layout.ILayoutAlgorithm;
 	import reflex.layout.Layout;
 	
+	[Event(name="init", type="flash.events.Event")]
+	
 	[DefaultProperty("children")]
 	public class Container extends MovieClip implements IContainer
 	{
@@ -289,6 +291,9 @@ package reflex.display
 			block.target = this;
 			constructChildren();
 			init();
+			if (hasEventListener(Event.INIT)) {
+				dispatchEvent(new Event(Event.INIT));
+			}
 		}
 		
 		private function onChildrenChange(event:ListEvent):void
