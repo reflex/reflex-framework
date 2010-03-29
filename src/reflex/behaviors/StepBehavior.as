@@ -26,11 +26,6 @@ package reflex.behaviors
 		public function StepBehavior(target:InteractiveObject = null)
 		{
 			super(target);
-			bindProperty("position", "target.position");
-			bindEventListener("press", onFwdPress, "fwdBtn");
-			bindEventListener("hold", onFwdPress, "fwdBtn");
-			bindEventListener("press", onBwdPress, "bwdBtn");
-			bindEventListener("hold", onBwdPress, "bwdBtn");
 		}
 		
 		override public function set target(value:InteractiveObject):void
@@ -53,13 +48,17 @@ package reflex.behaviors
 			}
 		}
 		
-		protected function onFwdPress(event:ButtonEvent):void
+		[EventListener(type="press", target="fwdBtn")]
+		[EventListener(type="hold", target="fwdBtn")]
+		public function onFwdPress(event:ButtonEvent):void
 		{
 			position.forward();
 			event.updateAfterEvent();
 		}
 		
-		protected function onBwdPress(event:ButtonEvent):void
+		[EventListener(type="press", target="bwdBtn")]
+		[EventListener(type="hold", target="bwdBtn")]
+		public function onBwdPress(event:ButtonEvent):void
 		{
 			position.backward();
 			event.updateAfterEvent();

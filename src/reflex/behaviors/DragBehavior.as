@@ -15,8 +15,6 @@ package reflex.behaviors
 		public function DragBehavior(target:InteractiveObject=null)
 		{
 			super(target);
-			bindEventListener("mouseDown", onMouseDown, "target");
-			bindEventListener("drag", onDrag, "target");
 		}
 		
 		override public function set target(value:InteractiveObject):void
@@ -30,14 +28,16 @@ package reflex.behaviors
 		
 		// ====== Event Listeners ====== //
 		
-		protected function onMouseDown(event:MouseEvent):void
+		[EventListener(type="mouseDown", target="target")]
+		public function onMouseDown(event:MouseEvent):void
 		{
 			startMouse = new Point(event.stageX, event.stageY);
 			startPosition = new Point(target.x, target.y);
 			startPosition = target.parent.localToGlobal(startPosition);
 		}
 		
-		protected function onDrag(event:MouseEvent):void
+		[EventListener(type="drag", target="target")]
+		public function onDrag(event:MouseEvent):void
 		{
 			var mouse:Point = new Point(event.stageX, event.stageY);
 			var delta:Point = mouse.subtract(startMouse);
