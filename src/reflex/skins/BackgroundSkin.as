@@ -12,7 +12,7 @@ package reflex.skins
 	import reflex.graphics.attributes.Color;
 	import reflex.graphics.attributes.CornerRadius;
 
-	public class BackgroundSkin extends Skin
+	public class BackgroundSkin extends DrawingSkin
 	{
 		protected static var splitter:RegExp = /\s*,\s*/;
 		public var backgroundColors:String;
@@ -26,17 +26,9 @@ package reflex.skins
 		public var borderWidth:Number;
 		public var radius:String;
 		
-		public function BackgroundSkin()
-		{
-			Bind.addListener(this, invalidateRedraw, this, "target.width");
-			Bind.addListener(this, invalidateRedraw, this, "target.height");
-		}
 		
-		override public function redraw():void
+		override public function redraw(g:Graphics):void
 		{
-			if (target == null) return;
-			
-			var g:Graphics = target.graphics;
 			g.clear();
 			var d:Vector.<IGraphicsData> = new Vector.<IGraphicsData>(1);
 			var r:CornerRadius = CornerRadius.fromString(radius);
