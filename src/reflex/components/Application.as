@@ -13,8 +13,6 @@ package reflex.components
 	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
 	public class Application extends Component
 	{
-		//[Bindable]
-		//public var background:int = 0xFFFFFF;
 		
 		public function Application()
 		{

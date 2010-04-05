@@ -187,7 +187,7 @@ package reflex.events
 				event = new classType(type, false, false, button.mouseX, button.mouseY, null, false, false, false, pressedIndex[button] != null);
 			} else {
 				event = new classType(type, false, false, button.mouseX, button.mouseY, event.relatedObject,
-									   event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta);
+									  event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta);
 			}
 			
 			if (!mouseEventType && pressedIndex[button] != null) {
@@ -245,10 +245,6 @@ package reflex.events
 			} else if (!event.buttonDown) {
 				dispatchButtonEvent(button, STATE_OVER, event);
 			}
-			
-			if (event.buttonDown) {
-				event.stopImmediatePropagation();
-			}
 		}
 		
 		/**
@@ -266,10 +262,6 @@ package reflex.events
 				dispatchButtonEvent(button, STATE_OVER, event);
 			} else if (!event.buttonDown) {
 				dispatchButtonEvent(button, STATE_UP, event);
-			}
-			
-			if (event.buttonDown) {
-				event.stopImmediatePropagation();
 			}
 		}
 		

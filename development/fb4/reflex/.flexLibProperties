@@ -2,9 +2,6 @@
 <flexLibProperties includeAllClasses="true" version="3">
   <includeClasses>
     <classEntry path="FlexClasses"/>
-    <classEntry path="flight.binding.Bind"/>
-    <classEntry path="flight.binding.Binding"/>
-    <classEntry path="flight.events.ListEvent"/>
     <classEntry path="flight.events.ListEventKind"/>
     <classEntry path="flight.events.PropertyEvent"/>
     <classEntry path="flight.list.ArrayList"/>

@@ -22,7 +22,7 @@ package reflex.components
 		public function Component()
 		{
 			_behaviors = new CompositeBehavior(this);
-			PropertyChange.addHook(this, "skin", this, setTarget);
+			PropertyChange.addObserver(this, "skin", this, setTarget);
 		}
 		
 		override public function get layout():ILayoutAlgorithm
