@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<project name="Reflex Build" basedir="." default="all">
+
+	<!-- Define variables/paths used in this build script -->
+	<property file="build.properties" />
+	<property name="FLEX_HOME" value="${flex-sdk.dir}" />
+	
+	<!-- Define tasks used in this build script -->
+	<taskdef resource="flexTasks.tasks" classpath="${flex-sdk.dir}/ant/lib/flexTasks.jar"/>
+	
+	<target name="all">
+		<antcall target="clean" />
+		<antcall target="compile" />
+		<antcall target="docs" />
+		<antcall target="test-reports"></antcall>
+	</target>
+	
+	<target name="clean">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${bin.dir}" defaultexcludes="false">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="${docs.dir}" defaultexcludes="false">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="${tests.dir}" defaultexcludes="false">
+				<include name="**/*"/>
+			</fileset>
+		</delete>
+	</target>
+	
+	<!--
+		Compile all of the classes under the "src" tree into a .swc file
+	-->
+	<target name="compile">
+		<compc output="${bin.dir}/${library.name}.swc" link-report="${link-report.dir}/link-report.xml">
+			<source-path path-element="${src.dir}"/>
+			<namespace uri="http://reflex.io/2010" manifest="${src.dir}/manifest.xml" />
+			<include-namespaces>http://reflex.io/2010</include-namespaces>
+			<strict>true</strict>
+			<optimize>true</optimize>
+			<warnings>true</warnings>
+			<external-library-path dir="${flex-sdk.dir}/frameworks/libs/player/${flex-sdk.player}" append="true">
+				<include name="playerglobal.swc" />
+			</external-library-path>
+			<library-path dir="${flex-sdk.dir}/frameworks" append="true">
+				<include name="libs/*.swc" />
+				<include name="locale/${flex-sdk.locale}/*.swc" />
+			</library-path>
+			<library-path dir="libs" append="true">
+				<include name="*.swc" />
+			</library-path>
+		</compc>
+	</target>
+	
+	<!--
+		Generate ASDoc output for the library
+	-->
+	<target name="docs">
+		<asdoc output="${docs.dir}" templates-path="${docs.templates}">
+			<doc-namespaces uri="http://reflex.io/2010" />
+			<namespace uri="http://reflex.io/2010" manifest="${basedir}/src/manifest.xml" />
+			<source-path path-element="${src.dir}" />
+			<library-path dir="${flex-sdk.dir}/frameworks/libs" includes="*.swc" append="true" />
+			<library-path dir="${basedir}/libs" includes="*.swc" append="true" />
+		</asdoc>
+	</target>
+	
+	<!-- Generate readable JUnit-style reports -->
+	<target name="test-reports">
+		<junitreport todir="${tests.dir}">
+			<fileset dir="${reports.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${tests.dir}" />
+		</junitreport>
+	</target>
+	
+</project>
