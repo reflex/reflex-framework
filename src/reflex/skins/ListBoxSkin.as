@@ -6,7 +6,7 @@ package reflex.skins
 	import flight.position.IPosition;
 	import flight.position.Position;
 	
-	import reflex.behaviors.ScrollBehavior;
+	import reflex.behaviors.SlideBehavior;
 	import reflex.components.ScrollPaneGraphic;
 	import reflex.display.Replicator;
 	import reflex.display.ScrollContainer;
@@ -43,20 +43,20 @@ package reflex.skins
 			block.scale = true;
 			block.anchor.right = block.anchor.bottom = 0;
 			
-			var scrollBehavior:ScrollBehavior;
+			var slideBehavior:SlideBehavior;
 			var scrollBarSkin:ScrollBarSkin;
 			
-			scrollBehavior = new ScrollBehavior(graphic.hScroll);
+			slideBehavior = new SlideBehavior(graphic.hScroll);
 			scrollBarSkin = new ScrollBarSkin(graphic.hScroll);
 			scrollBarSkin.target = graphic.hScroll;
-			scrollBarSkin.position = scrollBehavior.position = container.hPosition;
+			scrollBarSkin.position = slideBehavior.position = container.hPosition;
 			scrollBarSkin.graphicBlock.dock = Align.BOTTOM;
 			scrollBarSkin.graphicBlock.margin.right = graphic.corner.width;
 			
-			scrollBehavior = new ScrollBehavior(graphic.vScroll);
+			slideBehavior = new SlideBehavior(graphic.vScroll);
 			scrollBarSkin = new ScrollBarSkin(graphic.vScroll);
 			scrollBarSkin.target = graphic.vScroll;
-			position = scrollBarSkin.position = scrollBehavior.position = container.vPosition;
+			position = scrollBarSkin.position = slideBehavior.position = container.vPosition;
 			scrollBarSkin.graphicBlock.dock = Align.RIGHT;
 			
 			replicator = new Replicator(container);

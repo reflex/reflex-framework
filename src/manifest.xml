@@ -26,7 +26,7 @@
 	<component id="ListBehavior" class="reflex.behaviors.ListBehavior"/>
 	<component id="ListSelectBehavior" class="reflex.behaviors.ListSelectBehavior"/>
 	<component id="PopoutBehavior" class="reflex.behaviors.PopoutBehavior"/>
-	<component id="ScrollBehavior" class="reflex.behaviors.ScrollBehavior"/>
+	<component id="SlideBehavior" class="reflex.behaviors.SlideBehavior"/>
 	<component id="SelectableBehavior" class="reflex.behaviors.SelectableBehavior"/>
 	<component id="StepBehavior" class="reflex.behaviors.StepBehavior"/>
 	<component id="DragStepBehavior" class="reflex.behaviors.DragStepBehavior"/>

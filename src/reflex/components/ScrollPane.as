@@ -5,7 +5,7 @@ package reflex.components
 	
 	import mx.core.Container;
 	
-	import reflex.behaviors.ScrollBehavior;
+	import reflex.behaviors.SlideBehavior;
 	import reflex.display.ScrollContainer;
 	import reflex.layout.Align;
 	import reflex.layout.Block;
@@ -40,20 +40,20 @@ package reflex.components
 			block.scale = true;
 			block.anchor.right = block.anchor.bottom = 0;
 			
-			var scrollBehavior:ScrollBehavior;
+			var slideBehavior:SlideBehavior;
 			var scrollBarSkin:ScrollBarSkin;
 			
-			scrollBehavior = new ScrollBehavior(graphic.hScroll);
+			slideBehavior = new SlideBehavior(graphic.hScroll);
 			scrollBarSkin = new ScrollBarSkin(graphic.hScroll);
 			scrollBarSkin.target = graphic.hScroll;
-			hPosition = scrollBarSkin.position = scrollBehavior.position = container.hPosition;
+			hPosition = scrollBarSkin.position = slideBehavior.position = container.hPosition;
 			scrollBarSkin.graphicBlock.dock = Align.BOTTOM;
 			scrollBarSkin.graphicBlock.margin.right = graphic.corner.width;
 			
-			scrollBehavior = new ScrollBehavior(graphic.vScroll);
+			slideBehavior = new SlideBehavior(graphic.vScroll);
 			scrollBarSkin = new ScrollBarSkin(graphic.vScroll);
 			scrollBarSkin.target = graphic.vScroll;
-			vPosition = scrollBarSkin.position = scrollBehavior.position = container.vPosition;
+			vPosition = scrollBarSkin.position = slideBehavior.position = container.vPosition;
 			scrollBarSkin.graphicBlock.dock = Align.RIGHT;
 			
 			skin = new GraphicSkin(graphic);

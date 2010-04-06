@@ -67,6 +67,10 @@ package reflex.skins
 			if (_target != null && _target is ISkinnable) {
 				skinnable = _target as ISkinnable;
 				skinnable.children.removeEventListener(ListEvent.LIST_CHANGE, onContentChange);
+				
+				for (i = 0; i < _children.length; i++) {
+					_target.removeChild(_children.getItemAt(i) as DisplayObject);
+				}
 			}
 			
 			var oldValue:Object = _target;

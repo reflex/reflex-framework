@@ -10,8 +10,8 @@ package reflex.behaviors
 		public var hScrollBar:InteractiveObject;
 		public var vScrollBar:InteractiveObject;
 		
-		private var hScrollBehavior:ScrollBehavior;
-		private var vScrollBehavior:ScrollBehavior;
+		private var hSlideBehavior:SlideBehavior;
+		private var vSlideBehavior:SlideBehavior;
 		
 		public function ListBehavior()
 		{
@@ -30,11 +30,11 @@ package reflex.behaviors
 			hScrollBar = getSkinPart('hScrollBar');
 			vScrollBar = getSkinPart('vScrollBar');
 			
-			hScrollBehavior = new ScrollBehavior();
-			vScrollBehavior = new ScrollBehavior();
+			hSlideBehavior = new SlideBehavior();
+			vSlideBehavior = new SlideBehavior();
 			
-			hScrollBehavior.target = hScrollBar;
-			vScrollBehavior.target = vScrollBar;
+			hSlideBehavior.target = hScrollBar;
+			vSlideBehavior.target = vScrollBar;
 			
 		}
 	}

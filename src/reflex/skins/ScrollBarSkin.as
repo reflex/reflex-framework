@@ -7,12 +7,21 @@ package reflex.skins
 	
 	import legato.components.ScrollBarGraphic;
 	
+	import reflex.components.Button;
 	import reflex.layout.Align;
 	import reflex.layout.Block;
 	import reflex.layout.Layout;
 
 	public class ScrollBarSkin extends GraphicSkin
 	{
+		// skinParts with StepBehavior
+		public var fwdBtn:Button;
+		public var bwdBtn:Button;
+		
+		// skinParts with SlideBehavior
+		public var track:Button;
+		public var thumb:Button;
+		
 		[Bindable]
 		public var position:IPosition;
 		

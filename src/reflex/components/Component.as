@@ -120,7 +120,9 @@ package reflex.components
 		
 		override protected function constructChildren():void
 		{
-			// load skin from CSS, etc
+			if (skin == null) {	// else skin was set in mxml
+				// load skin from CSS, etc
+			}
 		}
 		
 	}

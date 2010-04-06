@@ -3,6 +3,7 @@ package
 	import reflex.components.Application;
 	import reflex.components.Button;
 	import reflex.components.ListBox;
+	import reflex.components.ScrollBar;
 	
 	import view.mxml_test;
 	
@@ -33,6 +34,8 @@ package
 			listBox = new ListBox();
 			listBox.dock = "top";
 			addChild(listBox);
+			
+			addChild(new ScrollBar());
 			
 		}
 		

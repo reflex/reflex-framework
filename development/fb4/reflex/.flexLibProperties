@@ -35,7 +35,7 @@
     <classEntry path="reflex.behaviors.ListBehavior"/>
     <classEntry path="reflex.behaviors.ListSelectBehavior"/>
     <classEntry path="reflex.behaviors.PopoutBehavior"/>
-    <classEntry path="reflex.behaviors.ScrollBehavior"/>
+    <classEntry path="reflex.behaviors.SlideBehavior"/>
     <classEntry path="reflex.behaviors.SelectableBehavior"/>
     <classEntry path="reflex.behaviors.StepBehavior"/>
     <classEntry path="reflex.components.Application"/>
@@ -91,5 +91,7 @@
     <classEntry path="reflex.utils.GraphicsUtil"/>
   </includeClasses>
   <includeResources/>
-  <namespaceManifests/>
+  <namespaceManifests>
+    <namespaceManifestEntry manifest="manifest.xml" namespace="http://rx.reflex.io/2010"/>
+  </namespaceManifests>
 </flexLibProperties>

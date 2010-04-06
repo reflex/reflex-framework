@@ -52,14 +52,14 @@ package reflex.skins
 			buttonGraphic.label.text = label || "";
 		}
 		
-		override protected function onStateChange(state:String):void
+		override protected function gotoState(state:String):void
 		{
-			super.onStateChange(selected ? "selected" : state);
+			super.gotoState(selected ? "selected" : state);
 		}
 		
 		protected function onSelectedChange(selected:Boolean):void
 		{
-			super.onStateChange(selected ? "selected" : state);
+			super.gotoState(selected ? "selected" : state);
 		}
 	}
 }

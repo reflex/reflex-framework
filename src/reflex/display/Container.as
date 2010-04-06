@@ -274,6 +274,7 @@ package reflex.display
 			block.addEventListener("dockChange", forwardEvent);
 			block.addEventListener("alignChange", forwardEvent);
 			Bind.addBinding(block, "freeform", this, "freeform", true);
+			block.target = this;
 		}
 		
 		private function onRender(event:Event):void
@@ -288,7 +289,6 @@ package reflex.display
 			}
 			removeEventListener(Event.ADDED, onInit);
 			
-			block.target = this;
 			constructChildren();
 			init();
 			if (hasEventListener(Event.INIT)) {

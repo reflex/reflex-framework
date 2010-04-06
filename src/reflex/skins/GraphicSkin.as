@@ -23,19 +23,33 @@ package reflex.skins
 		
 		public function GraphicSkin(graphic:Sprite)
 		{
+			// initialize graphic with smart layout
 			_graphic = graphic;
 			_graphicBlock = new Block(graphic);
-			if ("defaultSize" in graphic) {
-				trace(graphic, graphic["defaultSize"].width, graphic["defaultSize"].height);
+			// TODO: set that layout's scaling if the graphic has no children (slice-9)
+			
+			// override default width/height if a guide is present
+			if ("defaultSize" in graphic && graphic["defaultSize"] is DisplayObject) {
 				var defaultSize:DisplayObject = graphic["defaultSize"] as DisplayObject;
 				_graphicBlock.defaultWidth = defaultSize.width;
 				_graphicBlock.defaultHeight = defaultSize.height;
 			}
 			
+			// TODO: resolve API .. addstatefulchild, etc
 			if (_graphic is MovieClip) {
-				Bind.addListener(this, onStateChange, this, "state");
+				Bind.addListener(this, gotoState, this, "state");
 				addStatefulChild(_graphic as MovieClip);
 			}
+		}
+		
+		public function get graphic():Sprite
+		{
+			return _graphic;
+		}
+		
+		public function get graphicBlock():Block
+		{
+			return _graphicBlock;
 		}
 		
 		override public function set target(value:Sprite):void
@@ -60,16 +74,6 @@ package reflex.skins
 				target.addChild(graphic);
 				_graphicBlock.anchor = 0;
 			}
-		}
-		
-		public function get graphic():Sprite
-		{
-			return _graphic;
-		}
-		
-		public function get graphicBlock():Block
-		{
-			return _graphicBlock;
 		}
 		
 		override public function getSkinPart(part:String):InteractiveObject
@@ -99,7 +103,7 @@ package reflex.skins
 			}
 		}
 		
-		protected function onStateChange(state:String):void
+		protected function gotoState(state:String):void
 		{
 			for each (var child:MovieClip in _statefulChildren) {
 				child.gotoAndStop(state);

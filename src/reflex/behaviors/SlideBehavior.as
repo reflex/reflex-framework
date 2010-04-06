@@ -4,9 +4,12 @@ package reflex.behaviors
 	import flash.events.Event;
 	import flash.geom.Point;
 	
+	import flight.position.IPosition;
+	import flight.position.Position;
+	
 	import reflex.events.ButtonEvent;
 	
-	public class ScrollBehavior extends StepBehavior
+	public class SlideBehavior extends Behavior// extends StepBehavior
 	{
 		public var track:InteractiveObject;
 		public var thumb:InteractiveObject;
@@ -15,13 +18,17 @@ package reflex.behaviors
 		[Binding(target="target.horizontal")]
 		public var horizontal:Boolean = false;
 		
+		[Bindable]
+		[Binding(target="target.position")]
+		public var position:IPosition = new Position();		// TODO: implement lazy instantiation of position
+		
 		private var _percent:Number = 0;
 		private var dragPercent:Number;
 		private var dragPoint:Number;
 		private var dragging:Boolean;
 		private var forwardPress:Boolean;
 		
-		public function ScrollBehavior(target:InteractiveObject = null)
+		public function SlideBehavior(target:InteractiveObject = null)
 		{
 			super(target);
 		}

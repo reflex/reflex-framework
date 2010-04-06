@@ -2,7 +2,8 @@ package reflex.components
 {
 	import flight.position.IPosition;
 	
-	import reflex.behaviors.ScrollBehavior;
+	import reflex.behaviors.SlideBehavior;
+	import reflex.behaviors.StepBehavior;
 	import reflex.skins.ScrollBarSkin;
 	
 	public class ScrollBar extends Component
@@ -18,9 +19,11 @@ package reflex.components
 		{
 			var scrollBarSkin:ScrollBarSkin = new ScrollBarSkin();
 			skin = scrollBarSkin;
-			var scrollBehavior:ScrollBehavior = new ScrollBehavior(this);
-			behaviors.scroll = scrollBehavior;
-			position = scrollBarSkin.position = scrollBehavior.position;
+			var slideBehavior:SlideBehavior = new SlideBehavior(this);
+			behaviors.slide = slideBehavior;
+			var stepBehavior:StepBehavior = new StepBehavior(this);
+			behaviors.step = stepBehavior;
+//			position = scrollBarSkin.position = slideBehavior.position = stepBehavior.position;
 		}
 		
 	}
