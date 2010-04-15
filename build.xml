@@ -11,8 +11,8 @@
 	<target name="all">
 		<antcall target="clean" />
 		<antcall target="compile" />
-		<antcall target="docs" />
 		<antcall target="test-reports"></antcall>
+		<antcall target="docs" />
 	</target>
 	
 	<target name="clean">
