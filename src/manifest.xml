@@ -31,6 +31,6 @@
 	<component id="StepBehavior" class="reflex.behaviors.StepBehavior"/>
 	<component id="DragStepBehavior" class="reflex.behaviors.DragStepBehavior"/>
 	
-	<component id="StyleInit" class="mx.styles.StyleManager"/>
+	<!--<component id="StyleInit" class="mx.styles.StyleManager"/>-->
 	
 </componentPackage>

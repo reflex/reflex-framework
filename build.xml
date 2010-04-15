@@ -35,8 +35,8 @@
 	<target name="compile">
 		<compc output="${bin.dir}/${library.name}.swc" link-report="${link-report.dir}/link-report.xml">
 			<source-path path-element="${src.dir}"/>
-			<namespace uri="http://reflex.io/2010" manifest="${src.dir}/manifest.xml" />
-			<include-namespaces>http://reflex.io/2010</include-namespaces>
+			<namespace uri="http://rx.reflex.io/2010" manifest="${src.dir}/manifest.xml" />
+			<include-namespaces>http://rx.reflex.io/2010</include-namespaces>
 			<strict>true</strict>
 			<optimize>true</optimize>
 			<warnings>true</warnings>
