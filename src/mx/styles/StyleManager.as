@@ -26,6 +26,7 @@ package mx.styles
 			return instance;
 		}
 		
+		//public function initProtoChainRoots():void {};
 		
 		/**
 		 * Grab a reference to the stage so we can set styles when items are

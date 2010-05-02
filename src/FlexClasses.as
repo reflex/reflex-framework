@@ -12,7 +12,7 @@ package
 	internal class FlexClasses
 	{
 		import mx.core.IMXMLObject;						IMXMLObject;
-    import mx.core.IFlexModuleFactory;    IFlexModuleFactory;
+		import mx.core.IFlexModuleFactory;				IFlexModuleFactory;
 		
 		// binding references for use of the [Bindable] metadata tag
 		import mx.binding.BindingManager;				BindingManager;

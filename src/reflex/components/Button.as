@@ -13,6 +13,7 @@ package reflex.components
 		
 		public function Button()
 		{
+			behaviors = new ButtonBehavior();
 		}
 		
 		override protected function init():void
@@ -21,7 +22,7 @@ package reflex.components
 				var buttonSkin:ButtonSkin = new ButtonSkin();
 				skin = buttonSkin;
 			}
-			behaviors = new ButtonBehavior();
+			//behaviors = new ButtonBehavior();
 		}
 	}
 }

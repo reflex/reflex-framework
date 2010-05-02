@@ -2,6 +2,7 @@ package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	
 	import flight.position.IPosition;
@@ -39,7 +40,7 @@ package reflex.behaviors
 			return _percent;
 		}
 		
-		override public function set target(value:InteractiveObject):void
+		override public function set target(value:IEventDispatcher):void
 		{
 			super.target = value;
 			

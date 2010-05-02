@@ -2,12 +2,13 @@ package reflex.behaviors
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.InteractiveObject;
+	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
 	import flight.binding.Bind;
 	
-	import reflex.skins.ISkinnable;
 	import reflex.events.ButtonEvent;
+	import reflex.skins.ISkinnable;
 	
 	[SkinState("up")]
 	[SkinState("over")]
@@ -30,7 +31,7 @@ package reflex.behaviors
 			super(target);
 		}
 		
-		override public function set target(value:InteractiveObject):void
+		override public function set target(value:IEventDispatcher):void
 		{
 			if (value != null) {
 				if (value is DisplayObjectContainer) {

@@ -162,6 +162,10 @@ package reflex.layout
 						child.width = area.width - margin.left - margin.right;
 					}
 					break;
+				case Align.CENTER :
+					child.x = area.width/2 - child.width/2;
+					child.y = area.height/2 - child.height/2;
+					break;
 			}
 		}
 		

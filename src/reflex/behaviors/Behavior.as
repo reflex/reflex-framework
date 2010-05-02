@@ -30,14 +30,14 @@ package reflex.behaviors
 		 * The object this behavior acts upon.
 		 */
 		[Bindable]
-		public var target:InteractiveObject;
+		public var target:IEventDispatcher;
 		
 		// TODO: add SkinParts with support for adding child behaviors to them
 		// registration of Behavior instances (via styling?) for instantiation
 		// skins ability to pull behavior data for state and other use
 		// skins also need data such as labels and images? (localization?)
 		// and dynamic data for it's content-area (component children)
-		public function Behavior(target:InteractiveObject = null)
+		public function Behavior(target:IEventDispatcher = null)
 		{
 			this.target = target;
 			describeBindings(this);

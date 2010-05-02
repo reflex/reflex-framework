@@ -1,10 +1,11 @@
 package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
+	import flash.events.IEventDispatcher;
 
 	public interface IBehavior
 	{
-		function get target():InteractiveObject;
-		function set target(value:InteractiveObject):void;
+		function get target():IEventDispatcher;
+		function set target(value:IEventDispatcher):void;
 	}
 }

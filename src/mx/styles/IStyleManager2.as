@@ -5,5 +5,6 @@ package mx.styles
 		
 		function setStyleDeclaration(selector:String, styleDeclaration:CSSStyleDeclaration):void;
 		function getStyleDeclaration(selector:String):CSSStyleDeclaration;
+		//function initProtoChainRoots():void;
 	}
 }

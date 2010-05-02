@@ -2,6 +2,7 @@ package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
 	import flash.display.MovieClip;
+	import flash.events.IEventDispatcher;
 	
 	import flight.binding.Bind;
 	import flight.position.IPosition;
@@ -28,7 +29,7 @@ package reflex.behaviors
 			super(target);
 		}
 		
-		override public function set target(value:InteractiveObject):void
+		override public function set target(value:IEventDispatcher):void
 		{
 			super.target = value;
 			

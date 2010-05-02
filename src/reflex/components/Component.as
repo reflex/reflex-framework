@@ -32,7 +32,9 @@ package reflex.components
 		override public function set layout(value:ILayoutAlgorithm):void
 		{
 			var change:PropertyChange = PropertyChange.begin();
-			_skin.layout = change.add(this, "layout", _skin.layout, value);
+			if(_skin) {
+				_skin.layout = change.add(this, "layout", _skin.layout, value);
+			}
 			change.commit();
 		}
 		

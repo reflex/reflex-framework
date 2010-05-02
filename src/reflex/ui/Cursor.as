@@ -27,6 +27,7 @@ package reflex.ui
 	import flash.display.DisplayObjectContainer;
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
@@ -132,7 +133,7 @@ package reflex.ui
 		}
 		
 		
-		public static function useCursor(interactiveObject:InteractiveObject, cursor:Object):void
+		public static function useCursor(interactiveObject:IEventDispatcher, cursor:Object):void
 		{
 			Cursor.getInstance().useCursor(interactiveObject, cursor);
 		}
@@ -160,7 +161,7 @@ package reflex.ui
 		}
 		
 		
-		public function useCursor(interactiveObject:InteractiveObject, cursor:Object):void
+		public function useCursor(interactiveObject:IEventDispatcher, cursor:Object):void
 		{
 			if (cursor == AUTO) {
 				delete objects[interactiveObject];

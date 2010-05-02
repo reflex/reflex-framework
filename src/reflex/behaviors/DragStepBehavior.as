@@ -2,6 +2,7 @@ package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
 	import flash.display.MovieClip;
+	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
 	import flight.binding.Bind;
@@ -18,12 +19,12 @@ package reflex.behaviors
 		
 		protected var startDragPosition:Number;
 		
-		public function DragStepBehavior(target:InteractiveObject = null)
+		public function DragStepBehavior(target:IEventDispatcher = null)
 		{
 			super(target);
 		}
 		
-		override public function set target(value:InteractiveObject):void
+		override public function set target(value:IEventDispatcher):void
 		{
 			super.target = value;
 			
