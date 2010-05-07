@@ -15,18 +15,18 @@ package reflex.text
 	
 	import mx.events.ScrollEvent;
 	
-	import reflex.events.RenderEvent;
+	import reflex.events.InvalidationEvent;
 	import reflex.layout.Block;
 	import reflex.layout.Bounds;
 	import reflex.layout.Box;
 	import reflex.layout.ILayoutAlgorithm;
-	import reflex.layout.Layout;
+	import reflex.layout.LayoutWrapper;
 	
 	
 	public class Text extends TextField
 	{
 		public static const TEXT_CHANGE:String = "textChange";
-		RenderEvent.registerPhase(TEXT_CHANGE, 0x90); // before measure
+		InvalidationEvent.registerPhase(TEXT_CHANGE, 0x90); // before measure
 		
 		[Bindable]
 		public var freeform:Boolean = false;
@@ -49,7 +49,7 @@ package reflex.text
 			initLayout();
 			updateDefaultSize();
 			addEventListener(Event.ADDED, onInit);
-			addEventListener(Layout.LAYOUT, onRender);
+			addEventListener(LayoutWrapper.LAYOUT, onRender);
 			
 			addEventListener(Event.CHANGE, onChange);
 			addEventListener(TEXT_CHANGE, onTextChange);
@@ -57,10 +57,10 @@ package reflex.text
 		
 		private function onChange(event:Event):void
 		{
-			RenderEvent.invalidate(this, TEXT_CHANGE);
+			InvalidationEvent.invalidate(this, TEXT_CHANGE);
 		}
 		
-		private function onTextChange(event:RenderEvent):void
+		private function onTextChange(event:InvalidationEvent):void
 		{
 			updateDefaultSize();
 		}
@@ -139,13 +139,13 @@ package reflex.text
 		override public function set text(value:String):void
 		{
 			super.text = value;
-			RenderEvent.invalidate(this, TEXT_CHANGE);
+			InvalidationEvent.invalidate(this, TEXT_CHANGE);
 		}
 		
 		override public function set htmlText(value:String):void
 		{
 			super.htmlText = value;
-			RenderEvent.invalidate(this, TEXT_CHANGE);
+			InvalidationEvent.invalidate(this, TEXT_CHANGE);
 		}
 		
 		public function get font():String

@@ -49,11 +49,11 @@ package reflex.skins
 					}
 				}
 				
-				_backgrounds[background.state] = background;
+				_backgrounds[background.currentState] = background;
 			}
 			
-			if (state in _backgrounds) {
-				currentBackground = _backgrounds[state];
+			if (currentState in _backgrounds) {
+				currentBackground = _backgrounds[currentState];
 				currentBackground.target = target;
 			}
 		}

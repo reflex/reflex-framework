@@ -10,7 +10,7 @@ package reflex.skins
 	import reflex.components.Button;
 	import reflex.layout.Align;
 	import reflex.layout.Block;
-	import reflex.layout.Layout;
+	import reflex.layout.LayoutWrapper;
 
 	public class ScrollBarSkin extends GraphicSkin
 	{
@@ -66,7 +66,7 @@ package reflex.skins
 			}
 			
 			scrollBarGraphic.thumb.visible = true;
-			var block:Block = Layout.getLayout(scrollBarGraphic.thumb) as Block;
+			var block:Block = LayoutWrapper.getLayout(scrollBarGraphic.thumb) as Block;
 			block.width = scrollBarGraphic.track.width/position.size * position.space;
 		}
 		

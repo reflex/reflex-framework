@@ -8,7 +8,7 @@ package reflex.layout
 	{
 		public function layout(target:DisplayObjectContainer):void
 		{
-			var block:Block = Layout.getLayout(target) as Block;
+			var block:Block = LayoutWrapper.getLayout(target) as Block;
 			if (block == null) {
 				return;
 			}
@@ -30,7 +30,7 @@ package reflex.layout
 			
 			for (var i:int = 0; i < target.numChildren; i++) {
 				var display:DisplayObject = target.getChildAt(i);
-				var child:Block = Layout.getLayout(display) as Block;
+				var child:Block = LayoutWrapper.getLayout(display) as Block;
 				if (child == null || child.freeform) {
 					continue;
 				}
@@ -172,7 +172,7 @@ package reflex.layout
 		// TODO: factor anchor into the measurement
 		public function measure(target:DisplayObjectContainer):void
 		{
-			var block:Block = Layout.getLayout(target) as Block;
+			var block:Block = LayoutWrapper.getLayout(target) as Block;
 			if (block == null) {
 				return;
 			}
@@ -195,7 +195,7 @@ package reflex.layout
 			
 			for (var i:int = 0; i < target.numChildren; i++) {
 				var display:DisplayObject = target.getChildAt(i);
-				var child:Block = Layout.getLayout(display) as Block;
+				var child:Block = LayoutWrapper.getLayout(display) as Block;
 				if (child == null || child.freeform) {
 					continue;
 				}

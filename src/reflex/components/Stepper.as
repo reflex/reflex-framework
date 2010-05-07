@@ -21,7 +21,7 @@ package reflex.components
 			behaviors = new StepBehavior();
 		}
 		
-		override protected function init():void
+		/*override */protected function init():void
 		{
 		}
 	}

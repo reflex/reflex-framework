@@ -7,37 +7,30 @@ package reflex.components
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
 	import reflex.display.Container;
-	import reflex.layout.ILayoutAlgorithm;
+	import reflex.display.ReflexDisplay;
+	import reflex.events.InvalidationEvent;
+	//import reflex.layout.ILayoutAlgorithm;
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
+	import reflex.measurement.getWidth;
+	import reflex.measurement.getHeight;
 	
-	public class Component extends Container implements IBehavioral, ISkinnable
+	
+	public class Component extends ReflexDisplay implements IBehavioral, ISkinnable
 	{
+		
+		static public const MEASURE:String = "measure";
+		InvalidationEvent.registerPhase(MEASURE, 0, true);
+		
 		private var _state:String;
-		private var _data:Object;
-		private var _skin:ISkin;
+		private var _skin:Object;
 		private var _behaviors:CompositeBehavior;
-		private var _layout:ILayoutAlgorithm;
 		
 		public function Component()
 		{
 			_behaviors = new CompositeBehavior(this);
 			PropertyChange.addObserver(this, "skin", this, setTarget);
 		}
-		
-		override public function get layout():ILayoutAlgorithm
-		{
-			return _skin.layout;
-		}
-		override public function set layout(value:ILayoutAlgorithm):void
-		{
-			var change:PropertyChange = PropertyChange.begin();
-			if(_skin) {
-				_skin.layout = change.add(this, "layout", _skin.layout, value);
-			}
-			change.commit();
-		}
-		
 		
 		[Bindable]
 		public function get state():String
@@ -48,19 +41,6 @@ package reflex.components
 		{
 			var change:PropertyChange = PropertyChange.begin();
 			_state = change.add(this, "state", _state, value);
-			change.commit();
-		}
-		
-		
-		[Bindable]
-		public function get data():Object
-		{
-			return _data;
-		}
-		public function set data(value:Object):void
-		{
-			var change:PropertyChange = PropertyChange.begin();
-			_data = change.add(this, "data", _data, value);
 			change.commit();
 		}
 		
@@ -98,14 +78,15 @@ package reflex.components
 		}
 		
 		[Bindable]
-		public function get skin():ISkin
+		public function get skin():Object
 		{
 			return _skin;
 		}
-		public function set skin(value:ISkin):void
+		public function set skin(value:Object):void
 		{
 			var change:PropertyChange = PropertyChange.begin();
 			_skin = change.add(this, "skin", _skin, value);
+			//setSize(getWidth(_skin), getHeight(_skin));
 			change.commit();
 		}
 		
@@ -120,7 +101,7 @@ package reflex.components
 			}
 		}
 		
-		override protected function constructChildren():void
+		/*override */protected function constructChildren():void
 		{
 			if (skin == null) {	// else skin was set in mxml
 				// load skin from CSS, etc

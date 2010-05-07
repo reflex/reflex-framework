@@ -14,14 +14,15 @@ package reflex.display
 		
 		[Bindable]
 		public var vPosition:IPosition;
-		
+		/*
 		override public function set background(value:Number):void
 		{
 			super.background = value;
 			opaqueBackground = background;
 			cacheAsBitmap = !isNaN(background);
 		}
-		
+		*/
+		/*
 		override public function get width():Number
 		{
 			return block.width;
@@ -39,7 +40,7 @@ package reflex.display
 		{
 			block.height = value;
 		}
-		
+		*/
 		override protected function initLayout():void
 		{
 			var scrollBlock:ScrollBlock = new ScrollBlock();
@@ -62,7 +63,7 @@ package reflex.display
 			scrollBlock.addEventListener("dockChange", forwardEvent);
 			scrollBlock.addEventListener("alignChange", forwardEvent);
 			
-			block = scrollBlock;
+			//block = scrollBlock;
 		}
 		
 		private function forwardEvent(event:Event):void

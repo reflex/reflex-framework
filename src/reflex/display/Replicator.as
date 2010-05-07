@@ -14,7 +14,7 @@ package reflex.display
 	import flight.position.Position;
 	
 	import reflex.components.Button;
-	import reflex.layout.Layout;
+	import reflex.layout.LayoutWrapper;
 	
 	/**
 	 * A replicator can create any inanimate matter, as long as the desired
@@ -86,7 +86,7 @@ package reflex.display
 		
 		private function onPositionChange(percent:Number):void
 		{
-			var layout:Layout = Layout.getLayout(_target);
+			var layout:LayoutWrapper = LayoutWrapper.getLayout(_target);
 			if (layout == null) {
 				return;
 			}

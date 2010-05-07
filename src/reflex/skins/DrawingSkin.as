@@ -4,11 +4,14 @@ package reflex.skins
 	
 	import flight.binding.Bind;
 	
-	import reflex.events.RenderEvent;
+	import reflex.events.InvalidationEvent;
 
 	public class DrawingSkin extends Skin
 	{
-		RenderEvent.registerPhase(DRAW);
+		
+		static public const DRAW:String = "draw";
+		
+		InvalidationEvent.registerPhase(DRAW);
 		
 		public function DrawingSkin()
 		{
@@ -22,7 +25,7 @@ package reflex.skins
 		public function invalidateRedraw():void
 		{
 			if (target) {
-				RenderEvent.invalidate(target, DRAW);
+				InvalidationEvent.invalidate(target, DRAW);
 			}
 		}
 		
@@ -30,7 +33,7 @@ package reflex.skins
 		{
 		}
 		
-		protected function onDraw(event:RenderEvent):void
+		protected function onDraw(event:InvalidationEvent):void
 		{
 			if (target != null) {
 				redraw(target.graphics);

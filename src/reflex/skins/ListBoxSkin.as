@@ -35,7 +35,7 @@ package reflex.skins
 			super(scrollPaneGraphic);
 			
 			container = new ScrollContainer();
-			container.dock = Align.FILL;
+			//container.dock = Align.FILL;
 			graphic.addChild(container);
 			
 			var block:Block;

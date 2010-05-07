@@ -17,17 +17,17 @@ package reflex.text
 	
 	import flight.binding.Bind;
 	
-	import reflex.events.RenderEvent;
+	import reflex.events.InvalidationEvent;
 	import reflex.layout.Block;
 	import reflex.layout.Bounds;
 	import reflex.layout.Box;
 	import reflex.layout.ILayoutAlgorithm;
-	import reflex.layout.Layout;
+	import reflex.layout.LayoutWrapper;
 	
 	public class FTELabel extends Sprite
 	{
 		public static const TEXT_RENDER:String = "textRender";
-		private static var textPhase:Boolean = RenderEvent.registerPhase(TEXT_RENDER, 0x90, false);
+		private static var textPhase:Boolean = InvalidationEvent.registerPhase(TEXT_RENDER, 0x90, false);
 		
 		[Bindable]
 		public var freeform:Boolean = false;
@@ -53,7 +53,7 @@ package reflex.text
 			initLayout();
 			addEventListener(Event.ADDED, onInit);
 			addEventListener(TEXT_RENDER, onTextRender);
-			addEventListener(Layout.LAYOUT, onRender);
+			addEventListener(LayoutWrapper.LAYOUT, onRender);
 		}
 		
 		public function get text():String
@@ -65,7 +65,7 @@ package reflex.text
 		{
 			if (value == textElement.text) return;
 			textElement.text = value;
-			RenderEvent.invalidate(this, TEXT_RENDER);
+			InvalidationEvent.invalidate(this, TEXT_RENDER);
 		}
 		
 		public function get embed():Boolean
@@ -87,7 +87,7 @@ package reflex.text
 		{
 			if (value == format.color) return;
 			format.color = value;
-			RenderEvent.invalidate(this, TEXT_RENDER);
+			InvalidationEvent.invalidate(this, TEXT_RENDER);
 		}
 		
 		public function get fontFamily():String
@@ -99,7 +99,7 @@ package reflex.text
 		{
 			if (value == fontFormat.fontName) return;
 			fontFormat.fontName = value;
-			RenderEvent.invalidate(this, TEXT_RENDER);
+			InvalidationEvent.invalidate(this, TEXT_RENDER);
 		}
 		
 		public function get fontSize():Number
@@ -111,7 +111,7 @@ package reflex.text
 		{
 			if (value == format.fontSize) return;
 			format.fontSize = value;
-			RenderEvent.invalidate(this, TEXT_RENDER);
+			InvalidationEvent.invalidate(this, TEXT_RENDER);
 		}
 		
 		public function get bold():Boolean
@@ -123,7 +123,7 @@ package reflex.text
 		{
 			if (value == (fontFormat.fontWeight == FontWeight.BOLD)) return;
 			fontFormat.fontWeight = value ? FontWeight.BOLD : FontWeight.NORMAL;
-			RenderEvent.invalidate(this, TEXT_RENDER);
+			InvalidationEvent.invalidate(this, TEXT_RENDER);
 		}
 		
 		public function get italic():Boolean
@@ -135,10 +135,10 @@ package reflex.text
 		{
 			if (value == (fontFormat.fontPosture == FontPosture.ITALIC)) return;
 			fontFormat.fontPosture = value ? FontPosture.ITALIC : FontPosture.NORMAL;
-			RenderEvent.invalidate(this, TEXT_RENDER);
+			InvalidationEvent.invalidate(this, TEXT_RENDER);
 		}
 		
-		protected function onTextRender(event:RenderEvent):void
+		protected function onTextRender(event:InvalidationEvent):void
 		{
 			validateText();
 		}

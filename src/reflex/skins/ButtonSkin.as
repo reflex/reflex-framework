@@ -59,7 +59,7 @@ package reflex.skins
 		
 		protected function onSelectedChange(selected:Boolean):void
 		{
-			super.gotoState(selected ? "selected" : state);
+			super.gotoState(selected ? "selected" : currentState);
 		}
 	}
 }

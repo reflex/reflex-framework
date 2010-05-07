@@ -9,26 +9,26 @@ package reflex.layout
 	
 	import flight.events.PropertyEvent;
 	
-	import reflex.events.RenderEvent;
+	import reflex.events.InvalidationEvent;
 	
-	public class Layout implements IEventDispatcher, ILayout
+	public class LayoutWrapper implements IEventDispatcher, ILayoutWrapper
 	{
 		public static const MEASURE:String = "measure";
 		public static const LAYOUT:String = "layout";
 		
 		public static var layoutIndex:Dictionary = new Dictionary(true);
-		public static function getLayout(key:DisplayObject):Layout
+		public static function getLayout(key:DisplayObject):LayoutWrapper
 		{
 			return layoutIndex[key];		// TODO: resolve the circular reference holding both display and Layout in memory
 			var reference:Dictionary = layoutIndex[key];
 			for (var i:* in reference) {
-				return Layout(i);
+				return LayoutWrapper(i);
 			}
 			return null;
 		}
 		
-		private static var measurePhase:Boolean = RenderEvent.registerPhase(MEASURE, 0x80, false);
-		private static var layoutPhase:Boolean = RenderEvent.registerPhase(LAYOUT, 0x40, true);
+		private static var measurePhase:Boolean = InvalidationEvent.registerPhase(MEASURE, 0x80, false);
+		private static var layoutPhase:Boolean = InvalidationEvent.registerPhase(LAYOUT, 0x40, true);
 		
 		[Bindable]
 		public var freeform:Boolean = false;
@@ -49,7 +49,7 @@ package reflex.layout
 		
 		private var _target:DisplayObject;
 		
-		public function Layout(target:DisplayObject = null)
+		public function LayoutWrapper(target:DisplayObject = null)
 		{
 			reference[this] = true;		// used to maintain a weak-reference
 			this.target = target;
@@ -96,12 +96,12 @@ package reflex.layout
 				return;
 			}
 			
-			RenderEvent.invalidate(_target, LAYOUT);
+			InvalidationEvent.invalidate(_target, LAYOUT);
 			
 			if (children) {
-				RenderEvent.invalidate(_target, MEASURE);
+				InvalidationEvent.invalidate(_target, MEASURE);
 			} else {
-				var parent:Layout = getLayout(_target.parent);
+				var parent:LayoutWrapper = getLayout(_target.parent);
 				if (parent != null ) {
 					parent.invalidate(true);
 				}

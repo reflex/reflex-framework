@@ -2,7 +2,7 @@ package reflex.layout
 {
 	import flash.display.DisplayObject;
 
-	public interface ILayout
+	public interface ILayoutWrapper
 	{
 		function get target():DisplayObject;
 		function set target(value:DisplayObject):void;

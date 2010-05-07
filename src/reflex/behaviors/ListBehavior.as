@@ -26,7 +26,7 @@ package reflex.behaviors
 				return;
 			}
 			
-			var skin:ISkin = ISkinnable(target).skin;
+			//var skin:ISkin = ISkinnable(target).skin;
 			
 			hScrollBar = getSkinPart('hScrollBar');
 			vScrollBar = getSkinPart('vScrollBar');

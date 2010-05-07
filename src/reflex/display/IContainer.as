@@ -2,13 +2,15 @@ package reflex.display
 {
 	import flight.list.IList;
 	
-	import reflex.layout.ILayoutAlgorithm;
+	import reflex.layouts.ILayout;
 
 	public interface IContainer
 	{
 		function get children():IList;
 		
-		function get layout():ILayoutAlgorithm;
-		function set layout(value:ILayoutAlgorithm):void;
+		function get layout():ILayout;
+		function set layout(value:ILayout):void;
+		
+		//function setSize(width:Number, height:Number):void;
 	}
 }

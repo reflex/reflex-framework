@@ -10,7 +10,7 @@ package reflex.layout
 	
 	import mx.events.PropertyChangeEvent;
 	
-	public class Block extends Layout
+	public class Block extends LayoutWrapper
 	{
 		[Bindable]
 		public var scale:Boolean = false;

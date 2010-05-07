@@ -16,7 +16,7 @@ package reflex.components
 			behaviors = new ButtonBehavior();
 		}
 		
-		override protected function init():void
+		/*override */protected function init():void
 		{
 			if (skin == null) {
 				var buttonSkin:ButtonSkin = new ButtonSkin();

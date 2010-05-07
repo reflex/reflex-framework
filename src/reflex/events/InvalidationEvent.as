@@ -3,19 +3,20 @@ package reflex.events
 	import flash.display.DisplayObject;
 	import flash.display.Stage;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 	import flash.utils.setTimeout;
 	
-	public class RenderEvent extends Event
+	public class InvalidationEvent extends Event
 	{
-		public function RenderEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false)
+		public function InvalidationEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false)
 		{
 			super(type, bubbles, cancelable);
 		}
 		
 		override public function clone():Event
 		{
-			return new RenderEvent(type, bubbles, cancelable);
+			return new InvalidationEvent(type, bubbles, cancelable);
 		}
 		
 		private static var rendering:Boolean = false;
@@ -151,9 +152,10 @@ package reflex.events
 
 
 import flash.display.DisplayObject;
+import flash.events.IEventDispatcher;
 import flash.utils.Dictionary;
 
-import reflex.events.RenderEvent;
+import reflex.events.InvalidationEvent;
 
 class RenderPhase
 {
@@ -208,7 +210,7 @@ class RenderPhase
 				var display:DisplayObject = i;
 				delete current[i];
 				delete invalidated[display];
-				display.dispatchEvent( new RenderEvent(type) );
+				display.dispatchEvent( new InvalidationEvent(type) );
 			}
 		}
 		pos = -1;
@@ -227,7 +229,7 @@ class RenderPhase
 		delete depths[ invalidated[display] ][display];
 		delete invalidated[display];
 	}
-	public function hasDisplay(display:DisplayObject):Boolean
+	public function hasDisplay(display:IEventDispatcher):Boolean
 	{
 		return invalidated[display] != null;
 	}

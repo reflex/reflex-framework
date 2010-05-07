@@ -3,6 +3,8 @@ package reflex.display
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.events.Event;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import flight.binding.Bind;
 	import flight.events.ListEvent;
@@ -11,55 +13,40 @@ package reflex.display
 	import flight.list.ArrayList;
 	import flight.list.IList;
 	
+	import reflex.events.InvalidationEvent;
+	import reflex.graphics.IDrawable;
 	import reflex.layout.Block;
 	import reflex.layout.Bounds;
 	import reflex.layout.Box;
-	import reflex.layout.ILayoutAlgorithm;
-	import reflex.layout.Layout;
+	//import reflex.layout.ILayoutAlgorithm;
+	import reflex.layout.LayoutWrapper;
+	import reflex.layouts.ILayout;
 	
 	[Event(name="init", type="flash.events.Event")]
 	
 	[DefaultProperty("children")]
-	public class Container extends MovieClip implements IContainer
+	public class Container extends ReflexDisplay implements IContainer
 	{
-		[Bindable]
-		public var freeform:Boolean = false;
 		
-		public var block:Block;
+		static public const MEASURE:String = "measure";
+		static public const LAYOUT:String = "layout";
 		
-		private var _background:Number;
+		InvalidationEvent.registerPhase(MEASURE, 0, true);
+		InvalidationEvent.registerPhase(LAYOUT, 0, true);
+		
 		private var _children:IList = new ArrayList();
+		private var _layout:ILayout;
 		
-		// TODO: add propertyChange updates (via Block as well)
 		public function Container()
 		{
 			initLayout();
 			addEventListener(Event.ADDED, onInit);
 			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			addEventListener(MEASURE, onMeasure, false, 0, true);
+			addEventListener(LAYOUT, onLayout, false, 0, true);
 		}
 		
-		[Bindable(event="backgroundChange")]
-		public function get background():Number
-		{
-			return _background;
-		}
-		public function set background(value:Number):void
-		{
-			if (_background == value) {
-				return;
-			}
-			
-			_background = PropertyEvent.change(this, "background", _background, value);
-			if ( isNaN(_background) ) {
-				removeEventListener(Layout.LAYOUT, onRender);
-			} else {
-				addEventListener(Layout.LAYOUT, onRender);
-				draw();
-			}
-			PropertyEvent.dispatch(this);
-		}
-		
-		[ArrayElementType("flash.display.DisplayObject")]
+		[ArrayElementType("Object")]
 		public function get children():IList
 		{
 			return _children;
@@ -73,180 +60,55 @@ package reflex.display
 				_children.addItems(value);
 			} else if (value is IList) {
 				_children.addItems( IList(value).getItems() );
+			} else if (value is IDrawable) {
+				_children.addItem(value);
 			}
-		}
-		
-		[Bindable(event="xChange")]
-		override public function get x():Number
-		{
-			return super.x;
-		}
-		override public function set x(value:Number):void
-		{
-			if (super.x == value) {
-				return;
-			}
-			
-			super.x = value;
-			block.x = value;
-		}
-		
-		[Bindable(event="yChange")]
-		override public function get y():Number
-		{
-			return block.y;
-		}
-		override public function set y(value:Number):void
-		{
-			if (super.y == value) {
-				return;
-			}
-			
-			super.y = value;
-			block.y = value;
-		}
-		
-		[Bindable(event="widthChange")]
-		override public function get width():Number
-		{
-			return displayWidth * scaleX;
-		}
-		override public function set width(value:Number):void
-		{
-			displayWidth = value / scaleY;
-		}
-		
-		[Bindable(event="heightChange")]
-		override public function get height():Number
-		{
-			return displayHeight * scaleY;
-		}
-		override public function set height(value:Number):void
-		{
-			displayHeight = value / scaleY;
-		}
-		
-		
-		[Bindable(event="displayWidthChange")]
-		public function get displayWidth():Number
-		{
-			return block.displayWidth;
-		}
-		public function set displayWidth(value:Number):void
-		{
-			block.displayWidth = value;
-		}
-		
-		[Bindable(event="displayHeightChange")]
-		public function get displayHeight():Number
-		{
-			return block.displayHeight;
-		}
-		public function set displayHeight(value:Number):void
-		{
-			block.displayHeight = value;
-		}
-		
-		[Bindable(event="snapToPixelChange")]
-		public function get snapToPixel():Boolean
-		{
-			return block.snapToPixel;
-		}
-		public function set snapToPixel(value:Boolean):void
-		{
-			block.snapToPixel = value;
 		}
 		
 		
 		[Bindable(event="layoutChange")]
-		public function get layout():ILayoutAlgorithm
-		{
-			return block.algorithm;
-		}
-		public function set layout(value:ILayoutAlgorithm):void
-		{
-			block.algorithm = value;
-		}
-		
-		[Bindable(event="boundsChange")]
-		public function get bounds():Bounds
-		{
-			return block.bounds;
-		}
-		public function set bounds(value:Bounds):void
-		{
-			block.bounds = value;
+		public function get layout():ILayout { return _layout; }
+		public function set layout(value:ILayout):void {
+			if(_layout) { _layout.target = null; }
+			_layout = value;
+			_layout.target = this;
+			InvalidationEvent.invalidate(this, MEASURE);
+			InvalidationEvent.invalidate(this, LAYOUT);
 		}
 		
-		[Bindable(event="marginChange")]
-		public function get margin():Box
-		{
-			return block.margin;
-		}
-		public function set margin(value:*):void
-		{
-			block.margin = value;
+		// remove these width/height overrides when layout invalidation binding works
+		/*
+		override public function set width(value:Number):void {
+			super.width = value;
+			InvalidationEvent.invalidate(this, LAYOUT);
 		}
 		
-		[Bindable(event="paddingChange")]
-		public function get padding():Box
-		{
-			return block.padding;
+		override public function set height(value:Number):void {
+			super.height = value;
+			InvalidationEvent.invalidate(this, LAYOUT);
 		}
-		public function set padding(value:*):void
-		{
-			block.padding = value;
-		}
-		
-		[Bindable(event="anchorChange")]
-		public function get anchor():Box
-		{
-			return block.anchor;
-		}
-		public function set anchor(value:*):void
-		{
-			block.anchor = value;
-		}
-		
-		[Bindable(event="dockChange")]
-		public function get dock():String
-		{
-			return block.dock;
-		}
-		public function set dock(value:String):void
-		{
-			block.dock = value;
-		}
-		
-		[Bindable(event="alignChange")]
-		public function get align():String
-		{
-			return block.align;
-		}
-		public function set align(value:String):void
-		{
-			block.align = value;
-		}
-		
-		
-		
+		*/
 		public function invalidate(children:Boolean = false):void
 		{
-			block.invalidate(children);
+			// todo:invalidate layout
+			//block.invalidate(children);
 		}
 		
 		public function validate():void
 		{
-			block.validate();
+			// todo: validate layout
+			//block.validate();
 		}
 		
 		
 		protected function draw():void
 		{
+			/*
 			graphics.clear();
 			graphics.beginFill(background);
 			graphics.drawRect(0, 0, displayWidth, displayHeight);
 			graphics.endFill();
+			*/
 		}
 		
 		protected function init():void
@@ -259,6 +121,7 @@ package reflex.display
 		
 		protected function initLayout():void
 		{
+			/*
 			block = new Block();
 			block.addEventListener("xChange", forwardEvent);
 			block.addEventListener("yChange", forwardEvent);
@@ -275,6 +138,7 @@ package reflex.display
 			block.addEventListener("alignChange", forwardEvent);
 			Bind.addBinding(block, "freeform", this, "freeform", true);
 			block.target = this;
+			*/
 		}
 		
 		private function onRender(event:Event):void
@@ -302,9 +166,11 @@ package reflex.display
 			var loc:int = event.location1;
 			switch (event.kind) {
 				case ListEventKind.ADD :
+					/*
 					for each (child in event.items) {
 						addChildAt(child, loc++);
-					}
+					}*/
+					reflex.display.addChildrenAt(this, event.items, loc);
 					break;
 				case ListEventKind.REMOVE :
 					for each (child in event.items) {
@@ -313,20 +179,49 @@ package reflex.display
 					break;
 				case ListEventKind.REPLACE :
 					removeChild(event.items[1]);
-					addChildAt(event.items[0], loc);
+					//addChildAt(event.items[0], loc);
+					
 					break;
 				case ListEventKind.RESET :
 					while (numChildren) {
 						removeChildAt(numChildren-1);
 					}
+					/*
 					for (var i:int = 0; i < _children.length; i++) {
 						addChildAt(_children.getItemAt(i) as DisplayObject, i);
 					}
+					*/
+					reflex.display.addChildrenAt(this, event.items, 0);
 					break;
 			}
 			invalidate(true);
 		}
 		
+		private function onMeasure(event:InvalidationEvent):void {
+			if(isNaN(measurements.expliciteWidth) || isNaN(measurements.expliciteHeight)) {
+				var items:Array = [];
+				var length:int = _children.length;
+				for(var i:int = 0; i < length; i++) {
+					items.push(_children.getItemAt(i));
+				}
+				var point:Point = layout.measure(items);
+				measurements.measuredWidth = point.x;
+				measurements.measuredHeight = point.y;
+				InvalidationEvent.invalidate(this, LAYOUT);
+			}
+		}
+		
+		private function onLayout(event:InvalidationEvent):void {
+			var items:Array = [];
+			var length:int = _children.length;
+			for(var i:int = 0; i < length; i++) {
+				items.push(_children.getItemAt(i));
+			}
+			var rectangle:Rectangle = new Rectangle(0, 0, width, height);
+			layout.update(items, rectangle);
+		}
+		
+		/*
 		private function forwardEvent(event:Event):void
 		{
 			dispatchEvent(event);
@@ -341,5 +236,6 @@ package reflex.display
 		{
 			dispatchEvent( new Event("heightChange") );
 		}
+		*/
 	}
 }

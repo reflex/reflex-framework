@@ -9,7 +9,7 @@ package reflex.components
 	import reflex.display.ScrollContainer;
 	import reflex.layout.Align;
 	import reflex.layout.Block;
-	import reflex.layout.Layout;
+	import reflex.layout.LayoutWrapper;
 	import reflex.skins.GraphicSkin;
 	import reflex.skins.ScrollBarSkin;
 
@@ -30,7 +30,7 @@ package reflex.components
 		override protected function constructChildren():void
 		{
 			container = new ScrollContainer();
-			container.dock = Align.FILL;
+			//container.dock = Align.FILL;
 			
 			var graphic:ScrollPaneGraphic = new ScrollPaneGraphic();
 			graphic.addChild(container);

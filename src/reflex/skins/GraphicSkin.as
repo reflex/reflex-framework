@@ -11,8 +11,8 @@ package reflex.skins
 	import flight.events.PropertyEvent;
 	
 	import reflex.layout.Block;
-	import reflex.layout.ILayoutAlgorithm;
-	import reflex.layout.Layout;
+	//import reflex.layout.ILayoutAlgorithm;
+	import reflex.layout.LayoutWrapper;
 	
 
 	public class GraphicSkin extends Skin
@@ -64,7 +64,7 @@ package reflex.skins
 			}
 			
 			super.target = value;
-			var targetBlock:Block = Layout.getLayout(target) as Block;
+			var targetBlock:Block = LayoutWrapper.getLayout(target) as Block;
 			if (targetBlock != null) {
 				targetBlock.defaultWidth = _graphicBlock.defaultWidth;
 				targetBlock.defaultHeight = _graphicBlock.defaultHeight;

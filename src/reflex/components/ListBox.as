@@ -22,7 +22,7 @@ package reflex.components
 		{
 		}
 		
-		override protected function init():void
+		/*override */protected function init():void
 		{
 			var listBoxSkin:ListBoxSkin = new ListBoxSkin();
 			skin = listBoxSkin;
