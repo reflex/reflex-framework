@@ -8,7 +8,7 @@ package reflex.display
 	
 	/**
 	 * Modifies common DisplayObject properties for improved usability.
-	 * For instance width & height properties will not be be affected by graphics API updates.
+	 * For instance width and height properties will not be be affected by graphics API updates.
 	 * Better naming options are welcome for this class.
 	 */
 	public class ReflexDisplay extends Sprite
