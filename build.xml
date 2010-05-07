@@ -12,15 +12,17 @@
 		<antcall target="init" />
 		<antcall target="clean" />
 		<antcall target="compile" />
-		<antcall target="test-reports" />
+		<!--<antcall target="test-reports" />-->
 		<antcall target="docs" />
 	</target>
 	
 	<target name="init">
 		<mkdir dir="${bin.dir}"/>
 		<mkdir dir="${docs.dir}"/>
+		<!--
 		<mkdir dir="${tests.dir}"/>
 		<mkdir dir="${reports.dir}"/>
+		-->
 	</target>
 	
 	<target name="clean">
@@ -31,9 +33,11 @@
 			<fileset dir="${docs.dir}" defaultexcludes="false">
 				<include name="**/*"/>
 			</fileset>
+			<!--
 			<fileset dir="${tests.dir}" defaultexcludes="false">
 				<include name="**/*"/>
 			</fileset>
+			-->
 		</delete>
 	</target>
 	
@@ -72,16 +76,6 @@
 			<library-path dir="${flex-sdk.dir}/frameworks/libs" includes="*.swc" append="true" />
 			<library-path dir="${basedir}/libs" includes="*.swc" append="true" />
 		</asdoc>
-	</target>
-	
-	<!-- Generate readable JUnit-style reports -->
-	<target name="test-reports">
-		<junitreport todir="${tests.dir}">
-			<fileset dir="${reports.dir}">
-				<include name="TEST-*.xml" />
-			</fileset>
-			<report format="frames" todir="${tests.dir}" />
-		</junitreport>
 	</target>
 	
 </project>
