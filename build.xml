@@ -9,10 +9,18 @@
 	<taskdef resource="flexTasks.tasks" classpath="${flex-sdk.dir}/ant/lib/flexTasks.jar"/>
 	
 	<target name="all">
+		<antcall target="init" />
 		<antcall target="clean" />
 		<antcall target="compile" />
-		<antcall target="test-reports"></antcall>
+		<antcall target="test-reports" />
 		<antcall target="docs" />
+	</target>
+	
+	<target name="init">
+		<mkdir dir="${bin.dir}"/>
+		<mkdir dir="${docs.dir}"/>
+		<mkdir dir="${tests.dir}"/>
+		<mkdir dir="${reports.dir}"/>
 	</target>
 	
 	<target name="clean">
