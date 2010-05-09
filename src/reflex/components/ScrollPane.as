@@ -27,6 +27,7 @@ package reflex.components
 		{
 		}
 		
+		/*
 		override protected function constructChildren():void
 		{
 			container = new ScrollContainer();
@@ -58,6 +59,6 @@ package reflex.components
 			
 			skin = new GraphicSkin(graphic);
 		}
-		
+		*/
 	}
 }

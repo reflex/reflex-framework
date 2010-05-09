@@ -9,9 +9,7 @@ package reflex.graphics
 	import flash.geom.Rectangle;
 	
 	import mx.events.PropertyChangeEvent;
-	
 	import reflex.events.InvalidationEvent;
-	import reflex.utils.GraphicsUtil;
 	
 	public class Rect implements IDrawable
 	{
@@ -62,7 +60,7 @@ package reflex.graphics
 		}
 		
 		public function render():void {
-			var graphics:Vector.<Graphics> = GraphicsUtil.resolveGraphics(target);
+			var graphics:Vector.<Graphics> = reflex.graphics.resolveGraphics(target);
 			for each(var g:Graphics in graphics) {
 				drawTo(g);
 			}

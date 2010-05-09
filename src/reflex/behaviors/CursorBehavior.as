@@ -5,7 +5,7 @@ package reflex.behaviors
 	
 	import flight.binding.Bind;
 	
-	import reflex.ui.Cursor;
+	import reflex.cursors.Cursor;
 	
 	public class CursorBehavior extends Behavior
 	{

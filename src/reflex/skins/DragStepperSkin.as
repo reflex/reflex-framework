@@ -7,7 +7,7 @@ package reflex.skins
 	import flight.position.IPosition;
 	
 	import reflex.components.DragStepperGraphic;
-	import reflex.ui.Cursor;
+	import reflex.cursors.Cursor;
 
 	public class DragStepperSkin extends GraphicSkin
 	{

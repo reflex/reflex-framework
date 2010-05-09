@@ -23,8 +23,8 @@ package reflex.skins
 	import reflex.events.InvalidationEvent;
 	import reflex.layout.LayoutWrapper;
 	import reflex.layouts.ILayout;
-	import reflex.measurement.getHeight;
-	import reflex.measurement.getWidth;
+	import reflex.measurement.resolveHeight;
+	import reflex.measurement.resolveWidth;
 	
 	/**
 	 * Skin is a convenient base class for many skins, a swappable graphical
@@ -316,7 +316,7 @@ package reflex.skins
 		
 		private function onMeasure(event:InvalidationEvent):void {
 			var target:Object = this.target as Object;
-			if(isNaN(target.measurements.expliciteWidth) || isNaN(target.measurements.expliciteHeight)) {
+			if(layout && (isNaN(target.measurements.expliciteWidth) || isNaN(target.measurements.expliciteHeight))) {
 				var items:Array = [];
 				var length:int = _children.length;
 				for(var i:int = 0; i < length; i++) {
@@ -335,7 +335,7 @@ package reflex.skins
 			for(var i:int = 0; i < length; i++) {
 				items.push(_children.getItemAt(i));
 			}
-			var rectangle:Rectangle = new Rectangle(0, 0, getWidth(target), getHeight(target));
+			var rectangle:Rectangle = new Rectangle(0, 0, resolveWidth(target), resolveHeight(target));
 			layout.update(items, rectangle);
 		}
 		

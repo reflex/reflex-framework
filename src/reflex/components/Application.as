@@ -35,8 +35,9 @@ package reflex.components
 		{
 			//block.width = stage.stageWidth;
 			//block.height = stage.stageHeight;
-			width = stage.stageWidth;
-			height = stage.stageHeight;
+			//width = stage.stageWidth;
+			//height = stage.stageHeight;
+			setSize(stage.stageWidth, stage.stageHeight);
 			stage.transform.perspectiveProjection = new PerspectiveProjection();
 		}
 	}

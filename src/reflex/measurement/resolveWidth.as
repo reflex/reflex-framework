@@ -2,7 +2,7 @@ package reflex.measurement
 {
 	import reflex.display.ReflexDisplay;
 	
-	public function getWidth(object:Object):Number
+	public function resolveWidth(object:Object):Number
 	{
 		
 		// update to interfaces later

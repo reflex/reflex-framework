@@ -1,5 +1,7 @@
 package reflex.components
 {
+	import flash.display.DisplayObject;
+	
 	import flight.events.PropertyEvent;
 	import flight.observers.PropertyChange;
 	
@@ -9,11 +11,10 @@ package reflex.components
 	import reflex.display.Container;
 	import reflex.display.ReflexDisplay;
 	import reflex.events.InvalidationEvent;
-	//import reflex.layout.ILayoutAlgorithm;
+	import reflex.measurement.resolveHeight;
+	import reflex.measurement.resolveWidth;
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
-	import reflex.measurement.getWidth;
-	import reflex.measurement.getHeight;
 	
 	
 	public class Component extends ReflexDisplay implements IBehavioral, ISkinnable
@@ -96,15 +97,10 @@ package reflex.components
 				oldValue.target = null;
 			}
 			
-			if (newValue != null) {
+			if (newValue is ISkin) {
 				newValue.target = this;
-			}
-		}
-		
-		/*override */protected function constructChildren():void
-		{
-			if (skin == null) {	// else skin was set in mxml
-				// load skin from CSS, etc
+			} else if(newValue is DisplayObject) {
+				addChild(newValue as DisplayObject);
 			}
 		}
 		

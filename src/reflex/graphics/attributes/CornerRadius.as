@@ -1,6 +1,9 @@
 package reflex.graphics.attributes
 {
-
+	
+	/**
+	 * @private
+	 **/
 	public final class CornerRadius
 	{
 		public var topLeft:Number;

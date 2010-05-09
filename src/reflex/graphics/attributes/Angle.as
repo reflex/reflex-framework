@@ -1,6 +1,7 @@
 package reflex.graphics.attributes
 {
 	/**
+	 * @private
 	 * Utility class that helps transform between degrees and radians. The
 	 * default angle is radians.
 	 */

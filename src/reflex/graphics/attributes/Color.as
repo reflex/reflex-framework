@@ -1,6 +1,7 @@
 package reflex.graphics.attributes
 {
 	/**
+	 * @private
 	 * Converts string representations of a color to the uint value.
 	 */
 	public class Color

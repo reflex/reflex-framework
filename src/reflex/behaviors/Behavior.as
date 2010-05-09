@@ -8,6 +8,9 @@ package reflex.behaviors
 	import flight.binding.Bind;
 	import flight.utils.Type;
 	
+	import reflex.metadata.resolveBindings;
+	import reflex.metadata.resolveEventListeners;
+	import reflex.metadata.resolvePropertyListeners;
 	import reflex.skins.ISkinnable;
 	
 	/**
@@ -40,9 +43,9 @@ package reflex.behaviors
 		public function Behavior(target:IEventDispatcher = null)
 		{
 			this.target = target;
-			describeBindings(this);
-			describePropertyListeners(this);
-			describeEventListeners(this);
+			reflex.metadata.resolveBindings(this);
+			reflex.metadata.resolvePropertyListeners(this);
+			reflex.metadata.resolveEventListeners(this);
 		}
 		
 		protected function getSkinPart(part:String):InteractiveObject
@@ -55,7 +58,7 @@ package reflex.behaviors
 				return null;
 			}
 		}
-		
+		/*
 		protected function bindProperty(target:String, source:String):void
 		{
 			Bind.addBinding(this, target, this, source, true);
@@ -71,7 +74,8 @@ package reflex.behaviors
 		{
 			Bind.bindEventListener(type, listener, this, target, useCapture, priority, useWeakReference);
 		}
-		
+		*/
+		/*
 		// parses [Binding(target="target.path")] metadata
 		public static function describeBindings(behavior:IBehavior):void
 		{
@@ -129,6 +133,6 @@ package reflex.behaviors
 				}
 			}
 		}
-		
+		*/
 	}
 }

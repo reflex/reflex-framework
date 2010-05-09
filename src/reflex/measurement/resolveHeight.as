@@ -2,7 +2,7 @@ package reflex.measurement
 {
 	import reflex.display.ReflexDisplay;
 	
-	public function getHeight(object:Object):Number
+	public function resolveHeight(object:Object):Number
 	{
 		
 		// update to interfaces later

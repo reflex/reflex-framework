@@ -1,7 +1,9 @@
 package reflex.graphics.attributes
 {
 	
-
+	/**
+	 * @private
+	 **/
 	public class Length
 	{
 		

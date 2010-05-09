@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 //
 ////////////////////////////////////////////////////////////////////////////////
-package reflex.ui
+package reflex.cursors
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;

@@ -21,7 +21,7 @@ package reflex.layouts
 			return point;
 		}
 		
-		public function update(children:Array, rectangle:Rectangle):void
+		override public function update(children:Array, rectangle:Rectangle):void
 		{
 			var gap:Number = 5;
 			var position:Number = gap + 500;

@@ -9,8 +9,8 @@ package reflex.layouts
 	import flight.binding.Bind;
 	
 	import reflex.events.InvalidationEvent;
-	import reflex.measurement.getHeight;
-	import reflex.measurement.getWidth;
+	import reflex.measurement.resolveHeight;
+	import reflex.measurement.resolveWidth;
 	
 	[LayoutProperty(name="x", measure="true")]
 	[LayoutProperty(name="y", measure="true")]
@@ -24,8 +24,8 @@ package reflex.layouts
 		{
 			var point:Point = new Point(0, 0);
 			for each(var item:Object in children) {
-				var xp:Number = item.x + getWidth(item);
-				var yp:Number = item.y + getHeight(item);
+				var xp:Number = item.x + resolveWidth(item);
+				var yp:Number = item.y + resolveHeight(item);
 				point.x = Math.max(point.x, xp);
 				point.y = Math.max(point.y, yp);
 			}
@@ -33,7 +33,7 @@ package reflex.layouts
 			return point;
 		}
 		
-		public function update(children:Array, rectangle:Rectangle):void
+		override public function update(children:Array, rectangle:Rectangle):void
 		{
 			attachBindings(children);
 		}

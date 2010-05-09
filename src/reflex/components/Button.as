@@ -3,6 +3,7 @@ package reflex.components
 	import reflex.behaviors.ButtonBehavior;
 	import reflex.skins.ButtonSkin;
 	
+	//[Event(type="click")]
 	public class Button extends Component
 	{
 		[Bindable]
@@ -14,15 +15,9 @@ package reflex.components
 		public function Button()
 		{
 			behaviors = new ButtonBehavior();
+			//skin = new ButtonSkin(new ButtonGraphic());
+			skin = new ButtonGraphic();
 		}
 		
-		/*override */protected function init():void
-		{
-			if (skin == null) {
-				var buttonSkin:ButtonSkin = new ButtonSkin();
-				skin = buttonSkin;
-			}
-			//behaviors = new ButtonBehavior();
-		}
 	}
 }

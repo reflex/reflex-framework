@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <componentPackage>
 	
+	<!-- components -->
+	<component id="Application" class="reflex.components.Application"/>
 	<component id="Container" class="reflex.display.Container"/>
 	<component id="ScrollContainer" class="reflex.display.ScrollContainer"/>
-	<component id="Application" class="reflex.components.Application"/>
 	<component id="Button" class="reflex.components.Button"/>
 	<component id="Component" class="reflex.components.Component"/>
 	<component id="ListBox" class="reflex.components.ListBox"/>
@@ -11,6 +12,7 @@
 	<component id="ScrollPane" class="reflex.components.ScrollPane"/>
 	<component id="Stepper" class="reflex.components.Stepper"/>
 	
+	<!-- skins -->
 	<component id="BackgroundSkin" class="reflex.skins.BackgroundSkin"/>
 	<component id="ButtonSkin" class="reflex.skins.ButtonSkin"/>
 	<component id="GraphicSkin" class="reflex.skins.GraphicSkin"/>
@@ -20,6 +22,7 @@
 	<component id="StepperSkin" class="reflex.skins.StepperSkin"/>
 	<component id="DragStepperSkin" class="reflex.skins.DragStepperSkin"/>
 	
+	<!-- behaviors -->
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
 	<component id="CursorBehavior" class="reflex.behaviors.CursorBehavior"/>
 	<component id="DragBehavior" class="reflex.behaviors.DragBehavior"/>
@@ -31,6 +34,25 @@
 	<component id="StepBehavior" class="reflex.behaviors.StepBehavior"/>
 	<component id="DragStepBehavior" class="reflex.behaviors.DragStepBehavior"/>
 	
-	<!--<component id="StyleInit" class="mx.styles.StyleManager"/>-->
+	<!-- layouts -->
+	<component id="ILayout" class="reflex.layouts.ILayout"/>
+	<component id="Layout" class="reflex.layouts.Layout"/>
+	<component id="BasicLayout" class="reflex.layouts.BasicLayout"/>
+	<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>
+	<component id="HorizontalLayout" class="reflex.layouts.HorizontalLayout"/>
+	<component id="ConstraintLayout" class="reflex.layouts.ConstraintLayout"/>
+	<component id="DockLayout" class="reflex.layouts.DockLayout"/>
+	<component id="CoverFlowLayout" class="reflex.layouts.CoverFlowLayout"/>
+	
+	<!-- measurement -->
+	<component id="Measurements" class="reflex.measurement.Measurements"/>
+	
+	<!-- graphics -->
+	<component id="IDrawable" class="reflex.graphics.IDrawable"/>
+	<component id="Rect" class="reflex.graphics.Rect"/>
+	
+	<!-- events -->
+	<component id="ButtonEvent" class="reflex.events.ButtonEvent"/>
+	<component id="InvalidationEvent" class="reflex.events.InvalidationEvent"/>
 	
 </componentPackage>
