@@ -38,10 +38,10 @@
 	<component id="ILayout" class="reflex.layouts.ILayout"/>
 	<component id="Layout" class="reflex.layouts.Layout"/>
 	<component id="BasicLayout" class="reflex.layouts.BasicLayout"/>
-	<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>
+	<!--<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>-->
 	<component id="HorizontalLayout" class="reflex.layouts.HorizontalLayout"/>
-	<component id="ConstraintLayout" class="reflex.layouts.ConstraintLayout"/>
-	<component id="DockLayout" class="reflex.layouts.DockLayout"/>
+	<!--<component id="ConstraintLayout" class="reflex.layouts.ConstraintLayout"/>-->
+	<!--<component id="DockLayout" class="reflex.layouts.DockLayout"/>-->
 	<component id="CoverFlowLayout" class="reflex.layouts.CoverFlowLayout"/>
 	
 	<!-- measurement -->
