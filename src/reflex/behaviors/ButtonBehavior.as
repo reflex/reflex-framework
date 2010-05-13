@@ -16,6 +16,9 @@ package reflex.behaviors
 	
 	[Event(name="buttonDown", type="mx.events.FlexEvent")]
 	
+	/**
+	 * @alpha
+	 */
 	public class ButtonBehavior extends Behavior implements IBehavior
 	{
 		public static const UP:String = "up";

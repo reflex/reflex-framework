@@ -3,7 +3,10 @@ package reflex.display
 	import flight.list.IList;
 	
 	import reflex.layouts.ILayout;
-
+	
+	/**
+	 * @alpha
+	 */
 	public interface IContainer
 	{
 		function get children():IList;

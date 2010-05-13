@@ -37,6 +37,7 @@ package reflex.cursors
 
 	/**
 	 * Cursor is a helper class to use custom cursors registered with it in your flash application.
+	 * @experimental
 	 */
 	public class Cursor
 	{

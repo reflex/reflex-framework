@@ -5,6 +5,9 @@ package reflex.skins
 	
 	//import reflex.layout.ILayoutAlgorithm;
 	
+	/**
+	 * @alpha
+	 **/
 	public interface ISkin
 	{
 		function get target():Sprite;				// but I prefer ISkinnable targets, they're my favorite

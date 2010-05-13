@@ -10,14 +10,13 @@ package reflex.layouts
 	import reflex.events.InvalidationEvent;
 	import reflex.measurement.resolveWidth;
 	
-	
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]
 	
 	/**
 	 * @alpha
 	 **/
-	public class HorizontalLayout extends Layout implements ILayout
+	public class VerticalLayout extends Layout implements ILayout
 	{
 		
 		[Bindable] public var gap:Number = 5;
@@ -29,8 +28,8 @@ package reflex.layouts
 			for each(var child:Object in children) {
 				var width:Number = reflex.measurement.resolveWidth(child);
 				var height:Number = reflex.measurement.resolveHeight(child);
-				point.x += width + gap;
-				point.y = Math.max(point.y, height);
+				point.x = Math.max(point.x, width);
+				point.y += height + gap;
 			}
 			return point;
 		}
@@ -38,15 +37,17 @@ package reflex.layouts
 		override public function update(children:Array, rectangle:Rectangle):void
 		{
 			super.update(children, rectangle);
-			var position:Number = gap;
-			var length:int = children.length;
-			for(var i:int = 0; i < length; i++) {
-				var child:Object = children[i];
-				var width:Number = reflex.measurement.resolveWidth(child);
-				var height:Number = reflex.measurement.resolveHeight(child);
-				child.x = position;
-				child.y = rectangle.height/2 - height/2;
-				position += width + gap;
+			if(children) {
+				var position:Number = gap;
+				var length:int = children.length;
+				for(var i:int = 0; i < length; i++) {
+					var child:Object = children[i];
+					var width:Number = reflex.measurement.resolveWidth(child);
+					var height:Number = reflex.measurement.resolveHeight(child);
+					child.x = rectangle.width/2 - width/2;
+					child.y = position;
+					position += height + gap;
+				}
 			}
 		}
 		

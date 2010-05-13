@@ -1,12 +1,13 @@
 package reflex.components
 {
+	import mx.core.IDataRenderer;
+	
 	import reflex.behaviors.ButtonBehavior;
-	import reflex.skins.ButtonSkin;
 	
 	/**
 	 * @alpha
-	 **/
-	public class Button extends Component
+	 */
+	public class ListItem extends Component implements IDataRenderer
 	{
 		[Bindable]
 		public var label:String;
@@ -14,11 +15,13 @@ package reflex.components
 		[Bindable]
 		public var selected:Boolean;
 		
-		public function Button()
+		[Bindable]
+		public var data:Object;
+		
+		public function ListItem()
 		{
 			behaviors = new ButtonBehavior();
 			skin = new ButtonGraphic();
 		}
-		
 	}
 }

@@ -18,11 +18,12 @@ package reflex.skins
 	
 	import reflex.components.IStateful;
 	import reflex.display.IContainer;
-	import reflex.display.addChildAt;
-	import reflex.display.addChildrenAt;
+	import reflex.display.ReflexDataTemplate;
+	import reflex.display.addItemsAt;
 	import reflex.events.InvalidationEvent;
 	import reflex.layout.LayoutWrapper;
 	import reflex.layouts.ILayout;
+	import reflex.measurement.IMeasurable;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	
@@ -30,9 +31,10 @@ package reflex.skins
 	 * Skin is a convenient base class for many skins, a swappable graphical
 	 * definition. Skins decorate a target Sprite by drawing on its surface,
 	 * adding children to the Sprite, or both.
+	 * @alpha
 	 */
 	[DefaultProperty("children")]
-	public class Skin extends EventDispatcher implements ISkin, IContainer, IStateful
+	public class Skin extends EventDispatcher implements ISkin, IContainer, IStateful//, IMeasurable
 	{
 		
 		static public const MEASURE:String = "measure";
@@ -41,6 +43,7 @@ package reflex.skins
 		InvalidationEvent.registerPhase(MEASURE, 0, true);
 		InvalidationEvent.registerPhase(LAYOUT, 0, true);
 		
+		private var renderers:Array = [];
 		private var _layout:ILayout;
 		
 		[Bindable(event="layoutChange")]
@@ -54,6 +57,9 @@ package reflex.skins
 				InvalidationEvent.invalidate(target, LAYOUT);
 			}
 		}
+		
+		[Bindable]
+		public var template:Object = new ReflexDataTemplate();
 		
 		private var _currentState:String; [Bindable]
 		public function get currentState():String { return _currentState; }
@@ -87,6 +93,9 @@ package reflex.skins
 			//addEventListener(LAYOUT, onLayout, false, 0, true);
 		}
 		
+		//[Bindable]
+		//public var hostComponent:Object;
+		
 		[Bindable]
 		public function get target():Sprite
 		{
@@ -98,31 +107,38 @@ package reflex.skins
 				return;
 			}
 			
+			
+			/*
 			var skinnable:IContainer;
 			if (_target != null && _target is IContainer) {
 				skinnable = _target as IContainer;
-				skinnable.children.removeEventListener(ListEvent.LIST_CHANGE, onContentChange);
+				//skinnable.children.removeEventListener(ListEvent.LIST_CHANGE, onContentChange);
 				for (var i:int = 0; i < _children.length; i++) {
 					_target.removeChild(_children.getItemAt(i) as DisplayObject);
 				}
 			}
-			
+			*/
 			var oldValue:Object = _target;
 			_target = value;
 			if(layout) {
-				layout.target = value;
+				layout.target = _target;
 			}
+			
+			if(this.hasOwnProperty('hostComponent')) {
+				this['hostComponent'] = _target;
+			}
+			
 			if (_target != null) {
+			/*
 				//var i:int;
-				/*
-				for (i = 0; i < _children.length; i++) {
-					_target.addChildAt(_children.getItemAt(i) as DisplayObject, i);
-				}*/
+				//for (i = 0; i < _children.length; i++) {
+					//_target.addChildAt(_children.getItemAt(i) as DisplayObject, i);
+				//}
 				var items:Array = [];
 				for (i = 0; i < _children.length; i++) {
 					items.push(_children.getItemAt(i));
 				}
-				reflex.display.addChildrenAt(_target, items, 0);
+				reflex.display.addItemsAt(_target, items, 0);
 				/*
 				containerPart = getSkinPart("container") as DisplayObjectContainer;
 				if (_target is IContainer && containerPart != null) {
@@ -141,13 +157,18 @@ package reflex.skins
 					}
 				}
 				*/
-				target.addEventListener("measure", onMeasure, false, 0, true);
+				target.addEventListener(MEASURE, onMeasure, false, 0, true);
+				target.addEventListener(LAYOUT, onLayout, false, 0, true);
 				InvalidationEvent.invalidate(target, MEASURE);
 				InvalidationEvent.invalidate(target, LAYOUT);
 			}
 			
 			PropertyEvent.dispatchChange(this, "target", oldValue, _target);
-			init();
+			var items:Array = [];
+			for (var i:int = 0; i < _children.length; i++) {
+				items.push(_children.getItemAt(i));
+			}
+			reset(items);
 		}
 		
 		protected function init():void
@@ -161,13 +182,31 @@ package reflex.skins
 		}
 		public function set children(value:*):void
 		{
-			if (value is DisplayObject) {
-				_children.addItem(value);
-			} else if (value is Array) {
-				_children.removeItems();
-				_children.addItems(value);
-			} else if (value is IList) {
-				_children.addItems( IList(value).getItems() );
+			if(_children == value) {
+				return;
+			}
+			
+			if(_children) {
+				_children.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			}
+			
+			if(value == null) {
+				_children = null;
+			} else if(value is IList) {
+				_children = value as IList;
+			} else if(value is Array || value is Vector) {
+				_children = new ArrayList(value);
+			} else {
+				_children = new ArrayList([value]);
+			}
+			
+			if(_children) {
+				_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+				var items:Array = [];
+				for (var i:int = 0; i < _children.length; i++) {
+					items.push(_children.getItemAt(i));
+				}
+				reset(items);
 			}
 		}
 		
@@ -185,11 +224,7 @@ package reflex.skins
 			var loc:int = event.location1;
 			switch (event.kind) {
 				case ListEventKind.ADD :
-					/*
-					for each (child in event.items) {
-						_target.addChildAt(child, loc++);
-					}*/
-					reflex.display.addChildrenAt(_target, event.items, loc++);
+					add(event.items, loc++);
 					break;
 				case ListEventKind.REMOVE :
 					for each (child in event.items) {
@@ -201,17 +236,29 @@ package reflex.skins
 					_target.addChildAt(event.items[0], loc);
 					break;
 				case ListEventKind.RESET :
-					while (_target.numChildren) {
-						_target.removeChildAt(_target.numChildren-1);
-					}/*
-					for (var i:int = 0; i < _children.length; i++) {
-						_target.addChildAt(_children.getItemAt(i) as DisplayObject, i);
-					}*/
-					reflex.display.addChildrenAt(_target, event.items, 0);
+					reset(event.items);
 					break;
 			}
 		}
 		
+		
+		private function add(items:Array, index:int):void {
+			var children:Array = reflex.display.addItemsAt(_target, items, index, template);
+			renderers.concat(children); // todo: correct ordering
+		}
+		
+		private function reset(items:Array):void {
+			if(_target) {
+				while (_target.numChildren) {
+					_target.removeChildAt(_target.numChildren-1);
+				}
+				renderers = reflex.display.addItemsAt(_target, items, 0, template); // todo: correct ordering
+				InvalidationEvent.invalidate(_target, MEASURE);
+				InvalidationEvent.invalidate(_target, LAYOUT);
+			}
+		}
+		
+		/*
 		private function onContentChange(event:ListEvent):void
 		{
 			event.stopImmediatePropagation();
@@ -254,11 +301,11 @@ package reflex.skins
 			}
 			
 			trace("invalidate");
-			/*
+			
 			var containerLayout:LayoutWrapper = LayoutWrapper.getLayout(containerPart);
 			if (containerLayout != null) {
 				containerLayout.invalidate(true);
-			}*/
+			}
 		}
 		
 		protected function addContainerChildAt(child:DisplayObject, index:int):DisplayObject
@@ -287,7 +334,7 @@ package reflex.skins
 				return containerPart.removeChild(child);
 			}
 		}
-		
+		*/
 		private function onLayoutChange(value:ILayout):void
 		{
 			if (_target == null) {
@@ -316,27 +363,36 @@ package reflex.skins
 		
 		private function onMeasure(event:InvalidationEvent):void {
 			var target:Object = this.target as Object;
-			if(layout && (isNaN(target.measurements.expliciteWidth) || isNaN(target.measurements.expliciteHeight))) {
+			if(layout && target && (isNaN(target.measurements.expliciteWidth) || isNaN(target.measurements.expliciteHeight))) {
 				var items:Array = [];
 				var length:int = _children.length;
 				for(var i:int = 0; i < length; i++) {
 					items.push(_children.getItemAt(i));
 				}
 				var point:Point = layout.measure(items);
-				target.measurements.measuredWidth = point.x;
-				target.measurements.measuredHeight = point.y;
-				InvalidationEvent.invalidate(this.target, LAYOUT);
+				// this if statement blocks an infinite loop
+				// the lifecycle should be handled better here in some way
+				if(point.x != target.measurements.measuredWidth || point.y != target.measurements.measuredHeight) {
+					target.measurements.measuredWidth = point.x;
+					target.measurements.measuredHeight = point.y;
+					target.dispatchEvent(new Event("widthChange"));
+					target.dispatchEvent(new Event("heightChange"));
+				}
+								
 			}
+			InvalidationEvent.invalidate(this.target, LAYOUT);
 		}
 		
 		private function onLayout(event:InvalidationEvent):void {
-			var items:Array = [];
-			var length:int = _children.length;
-			for(var i:int = 0; i < length; i++) {
-				items.push(_children.getItemAt(i));
+			if(layout) {
+				var items:Array = [];
+				var length:int = _children.length;
+				for(var i:int = 0; i < length; i++) {
+					items.push(_children.getItemAt(i));
+				}
+				var rectangle:Rectangle = new Rectangle(0, 0, resolveWidth(target), resolveHeight(target));
+				layout.update(items, rectangle);
 			}
-			var rectangle:Rectangle = new Rectangle(0, 0, resolveWidth(target), resolveHeight(target));
-			layout.update(items, rectangle);
 		}
 		
 	}

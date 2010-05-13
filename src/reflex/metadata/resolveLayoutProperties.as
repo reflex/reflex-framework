@@ -6,6 +6,9 @@ package reflex.metadata
 	import flight.utils.Type;
 	
 	// this method of listening for layout invalidating changes is very much experimental
+	/**
+	 * @experimental
+	 */
 	public function resolveLayoutProperties(instance:IEventDispatcher, child:IEventDispatcher, listener:Function):void
 	{
 		var desc:XML = Type.describeType(instance);

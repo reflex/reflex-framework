@@ -7,6 +7,9 @@ package reflex.skins
 	import reflex.display.IContainer;
 	//import reflex.layout.ILayoutAlgorithm;
 	
+	/**
+	 * @alpha
+	 **/
 	public interface ISkinnable
 	{
 		/*

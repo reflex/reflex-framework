@@ -4,14 +4,17 @@ package reflex.display
 	import flash.events.Event;
 	
 	import reflex.events.InvalidationEvent;
+	import reflex.measurement.IMeasurable;
+	import reflex.measurement.IMeasurements;
 	import reflex.measurement.Measurements;
 	
 	/**
 	 * Modifies common DisplayObject properties for improved usability.
 	 * For instance width and height properties will not be be affected by graphics API updates.
 	 * Better naming options are welcome for this class.
+	 * @alpha
 	 */
-	public class ReflexDisplay extends Sprite
+	public class ReflexDisplay extends Sprite implements IMeasurable
 	{
 		
 		// we might consider splitting measurement into
@@ -19,7 +22,7 @@ package reflex.display
 		
 		private var unscaledWidth:Number;
 		private var unscaledHeight:Number;
-		private var _measurements:Measurements = new Measurements();
+		private var _measurements:IMeasurements = new Measurements();
 		
 		[Bindable(event="xChange")]
 		override public function get x():Number { return super.x; }
@@ -65,8 +68,8 @@ package reflex.display
 			dispatchEvent( new Event("heightChange") );
 		}
 		
-		public function get measurements():Measurements { return _measurements; }
-		public function set measurements(value:Measurements):void {
+		public function get measurements():IMeasurements { return _measurements; }
+		public function set measurements(value:IMeasurements):void {
 			if(value != null) { // must not be null
 				_measurements = value;
 			}
@@ -74,7 +77,7 @@ package reflex.display
 		
 		/**
 		 * Sets width and height properties without effecting measurement.
-		 * Use cases include animation and tweening among other things.
+		 * Use cases include layout and animation/tweening among other things.
 		 */
 		public function setSize(width:Number, height:Number):void {
 			unscaledWidth = width / scaleX;

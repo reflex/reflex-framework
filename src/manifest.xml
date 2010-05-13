@@ -7,10 +7,11 @@
 	<component id="ScrollContainer" class="reflex.display.ScrollContainer"/>
 	<component id="Button" class="reflex.components.Button"/>
 	<component id="Component" class="reflex.components.Component"/>
-	<component id="ListBox" class="reflex.components.ListBox"/>
+	<component id="List" class="reflex.components.List"/>
 	<component id="ScrollBar" class="reflex.components.ScrollBar"/>
 	<component id="ScrollPane" class="reflex.components.ScrollPane"/>
 	<component id="Stepper" class="reflex.components.Stepper"/>
+	<component id="ImageDisplay" class="reflex.display.ImageDisplay"/>
 	
 	<!-- skins -->
 	<component id="BackgroundSkin" class="reflex.skins.BackgroundSkin"/>
@@ -37,12 +38,12 @@
 	<!-- layouts -->
 	<component id="ILayout" class="reflex.layouts.ILayout"/>
 	<component id="Layout" class="reflex.layouts.Layout"/>
+	<component id="XYLayout" class="reflex.layouts.XYLayout"/>
 	<component id="BasicLayout" class="reflex.layouts.BasicLayout"/>
-	<!--<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>-->
+	<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>
 	<component id="HorizontalLayout" class="reflex.layouts.HorizontalLayout"/>
-	<!--<component id="ConstraintLayout" class="reflex.layouts.ConstraintLayout"/>-->
-	<!--<component id="DockLayout" class="reflex.layouts.DockLayout"/>-->
-	<component id="CoverFlowLayout" class="reflex.layouts.CoverFlowLayout"/>
+	<component id="DockLayout" class="reflex.layouts.DockLayout"/>-->
+	<!--<component id="CoverFlowLayout" class="reflex.layouts.CoverFlowLayout"/>-->
 	
 	<!-- measurement -->
 	<component id="Measurements" class="reflex.measurement.Measurements"/>
@@ -54,5 +55,8 @@
 	<!-- events -->
 	<component id="ButtonEvent" class="reflex.events.ButtonEvent"/>
 	<component id="InvalidationEvent" class="reflex.events.InvalidationEvent"/>
+	
+	<!-- flex dependencies -->
+	<!-- <component id="FlexClasses" class="FlexClasses"/> -->
 	
 </componentPackage>

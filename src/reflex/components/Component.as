@@ -16,7 +16,18 @@ package reflex.components
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
 	
+	[Style(name="left")]
+	[Style(name="right")]
+	[Style(name="top")]
+	[Style(name="bottom")]
+	[Style(name="horizontalCenter")]
+	[Style(name="verticalCenter")]
+	[Style(name="dock")]
+	[Style(name="align")]
 	
+	/**
+	 * @alpha
+	 */
 	public class Component extends ReflexDisplay implements IBehavioral, ISkinnable
 	{
 		
@@ -31,6 +42,12 @@ package reflex.components
 		{
 			_behaviors = new CompositeBehavior(this);
 			PropertyChange.addObserver(this, "skin", this, setTarget);
+		}
+		
+		[Bindable] public var style:Object = new Object();
+		
+		public function setStyle(property:String, value:*):void {
+			style[property] = value;
 		}
 		
 		[Bindable]

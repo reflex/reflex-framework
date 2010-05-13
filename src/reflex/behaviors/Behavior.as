@@ -26,6 +26,7 @@ package reflex.behaviors
 	 * the component (eg ReorderTabBehavior)
 	 * 3) common addon behaviors - general solutions for all components, or all
 	 * components of a type (eg TooltipBehavior)
+	 * @alpha
 	 */
 	public class Behavior extends EventDispatcher implements IBehavior
 	{

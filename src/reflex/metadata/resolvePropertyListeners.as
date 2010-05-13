@@ -5,6 +5,9 @@ package reflex.metadata
 	import flight.binding.Bind;
 	import flight.utils.Type;
 	
+	/**
+	 * @experimental
+	 */
 	public function resolvePropertyListeners(instance:IEventDispatcher):void
 	{
 		var desc:XMLList = Type.describeMethods(instance, "PropertyListener");

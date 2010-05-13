@@ -18,145 +18,112 @@ package reflex.display
 	import reflex.layout.Block;
 	import reflex.layout.Bounds;
 	import reflex.layout.Box;
-	//import reflex.layout.ILayoutAlgorithm;
 	import reflex.layout.LayoutWrapper;
 	import reflex.layouts.ILayout;
+	import reflex.measurement.resolveHeight;
+	import reflex.measurement.resolveWidth;
 	
-	[Event(name="init", type="flash.events.Event")]
+	[Event(name="initialize", type="reflex.events.InvalidationEvent")]
 	
 	[DefaultProperty("children")]
+	
+	/**
+	 * @alpha
+	 */
 	public class Container extends ReflexDisplay implements IContainer
 	{
 		
+		static public const CREATE:String = "create";
+		static public const INITIALIZE:String = "initialize";
 		static public const MEASURE:String = "measure";
 		static public const LAYOUT:String = "layout";
 		
-		InvalidationEvent.registerPhase(MEASURE, 0, true);
-		InvalidationEvent.registerPhase(LAYOUT, 0, true);
+		InvalidationEvent.registerPhase(CREATE, 0, true);
+		InvalidationEvent.registerPhase(INITIALIZE, 1, true);
+		InvalidationEvent.registerPhase(MEASURE, 2, true);
+		InvalidationEvent.registerPhase(LAYOUT, 3, true);
 		
-		private var _children:IList = new ArrayList();
 		private var _layout:ILayout;
+		private var _template:Object = new ReflexDataTemplate();
+		private var _children:IList;
+		private var renderers:Array;
 		
 		public function Container()
 		{
-			initLayout();
-			addEventListener(Event.ADDED, onInit);
-			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			addEventListener(Event.ADDED, onAdded, false, 0, true);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 			addEventListener(LAYOUT, onLayout, false, 0, true);
 		}
 		
 		[ArrayElementType("Object")]
-		public function get children():IList
-		{
-			return _children;
-		}
+		public function get children():IList { return _children; }
 		public function set children(value:*):void
 		{
-			if (value is DisplayObject) {
-				_children.addItem(value);
-			} else if (value is Array) {
-				_children.removeItems();
-				_children.addItems(value);
-			} else if (value is IList) {
-				_children.addItems( IList(value).getItems() );
-			} else if (value is IDrawable) {
-				_children.addItem(value);
+			if(_children == value) {
+				return;
+			}
+			
+			if(_children) {
+				_children.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			}
+			
+			if(value == null) {
+				_children = null;
+			} else if(value is IList) {
+				_children = value as IList;
+			} else if(value is Array || value is Vector) {
+				_children = new ArrayList(value);
+			} else {
+				_children = new ArrayList([value]);
+			}
+			
+			if(_children) {
+				_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+				var items:Array = [];
+				for (var i:int = 0; i < _children.length; i++) {
+					items.push(_children.getItemAt(i));
+				}
+				reset(items);
 			}
 		}
-		
 		
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
 			if(_layout) { _layout.target = null; }
 			_layout = value;
-			_layout.target = this;
+			if(_layout) { _layout.target = this; }
 			InvalidationEvent.invalidate(this, MEASURE);
 			InvalidationEvent.invalidate(this, LAYOUT);
 		}
 		
-		// remove these width/height overrides when layout invalidation binding works
-		/*
-		override public function set width(value:Number):void {
-			super.width = value;
-			InvalidationEvent.invalidate(this, LAYOUT);
+		[Bindable]
+		public function get template():Object { return _template; }
+		public function set template(value:Object):void {
+			_template = value;
 		}
 		
-		override public function set height(value:Number):void {
-			super.height = value;
-			InvalidationEvent.invalidate(this, LAYOUT);
-		}
-		*/
-		public function invalidate(children:Boolean = false):void
-		{
-			// todo:invalidate layout
-			//block.invalidate(children);
+		private function onAdded(event:Event):void {
+			removeEventListener(Event.ADDED, onAdded, false);
+			InvalidationEvent.invalidate(this, CREATE);
+			InvalidationEvent.invalidate(this, INITIALIZE);
 		}
 		
-		public function validate():void
-		{
-			// todo: validate layout
-			//block.validate();
-		}
-		
-		
-		protected function draw():void
-		{
-			/*
-			graphics.clear();
-			graphics.beginFill(background);
-			graphics.drawRect(0, 0, displayWidth, displayHeight);
-			graphics.endFill();
-			*/
-		}
-		
-		protected function init():void
-		{
-		}
-		
-		protected function constructChildren():void
-		{
-		}
-		
-		protected function initLayout():void
-		{
-			/*
-			block = new Block();
-			block.addEventListener("xChange", forwardEvent);
-			block.addEventListener("yChange", forwardEvent);
-			block.addEventListener("displayWidthChange", forwardEvent);
-			block.addEventListener("displayWidthChange", onWidthChange);
-			block.addEventListener("displayHeightChange", forwardEvent);
-			block.addEventListener("displayHeightChange", onHeightChange);
-			block.addEventListener("snapToPixelChange", forwardEvent);
-			block.addEventListener("layoutChange", forwardEvent);
-			block.addEventListener("boundsChange", forwardEvent);
-			block.addEventListener("marginChange", forwardEvent);
-			block.addEventListener("paddingChange", forwardEvent);
-			block.addEventListener("dockChange", forwardEvent);
-			block.addEventListener("alignChange", forwardEvent);
-			Bind.addBinding(block, "freeform", this, "freeform", true);
-			block.target = this;
-			*/
-		}
-		
-		private function onRender(event:Event):void
-		{
-			draw();
-		}
-		
-		private function onInit(event:Event):void
-		{
-			if (event.target != this) {
-				return;
+		private function onMeasure(event:InvalidationEvent):void {
+			if(isNaN(measurements.expliciteWidth) || isNaN(measurements.expliciteHeight)) {
+				var point:Point = layout.measure(renderers);
+				measurements.measuredWidth = point.x;
+				measurements.measuredHeight = point.y;
+				InvalidationEvent.invalidate(this, LAYOUT);
 			}
-			removeEventListener(Event.ADDED, onInit);
-			
-			constructChildren();
-			init();
-			if (hasEventListener(Event.INIT)) {
-				dispatchEvent(new Event(Event.INIT));
+		}
+		
+		private function onLayout(event:InvalidationEvent):void {
+			if(layout) {
+				var width:Number = reflex.measurement.resolveWidth(this);
+				var height:Number = reflex.measurement.resolveHeight(this);
+				var rectangle:Rectangle = new Rectangle(0, 0, width, height);
+				layout.update(renderers, rectangle);
 			}
 		}
 		
@@ -166,11 +133,7 @@ package reflex.display
 			var loc:int = event.location1;
 			switch (event.kind) {
 				case ListEventKind.ADD :
-					/*
-					for each (child in event.items) {
-						addChildAt(child, loc++);
-					}*/
-					reflex.display.addChildrenAt(this, event.items, loc);
+					add(event.items, loc);
 					break;
 				case ListEventKind.REMOVE :
 					for each (child in event.items) {
@@ -180,62 +143,27 @@ package reflex.display
 				case ListEventKind.REPLACE :
 					removeChild(event.items[1]);
 					//addChildAt(event.items[0], loc);
-					
 					break;
 				case ListEventKind.RESET :
-					while (numChildren) {
-						removeChildAt(numChildren-1);
-					}
-					/*
-					for (var i:int = 0; i < _children.length; i++) {
-						addChildAt(_children.getItemAt(i) as DisplayObject, i);
-					}
-					*/
-					reflex.display.addChildrenAt(this, event.items, 0);
+					reset(event.items);
 					break;
 			}
-			invalidate(true);
+			InvalidationEvent.invalidate(this, LAYOUT);
 		}
 		
-		private function onMeasure(event:InvalidationEvent):void {
-			if(isNaN(measurements.expliciteWidth) || isNaN(measurements.expliciteHeight)) {
-				var items:Array = [];
-				var length:int = _children.length;
-				for(var i:int = 0; i < length; i++) {
-					items.push(_children.getItemAt(i));
-				}
-				var point:Point = layout.measure(items);
-				measurements.measuredWidth = point.x;
-				measurements.measuredHeight = point.y;
-				InvalidationEvent.invalidate(this, LAYOUT);
+		private function add(items:Array, index:int):void {
+			var children:Array = reflex.display.addItemsAt(this, items, index, _template);
+			renderers.concat(children); // todo: correct ordering
+		}
+		
+		private function reset(items:Array):void {
+			while (numChildren) {
+				removeChildAt(numChildren-1);
 			}
+			renderers = reflex.display.addItemsAt(this, items, 0, _template); // todo: correct ordering
+			InvalidationEvent.invalidate(this, LAYOUT);
 		}
 		
-		private function onLayout(event:InvalidationEvent):void {
-			var items:Array = [];
-			var length:int = _children.length;
-			for(var i:int = 0; i < length; i++) {
-				items.push(_children.getItemAt(i));
-			}
-			var rectangle:Rectangle = new Rectangle(0, 0, width, height);
-			layout.update(items, rectangle);
-		}
 		
-		/*
-		private function forwardEvent(event:Event):void
-		{
-			dispatchEvent(event);
-		}
-		
-		private function onWidthChange(event:Event):void
-		{
-			dispatchEvent( new Event("widthChange") );
-		}
-		
-		private function onHeightChange(event:Event):void
-		{
-			dispatchEvent( new Event("heightChange") );
-		}
-		*/
 	}
 }

@@ -1,5 +1,7 @@
 package reflex.components
 {
+	import flash.display.InteractiveObject;
+	
 	import flight.binding.Bind;
 	import flight.position.IPosition;
 	
@@ -10,21 +12,41 @@ package reflex.components
 	import reflex.layout.Align;
 	import reflex.layout.Block;
 	import reflex.layout.LayoutWrapper;
+	import reflex.measurement.resolveHeight;
 	import reflex.skins.GraphicSkin;
 	import reflex.skins.ScrollBarSkin;
-
+	
+	[DefaultProperty("container")]
 	public class ScrollPane extends Component
 	{
 		[Bindable]
-		public var hPosition:IPosition;
+		public var horizontal:IPosition;
 		
 		[Bindable]
-		public var vPosition:IPosition;
+		public var vertical:IPosition;
 		
-		public var container:ScrollContainer;
+		private var _container:InteractiveObject; [Bindable]
+		public function get container():InteractiveObject { return _container; }
+		public function set container(value:InteractiveObject):void {
+			if(_container) { this.removeChild(_container); }
+			_container = value;
+			if(_container) { this.addChild(_container); }
+		}
 		
 		public function ScrollPane()
 		{
+			Bind.addListener(this, onVerticalScroll, this, "vertical.value");
+		}
+		
+		private function onVerticalScroll(value:Object):void {
+			var height:Number = reflex.measurement.resolveHeight(this);
+			var containerHeight:Number = reflex.measurement.resolveHeight(container);
+			var potential:Number = containerHeight - height;
+			if(vertical) {
+				vertical.min = 0;
+				vertical.max = containerHeight;
+				container.y = potential * vertical.percent * -1;
+			}
 		}
 		
 		/*

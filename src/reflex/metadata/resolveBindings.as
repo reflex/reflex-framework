@@ -5,6 +5,9 @@ package reflex.metadata
 	import flight.binding.Bind;
 	import flight.utils.Type;
 	
+	/**
+	 * @experimental
+	 */
 	public function resolveBindings(instance:IEventDispatcher):void
 	{
 		var desc:XMLList = Type.describeProperties(instance, "Binding");

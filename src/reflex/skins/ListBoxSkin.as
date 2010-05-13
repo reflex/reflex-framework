@@ -17,10 +17,10 @@ package reflex.skins
 	{
 		[Bindable]
 		public var position:IPosition = new Position();
-		
+		/*
 		[Bindable]
 		public var template:Class;
-		
+		*/
 		[Bindable]
 		public var dataProvider:IList = new ArrayList();
 		
@@ -37,15 +37,15 @@ package reflex.skins
 			container = new ScrollContainer();
 			//container.dock = Align.FILL;
 			graphic.addChild(container);
-			
+			/*
 			var block:Block;
 			block = new Block(graphic.corner);
 			block.scale = true;
 			block.anchor.right = block.anchor.bottom = 0;
-			
+			*/
 			var slideBehavior:SlideBehavior;
 			var scrollBarSkin:ScrollBarSkin;
-			
+			/*
 			slideBehavior = new SlideBehavior(graphic.hScroll);
 			scrollBarSkin = new ScrollBarSkin(graphic.hScroll);
 			scrollBarSkin.target = graphic.hScroll;
@@ -65,7 +65,7 @@ package reflex.skins
 			Bind.addBinding(replicator, "template", this, "template", true);
 			Bind.addBinding(replicator, "dataProvider", this, "dataProvider", true);
 			Bind.addBinding(this, "target.children", replicator, "children");
-			Bind.addBinding(replicator, "coverageSize", container, "height");
+			Bind.addBinding(replicator, "coverageSize", container, "height");*/
 		}
 		
 	}

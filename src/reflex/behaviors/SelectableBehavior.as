@@ -5,6 +5,7 @@ package reflex.behaviors
 	
 	/**
 	 * @description Adds selection toggling functionality to the target. When clicked, the target's selected property will be flipped.
+	 * @alpha
 	 */
 	public class SelectableBehavior extends Behavior implements IBehavior
 	{

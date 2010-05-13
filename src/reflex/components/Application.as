@@ -5,14 +5,20 @@ package reflex.components
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.PerspectiveProjection;
+	import flash.geom.Point;
 	import flash.ui.ContextMenu;
 	
 	import reflex.display.Container;
+	import reflex.events.InvalidationEvent;
 	import reflex.layout.LayoutWrapper;
 	
 	//[Frame(factoryClass="reflex.tools.flashbuilder.ReflexApplicationLoader")]
 	
 	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
+	
+	/**
+	 * @alpha
+	 */
 	public class Application extends Container
 	{
 		
@@ -22,8 +28,8 @@ package reflex.components
 				return;
 			}
 			
-			contextMenu = new ContextMenu();
-			contextMenu.hideBuiltInItems();
+			//contextMenu = new ContextMenu();
+			//contextMenu.hideBuiltInItems();
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
@@ -33,12 +39,11 @@ package reflex.components
 		
 		private function onStageResize(event:Event):void
 		{
-			//block.width = stage.stageWidth;
-			//block.height = stage.stageHeight;
-			//width = stage.stageWidth;
-			//height = stage.stageHeight;
 			setSize(stage.stageWidth, stage.stageHeight);
-			stage.transform.perspectiveProjection = new PerspectiveProjection();
+			/*var perspective:PerspectiveProjection = new PerspectiveProjection();
+			perspective.projectionCenter = new Point(stage.stageWidth/2, stage.stageHeight/2);
+			stage.transform.perspectiveProjection = perspective;*/
+			InvalidationEvent.invalidate(this, MEASURE);
 		}
 	}
 }

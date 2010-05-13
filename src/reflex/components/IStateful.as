@@ -1,5 +1,9 @@
 package reflex.components
 {
+	
+	/**
+	 * @alpha
+	 */
 	public interface IStateful
 	{
 		function get states():Array;

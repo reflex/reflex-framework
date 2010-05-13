@@ -4,6 +4,9 @@ package reflex.layouts
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	/**
+	 * @alpha
+	 */
 	public interface ILayout
 	{
 		

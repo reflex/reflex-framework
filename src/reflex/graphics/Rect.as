@@ -4,18 +4,34 @@ package reflex.graphics
 	
 	import flash.display.DisplayObject;
 	import flash.display.Graphics;
+	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import mx.events.PropertyChangeEvent;
+	
 	import reflex.events.InvalidationEvent;
 	
-	public class Rect implements IDrawable
+	[Style(name="left")]
+	[Style(name="right")]
+	[Style(name="top")]
+	[Style(name="bottom")]
+	[Style(name="horizontalCenter")]
+	[Style(name="verticalCenter")]
+	[Style(name="dock")]
+	[Style(name="align")]
+	public class Rect extends EventDispatcher implements IDrawable
 	{
 		
 		[Bindable] public var x:Number = 0;
 		[Bindable] public var y:Number = 0;
+		
+		[Bindable] public var style:Object = new Object();
+		
+		public function setStyle(property:String, value:*):void {
+			style[property] = value;
+		}
 		
 		private var _width:Number = 0; [Bindable]
 		public function get width():Number { return _width; }
@@ -28,6 +44,12 @@ package reflex.graphics
 		public function get height():Number { return _height; }
 		public function set height(value:Number):void {
 			_height = value;
+			render();
+		}
+		
+		public function setSize(width:Number, height:Number):void {
+			_width = width;
+			_height = height;
 			render();
 		}
 		

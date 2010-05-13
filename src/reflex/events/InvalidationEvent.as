@@ -7,6 +7,9 @@ package reflex.events
 	import flash.utils.Dictionary;
 	import flash.utils.setTimeout;
 	
+	/**
+	 * @alpha
+	 **/
 	public class InvalidationEvent extends Event
 	{
 		public function InvalidationEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false)
