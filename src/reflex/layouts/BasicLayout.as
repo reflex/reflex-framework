@@ -36,8 +36,8 @@ package reflex.layouts
 			for each(var item:Object in children) {
 				var xp:Number = item.x + resolveWidth(item);
 				var yp:Number = item.y + resolveHeight(item);
-				point.x = Math.max(point.x, xp);
-				point.y = Math.max(point.y, yp);
+				if(!isNaN(xp)) { point.x = Math.max(point.x, xp); }
+				if(!isNaN(yp)) { point.y = Math.max(point.y, yp); }
 			}
 			return point;
 		}

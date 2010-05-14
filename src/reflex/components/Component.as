@@ -5,6 +5,8 @@ package reflex.components
 	import flight.events.PropertyEvent;
 	import flight.observers.PropertyChange;
 	
+	import mx.utils.ObjectProxy;
+	
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
@@ -44,21 +46,34 @@ package reflex.components
 			PropertyChange.addObserver(this, "skin", this, setTarget);
 		}
 		
-		[Bindable] public var style:Object = new Object();
+		[Bindable] private var _style:ObjectProxy = new ObjectProxy();
+		public function get style():Object { return _style; }
+		public function set style(value:*):void {
+			if(value is String) {
+				var token:String = value as String;
+				var assignments:Array = token.split(";");
+				for each(var assignment:String in assignments) {
+					var split:Array = assignment.split(":");
+					var property:String = split[0];
+					var v:String = split[1];
+					_style[property] = v;
+				}
+			}
+		}
 		
 		public function setStyle(property:String, value:*):void {
 			style[property] = value;
 		}
 		
 		[Bindable]
-		public function get state():String
+		public function get currentState():String
 		{
 			return _state;
 		}
-		public function set state(value:String):void
+		public function set currentState(value:String):void
 		{
 			var change:PropertyChange = PropertyChange.begin();
-			_state = change.add(this, "state", _state, value);
+			_state = change.add(this, "currentState", _state, value);
 			change.commit();
 		}
 		

@@ -1,5 +1,7 @@
 package reflex.display
 {
+	import flash.display.DisplayObject;
+	
 	import reflex.graphics.IDrawable;
 	
 	// the generic objects here are suspect, but I'm leaving them in for now.

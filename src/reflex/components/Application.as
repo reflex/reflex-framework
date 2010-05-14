@@ -13,7 +13,6 @@ package reflex.components
 	import reflex.layout.LayoutWrapper;
 	
 	//[Frame(factoryClass="reflex.tools.flashbuilder.ReflexApplicationLoader")]
-	
 	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
 	
 	/**
@@ -39,11 +38,14 @@ package reflex.components
 		
 		private function onStageResize(event:Event):void
 		{
-			setSize(stage.stageWidth, stage.stageHeight);
+			width = stage.stageWidth;
+			height = stage.stageHeight;
+			//setSize(stage.stageWidth, stage.stageHeight);
 			/*var perspective:PerspectiveProjection = new PerspectiveProjection();
 			perspective.projectionCenter = new Point(stage.stageWidth/2, stage.stageHeight/2);
 			stage.transform.perspectiveProjection = perspective;*/
-			InvalidationEvent.invalidate(this, MEASURE);
+			//InvalidationEvent.invalidate(this, MEASURE);
+			//InvalidationEvent.invalidate(this, LAYOUT);
 		}
 	}
 }

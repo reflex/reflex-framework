@@ -43,7 +43,6 @@
 	<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>
 	<component id="HorizontalLayout" class="reflex.layouts.HorizontalLayout"/>
 	<component id="DockLayout" class="reflex.layouts.DockLayout"/>-->
-	<!--<component id="CoverFlowLayout" class="reflex.layouts.CoverFlowLayout"/>-->
 	
 	<!-- measurement -->
 	<component id="Measurements" class="reflex.measurement.Measurements"/>

@@ -26,8 +26,8 @@ package reflex.behaviors
 		public static const DOWN:String = "down";
 		
 		[Bindable]
-		[Binding(target="target.state")]
-		public var state:String = UP;
+		[Binding(target="target.currentState")]
+		public var currentState:String = UP;
 		
 		public function ButtonBehavior(target:InteractiveObject = null)
 		{
@@ -55,21 +55,21 @@ package reflex.behaviors
 		[EventListener(type="stateUp", target="target")]
 		public function onStateUp(event:MouseEvent):void
 		{
-			state = UP;
+			currentState = UP;
 			event.updateAfterEvent();
 		}
 		
 		[EventListener(type="stateOver", target="target")]
 		public function onStateOver(event:MouseEvent):void
 		{
-			state = OVER;
+			currentState = OVER;
 			event.updateAfterEvent();
 		}
 		
 		[EventListener(type="stateDown", target="target")]
 		public function onStateDown(event:MouseEvent):void
 		{
-			state = DOWN;
+			currentState = DOWN;
 			event.updateAfterEvent();
 		}
 		

@@ -1,6 +1,8 @@
 package reflex.components
 {
 	import reflex.behaviors.ButtonBehavior;
+	import reflex.behaviors.MovieClipSkinBehavior;
+	import reflex.behaviors.SelectableBehavior;
 	import reflex.skins.ButtonSkin;
 	
 	/**
@@ -16,7 +18,10 @@ package reflex.components
 		
 		public function Button()
 		{
-			behaviors = new ButtonBehavior();
+			super();
+			behaviors.button = new ButtonBehavior(this);
+			behaviors.selectable = new SelectableBehavior(this);
+			behaviors.movieclip = new MovieClipSkinBehavior(this);
 			skin = new ButtonGraphic();
 		}
 		
