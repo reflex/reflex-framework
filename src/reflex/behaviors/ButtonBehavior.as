@@ -1,9 +1,10 @@
-package reflex.behaviors
+﻿package reflex.behaviors
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.InteractiveObject;
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
+	import flash.events.Event;
 	
 	import flight.binding.Bind;
 	
@@ -25,9 +26,15 @@ package reflex.behaviors
 		public static const OVER:String = "over";
 		public static const DOWN:String = "down";
 		
-		[Bindable]
+		private var _currentState:String = UP;
+		
+		[Bindable(event="currentStateChange")]
 		[Binding(target="target.currentState")]
-		public var currentState:String = UP;
+		public function get currentState():String { return _currentState; }
+		public function set currentState(value:String):void {
+			_currentState = value;
+			dispatchEvent(new Event("currentStateChange"));
+		}
 		
 		public function ButtonBehavior(target:InteractiveObject = null)
 		{

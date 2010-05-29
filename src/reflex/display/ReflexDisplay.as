@@ -1,7 +1,9 @@
-package reflex.display
+﻿package reflex.display
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	
+	import flight.events.PropertyEvent;
 	
 	import reflex.events.InvalidationEvent;
 	import reflex.measurement.IMeasurable;
@@ -20,8 +22,8 @@ package reflex.display
 		// we might consider splitting measurement into
 		// a MeasuredDisplay class later.
 		
-		private var unscaledWidth:Number;
-		private var unscaledHeight:Number;
+		private var unscaledWidth:Number = 160;
+		private var unscaledHeight:Number = 22;
 		private var _measurements:IMeasurements = new Measurements();
 		
 		[Bindable(event="xChange")]
@@ -30,8 +32,7 @@ package reflex.display
 			if (super.x == value) {
 				return;
 			}
-			super.x = value;
-			dispatchEvent( new Event("xChange") );
+			PropertyEvent.dispatchChange(this, "xChange", super.x, super.x = value);
 		}
 		
 		[Bindable(event="yChange")]
@@ -40,8 +41,7 @@ package reflex.display
 			if (super.y == value) {
 				return;
 			}
-			super.y = value;
-			dispatchEvent( new Event("yChange") );
+			PropertyEvent.dispatchChange(this, "yChange", super.y, super.y = value);
 		}
 		
 		// these width/height setters need review in regards to scaling.
@@ -68,10 +68,14 @@ package reflex.display
 			dispatchEvent( new Event("heightChange") );
 		}
 		
+		[Bindable(event="measurementsChange")]
 		public function get measurements():IMeasurements { return _measurements; }
 		public function set measurements(value:IMeasurements):void {
+			if(value == _measurements) {
+				return;
+			}
 			if(value != null) { // must not be null
-				_measurements = value;
+				PropertyEvent.dispatchChange(this, "measurementsChange", _measurements, _measurements = value);
 			}
 		}
 		

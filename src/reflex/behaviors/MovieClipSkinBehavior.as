@@ -1,9 +1,10 @@
-package reflex.behaviors
+﻿package reflex.behaviors
 {
 	import flash.display.DisplayObject;
 	import flash.display.FrameLabel;
 	import flash.display.MovieClip;
 	import flash.events.IEventDispatcher;
+	import flash.events.Event;
 	
 	[SkinState("up")]
 	[SkinState("over")]
@@ -16,9 +17,15 @@ package reflex.behaviors
 		public static const OVER:String = "over";
 		public static const DOWN:String = "down";
 		
-		[Bindable]
+		private var _currentState:String = UP;
+		
+		[Bindable(event="currentStateChange")]
 		[Binding(target="target.currentState")]
-		public var currentState:String = UP;
+		public function get currentState():String { return _currentState; }
+		public function set currentState(value:String):void {
+			_currentState = value;
+			dispatchEvent(new Event("currentStateChange"));
+		}
 		
 		[Bindable]
 		[Binding(target="target.skin")]

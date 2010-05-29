@@ -20,6 +20,7 @@ package reflex.display
 	import reflex.layout.Box;
 	import reflex.layout.LayoutWrapper;
 	import reflex.layouts.ILayout;
+	import reflex.layouts.XYLayout;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	
@@ -41,21 +42,23 @@ package reflex.display
 		InvalidationEvent.registerPhase(CREATE, 0, true);
 		InvalidationEvent.registerPhase(INITIALIZE, 1, true);
 		InvalidationEvent.registerPhase(MEASURE, 2, true);
-		InvalidationEvent.registerPhase(LAYOUT, 3, true);
+		InvalidationEvent.registerPhase(LAYOUT, 3, false);
 		
 		private var _layout:ILayout;
-		private var _template:Object = new ReflexDataTemplate();
+		private var _template:Object;
 		private var _children:IList;
 		private var renderers:Array;
 		
 		public function Container()
 		{
+			_template = new ReflexDataTemplate();
 			addEventListener(Event.ADDED, onAdded, false, 0, true);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 			addEventListener(LAYOUT, onLayout, false, 0, true);
 		}
 		
 		[ArrayElementType("Object")]
+		[Bindable(event="childrenChange")]
 		public function get children():IList { return _children; }
 		public function set children(value:*):void
 		{
@@ -85,6 +88,7 @@ package reflex.display
 				}
 				reset(items);
 			}
+			dispatchEvent( new Event("childrenChange") );
 		}
 		
 		[Bindable(event="layoutChange")]
@@ -95,12 +99,14 @@ package reflex.display
 			if(_layout) { _layout.target = this; }
 			InvalidationEvent.invalidate(this, MEASURE);
 			InvalidationEvent.invalidate(this, LAYOUT);
+			dispatchEvent( new Event("layoutChange") );
 		}
 		
-		[Bindable]
+		[Bindable(event="templateChange")]
 		public function get template():Object { return _template; }
 		public function set template(value:Object):void {
 			_template = value;
+			dispatchEvent( new Event("templateChange") );
 		}
 		
 		private function onAdded(event:Event):void {
@@ -110,7 +116,7 @@ package reflex.display
 		}
 		
 		private function onMeasure(event:InvalidationEvent):void {
-			if(isNaN(measurements.expliciteWidth) || isNaN(measurements.expliciteHeight)) {
+			if((isNaN(measurements.expliciteWidth) || isNaN(measurements.expliciteHeight)) && layout) {
 				var point:Point = layout.measure(renderers);
 				measurements.measuredWidth = point.x;
 				measurements.measuredHeight = point.y;

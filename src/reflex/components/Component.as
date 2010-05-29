@@ -1,20 +1,20 @@
-package reflex.components
+﻿package reflex.components
 {
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	
 	import flight.events.PropertyEvent;
-	import flight.observers.PropertyChange;
-	
-	import mx.utils.ObjectProxy;
 	
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
 	import reflex.display.Container;
 	import reflex.display.ReflexDisplay;
+	import reflex.display.addItem;
 	import reflex.events.InvalidationEvent;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
+	import reflex.metadata.resolveCommitProperties;
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
 	
@@ -39,14 +39,16 @@ package reflex.components
 		private var _state:String;
 		private var _skin:Object;
 		private var _behaviors:CompositeBehavior;
-		
+		private var _style:Object;
 		public function Component()
 		{
+			_style = new Object(); // need to make object props bindable - something like ObjectProxy but lighter?
 			_behaviors = new CompositeBehavior(this);
-			PropertyChange.addObserver(this, "skin", this, setTarget);
+			//PropertyChange.addObserver(this, "skin", this, setTarget);
+			reflex.metadata.resolveCommitProperties(this);
 		}
 		
-		[Bindable] private var _style:ObjectProxy = new ObjectProxy();
+		[Bindable] 
 		public function get style():Object { return _style; }
 		public function set style(value:*):void {
 			if(value is String) {
@@ -65,20 +67,23 @@ package reflex.components
 			style[property] = value;
 		}
 		
-		[Bindable]
-		public function get currentState():String
-		{
-			return _state;
-		}
+		[Bindable(event="currentStateChange")]
+		public function get currentState():String { return _state; }
 		public function set currentState(value:String):void
 		{
+			_state = value;
+			dispatchEvent(new Event("currentStateChange"));
+			/*
 			var change:PropertyChange = PropertyChange.begin();
 			_state = change.add(this, "currentState", _state, value);
 			change.commit();
+			*/
 		}
 		
 		
 		[ArrayElementType("reflex.behaviors.IBehavior")]
+		[Bindable(event="behaviorsChange")]
+		[Inspectable(name="Behaviors", type=Array)]
 		/**
 		 * A dynamic object or hash map of behavior objects. <code>behaviors</code>
 		 * is effectively read-only, but setting either an IBehavior or array of
@@ -99,41 +104,40 @@ package reflex.components
 		}
 		public function set behaviors(value:*):void
 		{
+			/*
 			var change:PropertyChange = PropertyChange.begin();
 			value = change.add(this, "behaviors", _behaviors, value);
+			*/
 			_behaviors.clear();
 			if (value is Array) {
 				_behaviors.add(value);
 			} else if (value is IBehavior) {
 				_behaviors.add([value]);
 			}
-			change.commit();
+			//change.commit();
+			dispatchEvent(new Event("behaviorsChange"));
 		}
 		
-		[Bindable]
+		[Bindable(event="skinChange")]
+		[Inspectable(name="Skin", type=Class)]
 		public function get skin():Object
 		{
 			return _skin;
 		}
 		public function set skin(value:Object):void
 		{
-			var change:PropertyChange = PropertyChange.begin();
-			_skin = change.add(this, "skin", _skin, value);
-			//setSize(getWidth(_skin), getHeight(_skin));
-			change.commit();
+			_skin = value;
+			if(_skin is ISkin) {
+				(_skin as ISkin).target = this;
+			} else if(_skin is DisplayObject) {
+				reflex.display.addItem(this, _skin);
+			}
+			dispatchEvent(new Event("skinChange"));
 		}
 		
-		protected function setTarget(oldValue:*, newValue:*):void
-		{
-			if (oldValue != null) {
-				oldValue.target = null;
-			}
+		[CommitProperties("width,height,skin")]
+		public function updateSkinSize():void {
 			
-			if (newValue is ISkin) {
-				newValue.target = this;
-			} else if(newValue is DisplayObject) {
-				addChild(newValue as DisplayObject);
-			}
 		}
 		
 	}

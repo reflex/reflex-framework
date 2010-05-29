@@ -46,6 +46,8 @@ package reflex.skins
 		private var renderers:Array = [];
 		private var _layout:ILayout;
 		
+		//
+		
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
@@ -56,6 +58,7 @@ package reflex.skins
 				InvalidationEvent.invalidate(target, MEASURE);
 				InvalidationEvent.invalidate(target, LAYOUT);
 			}
+			dispatchEvent(new Event("layoutChange"));
 		}
 		
 		[Bindable]
@@ -88,13 +91,11 @@ package reflex.skins
 			Bind.addListener(this, onLayoutChange, this, "target.layout");
 			Bind.addListener(this, onLayoutChange, this, "layout");
 			//Bind.addBinding(this, "data", this, "target.data");
-			Bind.addBinding(this, "state", this, "target.state");
+			//Bind.addBinding(this, "state", this, "target.state");
 			//addEventListener(MEASURE, onMeasure, false, 0, true);
 			//addEventListener(LAYOUT, onLayout, false, 0, true);
 		}
 		
-		//[Bindable]
-		//public var hostComponent:Object;
 		
 		[Bindable]
 		public function get target():Sprite
@@ -258,83 +259,6 @@ package reflex.skins
 			}
 		}
 		
-		/*
-		private function onContentChange(event:ListEvent):void
-		{
-			event.stopImmediatePropagation();
-			var skinnable:IContainer = _target as IContainer;
-			if (defaultContainer) {
-				defaultContainer = false;
-				Bind.addBinding(containerPart, "padding", this, "target.padding");
-				while (containerPart.numChildren) {
-					removeContainerChildAt(containerPart.numChildren-1);
-				}
-			}
-			
-			var child:DisplayObject;
-			var loc:int = event.location1;
-			switch (event.kind) {
-				case ListEventKind.ADD :
-					for each (child in event.items) {
-					//addContainerChildAt(child, loc++);
-					addChildAt(target, child, loc++);
-				}
-					break;
-				case ListEventKind.REMOVE :
-					for each (child in event.items) {
-					removeContainerChild(child);
-				}
-					break;
-				case ListEventKind.REPLACE :
-					removeContainerChild(event.items[1]);
-					addContainerChildAt(event.items[0], loc);
-					break;
-				case ListEventKind.RESET :
-					while (containerPart.numChildren) {
-						removeContainerChildAt(containerPart.numChildren-1);
-					}
-					
-					for (var i:int = 0; i < skinnable.children.length; i++) {
-						addContainerChildAt(skinnable.children.getItemAt(i) as DisplayObject, i);
-					}
-					break;
-			}
-			
-			trace("invalidate");
-			
-			var containerLayout:LayoutWrapper = LayoutWrapper.getLayout(containerPart);
-			if (containerLayout != null) {
-				containerLayout.invalidate(true);
-			}
-		}
-		
-		protected function addContainerChildAt(child:DisplayObject, index:int):DisplayObject
-		{
-			if (containerPart is IContainer) {
-				return IContainer(containerPart).children.addItemAt(child, index) as DisplayObject;
-			} else {
-				return containerPart.addChildAt(child, index);
-			}
-		}
-		
-		protected function removeContainerChildAt(index:int):DisplayObject
-		{
-			if (containerPart is IContainer) {
-				return IContainer(containerPart).children.removeItemAt(index) as DisplayObject;
-			} else {
-				return containerPart.removeChildAt(index);
-			}
-		}
-		
-		protected function removeContainerChild(child:DisplayObject):DisplayObject
-		{
-			if (containerPart is IContainer) {
-				return IContainer(containerPart).children.removeItem(child) as DisplayObject;
-			} else {
-				return containerPart.removeChild(child);
-			}
-		}
-		*/
 		private function onLayoutChange(value:ILayout):void
 		{
 			if (_target == null) {

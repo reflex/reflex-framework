@@ -55,6 +55,9 @@
 	<component id="ButtonEvent" class="reflex.events.ButtonEvent"/>
 	<component id="InvalidationEvent" class="reflex.events.InvalidationEvent"/>
 	
+	<!-- flight dependencies -->
+	<!-- <component id="ListEvent" class="flight.events.ListEvent"/> -->
+	
 	<!-- flex dependencies -->
 	<!-- <component id="FlexClasses" class="FlexClasses"/> -->
 	

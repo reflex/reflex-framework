@@ -5,7 +5,7 @@ package reflex.display
 	import flash.net.URLRequest;
 	
 	import reflex.events.InvalidationEvent;
-
+	
 	public class ImageDisplay extends ReflexDisplay
 	{
 		
@@ -16,11 +16,14 @@ package reflex.display
 		
 		private var loader:Loader;
 		
-		private var _source:Object; [Bindable]
+		private var _source:Object;
+		
+		[Bindable(event="sourceChange")]
 		public function get source():Object { return _source; }
 		public function set source(value:Object):void {
 			_source = value;
 			InvalidationEvent.invalidate(this, SOURCE_CHANGED);
+			dispatchEvent(new Event("sourceChange"));
 		}
 		
 		public function ImageDisplay()

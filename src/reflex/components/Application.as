@@ -23,6 +23,7 @@ package reflex.components
 		
 		public function Application()
 		{
+			super();
 			if (stage == null) {
 				return;
 			}
@@ -32,7 +33,6 @@ package reflex.components
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
-			
 			onStageResize(null);
 		}
 		
@@ -40,12 +40,6 @@ package reflex.components
 		{
 			width = stage.stageWidth;
 			height = stage.stageHeight;
-			//setSize(stage.stageWidth, stage.stageHeight);
-			/*var perspective:PerspectiveProjection = new PerspectiveProjection();
-			perspective.projectionCenter = new Point(stage.stageWidth/2, stage.stageHeight/2);
-			stage.transform.perspectiveProjection = perspective;*/
-			//InvalidationEvent.invalidate(this, MEASURE);
-			//InvalidationEvent.invalidate(this, LAYOUT);
 		}
 	}
 }

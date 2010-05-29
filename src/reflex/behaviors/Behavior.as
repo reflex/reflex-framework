@@ -1,9 +1,10 @@
-package reflex.behaviors
+﻿package reflex.behaviors
 {
 	
 	import flash.display.InteractiveObject;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.events.Event;
 	
 	import flight.binding.Bind;
 	import flight.utils.Type;
@@ -30,13 +31,20 @@ package reflex.behaviors
 	 */
 	public class Behavior extends EventDispatcher implements IBehavior
 	{
+		
+		private var _target:IEventDispatcher;
+		
 		/**
 		 * The object this behavior acts upon.
 		 */
-		[Bindable]
-		public var target:IEventDispatcher;
+		[Bindable(event="targetChange")]
+		public function get target():IEventDispatcher { return _target; }
+		public function set target(value:IEventDispatcher):void {
+			_target = value;
+			dispatchEvent(new Event("targetChange"));
+		}
 		
-		// TODO: add SkinParts with support for adding child behaviors to them
+		// TODO: add SkinParts with support for adding child behaviors to them // bleh?
 		// registration of Behavior instances (via styling?) for instantiation
 		// skins ability to pull behavior data for state and other use
 		// skins also need data such as labels and images? (localization?)
@@ -59,81 +67,6 @@ package reflex.behaviors
 				return null;
 			}
 		}
-		/*
-		protected function bindProperty(target:String, source:String):void
-		{
-			Bind.addBinding(this, target, this, source, true);
-		}
 		
-		protected function bindPropertyListener(target:String, listener:Function):void
-		{
-			Bind.addListener(this, listener, this, target);
-		}
-		
-		protected function bindEventListener(type:String, target:String, listener:Function,
-											 useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = true):void
-		{
-			Bind.bindEventListener(type, listener, this, target, useCapture, priority, useWeakReference);
-		}
-		*/
-		/*
-		// parses [Binding(target="target.path")] metadata
-		public static function describeBindings(behavior:IBehavior):void
-		{
-			var desc:XMLList = Type.describeProperties(behavior, "Binding");
-			
-			for each (var prop:XML in desc) {
-				var meta:XMLList = prop.metadata.(@name == "Binding");
-				
-				// to support multiple Binding metadata tags on a single property
-				for each (var tag:XML in meta) {
-					var targ:String = ( tag.arg.(@key == "target").length() > 0 ) ?
-										tag.arg.(@key == "target").@value :
-										tag.arg.@value;
-					
-					Bind.addBinding(behavior, targ, behavior, prop.@name, true);
-				}
-			}
-		}
-		
-		// parses [PropertyListener(target="target.path)] metadata
-		public static function describePropertyListeners(behavior:IBehavior):void
-		{
-			var desc:XMLList = Type.describeMethods(behavior, "PropertyListener");
-			
-			for each (var meth:XML in desc) {
-				var meta:XMLList = meth.metadata.(@name == "PropertyListener");
-				
-				// to support multiple PropertyListener metadata tags on a single method
-				for each (var tag:XML in meta) {
-					var targ:String = ( tag.arg.(@key == "target").length() > 0 ) ?
-										tag.arg.(@key == "target").@value :
-										tag.arg.@value;
-					
-					Bind.addListener(behavior as IEventDispatcher, behavior[meth.@name], behavior, targ);
-				}
-			}
-		}
-		
-		// parses [EventListener(type="eventType", target="target.path")] metadata
-		public static function describeEventListeners(behavior:IBehavior):void
-		{
-			var desc:XMLList = Type.describeMethods(behavior, "EventListener");
-			
-			for each (var meth:XML in desc) {
-				var meta:XMLList = meth.metadata.(@name == "EventListener");
-				
-				// to support multiple EventListener metadata tags on a single method
-				for each (var tag:XML in meta) {
-					var type:String = ( tag.arg.(@key == "type").length() > 0 ) ?
-										tag.arg.(@key == "type").@value :
-										tag.arg.@value;
-					var targ:String = tag.arg.(@key == "target").@value;
-					
-					Bind.bindEventListener(type, behavior[meth.@name], behavior, targ);
-				}
-			}
-		}
-		*/
 	}
 }

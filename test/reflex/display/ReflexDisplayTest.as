@@ -1,8 +1,11 @@
 package reflex.display
 {
 	import flash.events.Event;
+	
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
+	
+	import reflex.measurement.Measurements;
 	
 	public class ReflexDisplayTest
 	{
@@ -37,6 +40,14 @@ package reflex.display
 			var display:ReflexDisplay = new ReflexDisplay();
 			display.addEventListener("heightChange", listener, false, 0, false);
 			display.height += 100;
+		}
+		
+		[Test(async)]
+		public function testMeasurementsChange():void {
+			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "measurementsChange", timeoutHandler);
+			var display:ReflexDisplay = new ReflexDisplay();
+			display.addEventListener("measurementsChange", listener, false, 0, false);
+			display.measurements = new Measurements();
 		}
 		
 		private function changeHandler(event:Event, type:String):void {
