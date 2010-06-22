@@ -1,15 +1,9 @@
 package reflex.layouts
 {
-	import flash.display.DisplayObject;
-	import flash.events.Event;
-	import flash.events.IEventDispatcher;
+	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
-	import flight.binding.Bind;
-	
 	import reflex.styles.resolveStyle;
-	import reflex.events.InvalidationEvent;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
@@ -46,14 +40,14 @@ package reflex.layouts
 		{
 			super.update(children, rectangle);
 			for each(var child:Object in children) {
-				var width:Number = reflex.measurement.resolveWidth(child);
-				var height:Number = reflex.measurement.resolveHeight(child);
-				var left:Number = reflex.styles.resolveStyle(child, "left") as Number;
-				var right:Number = reflex.styles.resolveStyle(child, "right") as Number;
-				var top:Number = reflex.styles.resolveStyle(child, "top") as Number;
-				var bottom:Number = reflex.styles.resolveStyle(child, "bottom") as Number;
-				var horizontalCenter:Number = reflex.styles.resolveStyle(child, "horizontalCenter") as Number;
-				var verticalCenter:Number = reflex.styles.resolveStyle(child, "verticalCenter") as Number;
+				var width:Number = resolveWidth(child);
+				var height:Number = resolveHeight(child);
+				var left:Number = resolveStyle(child, "left") as Number;
+				var right:Number = resolveStyle(child, "right") as Number;
+				var top:Number = resolveStyle(child, "top") as Number;
+				var bottom:Number = resolveStyle(child, "bottom") as Number;
+				var horizontalCenter:Number = resolveStyle(child, "horizontalCenter") as Number;
+				var verticalCenter:Number = resolveStyle(child, "verticalCenter") as Number;
 				
 				if(hasStyle(child, "left") && hasStyle(child, "right")) {
 					child.x = left;

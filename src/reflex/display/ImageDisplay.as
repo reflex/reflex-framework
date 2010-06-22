@@ -1,5 +1,6 @@
 package reflex.display
 {
+	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.net.URLRequest;
@@ -34,10 +35,18 @@ package reflex.display
 		}
 		
 		private function onSourceChanged(event:InvalidationEvent):void {
-			var request:URLRequest = new URLRequest(source as String);
-			loader = new Loader();
-			loader.load(request);
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete, false, 0, true);
+			if(source is String) {
+				var request:URLRequest = new URLRequest(source as String);
+				loader = new Loader();
+				loader.load(request);
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete, false, 0, true);
+			} else if(source is Class) {
+				var display:Bitmap = new (source as Class)();
+				measurements.measuredWidth = display.width;
+				measurements.measuredHeight = display.height;
+				setSize(measurements.measuredWidth, measurements.measuredHeight);
+				addChild(display);
+			}
 		}
 		
 		private function onComplete(event:Event):void {

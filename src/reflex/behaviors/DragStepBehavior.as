@@ -1,14 +1,10 @@
 package reflex.behaviors
 {
-	import flash.display.InteractiveObject;
-	import flash.display.MovieClip;
+	
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
-	
-	import flight.binding.Bind;
 	import flight.position.IPosition;
 	import flight.position.Position;
-	
 	import reflex.events.ButtonEvent;
 	
 	public class DragStepBehavior extends Behavior

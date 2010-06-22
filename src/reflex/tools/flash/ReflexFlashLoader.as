@@ -96,16 +96,20 @@ package reflex.tools.flash
     
     override public function nextFrame():void
     {
-      if(root === this)
-        return super.nextFrame();
+      if(root === this) {
+      	super.nextFrame();
+        return;
+      }
       
       MovieClip(root).nextFrame();
     }
     
     override public function stop():void
     {
-      if(root === this)
-        return super.stop();
+      if(root === this) {
+      	super.stop();
+        return;
+      }
       
       MovieClip(root).stop();
     }

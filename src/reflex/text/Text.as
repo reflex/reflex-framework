@@ -1,20 +1,13 @@
 package reflex.text
 {
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.geom.Rectangle;
 	import flash.text.AntiAliasType;
-	import flash.text.TextExtent;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
-	
 	import flight.binding.Bind;
 	import flight.observers.PropertyChange;
-	
-	import mx.events.ScrollEvent;
-	
 	import reflex.events.InvalidationEvent;
 	import reflex.layout.Block;
 	import reflex.layout.Bounds;
@@ -204,7 +197,7 @@ package reflex.text
 		
 		public function get italic():Boolean
 		{
-			return format.italic;
+			return Boolean(format.italic);
 		}
 		
 		public function set italic(value:Boolean):void
@@ -217,7 +210,7 @@ package reflex.text
 		
 		public function get underline():Boolean
 		{
-			return format.underline;
+			return Boolean(format.underline);
 		}
 		
 		public function set underline(value:Boolean):void

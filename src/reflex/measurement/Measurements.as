@@ -1,6 +1,9 @@
 package reflex.measurement
 {
 	
+	// might break this up to multiples later
+	// ie. measured.height, explicite.minWidth, etc
+	
 	/**
 	 * @alpha
 	 */
@@ -14,6 +17,7 @@ package reflex.measurement
 		private var _measuredHeight:Number;
 		
 		// todo: update for defined events
+		// should these even be bindable?
 		
 		[Bindable] public var minWidth:Number;
 		[Bindable] public var minHeight:Number;

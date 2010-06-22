@@ -2,6 +2,8 @@ package reflex.display
 {
 	import flash.events.Event;
 	
+	import flight.events.PropertyEvent;
+	
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
 	
@@ -12,7 +14,7 @@ package reflex.display
 		
 		[Test(async)]
 		public function testXChange():void {
-			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "xChange", timeoutHandler);
+			var listener:Function = Async.asyncHandler(this, changeHandler, 1000, "xChange", timeoutHandler);
 			var display:ReflexDisplay = new ReflexDisplay();
 			display.addEventListener("xChange", listener, false, 0, false);
 			display.x += 100;
@@ -50,7 +52,7 @@ package reflex.display
 			display.measurements = new Measurements();
 		}
 		
-		private function changeHandler(event:Event, type:String):void {
+		private function changeHandler(event:PropertyEvent, type:String):void {
 			Assert.assertEquals(event.type, type);
 		}
 		

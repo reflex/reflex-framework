@@ -1,17 +1,12 @@
 package reflex.graphics
 {
-	import __AS3__.vec.Vector;
 	
-	import flash.display.DisplayObject;
 	import flash.display.Graphics;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
 	import mx.events.PropertyChangeEvent;
-	
-	import reflex.events.InvalidationEvent;
 	
 	[Style(name="left")]
 	[Style(name="right")]

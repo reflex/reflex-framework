@@ -1,12 +1,9 @@
 package reflex.components
 {
 	import flight.position.IPosition;
-	
 	import legato.components.ScrollBarGraphic;
-	
 	import reflex.behaviors.SlideBehavior;
 	import reflex.behaviors.StepBehavior;
-	import reflex.skins.ScrollBarSkin;
 	
 	public class ScrollBar extends Component
 	{

@@ -24,8 +24,14 @@ package reflex.layouts
 	{
 		
 		private var attached:Dictionary = new Dictionary(true);
+		private var _target:IEventDispatcher;
 		
-		[Bindable] public var target:IEventDispatcher;
+		[Bindable]
+		public function get target():IEventDispatcher { return _target; }
+		public function set target(value:IEventDispatcher):void
+		{
+			_target = value;
+		}
 		
 		public function Layout() {
 			reflex.metadata.resolveBindings(this);

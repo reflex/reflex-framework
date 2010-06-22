@@ -3,17 +3,14 @@
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import flight.events.PropertyEvent;
-	
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
-	import reflex.display.Container;
 	import reflex.display.ReflexDisplay;
 	import reflex.display.addItem;
 	import reflex.events.InvalidationEvent;
-	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
+	import reflex.measurement.setSize;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
@@ -40,12 +37,14 @@
 		private var _skin:Object;
 		private var _behaviors:CompositeBehavior;
 		private var _style:Object;
+		
 		public function Component()
 		{
 			_style = new Object(); // need to make object props bindable - something like ObjectProxy but lighter?
 			_behaviors = new CompositeBehavior(this);
 			//PropertyChange.addObserver(this, "skin", this, setTarget);
 			reflex.metadata.resolveCommitProperties(this);
+			addEventListener(MEASURE, onMeasure, false, 0, true);
 		}
 		
 		[Bindable] 
@@ -132,12 +131,38 @@
 			} else if(_skin is DisplayObject) {
 				reflex.display.addItem(this, _skin);
 			}
+			reflex.measurement.setSize(skin, width, height);
 			dispatchEvent(new Event("skinChange"));
+			InvalidationEvent.invalidate(this, MEASURE);
 		}
 		
 		[CommitProperties("width,height,skin")]
 		public function updateSkinSize():void {
 			
+		}
+		
+		// needs more thought
+		
+		override public function set width(value:Number):void {
+			super.width = value;
+			reflex.measurement.setSize(skin, value, height);
+		}
+		
+		override public function set height(value:Number):void {
+			super.height = value;
+			reflex.measurement.setSize(skin, width, value);
+		}
+		
+		override public function setSize(width:Number, height:Number):void {
+			super.setSize(width, height);
+			reflex.measurement.setSize(skin, width, height);
+		}
+		
+		private function onMeasure(event:InvalidationEvent):void {
+			if((isNaN(measurements.expliciteWidth) || isNaN(measurements.expliciteHeight)) && skin) {
+				measurements.measuredWidth = reflex.measurement.resolveWidth(skin); // explicite width of skin becomes measured width of component
+				measurements.measuredHeight = reflex.measurement.resolveHeight(skin); // explicite height of skin becomes measured height of component
+			}
 		}
 		
 	}

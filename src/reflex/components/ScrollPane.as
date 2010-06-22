@@ -1,20 +1,10 @@
 package reflex.components
 {
-	import flash.display.InteractiveObject;
 	
+	import flash.display.InteractiveObject;
 	import flight.binding.Bind;
 	import flight.position.IPosition;
-	
-	import mx.core.Container;
-	
-	import reflex.behaviors.SlideBehavior;
-	import reflex.display.ScrollContainer;
-	import reflex.layout.Align;
-	import reflex.layout.Block;
-	import reflex.layout.LayoutWrapper;
 	import reflex.measurement.resolveHeight;
-	import reflex.skins.GraphicSkin;
-	import reflex.skins.ScrollBarSkin;
 	
 	[DefaultProperty("container")]
 	public class ScrollPane extends Component

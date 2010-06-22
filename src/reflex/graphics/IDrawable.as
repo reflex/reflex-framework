@@ -1,6 +1,5 @@
 package reflex.graphics
 {
-	import flash.display.Graphics;
 	
 	public interface IDrawable
 	{

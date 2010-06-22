@@ -7,21 +7,29 @@ package reflex.components
 	/**
 	 * @alpha
 	 */
-	public class ListItem extends Component implements IDataRenderer
+	public class ListItem extends Button implements IDataRenderer
 	{
+		
+		private var _data:Object;
+		/*
 		[Bindable]
 		public var label:String;
 		
 		[Bindable]
 		public var selected:Boolean;
-		
+		*/
 		[Bindable]
-		public var data:Object;
+		public function get data():Object { return _data; }
+		public function set data(value:Object):void
+		{
+			_data = value;		
+		}
 		
 		public function ListItem()
 		{
-			behaviors = new ButtonBehavior();
-			skin = new ButtonGraphic();
+			super();
+			//behaviors = new ButtonBehavior();
+			//skin = new ButtonGraphic();
 		}
 	}
 }

@@ -51,7 +51,7 @@ package reflex.layout
 			_margin.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
 			_padding.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
 			_anchor.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
-			bounds.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
+			//bounds.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onObjectChange);
 			_anchor.horizontal = _anchor.vertical = NaN;
 			algorithm = new Dock();
 		}

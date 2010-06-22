@@ -9,6 +9,10 @@
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurements;
 	import reflex.measurement.Measurements;
+	import reflex.measurement.resolveHeight;
+	import reflex.measurement.resolveWidth;
+	
+	import mx.containers.Canvas;
 	
 	/**
 	 * Modifies common DisplayObject properties for improved usability.
@@ -22,8 +26,9 @@
 		// we might consider splitting measurement into
 		// a MeasuredDisplay class later.
 		
-		private var unscaledWidth:Number = 160;
-		private var unscaledHeight:Number = 22;
+		protected var unscaledWidth:Number = 160;
+		protected var unscaledHeight:Number = 22;
+		
 		private var _measurements:IMeasurements = new Measurements();
 		
 		[Bindable(event="xChange")]
@@ -32,7 +37,7 @@
 			if (super.x == value) {
 				return;
 			}
-			PropertyEvent.dispatchChange(this, "xChange", super.x, super.x = value);
+			PropertyEvent.dispatchChange(this, "x", super.x, super.x = value);
 		}
 		
 		[Bindable(event="yChange")]
@@ -41,53 +46,72 @@
 			if (super.y == value) {
 				return;
 			}
-			PropertyEvent.dispatchChange(this, "yChange", super.y, super.y = value);
+			PropertyEvent.dispatchChange(this, "y", super.y, super.y = value);
 		}
 		
 		// these width/height setters need review in regards to scaling.
 		// I think I would perfer following Flex's lead here.
 		
 		[Bindable(event="widthChange")]
-		override public function get width():Number {
-			return unscaledWidth * scaleX;
-		}
+		override public function get width():Number { return unscaledWidth; }
 		override public function set width(value:Number):void {
-			unscaledWidth = value / scaleX;
-			_measurements.expliciteWidth = unscaledWidth;
-			dispatchEvent( new Event("widthChange") );
+			if(unscaledWidth == value) {
+				return;
+			}
+			_measurements.expliciteWidth = value;
+			PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = value);
 		}
 		
 		
 		[Bindable(event="heightChange")]
-		override public function get height():Number {
-			return unscaledHeight * scaleY;
-		}
+		override public function get height():Number { return unscaledHeight; }
 		override public function set height(value:Number):void {
-			unscaledHeight = value / scaleY;
-			_measurements.expliciteHeight = unscaledHeight;
-			dispatchEvent( new Event("heightChange") );
+			if(unscaledHeight == value) {
+				return;
+			}
+			_measurements.expliciteHeight = value;
+			PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = value);
 		}
 		
+		/*
+		[Bindable(event="widthChange")]
+		public function set actualWidth(value:Number):void {
+			if(unscaledWidth == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "widthChange", unscaledWidth, unscaledWidth = value);
+		}
+		
+		[Bindable(event="heightChange")]
+		public function set actualHeight(value:Number):void {
+			if(unscaledHeight == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "heightChange", unscaledHeight, unscaledHeight = value);
+		}
+		*/
 		[Bindable(event="measurementsChange")]
 		public function get measurements():IMeasurements { return _measurements; }
 		public function set measurements(value:IMeasurements):void {
-			if(value == _measurements) {
+			if(_measurements == value) {
 				return;
 			}
 			if(value != null) { // must not be null
-				PropertyEvent.dispatchChange(this, "measurementsChange", _measurements, _measurements = value);
+				PropertyEvent.dispatchChange(this, "measurements", _measurements, _measurements = value);
 			}
 		}
+		
+		// design work
 		
 		/**
 		 * Sets width and height properties without effecting measurement.
 		 * Use cases include layout and animation/tweening among other things.
 		 */
 		public function setSize(width:Number, height:Number):void {
-			unscaledWidth = width / scaleX;
-			unscaledHeight = height / scaleY;
-			dispatchEvent( new Event("widthChange") );
-			dispatchEvent( new Event("heightChange") );
+			//unscaledWidth = width;
+			//unscaledHeight = height;
+			PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = width);
+			PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = height);
 		}
 		
 	}

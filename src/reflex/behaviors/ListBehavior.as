@@ -2,9 +2,6 @@ package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
 	import flash.events.IEventDispatcher;
-	
-	import reflex.skins.ISkin;
-	import reflex.skins.ISkinnable;
 
 	public class ListBehavior extends Behavior
 	{

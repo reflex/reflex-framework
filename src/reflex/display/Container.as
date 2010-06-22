@@ -24,6 +24,15 @@ package reflex.display
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	
+	[Style(name="left")]
+	[Style(name="right")]
+	[Style(name="top")]
+	[Style(name="bottom")]
+	[Style(name="horizontalCenter")]
+	[Style(name="verticalCenter")]
+	[Style(name="dock")]
+	[Style(name="align")]
+	
 	[Event(name="initialize", type="reflex.events.InvalidationEvent")]
 	
 	[DefaultProperty("children")]
@@ -47,14 +56,83 @@ package reflex.display
 		private var _layout:ILayout;
 		private var _template:Object;
 		private var _children:IList;
-		private var renderers:Array;
+		public var renderers:Array;
+		private var _style:Object;
 		
 		public function Container()
 		{
-			_template = new ReflexDataTemplate();
+			if(_template == null) {
+				_template = new ReflexDataTemplate();
+			}
+			if(_layout == null) {
+				//_layout = new XYLayout();
+			}
+			_style = new Object();
 			addEventListener(Event.ADDED, onAdded, false, 0, true);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 			addEventListener(LAYOUT, onLayout, false, 0, true);
+			addEventListener("widthChange", onSizeChange, false, 0, true);
+			addEventListener("heightChange", onSizeChange, false, 0, true);
+		}
+		
+		// width/height invalidation needs some thought
+		
+		private function onSizeChange(event:Event):void {
+			InvalidationEvent.invalidate(this, LAYOUT);
+		}
+		/*
+		override public function set width(value:Number):void {
+			if(value != width) {
+				super.width = value;
+				InvalidationEvent.invalidate(this, LAYOUT);
+			}
+		}
+		
+		override public function set height(value:Number):void {
+			if(value != height) {
+				super.height = value;
+				InvalidationEvent.invalidate(this, LAYOUT);
+			}
+		}
+		
+		override public function set actualWidth(value:Number):void {
+			if(value != width) {
+				super.actualWidth = value;
+				InvalidationEvent.invalidate(this, LAYOUT);
+			}
+		}
+		
+		override public function set actualHeight(value:Number):void {
+			if(value != height) {
+				super.actualHeight = value;
+				InvalidationEvent.invalidate(this, LAYOUT);
+			}
+		}
+		
+		override public function setSize(width:Number, height:Number):void {
+			if(width != this.width || height != this.height) {
+				super.setSize(width, height);
+				InvalidationEvent.invalidate(this, LAYOUT);
+			}
+		}
+		*/
+		[Bindable] 
+		public function get style():Object { return _style; }
+		public function set style(value:*):void {
+			if(value is String) {
+				var token:String = value as String;
+				var assignments:Array = token.split(";");
+				for each(var assignment:String in assignments) {
+					var split:Array = assignment.split(":");
+					var property:String = split[0];
+					var v:String = split[1];
+					_style[property] = v;
+				}
+			}
+		}
+		
+		public function setStyle(property:String, value:*):void {
+			style[property] = value;
 		}
 		
 		[ArrayElementType("Object")]
@@ -89,6 +167,8 @@ package reflex.display
 				reset(items);
 			}
 			dispatchEvent( new Event("childrenChange") );
+			InvalidationEvent.invalidate(this, MEASURE);
+			InvalidationEvent.invalidate(this, LAYOUT);
 		}
 		
 		[Bindable(event="layoutChange")]
@@ -106,7 +186,18 @@ package reflex.display
 		public function get template():Object { return _template; }
 		public function set template(value:Object):void {
 			_template = value;
+			if(children != null) {
+				var items:Array = [];
+				var length:int = children.length;
+				for(var i:int = 0; i < length; i++) {
+					var child:Object = children.getItemAt(i);
+					items.push(child);
+				}
+				reset(items);
+			}
 			dispatchEvent( new Event("templateChange") );
+			InvalidationEvent.invalidate(this, MEASURE);
+			InvalidationEvent.invalidate(this, LAYOUT);
 		}
 		
 		private function onAdded(event:Event):void {
@@ -120,15 +211,14 @@ package reflex.display
 				var point:Point = layout.measure(renderers);
 				measurements.measuredWidth = point.x;
 				measurements.measuredHeight = point.y;
-				InvalidationEvent.invalidate(this, LAYOUT);
 			}
 		}
 		
 		private function onLayout(event:InvalidationEvent):void {
 			if(layout) {
-				var width:Number = reflex.measurement.resolveWidth(this);
-				var height:Number = reflex.measurement.resolveHeight(this);
-				var rectangle:Rectangle = new Rectangle(0, 0, width, height);
+				//var width:Number = reflex.measurement.resolveWidth(this);
+				//var height:Number = reflex.measurement.resolveHeight(this);
+				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);
 				layout.update(renderers, rectangle);
 			}
 		}

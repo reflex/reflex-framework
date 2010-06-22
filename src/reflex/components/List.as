@@ -25,9 +25,15 @@ package reflex.components
 		
 		public function List()
 		{
-			skin = new ListSkin();
-			layout = new VerticalLayout();
-			template = Button;
+			if(skin == null) {
+				skin = new ListSkin();
+			}
+			if(layout == null) {
+				layout = new VerticalLayout();
+			}
+			if(template == null) {
+				template = Button;
+			}
 		}
 		/*
 		protected function init():void

@@ -30,17 +30,38 @@ package reflex.layout
 		private static var measurePhase:Boolean = InvalidationEvent.registerPhase(MEASURE, 0x80, false);
 		private static var layoutPhase:Boolean = InvalidationEvent.registerPhase(LAYOUT, 0x40, true);
 		
-		[Bindable]
-		public var freeform:Boolean = false;
+		private var _freeform:Boolean;
+		private var _algorithm:ILayoutAlgorithm;
+		private var _shift:Number = 0;
+		private var _shiftSize:Number = 0;
 		
 		[Bindable]
-		public var algorithm:ILayoutAlgorithm;
+		public function get freeform():Boolean { return _freeform; }
+		public function set freeform(value:Boolean):void
+		{
+			_freeform = value;
+		}
 		
 		[Bindable]
-		public var shift:Number = 0;
+		public function get algorithm():ILayoutAlgorithm { return _algorithm; }
+		public function set algorithm(value:ILayoutAlgorithm):void
+		{
+			_algorithm = value;
+		}
 		
 		[Bindable]
-		public var shiftSize:Number = 0;
+		public function get shift():Number { return _shift; }
+		public function set shift(value:Number):void
+		{
+			_shift = value;
+		}
+		
+		[Bindable]
+		public function get shiftSize():Number { return _shiftSize; }
+		public function set shiftSize(value:Number):void
+		{
+			_shiftSize = value;
+		}
 		
 		protected var dispatcher:IEventDispatcher;
 		
@@ -195,5 +216,6 @@ package reflex.layout
 			}
 			return false;
 		}
+		
 	}
 }

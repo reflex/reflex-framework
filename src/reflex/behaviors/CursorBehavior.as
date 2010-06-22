@@ -1,8 +1,7 @@
 package reflex.behaviors
 {
-	import flash.display.DisplayObject;
+	import flash.events.IEventDispatcher;
 	import flash.display.InteractiveObject;
-	
 	import flight.binding.Bind;
 	
 	import reflex.cursors.Cursor;

@@ -47,6 +47,10 @@ package reflex.events
 		
 		public static function invalidate(display:DisplayObject, type:String):void
 		{
+			if(display == null) {
+				return;
+			}
+			
 			if (phaseIndex[type] == null) {
 				throw new Error("DisplayObject cannot be invalidated in unknown phase '" + type + "'.");
 			}

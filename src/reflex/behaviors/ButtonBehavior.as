@@ -5,11 +5,7 @@
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.events.Event;
-	
-	import flight.binding.Bind;
-	
 	import reflex.events.ButtonEvent;
-	import reflex.skins.ISkinnable;
 	
 	[SkinState("up")]
 	[SkinState("over")]

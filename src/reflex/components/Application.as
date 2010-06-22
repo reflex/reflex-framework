@@ -1,16 +1,10 @@
 package reflex.components
 {
+	
 	import flash.display.StageAlign;
-	import flash.display.StageQuality;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import flash.geom.PerspectiveProjection;
-	import flash.geom.Point;
-	import flash.ui.ContextMenu;
-	
 	import reflex.display.Container;
-	import reflex.events.InvalidationEvent;
-	import reflex.layout.LayoutWrapper;
 	
 	//[Frame(factoryClass="reflex.tools.flashbuilder.ReflexApplicationLoader")]
 	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]

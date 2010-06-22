@@ -5,10 +5,6 @@
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.events.Event;
-	
-	import flight.binding.Bind;
-	import flight.utils.Type;
-	
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveEventListeners;
 	import reflex.metadata.resolvePropertyListeners;

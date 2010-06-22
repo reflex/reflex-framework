@@ -39,11 +39,12 @@ package reflex.layouts
 		
 		override public function update(children:Array, rectangle:Rectangle):void
 		{
-			attachBindings(children);
+			//attachBindings(children);
 		}
 		
 		// update this for correct binding
 		// find the easiest Flash/AS3 option (add metadata functionality as well)
+		/*
 		private function attachBindings(children:Array):void {
 			for each(var child:IEventDispatcher in children) {
 				Bind.addListener(child, onInvalidateMeasure, child, "x");
@@ -60,6 +61,6 @@ package reflex.layouts
 				InvalidationEvent.invalidate(target as DisplayObject, "measure");
 			}
 		}
-		
+		*/
 	}
 }
