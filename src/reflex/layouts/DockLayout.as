@@ -7,18 +7,25 @@ package reflex.layouts
 	
 	import flight.binding.Bind;
 	
-	import reflex.styles.hasStyle;
-	import reflex.styles.resolveStyle;
 	import reflex.events.InvalidationEvent;
-	import reflex.layout.Align;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
+	import reflex.styles.hasStyle;
+	import reflex.styles.resolveStyle;
 	
 	[LayoutProperty(name="style.dock", measure="true")]
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]
 	public class DockLayout extends Layout implements ILayout
 	{
+		
+		static public const NONE:String = null;
+		static public const LEFT:String = "left";
+		static public const RIGHT:String = "right";
+		static public const TOP:String = "top";
+		static public const BOTTOM:String = "bottom";
+		static public const FILL:String = "fill";
+		static public const CENTER:String = "center";
 		
 		override public function measure(children:Array):Point
 		{
@@ -42,51 +49,51 @@ package reflex.layouts
 				var child:Object = children[i];
 				var width:Number = reflex.measurement.resolveWidth(child);
 				var height:Number = reflex.measurement.resolveHeight(child);
-				var dock:String = reflex.styles.resolveStyle(child, "dock", null, Align.NONE) as String;
-				var align:String = reflex.styles.resolveStyle(child, "align", null, Align.NONE) as String;
+				var dock:String = reflex.styles.resolveStyle(child, "dock", null, NONE) as String;
+				var align:String = reflex.styles.resolveStyle(child, "align", null, NONE) as String;
 				switch (dock) {
-					case Align.LEFT :
+					case LEFT :
 						child.x = rectangle.x;
 						child.y = rectangle.y;
-						if (align == Align.NONE) {
+						if (align == NONE) {
 							child.setSize(width, rectangle.height);
-						} else if (align == Align.BOTTOM) {
+						} else if (align == BOTTOM) {
 							child.y = rectangle.y + rectangle.height - height;
 						}
 						break;
-					case Align.TOP :
+					case TOP :
 						child.x = rectangle.x;
 						child.y = rectangle.y;
-						if (align == Align.NONE) {
+						if (align == NONE) {
 							child.setSize(rectangle.width, height)
-						} else if (align == Align.RIGHT) {
+						} else if (align == RIGHT) {
 							child.x = rectangle.x + rectangle.width - width;
 						}
 						break;
-					case Align.RIGHT :
+					case RIGHT :
 						child.x = rectangle.x + rectangle.width - width;
 						child.y = rectangle.y;
-						if (align == Align.NONE) {
+						if (align == NONE) {
 							child.setSize(width, rectangle.height);
-						} else if (align == Align.BOTTOM) {
+						} else if (align == BOTTOM) {
 							child.y = rectangle.y + rectangle.height - height;
 						}
 						break;
-					case Align.BOTTOM :
+					case BOTTOM :
 						child.x = rectangle.x;
 						child.y = rectangle.y + rectangle.height - height;
-						if (align == Align.NONE) {
+						if (align == NONE) {
 							child.setSize(rectangle.width, height);
-						} else if (align == Align.RIGHT) {
+						} else if (align == RIGHT) {
 							child.x = rectangle.x + rectangle.width - width;
 						}
 						break;
-					case Align.FILL :
+					case FILL :
 						child.x = rectangle.x;
 						child.y = rectangle.y;
 						child.setSize(rectangle.width, rectangle.height)
 						break;
-					case Align.CENTER :
+					case CENTER :
 						child.x = rectangle.width/2 - width/2;
 						child.y = rectangle.height/2 - height/2;
 						break;

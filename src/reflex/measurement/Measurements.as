@@ -1,5 +1,9 @@
 package reflex.measurement
 {
+	import flash.events.Event;
+	import flash.events.IEventDispatcher;
+	
+	import flight.events.PropertyEvent;
 	
 	// might break this up to multiples later
 	// ie. measured.height, explicite.minWidth, etc
@@ -10,53 +14,54 @@ package reflex.measurement
 	public class Measurements implements IMeasurements
 	{
 		
-		private var _expliciteWidth:Number;
-		private var _expliciteHeight:Number;
+		private var _width:Number;
+		private var _height:Number;
 		
-		private var _measuredWidth:Number;
-		private var _measuredHeight:Number;
+		private var _minWidth:Number;
+		private var _minHeight:Number;
 		
 		// todo: update for defined events
 		// should these even be bindable?
 		
-		[Bindable] public var minWidth:Number;
-		[Bindable] public var minHeight:Number;
+		private var instance:IMeasurable;
 		
-		[Bindable] public var maxWidth:Number;
-		[Bindable] public var maxHeight:Number;
+		// [Bindable] public var maxWidth:Number;
+		// [Bindable] public var maxHeight:Number;
 		
 		[Bindable]
-		public function get expliciteWidth():Number { return _expliciteWidth; }
-		public function set expliciteWidth(value:Number):void {
-			_expliciteWidth = value;
+		public function get width():Number { return _width; }
+		public function set width(value:Number):void {
+			_width = value;
+			instance.setSize(value, instance.height); // ?? this is incorrect. measured will update even when explicite is set.
+			//PropertyEvent.dispatchChange(instance, "width", instance["width"], value);
 		}
 		
 		[Bindable]
-		public function get expliciteHeight():Number { return _expliciteHeight; }
-		public function set expliciteHeight(value:Number):void {
-			_expliciteHeight = value;
-		}
-		
-		[Bindable] public var percentWidth:Number;
-		[Bindable] public var percentHeight:Number;
-		
-		[Bindable]
-		public function get measuredWidth():Number { return _measuredWidth; }
-		public function set measuredWidth(value:Number):void {
-			_measuredWidth = value;
+		public function get height():Number { return _height; }
+		public function set height(value:Number):void {
+			_height = value;
+			instance.setSize(instance.width, value); // ?? this is incorrect. measured will update even when explicite is set.
+			//PropertyEvent.dispatchChange(instance, "height", instance["height"], value);
 		}
 		
 		[Bindable]
-		public function get measuredHeight():Number { return _measuredHeight; }
-		public function set measuredHeight(value:Number):void {
-			_measuredHeight = value;
+		public function get minWidth():Number { return _minWidth; }
+		public function set minWidth(value:Number):void {
+			_minWidth = value;
+		}
+		
+		[Bindable]
+		public function get minHeight():Number { return _minHeight; }
+		public function set minHeight(value:Number):void {
+			_minHeight = value;
 		}
 		
 		//private var _target:Object;
 		
-		public function Measurements(defaultWidth:Number = 160, defaultHeight:Number = 22) {
-			measuredWidth = defaultWidth;
-			measuredHeight = defaultHeight;
+		public function Measurements(instance:IMeasurable, defaultWidth:Number = 160, defaultHeight:Number = 22) {
+			this.instance = instance;
+			_width = defaultWidth;
+			_height = defaultHeight;
 		}
 		
 	}

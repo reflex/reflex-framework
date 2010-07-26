@@ -42,17 +42,17 @@ package reflex.display
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete, false, 0, true);
 			} else if(source is Class) {
 				var display:Bitmap = new (source as Class)();
-				measurements.measuredWidth = display.width;
-				measurements.measuredHeight = display.height;
-				setSize(measurements.measuredWidth, measurements.measuredHeight);
+				measured.width = display.width;
+				measured.height = display.height;
+				setSize(measured.width, measured.height);
 				addChild(display);
 			}
 		}
 		
 		private function onComplete(event:Event):void {
-			measurements.measuredWidth = loader.content.width;
-			measurements.measuredHeight = loader.content.height;
-			setSize(measurements.measuredWidth, measurements.measuredHeight);
+			measured.width = loader.content.width;
+			measured.height = loader.content.height;
+			setSize(measured.width, measured.height);
 			addChild(loader);
 		}
 		

@@ -8,9 +8,6 @@ package reflex.skins
 	import legato.components.ScrollBarGraphic;
 	
 	import reflex.components.Button;
-	import reflex.layout.Align;
-	import reflex.layout.Block;
-	import reflex.layout.LayoutWrapper;
 
 	public class ScrollBarSkin extends GraphicSkin
 	{
@@ -31,7 +28,7 @@ package reflex.skins
 		{
 			graphic = scrollBarGraphic = graphic || new ScrollBarGraphic()
 			super(scrollBarGraphic);
-			
+			/*
 			var block:Block;
 			block = new Block(graphic.background);
 			block.scale = true;
@@ -49,7 +46,7 @@ package reflex.skins
 			block.scale = true;
 			block.anchor.top = block.anchor.bottom = 0;
 			block.bounds.minWidth = block.bounds.minHeight = 10;
-			
+			*/
 			Bind.addListener(this, onSizeChange, this, "position.size");
 			Bind.addListener(this, onSizeChange, this, "position.space");
 		}
@@ -66,8 +63,8 @@ package reflex.skins
 			}
 			
 			scrollBarGraphic.thumb.visible = true;
-			var block:Block = LayoutWrapper.getLayout(scrollBarGraphic.thumb) as Block;
-			block.width = scrollBarGraphic.track.width/position.size * position.space;
+			//var block:Block = LayoutWrapper.getLayout(scrollBarGraphic.thumb) as Block;
+			//block.width = scrollBarGraphic.track.width/position.size * position.space;
 		}
 		
 	}

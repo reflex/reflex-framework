@@ -14,12 +14,9 @@
 	<component id="ImageDisplay" class="reflex.display.ImageDisplay"/>
 	
 	<!-- skins -->
-	<component id="BackgroundSkin" class="reflex.skins.BackgroundSkin"/>
 	<component id="ButtonSkin" class="reflex.skins.ButtonSkin"/>
-	<component id="GraphicSkin" class="reflex.skins.GraphicSkin"/>
 	<component id="ScrollBarSkin" class="reflex.skins.ScrollBarSkin"/>
 	<component id="Skin" class="reflex.skins.Skin"/>
-	<component id="StatefulBackgroundSkin" class="reflex.skins.StatefulBackgroundSkin"/>
 	<component id="StepperSkin" class="reflex.skins.StepperSkin"/>
 	<component id="DragStepperSkin" class="reflex.skins.DragStepperSkin"/>
 	

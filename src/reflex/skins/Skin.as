@@ -53,7 +53,9 @@ package reflex.skins
 		
 		private var unscaledWidth:Number = 160;
 		private var unscaledHeight:Number = 22;
-		private var _measurements:IMeasurements = new Measurements();
+		
+		private var _explicite:IMeasurements;
+		private var _measured:IMeasurements;
 		
 		//
 		
@@ -63,7 +65,7 @@ package reflex.skins
 			if(unscaledWidth == value) {
 				return;
 			}
-			_measurements.expliciteWidth = value;
+			_explicite.width = value;
 			PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = value);
 			InvalidationEvent.invalidate(target, LAYOUT);
 		}
@@ -74,28 +76,40 @@ package reflex.skins
 			if(unscaledHeight == value) {
 				return;
 			}
-			_measurements.expliciteHeight = value;
+			_explicite.height = value;
 			PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = value);
 			InvalidationEvent.invalidate(target, LAYOUT);
 		}
 		
-		[Bindable(event="measurementsChange")]
-		public function get measurements():IMeasurements { return _measurements; }
-		public function set measurements(value:IMeasurements):void {
-			if(value == _measurements) {
+		[Bindable(event="expliciteChange")]
+		public function get explicite():IMeasurements { return _explicite; }
+		/*public function set explicite(value:IMeasurements):void {
+			if(value == _explicite) {
 				return;
 			}
 			if(value != null) { // must not be null
-				PropertyEvent.dispatchChange(this, "measurements", _measurements, _measurements = value);
+				PropertyEvent.dispatchChange(this, "explicite", _explicite, _explicite = value);
 				InvalidationEvent.invalidate(target, LAYOUT);
 			}
-		}
+		}*/
+		
+		[Bindable(event="measuredChange")]
+		public function get measured():IMeasurements { return _measured; }
+		/*public function set measured(value:IMeasurements):void {
+			if(value == _measured) {
+				return;
+			}
+			if(value != null) { // must not be null
+				PropertyEvent.dispatchChange(this, "measured", _measured, _measured = value);
+				InvalidationEvent.invalidate(target, LAYOUT);
+			}
+		}*/
 		
 		public function setSize(width:Number, height:Number):void {
 			unscaledWidth = width;
 			unscaledHeight = height;
-			//PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = width);
-			//PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = height);
+			PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = width);
+			PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = height);
 			//InvalidationEvent.invalidate(target, LAYOUT);
 		}
 		
@@ -146,6 +160,9 @@ package reflex.skins
 		
 		public function Skin()
 		{
+			super();
+			_explicite = new Measurements(this);
+			_measured = new Measurements(this);
 			if(_layout == null) {
 				//_layout = new XYLayout();
 			}
@@ -349,7 +366,7 @@ package reflex.skins
 		
 		private function onMeasure(event:InvalidationEvent):void {
 			var target:IMeasurable= this.target as IMeasurable;
-			if(layout && target && (isNaN(target.measurements.expliciteWidth) || isNaN(target.measurements.expliciteHeight))) {
+			if(layout && target && (isNaN(target.explicite.width) || isNaN(target.explicite.height))) {
 				var items:Array = [];
 				var length:int = _children.length;
 				for(var i:int = 0; i < length; i++) {
@@ -358,9 +375,9 @@ package reflex.skins
 				var point:Point = layout.measure(items);
 				// this if statement blocks an infinite loop
 				// the lifecycle should be handled better here in some way
-				if(point.x != target.measurements.measuredWidth || point.y != target.measurements.measuredHeight) {
-					target.measurements.measuredWidth = point.x;
-					target.measurements.measuredHeight = point.y;
+				if(point.x != target.measured.width || point.y != target.measured.height) {
+					target.measured.width = point.x;
+					target.measured.height = point.y;
 				}
 								
 			}

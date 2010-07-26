@@ -6,8 +6,7 @@ package reflex.skins
 	import flight.events.PropertyEvent;
 	
 	import reflex.components.ButtonGraphic;
-	import reflex.layout.Block;
-
+	
 	public class ButtonSkin extends GraphicSkin
 	{
 		[Bindable]
@@ -28,7 +27,7 @@ package reflex.skins
 			removeStatefulChild(graphic);
 			addStatefulChild(graphic.background);
 			addStatefulChild(graphic.foreground);
-			
+			/*
 			var block:Block = new Block(graphic.background);
 			block.scale = true;
 			block.anchor = 0;
@@ -42,7 +41,7 @@ package reflex.skins
 			block.scale = true;
 			block.anchor.left = block.anchor.right = 0;
 			block.anchor.vertical = .5;
-			
+			*/
 			Bind.addListener(this, setLabel, this, "label");
 			Bind.addListener(this, onSelectedChange, this, "selected");
 		}

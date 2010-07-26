@@ -10,6 +10,7 @@
 	import reflex.display.addItem;
 	import reflex.events.InvalidationEvent;
 	import reflex.measurement.resolveWidth;
+	import reflex.measurement.resolveHeight;
 	import reflex.measurement.setSize;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.skins.ISkin;
@@ -159,9 +160,9 @@
 		}
 		
 		private function onMeasure(event:InvalidationEvent):void {
-			if((isNaN(measurements.expliciteWidth) || isNaN(measurements.expliciteHeight)) && skin) {
-				measurements.measuredWidth = reflex.measurement.resolveWidth(skin); // explicite width of skin becomes measured width of component
-				measurements.measuredHeight = reflex.measurement.resolveHeight(skin); // explicite height of skin becomes measured height of component
+			if((isNaN(explicite.width) || isNaN(explicite.height)) && skin) {
+				measured.width = reflex.measurement.resolveWidth(skin); // explicite width of skin becomes measured width of component
+				measured.height = reflex.measurement.resolveHeight(skin); // explicite height of skin becomes measured height of component
 			}
 		}
 		

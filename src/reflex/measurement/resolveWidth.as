@@ -1,20 +1,21 @@
 package reflex.measurement
 {
-	import reflex.display.ReflexDisplay;
 	
 	/**
 	 * @alpha
 	 */
 	public function resolveWidth(object:Object):Number
 	{
-		var measurements:IMeasurements;
+		var explicite:IMeasurements;
+		var measured:IMeasurements;
 		if(object is IMeasurable) {
-			measurements = (object as IMeasurable).measurements;
-			return isNaN(measurements.expliciteWidth) ? measurements.measuredWidth : measurements.expliciteWidth;
-		} else if(object is IMeasurements) {
+			explicite = (object as IMeasurable).explicite;
+			measured = (object as IMeasurable).measured;
+			return isNaN(explicite.width) ? measured.width : explicite.width;
+		} /* else if(object is IMeasurements) {
 			measurements = (object as IMeasurements);
 			return isNaN(measurements.expliciteWidth) ? measurements.measuredWidth : measurements.expliciteWidth;
-		} else {
+		} */ else {
 			return object.width;
 		}
 		

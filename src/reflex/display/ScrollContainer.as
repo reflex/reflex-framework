@@ -5,8 +5,6 @@ package reflex.display
 	import flight.binding.Bind;
 	import flight.position.IPosition;
 	
-	import reflex.layout.ScrollBlock;
-
 	public class ScrollContainer extends Container
 	{
 		[Bindable]

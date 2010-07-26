@@ -15,10 +15,6 @@ package reflex.display
 	
 	import reflex.events.InvalidationEvent;
 	import reflex.graphics.IDrawable;
-	import reflex.layout.Block;
-	import reflex.layout.Bounds;
-	import reflex.layout.Box;
-	import reflex.layout.LayoutWrapper;
 	import reflex.layouts.ILayout;
 	import reflex.layouts.XYLayout;
 	import reflex.measurement.resolveHeight;
@@ -207,10 +203,10 @@ package reflex.display
 		}
 		
 		private function onMeasure(event:InvalidationEvent):void {
-			if((isNaN(measurements.expliciteWidth) || isNaN(measurements.expliciteHeight)) && layout) {
+			if((isNaN(explicite.width) || isNaN(explicite.height)) && layout) {
 				var point:Point = layout.measure(renderers);
-				measurements.measuredWidth = point.x;
-				measurements.measuredHeight = point.y;
+				measured.width = point.x;
+				measured.height = point.y;
 			}
 		}
 		

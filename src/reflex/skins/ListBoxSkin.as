@@ -8,11 +8,8 @@ package reflex.skins
 	
 	import reflex.behaviors.SlideBehavior;
 	import reflex.components.ScrollPaneGraphic;
-	import reflex.display.Replicator;
 	import reflex.display.ScrollContainer;
-	import reflex.layout.Align;
-	import reflex.layout.Block;
-
+	
 	public class ListBoxSkin extends GraphicSkin
 	{
 		[Bindable]
@@ -26,7 +23,7 @@ package reflex.skins
 		
 		public var container:ScrollContainer;
 		
-		private var replicator:Replicator;
+		//private var replicator:Replicator;
 		private var scrollPaneGraphic:ScrollPaneGraphic;
 		
 		public function ListBoxSkin(graphic:ScrollPaneGraphic = null)

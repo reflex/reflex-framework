@@ -4,9 +4,6 @@ package reflex.components
 	import flight.list.ArrayList;
 	import flight.list.IList;
 	import flight.position.IPosition;
-	
-	import mx.core.Container;
-	
 	import reflex.layouts.ILayout;
 	import reflex.layouts.VerticalLayout;
 	import reflex.skins.ListBoxSkin;

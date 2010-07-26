@@ -10,29 +10,29 @@ package reflex.skins
 	import flight.binding.Bind;
 	import flight.events.PropertyEvent;
 	
-	import reflex.layout.Block;
+	//import reflex.layout.Block;
 	//import reflex.layout.ILayoutAlgorithm;
-	import reflex.layout.LayoutWrapper;
+	//import reflex.layout.LayoutWrapper;
 	
 
 	public class GraphicSkin extends Skin
 	{
 		private var _statefulChildren:Array = [];
 		private var _graphic:Sprite;
-		private var _graphicBlock:Block;
+		//private var _graphicBlock:Block;
 		
 		public function GraphicSkin(graphic:Sprite)
 		{
 			// initialize graphic with smart layout
 			_graphic = graphic;
-			_graphicBlock = new Block(graphic);
+			//_graphicBlock = new Block(graphic);
 			// TODO: set that layout's scaling if the graphic has no children (slice-9)
 			
 			// override default width/height if a guide is present
 			if ("defaultSize" in graphic && graphic["defaultSize"] is DisplayObject) {
 				var defaultSize:DisplayObject = graphic["defaultSize"] as DisplayObject;
-				_graphicBlock.defaultWidth = defaultSize.width;
-				_graphicBlock.defaultHeight = defaultSize.height;
+				//_graphicBlock.defaultWidth = defaultSize.width;
+				//_graphicBlock.defaultHeight = defaultSize.height;
 			}
 			
 			// TODO: resolve API .. addstatefulchild, etc
@@ -47,10 +47,6 @@ package reflex.skins
 			return _graphic;
 		}
 		
-		public function get graphicBlock():Block
-		{
-			return _graphicBlock;
-		}
 		
 		override public function set target(value:Sprite):void
 		{
@@ -60,10 +56,11 @@ package reflex.skins
 			
 			if (target != null && target != graphic) {
 				target.removeChild(graphic);
-				_graphicBlock.anchor = null;
+				//_graphicBlock.anchor = null;
 			}
 			
 			super.target = value;
+			/*
 			var targetBlock:Block = LayoutWrapper.getLayout(target) as Block;
 			if (targetBlock != null) {
 				targetBlock.defaultWidth = _graphicBlock.defaultWidth;
@@ -74,6 +71,7 @@ package reflex.skins
 				target.addChild(graphic);
 				_graphicBlock.anchor = 0;
 			}
+			*/
 		}
 		
 		override public function getSkinPart(part:String):InteractiveObject

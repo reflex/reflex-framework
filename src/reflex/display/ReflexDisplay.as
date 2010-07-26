@@ -11,9 +11,7 @@
 	import reflex.measurement.Measurements;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
-	
-	import mx.containers.Canvas;
-	
+		
 	/**
 	 * Modifies common DisplayObject properties for improved usability.
 	 * For instance width and height properties will not be be affected by graphics API updates.
@@ -29,7 +27,8 @@
 		protected var unscaledWidth:Number = 160;
 		protected var unscaledHeight:Number = 22;
 		
-		private var _measurements:IMeasurements = new Measurements();
+		private var _explicite:IMeasurements;
+		private var _measured:IMeasurements;
 		
 		[Bindable(event="xChange")]
 		override public function get x():Number { return super.x; }
@@ -58,7 +57,7 @@
 			if(unscaledWidth == value) {
 				return;
 			}
-			_measurements.expliciteWidth = value;
+			_explicite.width = value;
 			PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = value);
 		}
 		
@@ -69,36 +68,36 @@
 			if(unscaledHeight == value) {
 				return;
 			}
-			_measurements.expliciteHeight = value;
+			_explicite.height = value;
 			PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = value);
 		}
 		
-		/*
-		[Bindable(event="widthChange")]
-		public function set actualWidth(value:Number):void {
-			if(unscaledWidth == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "widthChange", unscaledWidth, unscaledWidth = value);
-		}
-		
-		[Bindable(event="heightChange")]
-		public function set actualHeight(value:Number):void {
-			if(unscaledHeight == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "heightChange", unscaledHeight, unscaledHeight = value);
-		}
-		*/
-		[Bindable(event="measurementsChange")]
-		public function get measurements():IMeasurements { return _measurements; }
-		public function set measurements(value:IMeasurements):void {
-			if(_measurements == value) {
+		[Bindable(event="expliciteChange")]
+		public function get explicite():IMeasurements { return _explicite; }
+		/*public function set explicite(value:IMeasurements):void {
+			if(_explicite== value) {
 				return;
 			}
 			if(value != null) { // must not be null
-				PropertyEvent.dispatchChange(this, "measurements", _measurements, _measurements = value);
+				PropertyEvent.dispatchChange(this, "explicite", _explicite, _explicite = value);
 			}
+		}*/
+		
+		[Bindable(event="measuredChange")]
+		public function get measured():IMeasurements { return _measured; }
+		/*public function set measured(value:IMeasurements):void {
+			if(_measured== value) {
+				return;
+			}
+			if(value != null) { // must not be null
+				PropertyEvent.dispatchChange(this, "measured", _measured, _measured = value);
+			}
+		}*/
+		
+		public function ReflexDisplay():void {
+			super();
+			_explicite = new Measurements(this);
+			_measured = new Measurements(this);
 		}
 		
 		// design work

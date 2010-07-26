@@ -44,14 +44,6 @@ package reflex.display
 			display.height += 100;
 		}
 		
-		[Test(async)]
-		public function testMeasurementsChange():void {
-			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "measurementsChange", timeoutHandler);
-			var display:ReflexDisplay = new ReflexDisplay();
-			display.addEventListener("measurementsChange", listener, false, 0, false);
-			display.measurements = new Measurements();
-		}
-		
 		private function changeHandler(event:PropertyEvent, type:String):void {
 			Assert.assertEquals(event.type, type);
 		}
