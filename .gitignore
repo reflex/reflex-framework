@@ -6,7 +6,6 @@ report*
 html-template
 build.properties
 reports
-tests
 flex-config.xml
 FlexUnit*
 Thumbs.db
