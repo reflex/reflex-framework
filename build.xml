@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="Reflex Build" basedir="." default="all">
+<project name="Reflex Framework Build" basedir="." default="all">
 
 	<!-- Define variables/paths used in this build script -->
 	<property file="build.properties" />
