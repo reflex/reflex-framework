@@ -8,7 +8,7 @@ package reflex.display
 		public function ReflexDisplayMeasurementTest()
 		{
 			super();
-			C = ReflexDisplay;
+			C = MeasuredDisplayObject;
 		}
 		
 	}

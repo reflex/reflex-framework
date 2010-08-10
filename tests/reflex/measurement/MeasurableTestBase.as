@@ -38,6 +38,7 @@ package reflex.measurement
 			instance.measured = new Measurements(this);
 		}
 		*/
+		
 		[Test(async)]
 		public function testExpliciteWidth():void {
 			var instance:IMeasurable = new C() as IMeasurable;
@@ -80,6 +81,28 @@ package reflex.measurement
 			instance.measured.height = 5;
 			Assert.assertEquals(5, instance.height);
 			Assert.assertEquals(5, instance.measured.height);
+		}
+		
+		[Test(async)]
+		public function testMeasuredWidthEvent():void {
+			var instance:IMeasurable = new C() as IMeasurable;
+			instance.width = 5; // there should be no change event for measured changes now
+			Async.failOnEvent(this, instance as IEventDispatcher, "widthChange", 500);
+			
+			instance.measured.width = 100;
+			Assert.assertEquals(5, instance.width);
+			Assert.assertEquals(5, instance.explicite.width);
+		}
+		
+		[Test(async)]
+		public function testMeasuredHeightEvent():void {
+			var instance:IMeasurable = new C() as IMeasurable;
+			instance.height = 5; // there should be no change event for measured changes now
+			Async.failOnEvent(this, instance as IEventDispatcher, "heightChange", 500);
+			
+			instance.measured.height = 100;
+			Assert.assertEquals(5, instance.height);
+			Assert.assertEquals(5, instance.explicite.height);
 		}
 		
 		[Test(async)]

@@ -18,11 +18,8 @@
 	 * Better naming options are welcome for this class.
 	 * @alpha
 	 */
-	public class ReflexDisplay extends Sprite implements IMeasurable
+	public class MeasuredDisplayObject extends Sprite implements IMeasurable
 	{
-		
-		// we might consider splitting measurement into
-		// a MeasuredDisplay class later.
 		
 		protected var unscaledWidth:Number = 160;
 		protected var unscaledHeight:Number = 22;
@@ -94,10 +91,10 @@
 			}
 		}*/
 		
-		public function ReflexDisplay():void {
+		public function MeasuredDisplayObject():void {
 			super();
-			_explicite = new Measurements(this);
-			_measured = new Measurements(this);
+			_explicite = new Measurements(this, NaN, NaN);
+			_measured = new Measurements(this, 160, 22);
 		}
 		
 		// design work
@@ -107,8 +104,6 @@
 		 * Use cases include layout and animation/tweening among other things.
 		 */
 		public function setSize(width:Number, height:Number):void {
-			//unscaledWidth = width;
-			//unscaledHeight = height;
 			PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = width);
 			PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = height);
 		}

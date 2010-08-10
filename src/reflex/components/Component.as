@@ -6,7 +6,7 @@
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
-	import reflex.display.ReflexDisplay;
+	import reflex.display.MeasuredDisplayObject;
 	import reflex.display.addItem;
 	import reflex.events.InvalidationEvent;
 	import reflex.measurement.resolveWidth;
@@ -28,7 +28,7 @@
 	/**
 	 * @alpha
 	 */
-	public class Component extends ReflexDisplay implements IBehavioral, ISkinnable
+	public class Component extends MeasuredDisplayObject implements IBehavioral, ISkinnable
 	{
 		
 		static public const MEASURE:String = "measure";

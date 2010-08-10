@@ -20,28 +20,26 @@ package reflex.measurement
 		private var _minWidth:Number;
 		private var _minHeight:Number;
 		
-		// todo: update for defined events
 		// should these even be bindable?
 		
 		private var instance:IMeasurable;
-		
-		// [Bindable] public var maxWidth:Number;
-		// [Bindable] public var maxHeight:Number;
 		
 		[Bindable]
 		public function get width():Number { return _width; }
 		public function set width(value:Number):void {
 			_width = value;
-			instance.setSize(value, instance.height); // ?? this is incorrect. measured will update even when explicite is set.
-			//PropertyEvent.dispatchChange(instance, "width", instance["width"], value);
+			if(!(instance.measured== this && !isNaN(instance.explicite.width))) { // measured changes shouldn't update when explicite is set
+				instance.setSize(value, instance.height);
+			}
 		}
 		
 		[Bindable]
 		public function get height():Number { return _height; }
 		public function set height(value:Number):void {
 			_height = value;
-			instance.setSize(instance.width, value); // ?? this is incorrect. measured will update even when explicite is set.
-			//PropertyEvent.dispatchChange(instance, "height", instance["height"], value);
+			if(!(instance.measured== this && !isNaN(instance.explicite.height))) { // measured changes shouldn't update when explicite is set
+				instance.setSize(instance.width, value); 
+			}
 		}
 		
 		[Bindable]
@@ -56,9 +54,8 @@ package reflex.measurement
 			_minHeight = value;
 		}
 		
-		//private var _target:Object;
-		
-		public function Measurements(instance:IMeasurable, defaultWidth:Number = 160, defaultHeight:Number = 22) {
+		// 160, 22
+		public function Measurements(instance:IMeasurable, defaultWidth:Number = NaN, defaultHeight:Number = NaN) {
 			this.instance = instance;
 			_width = defaultWidth;
 			_height = defaultHeight;

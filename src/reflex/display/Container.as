@@ -36,7 +36,7 @@ package reflex.display
 	/**
 	 * @alpha
 	 */
-	public class Container extends ReflexDisplay implements IContainer
+	public class Container extends MeasuredDisplayObject implements IContainer
 	{
 		
 		static public const CREATE:String = "create";
