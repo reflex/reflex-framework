@@ -7,7 +7,7 @@ package reflex.display
 	
 	import reflex.events.InvalidationEvent;
 	
-	public class ImageDisplay extends MeasuredDisplayObject
+	public class ImageDisplay extends MeasuredSprite
 	{
 		
 		public static const MEASURE:String = "measure";

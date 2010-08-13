@@ -104,7 +104,27 @@ package reflex.measurement
 			Assert.assertEquals(5, instance.height);
 			Assert.assertEquals(5, instance.explicite.height);
 		}
+		/*
+		[Test(async)]
+		public function testPercentWidth():void {
+			var instance:IMeasurablePercent = new C() as IMeasurablePercent;
+			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "percentWidthChange", timeoutHandler);
+			(instance as IEventDispatcher).addEventListener("percentWidthChange", listener, false, 0, false);
+			
+			instance.percentWidth = 75;
+			Assert.assertEquals(75, instance.percentWidth);
+		}
 		
+		[Test(async)]
+		public function testPercentHeight():void {
+			var instance:IMeasurablePercent = new C() as IMeasurablePercent;
+			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "percentHeightChange", timeoutHandler);
+			(instance as IEventDispatcher).addEventListener("percentHeightChange", listener, false, 0, false);
+			
+			instance.percentHeight = 75;
+			Assert.assertEquals(75, instance.percentHeight);
+		}
+		*/
 		[Test(async)]
 		public function testSetSize():void {
 			var instance:IMeasurable = new C() as IMeasurable;

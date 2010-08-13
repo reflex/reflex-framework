@@ -3,8 +3,8 @@ package
 	import reflex.behaviors.CompositeBehaviorTest;
 	import reflex.behaviors.SelectableBehaviorTest;
 	import reflex.display.ContainerTest;
-	import reflex.display.ReflexDisplayMeasurementTest;
-	import reflex.display.ReflexDisplayTest;
+	import reflex.display.MeasuredSpriteTest;
+	import reflex.display.BindableSpriteTest;
 	import reflex.skins.SkinMeasurementTest;
 	
 	[Suite]
@@ -12,10 +12,10 @@ package
 	public class ReflexSuite
 	{
 		
-		public var display:ReflexDisplayTest;
+		public var display:BindableSpriteTest;
 		
 		public var container:ContainerTest;
-		public var containerMeasurement:ReflexDisplayMeasurementTest;
+		public var containerMeasurement:MeasuredSpriteTest;
 		
 		public var behaviors:CompositeBehaviorTest;
 		public var selectabe:SelectableBehaviorTest;

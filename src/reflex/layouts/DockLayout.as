@@ -16,6 +16,12 @@ package reflex.layouts
 	[LayoutProperty(name="style.dock", measure="true")]
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]
+	
+	/**
+	 * Provides a docking layout for common use cases which might otherwise require nested containers.
+	 * 
+	 * @alpha
+	 */
 	public class DockLayout extends Layout implements ILayout
 	{
 		

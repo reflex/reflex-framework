@@ -2,7 +2,7 @@ package reflex.measurement
 {
 	import flash.display.DisplayObject;
 	
-	import reflex.display.MeasuredDisplayObject;
+	import reflex.display.MeasuredSprite;
 	import reflex.graphics.Rect;
 
 	public function setSize(child:Object, width:Number, height:Number):void

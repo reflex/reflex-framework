@@ -59,6 +59,9 @@ package reflex.skins
 		
 		//
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="widthChange")]
 		public function get width():Number { return unscaledWidth; }
 		public function set width(value:Number):void {
@@ -70,6 +73,9 @@ package reflex.skins
 			InvalidationEvent.invalidate(target, LAYOUT);
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="heightChange")]
 		public function get height():Number { return unscaledHeight; }
 		public function set height(value:Number):void {
@@ -81,6 +87,9 @@ package reflex.skins
 			InvalidationEvent.invalidate(target, LAYOUT);
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="expliciteChange")]
 		public function get explicite():IMeasurements { return _explicite; }
 		/*public function set explicite(value:IMeasurements):void {
@@ -93,6 +102,9 @@ package reflex.skins
 			}
 		}*/
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="measuredChange")]
 		public function get measured():IMeasurements { return _measured; }
 		/*public function set measured(value:IMeasurements):void {
@@ -105,6 +117,9 @@ package reflex.skins
 			}
 		}*/
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function setSize(width:Number, height:Number):void {
 			unscaledWidth = width;
 			unscaledHeight = height;
@@ -113,6 +128,9 @@ package reflex.skins
 			//InvalidationEvent.invalidate(target, LAYOUT);
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
@@ -255,6 +273,9 @@ package reflex.skins
 		{
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[ArrayElementType("Object")]
 		public function get children():IList
 		{

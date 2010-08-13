@@ -5,6 +5,9 @@ package reflex.layouts
 	import flash.geom.Rectangle;
 	
 	/**
+	 * This interface is used to Integrate custom layouts into the Reflex layout and measurement system.
+	 * You must implement this interface when creating a custom layout.
+	 * 
 	 * @alpha
 	 */
 	public interface ILayout

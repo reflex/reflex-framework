@@ -18,6 +18,8 @@ package reflex.layouts
 	[LayoutProperty(name="height", measure="true")]
 	
 	/**
+	 * Provides basic measurement for containers which want to adjust children manually using x/y coordinates.
+	 * 
 	 * @alpha
 	 **/
 	public class XYLayout extends Layout implements ILayout

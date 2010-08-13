@@ -34,9 +34,11 @@ package reflex.display
 	[DefaultProperty("children")]
 	
 	/**
+	 * Used to contain and layout children.
+	 * 
 	 * @alpha
 	 */
-	public class Container extends MeasuredDisplayObject implements IContainer
+	public class Container extends MeasuredSprite implements IContainer
 	{
 		
 		static public const CREATE:String = "create";
@@ -131,6 +133,9 @@ package reflex.display
 			style[property] = value;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[ArrayElementType("Object")]
 		[Bindable(event="childrenChange")]
 		public function get children():IList { return _children; }
@@ -167,6 +172,9 @@ package reflex.display
 			InvalidationEvent.invalidate(this, LAYOUT);
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {

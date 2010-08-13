@@ -18,6 +18,9 @@ package reflex.layouts
 	//[LayoutProperty(name="layout", measure="true")]
 	//[LayoutProperty(name="measurements", measure="true")]
 	/**
+	 * The Layout class provides automated metadata handling for layouts which extend it.
+	 * It is recommended that you extend this class to create custom layouts, but it's not required.
+	 * 
 	 * @alpha
 	 **/
 	public class Layout extends EventDispatcher

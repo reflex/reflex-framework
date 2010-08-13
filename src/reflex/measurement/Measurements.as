@@ -5,10 +5,10 @@ package reflex.measurement
 	
 	import flight.events.PropertyEvent;
 	
-	// might break this up to multiples later
-	// ie. measured.height, explicite.minWidth, etc
 	
 	/**
+	 * The Measurements class holds values related to a object's dimensions.
+	 * 
 	 * @alpha
 	 */
 	public class Measurements implements IMeasurements
@@ -24,6 +24,9 @@ package reflex.measurement
 		
 		private var instance:IMeasurable;
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable]
 		public function get width():Number { return _width; }
 		public function set width(value:Number):void {
@@ -33,6 +36,9 @@ package reflex.measurement
 			}
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable]
 		public function get height():Number { return _height; }
 		public function set height(value:Number):void {
@@ -42,12 +48,18 @@ package reflex.measurement
 			}
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable]
 		public function get minWidth():Number { return _minWidth; }
 		public function set minWidth(value:Number):void {
 			_minWidth = value;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable]
 		public function get minHeight():Number { return _minHeight; }
 		public function set minHeight(value:Number):void {

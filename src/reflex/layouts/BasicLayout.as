@@ -18,6 +18,8 @@ package reflex.layouts
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]
 	/**
+	 * Recognizes style elements familiar to Flex developers such as left, right, top, bottom, horizontalCenter and verticalCenter.
+	 * 
 	 * @alpha
 	 **/
 	public class BasicLayout extends Layout implements ILayout

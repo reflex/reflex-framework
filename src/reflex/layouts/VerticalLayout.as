@@ -10,6 +10,8 @@ package reflex.layouts
 	[LayoutProperty(name="height", measure="true")]
 	
 	/**
+	 * Provides a measured layout from top to bottom.
+	 * 
 	 * @alpha
 	 **/
 	public class VerticalLayout extends Layout implements ILayout
