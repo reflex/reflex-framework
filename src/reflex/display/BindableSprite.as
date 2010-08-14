@@ -12,6 +12,9 @@ package reflex.display
 	public class BindableSprite extends Sprite
 	{
 		
+		private var _width:Number = 0;
+		private var _height:Number = 0;
+		
 		// which properties become bindable are up for debate
 		// should it really be all of them? size concerns?
 		
@@ -37,21 +40,21 @@ package reflex.display
 		
 		// should width/height even be bindable?
 		[Bindable(event="widthChange")]
-		override public function get width():Number { return super.width; }
+		override public function get width():Number { return _width; }
 		override public function set width(value:Number):void {
-			if (super.width == value) {
+			if (_width == value) {
 				return;
 			}
-			PropertyEvent.dispatchChange(this, "width", super.width, super.width = value);
+			PropertyEvent.dispatchChange(this, "width", _width, _width = value);
 		}
 		
 		[Bindable(event="heightChange")]
-		override public function get height():Number { return super.height; }
+		override public function get height():Number { return _height; }
 		override public function set height(value:Number):void {
-			if (super.height == value) {
+			if (_height == value) {
 				return;
 			}
-			PropertyEvent.dispatchChange(this, "height", super.height, super.height = value);
+			PropertyEvent.dispatchChange(this, "height", _height, _height = value);
 		}
 		
 		

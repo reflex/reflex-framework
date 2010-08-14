@@ -45,7 +45,7 @@
 		[Bindable(event="widthChange")]
 		override public function get width():Number { return unscaledWidth; }
 		override public function set width(value:Number):void {
-			_explicite.width = unscaledWidth = value; // this will dispatch for us if needed
+			unscaledWidth = _explicite.width = value; // this will dispatch for us if needed
 			// excluding super to avoid double event dispatch
 		}
 		
@@ -55,7 +55,7 @@
 		[Bindable(event="heightChange")]
 		override public function get height():Number { return unscaledHeight; }
 		override public function set height(value:Number):void {
-			_explicite.height = unscaledHeight = value; // this will dispatch for us if needed
+			unscaledHeight  = _explicite.height = value; // this will dispatch for us if needed (order is important)
 			// excluding super to avoid double event dispatch
 		}
 		
