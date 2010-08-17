@@ -7,14 +7,16 @@
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
 	import reflex.display.MeasuredSprite;
+	import reflex.display.StyleableSprite;
 	import reflex.display.addItem;
 	import reflex.events.InvalidationEvent;
-	import reflex.measurement.resolveWidth;
 	import reflex.measurement.resolveHeight;
+	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
+	import reflex.styles.IStyleable;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -28,57 +30,24 @@
 	/**
 	 * @alpha
 	 */
-	public class Component extends MeasuredSprite implements IBehavioral, ISkinnable
+	public class Component extends StyleableSprite implements IBehavioral, ISkinnable
 	{
 		
 		static public const MEASURE:String = "measure";
 		InvalidationEvent.registerPhase(MEASURE, 0, true);
 		
-		private var _state:String;
+		
 		private var _skin:Object;
 		private var _behaviors:CompositeBehavior;
-		private var _style:Object;
+		
 		
 		public function Component()
 		{
-			_style = new Object(); // need to make object props bindable - something like ObjectProxy but lighter?
 			_behaviors = new CompositeBehavior(this);
-			//PropertyChange.addObserver(this, "skin", this, setTarget);
 			reflex.metadata.resolveCommitProperties(this);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 		}
 		
-		[Bindable] 
-		public function get style():Object { return _style; }
-		public function set style(value:*):void {
-			if(value is String) {
-				var token:String = value as String;
-				var assignments:Array = token.split(";");
-				for each(var assignment:String in assignments) {
-					var split:Array = assignment.split(":");
-					var property:String = split[0];
-					var v:String = split[1];
-					_style[property] = v;
-				}
-			}
-		}
-		
-		public function setStyle(property:String, value:*):void {
-			style[property] = value;
-		}
-		
-		[Bindable(event="currentStateChange")]
-		public function get currentState():String { return _state; }
-		public function set currentState(value:String):void
-		{
-			_state = value;
-			dispatchEvent(new Event("currentStateChange"));
-			/*
-			var change:PropertyChange = PropertyChange.begin();
-			_state = change.add(this, "currentState", _state, value);
-			change.commit();
-			*/
-		}
 		
 		
 		[ArrayElementType("reflex.behaviors.IBehavior")]

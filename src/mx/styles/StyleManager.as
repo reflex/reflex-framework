@@ -9,7 +9,7 @@ package mx.styles
 	
 	import mx.core.IMXMLObject;
 	
-	import reflex.styles.IStylable;
+	import reflex.styles.IStyleable;
 
 	public class StyleManager implements IMXMLObject, IStyleManager2
 	{
@@ -47,7 +47,7 @@ package mx.styles
 		{
 			var displayObject:DisplayObject = event.target as DisplayObject;
 			updateStyles(displayObject);
-			if (displayObject is IStylable) {
+			if (displayObject is IStyleable) {
 				displayObject.addEventListener("stateChange", onStateChange);
 			}
 		}
@@ -55,7 +55,7 @@ package mx.styles
 		protected static function onRemovedFromStage(event:Event):void
 		{
 			var displayObject:DisplayObject = event.target as DisplayObject;
-			if (displayObject is IStylable) {
+			if (displayObject is IStyleable) {
 				displayObject.removeEventListener("stateChange", onStateChange);
 			}
 		}

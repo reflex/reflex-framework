@@ -13,12 +13,15 @@ package reflex.display
 	import flight.list.ArrayList;
 	import flight.list.IList;
 	
+	import reflex.components.IStateful;
 	import reflex.events.InvalidationEvent;
 	import reflex.graphics.IDrawable;
 	import reflex.layouts.ILayout;
 	import reflex.layouts.XYLayout;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
+	import reflex.styles.IStyleable;
+	
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -38,7 +41,7 @@ package reflex.display
 	 * 
 	 * @alpha
 	 */
-	public class Container extends MeasuredSprite implements IContainer
+	public class Container extends StyleableSprite implements IContainer//, IStyleable
 	{
 		
 		static public const CREATE:String = "create";
@@ -55,7 +58,7 @@ package reflex.display
 		private var _template:Object;
 		private var _children:IList;
 		public var renderers:Array;
-		private var _style:Object;
+		
 		
 		public function Container()
 		{
@@ -65,7 +68,7 @@ package reflex.display
 			if(_layout == null) {
 				//_layout = new XYLayout();
 			}
-			_style = new Object();
+			
 			addEventListener(Event.ADDED, onAdded, false, 0, true);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 			addEventListener(LAYOUT, onLayout, false, 0, true);
@@ -78,60 +81,7 @@ package reflex.display
 		private function onSizeChange(event:Event):void {
 			InvalidationEvent.invalidate(this, LAYOUT);
 		}
-		/*
-		override public function set width(value:Number):void {
-			if(value != width) {
-				super.width = value;
-				InvalidationEvent.invalidate(this, LAYOUT);
-			}
-		}
 		
-		override public function set height(value:Number):void {
-			if(value != height) {
-				super.height = value;
-				InvalidationEvent.invalidate(this, LAYOUT);
-			}
-		}
-		
-		override public function set actualWidth(value:Number):void {
-			if(value != width) {
-				super.actualWidth = value;
-				InvalidationEvent.invalidate(this, LAYOUT);
-			}
-		}
-		
-		override public function set actualHeight(value:Number):void {
-			if(value != height) {
-				super.actualHeight = value;
-				InvalidationEvent.invalidate(this, LAYOUT);
-			}
-		}
-		
-		override public function setSize(width:Number, height:Number):void {
-			if(width != this.width || height != this.height) {
-				super.setSize(width, height);
-				InvalidationEvent.invalidate(this, LAYOUT);
-			}
-		}
-		*/
-		[Bindable] 
-		public function get style():Object { return _style; }
-		public function set style(value:*):void {
-			if(value is String) {
-				var token:String = value as String;
-				var assignments:Array = token.split(";");
-				for each(var assignment:String in assignments) {
-					var split:Array = assignment.split(":");
-					var property:String = split[0];
-					var v:String = split[1];
-					_style[property] = v;
-				}
-			}
-		}
-		
-		public function setStyle(property:String, value:*):void {
-			style[property] = value;
-		}
 		
 		/**
 		 * @inheritDoc
