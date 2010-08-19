@@ -17,7 +17,6 @@ package reflex.display
 	import reflex.events.InvalidationEvent;
 	import reflex.graphics.IDrawable;
 	import reflex.layouts.ILayout;
-	import reflex.layouts.XYLayout;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.styles.IStyleable;
@@ -41,7 +40,7 @@ package reflex.display
 	 * 
 	 * @alpha
 	 */
-	public class Container extends StyleableSprite implements IContainer//, IStyleable
+	public class Container extends StyleableSprite implements IContainer
 	{
 		
 		static public const CREATE:String = "create";
@@ -128,6 +127,9 @@ package reflex.display
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
+			if(_layout == value) {
+				return;
+			}
 			if(_layout) { _layout.target = null; }
 			_layout = value;
 			if(_layout) { _layout.target = this; }

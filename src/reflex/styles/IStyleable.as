@@ -14,6 +14,7 @@ package reflex.styles
 		function set style(value:Object):void;
 		*/
 		
+		function getStyle(property:String):*;
 		function setStyle(property:String, value:*):void; // the mxmlc compiler looks or this method specifically (no interface is required)
 		
 	}

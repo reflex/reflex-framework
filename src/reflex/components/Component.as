@@ -3,6 +3,8 @@
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
+	import flight.events.PropertyEvent;
+	
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
@@ -95,6 +97,10 @@
 		}
 		public function set skin(value:Object):void
 		{
+			if(_skin == value) {
+				return;
+			}
+			var oldSkin:Object = _skin;
 			_skin = value;
 			if(_skin is ISkin) {
 				(_skin as ISkin).target = this;
@@ -102,8 +108,8 @@
 				reflex.display.addItem(this, _skin);
 			}
 			reflex.measurement.setSize(skin, width, height);
-			dispatchEvent(new Event("skinChange"));
 			InvalidationEvent.invalidate(this, MEASURE);
+			PropertyEvent.dispatchChange(this, "skin", oldSkin, _skin);
 		}
 		
 		[CommitProperties("width,height,skin")]

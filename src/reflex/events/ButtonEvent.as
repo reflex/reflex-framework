@@ -130,7 +130,7 @@ package reflex.events
 			return button;
 		}
 		
-		public static function deinitialize(button:InteractiveObject):InteractiveObject
+		public static function deinitialize(button:IEventDispatcher):IEventDispatcher
 		{
 			button.removeEventListener(MouseEvent.MOUSE_DOWN,	onMouseDown);
 			button.removeEventListener(MouseEvent.ROLL_OVER,	onRollOver);
@@ -175,7 +175,7 @@ package reflex.events
 		/**
 		 * The dispatch process for all ButtonEvent events.
 		 */
-		private static function dispatchButtonEvent(button:InteractiveObject, type:String, event:MouseEvent = null, mouseEventType:Boolean = false):void
+		private static function dispatchButtonEvent(button:IEventDispatcher, type:String, event:MouseEvent = null, mouseEventType:Boolean = false):void
 		{
 			// performance improvement when dispatch is aborted while there are no listeners
 			// note: there are always listeners when including callbacks
@@ -183,17 +183,24 @@ package reflex.events
 				return;
 			}
 			
+			var mouseX:Number;
+			var mouseY:Number;
+			if(button is InteractiveObject) {
+				mouseX = (button as InteractiveObject).mouseX;
+				mouseY = (button as InteractiveObject).mouseY;
+			}
+			
 			var classType:Class = mouseEventType ? MouseEvent : ButtonEvent;
 			if (event == null) {
-				event = new classType(type, false, false, button.mouseX, button.mouseY, null, false, false, false, pressedIndex[button] != null);
+				event = new classType(type, false, false, mouseX, mouseY, null, false, false, false, pressedIndex[button] != null);
 			} else {
-				event = new classType(type, false, false, button.mouseX, button.mouseY, event.relatedObject,
+				event = new classType(type, false, false, mouseX, mouseY, event.relatedObject,
 									  event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta);
 			}
 			
 			if (!mouseEventType && pressedIndex[button] != null) {
-				ButtonEvent(event).deltaX = button.mouseX - pressedX[button];
-				ButtonEvent(event).deltaY = button.mouseY - pressedY[button];
+				ButtonEvent(event).deltaX = mouseX - pressedX[button];
+				ButtonEvent(event).deltaY = mouseY - pressedY[button];
 			}
 			
 			button.dispatchEvent(event);
@@ -205,14 +212,25 @@ package reflex.events
 		 */
 		private static function onMouseDown(event:MouseEvent):void
 		{
-			var button:InteractiveObject = event.currentTarget as InteractiveObject;
-				button.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-				button.stage.addEventListener(MouseEvent.MOUSE_UP, onRelease);
-				button.stage.addEventListener(Event.MOUSE_LEAVE, onRelease);
-				
+			var button:IEventDispatcher = event.currentTarget as IEventDispatcher;
+			
+			var mouseX:Number;
+			var mouseY:Number;
+			if(button is InteractiveObject) {
+				mouseX = (button as InteractiveObject).mouseX;
+				mouseY = (button as InteractiveObject).mouseY;
+			}
+			
+			var stage:Stage = button["stage"];
+			if(stage) {
+				stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+				stage.addEventListener(MouseEvent.MOUSE_UP, onRelease);
+				stage.addEventListener(Event.MOUSE_LEAVE, onRelease);
+			}
+			
 			pressedIndex[button] = setTimeout(onHold, DELAY_INTERVAL, button);
-			pressedX[button] = button.mouseX;
-			pressedY[button] = button.mouseY;
+			pressedX[button] = mouseX;
+			pressedY[button] = mouseY;
 			dispatchButtonEvent(button, PRESS, event);
 			dispatchButtonEvent(button, STATE_DOWN, event);
 		}
@@ -223,7 +241,7 @@ package reflex.events
 		private static function onMouseMove(event:MouseEvent):void
 		{
 			for (var i:* in pressedIndex) {
-				var button:InteractiveObject = i as InteractiveObject;
+				var button:IEventDispatcher = i as IEventDispatcher;
 				dispatchButtonEvent(button, DRAG, event);
 			}
 		}
@@ -237,7 +255,7 @@ package reflex.events
 			if (event is ButtonEvent) {
 				return;
 			}
-			var button:InteractiveObject = event.currentTarget as InteractiveObject;
+			var button:IEventDispatcher = event.currentTarget as IEventDispatcher;
 			
 			if (pressedIndex[button] != null) {
 				pressedIndex[button] = setTimeout(onHold, HOLD_INTERVAL, button);
@@ -254,7 +272,7 @@ package reflex.events
 		 */
 		private static function onRollOut(event:MouseEvent):void
 		{
-			var button:InteractiveObject = event.currentTarget as InteractiveObject;
+			var button:IEventDispatcher= event.currentTarget as IEventDispatcher;
 			
 			if (pressedIndex[button] != null) {
 				clearTimeout(pressedIndex[button]);
@@ -272,7 +290,7 @@ package reflex.events
 		 */
 		private static function onMouseUp(event:MouseEvent):void
 		{
-			var button:InteractiveObject = event.currentTarget as InteractiveObject;
+			var button:IEventDispatcher = event.currentTarget as IEventDispatcher;
 			if (pressedIndex[button] == null) {
 				dispatchButtonEvent(button, MouseEvent.ROLL_OVER, event, true);
 				dispatchButtonEvent(button, STATE_OVER, event);
@@ -281,7 +299,7 @@ package reflex.events
 		
 		/**
 		 */
-		private static function onHold(button:InteractiveObject):void
+		private static function onHold(button:IEventDispatcher):void
 		{
 			dispatchButtonEvent(button, HOLD);
 			pressedIndex[button] = setTimeout(onHold, HOLD_INTERVAL, button);
@@ -302,7 +320,7 @@ package reflex.events
 				stage.removeEventListener(Event.MOUSE_LEAVE, onRelease);
 			
 			for (var i:* in pressedIndex) {
-				var button:InteractiveObject = i as InteractiveObject;
+				var button:IEventDispatcher = i as IEventDispatcher;
 				
 				if (pressedIndex[button] != -1) {
 					dispatchButtonEvent(button, RELEASE, event as MouseEvent);
@@ -328,7 +346,7 @@ package reflex.events
 		 */
 		private static function onCallbackEvent(event:MouseEvent):void
 		{
-			var button:InteractiveObject = event.currentTarget as InteractiveObject;
+			var button:IEventDispatcher = event.currentTarget as IEventDispatcher;
 			var callback:String = event.type;
 			callback = "on" + callback.substr(0, 1).toUpperCase() + callback.substr(1);
 			

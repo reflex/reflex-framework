@@ -2,9 +2,10 @@
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.display.InteractiveObject;
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
-	import flash.events.Event;
+	
 	import reflex.events.ButtonEvent;
 	
 	[SkinState("up")]
@@ -32,7 +33,7 @@
 			dispatchEvent(new Event("currentStateChange"));
 		}
 		
-		public function ButtonBehavior(target:InteractiveObject = null)
+		public function ButtonBehavior(target:IEventDispatcher= null)
 		{
 			super(target);
 		}

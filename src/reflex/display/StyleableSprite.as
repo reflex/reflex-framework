@@ -1,5 +1,9 @@
 package reflex.display
 {
+	import flash.events.Event;
+	
+	import flight.events.PropertyEvent;
+	
 	import reflex.components.IStateful;
 	import reflex.styles.IStyleable;
 	
@@ -26,19 +30,25 @@ package reflex.display
 		
 		// IStyleable implementation
 		
-		[Bindable]
+		[Bindable(event="idChange")]
 		public function get id():String { return _id; }
 		public function set id(value:String):void {
-			_id = value;
+			if(_id == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "id", _id, _id = value);
 		}
 		
-		[Bindable]
+		[Bindable(event="styleNameChange")]
 		public function get styleName():String { return _styleName;}
 		public function set styleName(value:String):void {
-			_styleName = value;
+			if(_styleName == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "styleName", _styleName, _styleName= value);
 		}
 		
-		[Bindable] 
+		[Bindable(event="styleChange")]
 		public function get style():Object { return _style; }
 		public function set style(value:*):void { // this needs expanding
 			if(value is String) {
@@ -53,6 +63,10 @@ package reflex.display
 			}
 		}
 		
+		public function getStyle(property:String):* {
+			return style[property];
+		}
+		
 		public function setStyle(property:String, value:*):void {
 			style[property] = value;
 		}
@@ -60,11 +74,13 @@ package reflex.display
 		
 		// IStateful implementation
 		
-		[Bindable]
+		[Bindable(event="statesChange")]
 		public function get states():Array { return _states; }
 		public function set states(value:Array):void {
-			_states = value;
-			dispatchEvent(new Event("statesChange"));
+			if(_states == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
 		}
 		
 		
@@ -72,8 +88,10 @@ package reflex.display
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void
 		{
-			_currentState = value;
-			dispatchEvent(new Event("currentStateChange"));
+			if(_currentState == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
 		}
 		
 	}

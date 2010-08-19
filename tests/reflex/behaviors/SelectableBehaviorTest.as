@@ -1,18 +1,19 @@
 package reflex.behaviors
 {
-	import org.flexunit.Assert;
 	import flash.display.Sprite;
+	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
+	
+	import org.flexunit.Assert;
 
-	public class SelectableBehaviorTest
+	public class SelectableBehaviorTest extends EventDispatcher
 	{
 		
 		[Test]
 		public function testClick():void {
-			var sprite:Sprite = new Sprite();
-			var selectable:SelectableBehavior = new SelectableBehavior(sprite);
+			var selectable:SelectableBehavior = new SelectableBehavior(this);
 			selectable.selected = false;
-			sprite.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+			this.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 			Assert.assertTrue(selectable.selected);
 		}
 		

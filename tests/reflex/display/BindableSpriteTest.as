@@ -8,52 +8,50 @@ package reflex.display
 	import org.flexunit.async.Async;
 	
 	import reflex.measurement.Measurements;
+	import reflex.tests.TestBase;
 	
-	public class BindableSpriteTest
+	public class BindableSpriteTest extends TestBase
 	{
 		
 		[Test(async)]
 		public function testXChange():void {
-			var listener:Function = Async.asyncHandler(this, changeHandler, 1000, "xChange", timeoutHandler);
-			var display:BindableSprite = new BindableSprite();
-			display.addEventListener("xChange", listener, false, 0, false);
-			display.x = 100;
-			Assert.assertEquals(100, display.x);
+			testPropertyChange(BindableSprite, "x", 100);
+		}
+		
+		[Test(async)]
+		public function testXNotChanged():void {
+			testPropertyNotChanged(BindableSprite, "x", 100);
 		}
 		
 		[Test(async)]
 		public function testYChange():void {
-			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "yChange", timeoutHandler);
-			var display:BindableSprite = new BindableSprite();
-			display.addEventListener("yChange", listener, false, 0, false);
-			display.y = 100;
-			Assert.assertEquals(100, display.y);
+			testPropertyChange(BindableSprite, "y", 100);
+		}
+		
+		[Test(async)]
+		public function testYNotChanged():void {
+			testPropertyNotChanged(BindableSprite, "y", 100);
 		}
 		
 		[Test(async)]
 		public function testWidthChange():void {
-			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "widthChange", timeoutHandler);
-			var display:BindableSprite= new BindableSprite();
-			display.addEventListener("widthChange", listener, false, 0, false);
-			display.width = 100;
-			Assert.assertEquals(100, display.width);
+			testPropertyChange(BindableSprite, "width", 100);
+		}
+		
+		[Test(async)]
+		public function testWidthNotChanged():void {
+			testPropertyNotChanged(BindableSprite, "width", 100);
 		}
 		
 		[Test(async)]
 		public function testHeightChange():void {
-			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "heightChange", timeoutHandler);
-			var display:BindableSprite = new BindableSprite();
-			display.addEventListener("heightChange", listener, false, 0, false);
-			display.height = 100;
-			Assert.assertEquals(100, display.height);
+			testPropertyChange(BindableSprite, "height", 100);
 		}
 		
-		private function changeHandler(event:PropertyEvent, type:String):void {
-			Assert.assertEquals(event.type, type);
+		[Test(async)]
+		public function testHeightNotChanged():void {
+			testPropertyNotChanged(BindableSprite, "height", 100);
 		}
 		
-		private function timeoutHandler(type:String):void {
-			Assert.fail(type + ": timed out.");
-		}
 	}
 }

@@ -134,6 +134,9 @@ package reflex.skins
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
+			if(_layout == value) {
+				return;
+			}
 			if(_layout) { _layout.target = null; }
 			_layout = value;
 			_layout.target = target;
@@ -287,6 +290,8 @@ package reflex.skins
 				return;
 			}
 			
+			var oldChildren:IList = _children;
+			
 			if(_children) {
 				_children.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
 			}
@@ -309,6 +314,9 @@ package reflex.skins
 				}
 				reset(items);
 			}
+			
+			
+			PropertyEvent.dispatchChange(this, "children", oldChildren, _children);
 		}
 		
 		public function getSkinPart(part:String):InteractiveObject

@@ -19,6 +19,7 @@ package reflex.display
 		 * however children added manually will not be measured or positioned by the container.
 		 */
 		function get children():IList;
+		function set children(value:*):void;
 		
 		/**
 		 * The layout used to measure and position this container's children.
