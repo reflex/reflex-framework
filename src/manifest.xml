@@ -8,6 +8,7 @@
 	<component id="Button" class="reflex.components.Button"/>
 	<component id="Component" class="reflex.components.Component"/>
 	<component id="List" class="reflex.components.List"/>
+	<component id="ListItem" class="reflex.components.ListItem"/>
 	<component id="ScrollBar" class="reflex.components.ScrollBar"/>
 	<component id="ScrollPane" class="reflex.components.ScrollPane"/>
 	<component id="Stepper" class="reflex.components.Stepper"/>
