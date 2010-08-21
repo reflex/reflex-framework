@@ -9,8 +9,8 @@ package reflex.display
 	public class ScrollContainer extends Container
 	{
 		
-		private _horizontal:IPosition;
-		private _vertical:IPosition;
+		private var _horizontal:IPosition;
+		private var _vertical:IPosition;
 		
 		[Bindable(event="horizontalChange")]
 		public function get horizontal():IPosition { return _horizontal; }
