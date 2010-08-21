@@ -103,7 +103,7 @@ package reflex.measurement
 			Assert.assertEquals(100, instance.explicite.height);
 		}
 		
-		[Test(async)]
+		[Test(async)] // binding events should fire for width/height changes, but explicite/measured should not be updated
 		public function testSetSize():void {
 			var instance:IMeasurable = new C() as IMeasurable;
 			var widthListener:Function = Async.asyncHandler(this, changeHandler, 500, "widthChange", timeoutHandler);
@@ -111,11 +111,20 @@ package reflex.measurement
 			(instance as IEventDispatcher).addEventListener("widthChange", widthListener, false, 0, false);
 			(instance as IEventDispatcher).addEventListener("heightChange", heightListener, false, 0, false);
 			
-			instance.setSize(5, 5);
-			Assert.assertEquals(5, instance.width);
-			Assert.assertEquals(5, instance.height);
-			Assert.assertFalse(instance.explicite.width == 5);
-			Assert.assertFalse(instance.explicite.height == 5);
+			instance.setSize(100, 100);
+			Assert.assertEquals(100, instance.width);
+			Assert.assertEquals(100, instance.height);
+			Assert.assertFalse(instance.explicite.width == 100);
+			Assert.assertFalse(instance.explicite.height == 100);
+		}
+		
+		[Test(async)] //  no events should fire if size hasn't changed
+		public function testSetSizeNotChanged():void {
+			var instance:IMeasurable = new C() as IMeasurable;
+			instance.setSize(100, 100);
+			Async.failOnEvent(this, instance as IEventDispatcher, "widthChange", 500, timeoutHandler);
+			Async.failOnEvent(this, instance as IEventDispatcher, "heightChange", 500, timeoutHandler);
+			instance.setSize(100, 100);
 		}
 		
 	}

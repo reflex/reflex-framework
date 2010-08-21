@@ -15,6 +15,8 @@ package
 	import reflex.display.DisplayFunctionsTest;
 	import reflex.display.MeasuredSpriteTest;
 	import reflex.display.StyleableSpriteTest;
+	import reflex.layouts.BasicLayoutTest;
+	import reflex.layouts.XYLayoutTest;
 	import reflex.measurement.MeasurementFunctionsTest;
 	import reflex.skins.SkinContainerTest;
 	import reflex.skins.SkinMeasurementTest;
@@ -49,6 +51,9 @@ package
 		public var button:ButtonTest;
 		public var listItem:ListItemTest;
 		public var list:ListTest;
+		
+		public var xyLayout:XYLayoutTest;
+		public var basicLayout:BasicLayoutTest;
 		
 	}
 }

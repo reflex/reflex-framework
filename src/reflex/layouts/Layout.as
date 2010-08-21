@@ -8,6 +8,7 @@ package reflex.layouts
 	import flash.utils.Dictionary;
 	
 	import flight.binding.Bind;
+	import flight.events.PropertyEvent;
 	
 	import reflex.events.InvalidationEvent;
 	import reflex.metadata.resolveBindings;
@@ -29,11 +30,14 @@ package reflex.layouts
 		private var attached:Dictionary = new Dictionary(true);
 		private var _target:IEventDispatcher;
 		
-		[Bindable]
+		[Bindable(event="targetChange")]
 		public function get target():IEventDispatcher { return _target; }
 		public function set target(value:IEventDispatcher):void
 		{
-			_target = value;
+			if(_target == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "target", _target, _target = value);
 		}
 		
 		public function Layout() {
@@ -67,7 +71,7 @@ package reflex.layouts
 		
 		private function onInvalidateLayout(object:*):void {
 			if(target is DisplayObject) {
-				InvalidationEvent.invalidate(target as DisplayObject, "measure");
+				//InvalidationEvent.invalidate(target as DisplayObject, "measure");
 				InvalidationEvent.invalidate(target as DisplayObject, "layout");
 			}
 		}

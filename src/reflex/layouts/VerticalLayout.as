@@ -3,8 +3,9 @@ package reflex.layouts
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import reflex.measurement.resolveWidth;
+	
 	import reflex.measurement.resolveHeight;
+	import reflex.measurement.resolveWidth;
 	
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]
@@ -17,7 +18,8 @@ package reflex.layouts
 	public class VerticalLayout extends Layout implements ILayout
 	{
 		
-		[Bindable] public var gap:Number = 5;
+		
+		public var gap:Number = 5;
 		
 		override public function measure(children:Array):Point
 		{

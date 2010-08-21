@@ -20,14 +20,13 @@ package reflex.measurement
 		private var _minWidth:Number;
 		private var _minHeight:Number;
 		
-		// should these even be bindable?
+		// should these be bindable?
 		
 		private var instance:IMeasurable;
 		
 		/**
 		 * @inheritDoc
 		 */
-		[Bindable]
 		public function get width():Number { return _width; }
 		public function set width(value:Number):void {
 			_width = value;
@@ -39,7 +38,6 @@ package reflex.measurement
 		/**
 		 * @inheritDoc
 		 */
-		[Bindable]
 		public function get height():Number { return _height; }
 		public function set height(value:Number):void {
 			_height = value;
@@ -51,7 +49,6 @@ package reflex.measurement
 		/**
 		 * @inheritDoc
 		 */
-		[Bindable]
 		public function get minWidth():Number { return _minWidth; }
 		public function set minWidth(value:Number):void {
 			_minWidth = value;
@@ -60,7 +57,6 @@ package reflex.measurement
 		/**
 		 * @inheritDoc
 		 */
-		[Bindable]
 		public function get minHeight():Number { return _minHeight; }
 		public function set minHeight(value:Number):void {
 			_minHeight = value;

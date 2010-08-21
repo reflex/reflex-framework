@@ -17,7 +17,7 @@ package reflex.layouts
 	public class HorizontalLayout extends Layout implements ILayout
 	{
 		
-		[Bindable] public var gap:Number = 5;
+		public var gap:Number = 5;
 		
 		override public function measure(children:Array):Point
 		{

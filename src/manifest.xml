@@ -23,11 +23,9 @@
 	
 	<!-- behaviors -->
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
-	<component id="CursorBehavior" class="reflex.behaviors.CursorBehavior"/>
 	<component id="DragBehavior" class="reflex.behaviors.DragBehavior"/>
 	<component id="ListBehavior" class="reflex.behaviors.ListBehavior"/>
 	<component id="ListSelectBehavior" class="reflex.behaviors.ListSelectBehavior"/>
-	<component id="PopoutBehavior" class="reflex.behaviors.PopoutBehavior"/>
 	<component id="SlideBehavior" class="reflex.behaviors.SlideBehavior"/>
 	<component id="SelectableBehavior" class="reflex.behaviors.SelectableBehavior"/>
 	<component id="StepBehavior" class="reflex.behaviors.StepBehavior"/>

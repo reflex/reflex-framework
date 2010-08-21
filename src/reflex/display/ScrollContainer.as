@@ -3,15 +3,32 @@ package reflex.display
 	import flash.events.Event;
 	
 	import flight.binding.Bind;
+	import flight.events.PropertyEvent;
 	import flight.position.IPosition;
 	
 	public class ScrollContainer extends Container
 	{
-		[Bindable]
-		public var horizontal:IPosition;
 		
-		[Bindable]
-		public var vertical:IPosition;
+		private _horizontal:IPosition;
+		private _vertical:IPosition;
+		
+		[Bindable(event="horizontalChange")]
+		public function get horizontal():IPosition { return _horizontal; }
+		public function set horizontal(value:IPosition):void {
+			if(_horizontal == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "horizontal", _horizontal, _horizontal = value);
+		}
+		
+		[Bindable(event="verticalChange")]
+		public function get vertical():IPosition { return _vertical; }
+		public function set vertical(value:IPosition):void {
+			if(_vertical == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "vertical", _vertical, _vertical = value);
+		}
 		
 		/*
 		override public function set background(value:Number):void
@@ -20,8 +37,7 @@ package reflex.display
 			opaqueBackground = background;
 			cacheAsBitmap = !isNaN(background);
 		}
-		*/
-		/*
+		
 		override public function get width():Number
 		{
 			return block.width;
@@ -39,8 +55,8 @@ package reflex.display
 		{
 			block.height = value;
 		}
-		*/
-		/*override *//*protected function initLayout():void
+		
+		protected function initLayout():void
 		{
 			var scrollBlock:ScrollBlock = new ScrollBlock();
 			hPosition = scrollBlock.hPosition;
@@ -78,6 +94,7 @@ package reflex.display
 		private function onHeightChange(event:Event):void
 		{
 			dispatchEvent( new Event("heightChange") );
-		}*/
+		}
+		*/
 	}
 }

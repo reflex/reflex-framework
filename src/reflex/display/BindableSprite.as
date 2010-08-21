@@ -7,7 +7,7 @@ package reflex.display
 	/**
 	 * The BindableSprite class makes most DisplayObject properties bindable.
 	 * 
-	 * 
+	 * @alpha
 	 */
 	public class BindableSprite extends Sprite
 	{

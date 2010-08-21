@@ -167,7 +167,7 @@ package reflex.behaviors
 		}
 		
 		
-		private var props:Array;
+		//private var props:Array;
 		
 		/**
 		 * Proxy method allowing looping through the map.

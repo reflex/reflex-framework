@@ -5,6 +5,8 @@ package reflex.display
 	import flash.events.Event;
 	import flash.net.URLRequest;
 	
+	import flight.events.PropertyEvent;
+	
 	import reflex.events.InvalidationEvent;
 	
 	public class ImageDisplay extends MeasuredSprite
@@ -22,16 +24,20 @@ package reflex.display
 		[Bindable(event="sourceChange")]
 		public function get source():Object { return _source; }
 		public function set source(value:Object):void {
+			if(_source == value) {
+				return
+			}
+			var oldSource:Object = _source;
 			_source = value;
 			InvalidationEvent.invalidate(this, SOURCE_CHANGED);
-			dispatchEvent(new Event("sourceChange"));
+			PropertyEvent.dispatchChange(this, "source", oldSource, _source);
 		}
 		
 		public function ImageDisplay()
 		{
 			super();
 			addEventListener(SOURCE_CHANGED, onSourceChanged, false, 0, true);
-			addEventListener(MEASURE, onMeasure, false, 0, true);
+			//addEventListener(MEASURE, onMeasure, false, 0, true);
 		}
 		
 		private function onSourceChanged(event:InvalidationEvent):void {
@@ -55,10 +61,10 @@ package reflex.display
 			setSize(measured.width, measured.height);
 			addChild(loader);
 		}
-		
+		/*
 		private function onMeasure(event:InvalidationEvent):void {
 			
 		}
-		
+		*/
 	}
 }

@@ -79,6 +79,7 @@ package reflex.graphics
 		public function render():void {
 			var graphics:Vector.<Graphics> = reflex.graphics.resolveGraphics(target);
 			for each(var g:Graphics in graphics) {
+				g.clear();
 				drawTo(g);
 			}
 		}

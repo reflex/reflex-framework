@@ -71,8 +71,8 @@ package reflex.display
 			addEventListener(Event.ADDED, onAdded, false, 0, true);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 			addEventListener(LAYOUT, onLayout, false, 0, true);
-			addEventListener("widthChange", onSizeChange, false, 0, true);
-			addEventListener("heightChange", onSizeChange, false, 0, true);
+			//addEventListener("widthChange", onSizeChange, false, 0, true);
+			//addEventListener("heightChange", onSizeChange, false, 0, true);
 		}
 		
 		// width/height invalidation needs some thought
@@ -93,6 +93,8 @@ package reflex.display
 			if(_children == value) {
 				return;
 			}
+			
+			var oldChildren:IList = _children;
 			
 			if(_children) {
 				_children.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
@@ -116,9 +118,9 @@ package reflex.display
 				}
 				reset(items);
 			}
-			dispatchEvent( new Event("childrenChange") );
 			InvalidationEvent.invalidate(this, MEASURE);
 			InvalidationEvent.invalidate(this, LAYOUT);
+			PropertyEvent.dispatchChange(this, "children", oldChildren, _children);
 		}
 		
 		/**
@@ -130,17 +132,22 @@ package reflex.display
 			if(_layout == value) {
 				return;
 			}
+			var oldLayout:ILayout = _layout;
 			if(_layout) { _layout.target = null; }
 			_layout = value;
 			if(_layout) { _layout.target = this; }
 			InvalidationEvent.invalidate(this, MEASURE);
 			InvalidationEvent.invalidate(this, LAYOUT);
-			dispatchEvent( new Event("layoutChange") );
+			PropertyEvent.dispatchChange(this, "layout", oldLayout, _layout);
 		}
 		
 		[Bindable(event="templateChange")]
 		public function get template():Object { return _template; }
 		public function set template(value:Object):void {
+			if(_template == value) {
+				return;
+			}
+			var oldTemplate:Object = _template;
 			_template = value;
 			if(children != null) {
 				var items:Array = [];
@@ -151,9 +158,9 @@ package reflex.display
 				}
 				reset(items);
 			}
-			dispatchEvent( new Event("templateChange") );
 			InvalidationEvent.invalidate(this, MEASURE);
 			InvalidationEvent.invalidate(this, LAYOUT);
+			PropertyEvent.dispatchChange(this, "template", oldTemplate, _template);
 		}
 		
 		private function onAdded(event:Event):void {
@@ -197,6 +204,7 @@ package reflex.display
 					//addChildAt(event.items[0], loc);
 					break;
 				case ListEventKind.RESET :
+				default:
 					reset(event.items);
 					break;
 			}

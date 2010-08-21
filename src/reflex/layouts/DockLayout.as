@@ -100,6 +100,7 @@ package reflex.layouts
 						child.setSize(rectangle.width, rectangle.height)
 						break;
 					case CENTER :
+					default:
 						child.x = rectangle.width/2 - width/2;
 						child.y = rectangle.height/2 - height/2;
 						break;
