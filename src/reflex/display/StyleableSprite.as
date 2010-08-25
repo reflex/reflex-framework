@@ -50,15 +50,17 @@ package reflex.display
 		
 		[Bindable(event="styleChange")]
 		public function get style():Object { return _style; }
-		public function set style(value:*):void { // this needs expanding
+		public function set style(value:*):void { // this needs expanding in the future
 			if(value is String) {
 				var token:String = value as String;
 				var assignments:Array = token.split(";");
 				for each(var assignment:String in assignments) {
 					var split:Array = assignment.split(":");
-					var property:String = split[0];
-					var v:String = split[1];
-					_style[property] = v;
+					if(split.length == 2) {
+						var property:String = split[0].replace(/\s+/g, "");
+						var v:String = split[1].replace(/\s+/g, "");
+						_style[property] = v;
+					}
 				}
 			}
 		}

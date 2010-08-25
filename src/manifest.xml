@@ -53,8 +53,10 @@
 	<component id="InvalidationEvent" class="reflex.events.InvalidationEvent"/>
 	
 	<!-- flight dependencies -->
-	<!-- <component id="ListEvent" class="flight.events.ListEvent"/> -->
-	
+	<!--
+	<component id="IList" class="flight.list.IList"/>
+	<component id="ArrayList" class="flight.list.ArrayList"/>
+	-->
 	<!-- flex dependencies -->
 	<!-- <component id="FlexClasses" class="FlexClasses"/> -->
 	
