@@ -1,24 +1,17 @@
 package reflex.display
 {
 	import flash.display.DisplayObject;
-	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import flight.binding.Bind;
 	import flight.events.ListEvent;
 	import flight.events.ListEventKind;
-	import flight.events.PropertyEvent;
 	import flight.list.ArrayList;
 	import flight.list.IList;
 	
-	import reflex.events.InvalidationEvent;
-	import reflex.graphics.IDrawable;
+	import reflex.events.RenderPhase;
 	import reflex.layouts.ILayout;
-	import reflex.layouts.XYLayout;
-	import reflex.measurement.resolveHeight;
-	import reflex.measurement.resolveWidth;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -29,7 +22,7 @@ package reflex.display
 	[Style(name="dock")]
 	[Style(name="align")]
 	
-	[Event(name="initialize", type="reflex.events.InvalidationEvent")]
+	[Event(name="initialize", type="reflex.events.RenderPhase")]
 	
 	[DefaultProperty("children")]
 	
@@ -44,10 +37,10 @@ package reflex.display
 		static public const MEASURE:String = "measure";
 		static public const LAYOUT:String = "layout";
 		
-		InvalidationEvent.registerPhase(CREATE, 0, true);
-		InvalidationEvent.registerPhase(INITIALIZE, 1, true);
-		InvalidationEvent.registerPhase(MEASURE, 2, true);
-		InvalidationEvent.registerPhase(LAYOUT, 3, false);
+		RenderPhase.registerPhase(CREATE, 0, true);
+		RenderPhase.registerPhase(INITIALIZE, 1, true);
+		RenderPhase.registerPhase(MEASURE, 2, true);
+		RenderPhase.registerPhase(LAYOUT, 3, false);
 		
 		private var _layout:ILayout;
 		private var _template:Object;
@@ -74,7 +67,7 @@ package reflex.display
 		// width/height invalidation needs some thought
 		
 		private function onSizeChange(event:Event):void {
-			InvalidationEvent.invalidate(this, LAYOUT);
+			RenderPhase.invalidate(this, LAYOUT);
 		}
 		/*
 		override public function set width(value:Number):void {
@@ -163,8 +156,8 @@ package reflex.display
 				reset(items);
 			}
 			dispatchEvent( new Event("childrenChange") );
-			InvalidationEvent.invalidate(this, MEASURE);
-			InvalidationEvent.invalidate(this, LAYOUT);
+			RenderPhase.invalidate(this, MEASURE);
+			RenderPhase.invalidate(this, LAYOUT);
 		}
 		
 		[Bindable(event="layoutChange")]
@@ -173,8 +166,8 @@ package reflex.display
 			if(_layout) { _layout.target = null; }
 			_layout = value;
 			if(_layout) { _layout.target = this; }
-			InvalidationEvent.invalidate(this, MEASURE);
-			InvalidationEvent.invalidate(this, LAYOUT);
+			RenderPhase.invalidate(this, MEASURE);
+			RenderPhase.invalidate(this, LAYOUT);
 			dispatchEvent( new Event("layoutChange") );
 		}
 		
@@ -192,17 +185,17 @@ package reflex.display
 				reset(items);
 			}
 			dispatchEvent( new Event("templateChange") );
-			InvalidationEvent.invalidate(this, MEASURE);
-			InvalidationEvent.invalidate(this, LAYOUT);
+			RenderPhase.invalidate(this, MEASURE);
+			RenderPhase.invalidate(this, LAYOUT);
 		}
 		
 		private function onAdded(event:Event):void {
 			removeEventListener(Event.ADDED, onAdded, false);
-			InvalidationEvent.invalidate(this, CREATE);
-			InvalidationEvent.invalidate(this, INITIALIZE);
+			RenderPhase.invalidate(this, CREATE);
+			RenderPhase.invalidate(this, INITIALIZE);
 		}
 		
-		private function onMeasure(event:InvalidationEvent):void {
+		private function onMeasure(event:Event):void {
 			if((isNaN(explicite.width) || isNaN(explicite.height)) && layout) {
 				var point:Point = layout.measure(renderers);
 				measured.width = point.x;
@@ -210,7 +203,7 @@ package reflex.display
 			}
 		}
 		
-		private function onLayout(event:InvalidationEvent):void {
+		private function onLayout(event:Event):void {
 			if(layout) {
 				//var width:Number = reflex.measurement.resolveWidth(this);
 				//var height:Number = reflex.measurement.resolveHeight(this);
@@ -240,7 +233,7 @@ package reflex.display
 					reset(event.items);
 					break;
 			}
-			InvalidationEvent.invalidate(this, LAYOUT);
+			RenderPhase.invalidate(this, LAYOUT);
 		}
 		
 		private function add(items:Array, index:int):void {
@@ -253,7 +246,7 @@ package reflex.display
 				removeChildAt(numChildren-1);
 			}
 			renderers = reflex.display.addItemsAt(this, items, 0, _template); // todo: correct ordering
-			InvalidationEvent.invalidate(this, LAYOUT);
+			RenderPhase.invalidate(this, LAYOUT);
 		}
 		
 		

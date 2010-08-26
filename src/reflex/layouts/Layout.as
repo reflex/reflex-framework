@@ -9,7 +9,7 @@ package reflex.layouts
 	
 	import flight.binding.Bind;
 	
-	import reflex.events.InvalidationEvent;
+	import reflex.events.RenderPhase;
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveEventListeners;
 	import reflex.metadata.resolveLayoutProperties;
@@ -64,8 +64,8 @@ package reflex.layouts
 		
 		private function onInvalidateLayout(object:*):void {
 			if(target is DisplayObject) {
-				InvalidationEvent.invalidate(target as DisplayObject, "measure");
-				InvalidationEvent.invalidate(target as DisplayObject, "layout");
+				RenderPhase.invalidate(target as DisplayObject, "measure");
+				RenderPhase.invalidate(target as DisplayObject, "layout");
 			}
 		}
 		

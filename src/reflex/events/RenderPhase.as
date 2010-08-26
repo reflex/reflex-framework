@@ -10,17 +10,8 @@ package reflex.events
 	/**
 	 * @alpha
 	 **/
-	public class InvalidationEvent extends Event
+	public class RenderPhase
 	{
-		public function InvalidationEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false)
-		{
-			super(type, bubbles, cancelable);
-		}
-		
-		override public function clone():Event
-		{
-			return new InvalidationEvent(type, bubbles, cancelable);
-		}
 		
 		private static var rendering:Boolean = false;
 		private static var phaseList:Array = [];
@@ -110,8 +101,8 @@ package reflex.events
 		{
 			invalidStages[stage] = true;
 			stage.invalidate();
-			stage.addEventListener(Event.RENDER, onRender, false, 0xF, true);
-			stage.addEventListener(Event.RESIZE, onRender, false, 0xF, true);
+			stage.addEventListener(Event.RENDER, onRender, false, -0xF, true);
+			stage.addEventListener(Event.RESIZE, onRender, false, -0xF, true);
 		}
 		
 		private static function validateStages():void
@@ -154,90 +145,81 @@ package reflex.events
 			}
 		}
 		
-	}
-}
-
-
-import flash.display.DisplayObject;
-import flash.events.IEventDispatcher;
-import flash.utils.Dictionary;
-
-import reflex.events.InvalidationEvent;
-
-class RenderPhase
-{
-	public var ascending:Boolean = true;
-	public var priority:int = 0;
-	
-	private var _type:String;
-	private var depths:Array = [];
-	private var pos:int = -1;
-	private var current:Dictionary = new Dictionary(true);
-	private var invalidated:Dictionary = new Dictionary(true);
-	
-	public function RenderPhase(type:String, priority:int = 0, ascending:Boolean = true)
-	{
-		_type = type;
-		this.ascending = ascending;
-		this.priority = priority;
-	}
-	
-	public function get type():String
-	{
-		return _type;
-	}
-	
-	public function get renderingDepth():int
-	{
-		return pos;
-	}
-	
-	public function render():void
-	{
-		if (depths.length == 0) {
-			return;
+		
+		public var ascending:Boolean = true;
+		public var priority:int = 0;
+		
+		private var _type:String;
+		private var depths:Array = [];
+		private var pos:int = -1;
+		private var current:Dictionary = new Dictionary(true);
+		private var invalidated:Dictionary = new Dictionary(true);
+		
+		public function RenderPhase(type:String, priority:int = 0, ascending:Boolean = true)
+		{
+			_type = type;
+			this.ascending = ascending;
+			this.priority = priority;
 		}
 		
-		var beg:int = ascending ? 			 -1 : depths.length;
-		var end:int = ascending ? depths.length : 0;
-		var vel:int = ascending ? 			  1 : -1;
-		var pre:Dictionary;
+		public function get type():String
+		{
+			return _type;
+		}
 		
-		for (pos = beg; pos != end; pos += vel) {
-			if (depths[pos] == null) {
-				continue;
+		public function get renderingDepth():int
+		{
+			return pos;
+		}
+		
+		public function render():void
+		{
+			if (depths.length == 0) {
+				return;
 			}
 			
-			// replace current dictionary with a clean one before new cycle
-			pre = current;
-			current = depths[pos];
-			depths[pos] = pre;
+			var beg:int = ascending ? 			 -1 : depths.length;
+			var end:int = ascending ? depths.length : 0;
+			var vel:int = ascending ? 			  1 : -1;
+			var pre:Dictionary;
 			
-			for (var i:* in current) {
-				var display:DisplayObject = i;
-				delete current[i];
-				delete invalidated[display];
-				display.dispatchEvent( new InvalidationEvent(type) );
+			for (pos = beg; pos != end; pos += vel) {
+				if (depths[pos] == null) {
+					continue;
+				}
+				
+				// replace current dictionary with a clean one before new cycle
+				pre = current;
+				current = depths[pos];
+				depths[pos] = pre;
+				
+				for (var i:* in current) {
+					var display:DisplayObject = i;
+					delete current[i];
+					delete invalidated[display];
+					display.dispatchEvent( new Event(type) );
+				}
 			}
+			pos = -1;
 		}
-		pos = -1;
-	}
-	
-	public function addDisplay(display:DisplayObject, depth:int):void
-	{
-		if (depths[depth] == null) {
-			depths[depth] = new Dictionary(true);
+		
+		public function addDisplay(display:DisplayObject, depth:int):void
+		{
+			if (depths[depth] == null) {
+				depths[depth] = new Dictionary(true);
+			}
+			depths[depth][display] = true;
+			invalidated[display] = depth;
 		}
-		depths[depth][display] = true;
-		invalidated[display] = depth;
-	}
-	public function removeDisplay(display:DisplayObject):void
-	{
-		delete depths[ invalidated[display] ][display];
-		delete invalidated[display];
-	}
-	public function hasDisplay(display:IEventDispatcher):Boolean
-	{
-		return invalidated[display] != null;
+		public function removeDisplay(display:DisplayObject):void
+		{
+			delete depths[ invalidated[display] ][display];
+			delete invalidated[display];
+		}
+		public function hasDisplay(display:IEventDispatcher):Boolean
+		{
+			return invalidated[display] != null;
+		}
+		
 	}
 }

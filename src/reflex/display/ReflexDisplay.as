@@ -5,7 +5,7 @@
 	
 	import flight.events.PropertyEvent;
 	
-	import reflex.events.InvalidationEvent;
+	import reflex.events.RenderPhase;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurements;
 	import reflex.measurement.Measurements;

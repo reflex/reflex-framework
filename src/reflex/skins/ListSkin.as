@@ -5,7 +5,7 @@ package reflex.skins
 	
 	import reflex.display.Container;
 	
-	import reflex.events.InvalidationEvent;
+	import reflex.events.RenderPhase;
 
 	public class ListSkin extends Skin
 	{

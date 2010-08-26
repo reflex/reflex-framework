@@ -3,8 +3,10 @@ package reflex.behaviors
 	
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
+	
 	import flight.position.IPosition;
 	import flight.position.Position;
+	
 	import reflex.events.ButtonEvent;
 	
 	public class DragStepBehavior extends Behavior
@@ -13,7 +15,11 @@ package reflex.behaviors
 		[Binding(target="target.position")]
 		public var position:IPosition = new Position();		// TODO: implement lazy instantiation of position
 		
-		protected var startDragPosition:Number;
+		public var increment:Number = 1;
+		public var dragTolerance:Number = 3;
+		public var dragging:Boolean = false;
+		
+		private var startDragPosition:Number;
 		
 		public function DragStepBehavior(target:IEventDispatcher = null)
 		{
@@ -40,7 +46,12 @@ package reflex.behaviors
 		[EventListener(type="drag", target="target")]
 		public function onDrag(event:ButtonEvent):void
 		{
-			position.value = startDragPosition + event.deltaX;
+			if (dragging) {
+				position.value = Math.round( (startDragPosition + event.deltaX) / increment) * increment;
+			} else if ( Math.abs(startDragPosition - event.deltaX) > dragTolerance) {
+				position.value = Math.round( (startDragPosition + event.deltaX) / increment) * increment;
+				dragging = true;
+			}
 		}
 		
 	}

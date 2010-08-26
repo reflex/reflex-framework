@@ -8,9 +8,9 @@
 	import reflex.behaviors.IBehavioral;
 	import reflex.display.ReflexDisplay;
 	import reflex.display.addItem;
-	import reflex.events.InvalidationEvent;
-	import reflex.measurement.resolveWidth;
+	import reflex.events.RenderPhase;
 	import reflex.measurement.resolveHeight;
+	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.skins.ISkin;
@@ -32,7 +32,7 @@
 	{
 		
 		static public const MEASURE:String = "measure";
-		InvalidationEvent.registerPhase(MEASURE, 0, true);
+		RenderPhase.registerPhase(MEASURE, 0, true);
 		
 		private var _state:String;
 		private var _skin:Object;
@@ -134,7 +134,7 @@
 			}
 			reflex.measurement.setSize(skin, width, height);
 			dispatchEvent(new Event("skinChange"));
-			InvalidationEvent.invalidate(this, MEASURE);
+			RenderPhase.invalidate(this, MEASURE);
 		}
 		
 		[CommitProperties("width,height,skin")]
@@ -159,7 +159,7 @@
 			reflex.measurement.setSize(skin, width, height);
 		}
 		
-		private function onMeasure(event:InvalidationEvent):void {
+		private function onMeasure(event:Event):void {
 			if((isNaN(explicite.width) || isNaN(explicite.height)) && skin) {
 				measured.width = reflex.measurement.resolveWidth(skin); // explicite width of skin becomes measured width of component
 				measured.height = reflex.measurement.resolveHeight(skin); // explicite height of skin becomes measured height of component

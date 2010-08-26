@@ -6,7 +6,8 @@ package reflex.events
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
-	import flash.utils.clearTimeout;
+	import flash.utils.clearInterval;
+	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 	
 	/**
@@ -82,6 +83,7 @@ package reflex.events
 		 * Index values track whether the mouse is over the indexed Button's at any given moment.
 		 */
 		private static var pressedIndex:Dictionary = new Dictionary(true);
+		private static var holdIntervals:Dictionary = new Dictionary(true);
 		private static var pressedX:Dictionary = new Dictionary(true);
 		private static var pressedY:Dictionary = new Dictionary(true);
 		
@@ -185,13 +187,13 @@ package reflex.events
 			
 			var classType:Class = mouseEventType ? MouseEvent : ButtonEvent;
 			if (event == null) {
-				event = new classType(type, false, false, button.mouseX, button.mouseY, null, false, false, false, pressedIndex[button] != null);
+				event = new classType(type, false, false, button.mouseX, button.mouseY, null, false, false, false, pressedIndex[button]);
 			} else {
 				event = new classType(type, false, false, button.mouseX, button.mouseY, event.relatedObject,
 									  event.ctrlKey, event.altKey, event.shiftKey, event.buttonDown, event.delta);
 			}
 			
-			if (!mouseEventType && pressedIndex[button] != null) {
+			if (!mouseEventType && pressedIndex[button]) {
 				ButtonEvent(event).deltaX = button.mouseX - pressedX[button];
 				ButtonEvent(event).deltaY = button.mouseY - pressedY[button];
 			}
@@ -209,8 +211,9 @@ package reflex.events
 				button.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				button.stage.addEventListener(MouseEvent.MOUSE_UP, onRelease);
 				button.stage.addEventListener(Event.MOUSE_LEAVE, onRelease);
-				
-			pressedIndex[button] = setTimeout(onHold, DELAY_INTERVAL, button);
+			
+			pressedIndex[button] = 1;
+			holdIntervals[button] = setTimeout(onDelayHold, DELAY_INTERVAL, button);
 			pressedX[button] = button.mouseX;
 			pressedY[button] = button.mouseY;
 			dispatchButtonEvent(button, PRESS, event);
@@ -239,8 +242,8 @@ package reflex.events
 			}
 			var button:InteractiveObject = event.currentTarget as InteractiveObject;
 			
-			if (pressedIndex[button] != null) {
-				pressedIndex[button] = setTimeout(onHold, HOLD_INTERVAL, button);
+			if (pressedIndex[button]) {
+				pressedIndex[button] = 1;
 				dispatchButtonEvent(button, DRAG_OVER, event);
 				dispatchButtonEvent(button, STATE_DOWN, event);
 			} else if (!event.buttonDown) {
@@ -256,8 +259,7 @@ package reflex.events
 		{
 			var button:InteractiveObject = event.currentTarget as InteractiveObject;
 			
-			if (pressedIndex[button] != null) {
-				clearTimeout(pressedIndex[button]);
+			if (pressedIndex[button]) {
 				pressedIndex[button] = -1;
 				dispatchButtonEvent(button, DRAG_OUT, event);
 				dispatchButtonEvent(button, STATE_OVER, event);
@@ -273,7 +275,7 @@ package reflex.events
 		private static function onMouseUp(event:MouseEvent):void
 		{
 			var button:InteractiveObject = event.currentTarget as InteractiveObject;
-			if (pressedIndex[button] == null) {
+			if (!pressedIndex[button]) {
 				dispatchButtonEvent(button, MouseEvent.ROLL_OVER, event, true);
 				dispatchButtonEvent(button, STATE_OVER, event);
 			}
@@ -283,9 +285,18 @@ package reflex.events
 		 */
 		private static function onHold(button:InteractiveObject):void
 		{
-			dispatchButtonEvent(button, HOLD);
-			pressedIndex[button] = setTimeout(onHold, HOLD_INTERVAL, button);
+			if (pressedIndex[button] == 1) {
+				dispatchButtonEvent(button, HOLD);
+			}
 		}
+		
+		private static function onDelayHold(button:InteractiveObject):void
+		{
+			if (pressedIndex[button] == 1) {
+				dispatchButtonEvent(button, HOLD);
+			}
+			holdIntervals[button] = setInterval(onHold, HOLD_INTERVAL, button);
+		}	
 		
 		/**
 		 * mouseUp event listener. Triggers release and stateOver events for
@@ -312,8 +323,9 @@ package reflex.events
 					dispatchButtonEvent(button, STATE_UP, event as MouseEvent);
 				}
 				
-				clearTimeout(pressedIndex[button]);
+				clearInterval(holdIntervals[button]);
 				delete pressedIndex[button];
+				delete holdIntervals[button];
 				delete pressedX[button];
 				delete pressedY[button];
 			}
@@ -338,7 +350,7 @@ package reflex.events
 				} else {
 					button[callback]();
 				}
-				event.updateAfterEvent();
+				//event.updateAfterEvent();
 			}
 		}
 		

@@ -5,7 +5,7 @@ package reflex.display
 	import flash.events.Event;
 	import flash.net.URLRequest;
 	
-	import reflex.events.InvalidationEvent;
+	import reflex.events.RenderPhase;
 	
 	public class ImageDisplay extends ReflexDisplay
 	{
@@ -13,7 +13,7 @@ package reflex.display
 		public static const MEASURE:String = "measure";
 		public static const SOURCE_CHANGED:String = "sourceChanged";
 		
-		InvalidationEvent.registerPhase(SOURCE_CHANGED, 0, true);
+		RenderPhase.registerPhase(SOURCE_CHANGED, 0, true);
 		
 		private var loader:Loader;
 		
@@ -23,7 +23,7 @@ package reflex.display
 		public function get source():Object { return _source; }
 		public function set source(value:Object):void {
 			_source = value;
-			InvalidationEvent.invalidate(this, SOURCE_CHANGED);
+			RenderPhase.invalidate(this, SOURCE_CHANGED);
 			dispatchEvent(new Event("sourceChange"));
 		}
 		
@@ -34,7 +34,7 @@ package reflex.display
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 		}
 		
-		private function onSourceChanged(event:InvalidationEvent):void {
+		private function onSourceChanged(event:Event):void {
 			if(source is String) {
 				var request:URLRequest = new URLRequest(source as String);
 				loader = new Loader();
@@ -56,7 +56,7 @@ package reflex.display
 			addChild(loader);
 		}
 		
-		private function onMeasure(event:InvalidationEvent):void {
+		private function onMeasure(event:Event):void {
 			
 		}
 		

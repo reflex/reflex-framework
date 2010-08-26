@@ -7,7 +7,7 @@ package reflex.layouts
 	
 	import flight.binding.Bind;
 	
-	import reflex.events.InvalidationEvent;
+	import reflex.events.RenderPhase;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.styles.hasStyle;

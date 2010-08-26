@@ -21,14 +21,11 @@ package reflex.skins
 	import reflex.display.IContainer;
 	import reflex.display.ReflexDataTemplate;
 	import reflex.display.addItemsAt;
-	import reflex.events.InvalidationEvent;
+	import reflex.events.RenderPhase;
 	import reflex.layouts.ILayout;
-	import reflex.layouts.XYLayout;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurements;
 	import reflex.measurement.Measurements;
-	import reflex.measurement.resolveHeight;
-	import reflex.measurement.resolveWidth;
 	
 	/**
 	 * Skin is a convenient base class for many skins, a swappable graphical
@@ -43,8 +40,8 @@ package reflex.skins
 		static public const MEASURE:String = "measure";
 		static public const LAYOUT:String = "layout";
 		
-		InvalidationEvent.registerPhase(MEASURE, 0, true);
-		InvalidationEvent.registerPhase(LAYOUT, 0, true);
+		RenderPhase.registerPhase(MEASURE, 0, true);
+		RenderPhase.registerPhase(LAYOUT, 0, true);
 		
 		private var renderers:Array = [];
 		private var _layout:ILayout;
@@ -67,7 +64,7 @@ package reflex.skins
 			}
 			_explicite.width = value;
 			PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = value);
-			InvalidationEvent.invalidate(target, LAYOUT);
+			RenderPhase.invalidate(target, LAYOUT);
 		}
 		
 		[Bindable(event="heightChange")]
@@ -78,7 +75,7 @@ package reflex.skins
 			}
 			_explicite.height = value;
 			PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = value);
-			InvalidationEvent.invalidate(target, LAYOUT);
+			RenderPhase.invalidate(target, LAYOUT);
 		}
 		
 		[Bindable(event="expliciteChange")]
@@ -120,8 +117,8 @@ package reflex.skins
 			_layout = value;
 			_layout.target = target;
 			if(target) {
-				InvalidationEvent.invalidate(target, MEASURE);
-				InvalidationEvent.invalidate(target, LAYOUT);
+				RenderPhase.invalidate(target, MEASURE);
+				RenderPhase.invalidate(target, LAYOUT);
 			}
 			dispatchEvent(new Event("layoutChange"));
 		}
@@ -239,8 +236,8 @@ package reflex.skins
 				*/
 				target.addEventListener(MEASURE, onMeasure, false, 0, true);
 				target.addEventListener(LAYOUT, onLayout, false, 0, true);
-				InvalidationEvent.invalidate(target, MEASURE);
-				InvalidationEvent.invalidate(target, LAYOUT);
+				RenderPhase.invalidate(target, MEASURE);
+				RenderPhase.invalidate(target, LAYOUT);
 			}
 			
 			PropertyEvent.dispatchChange(this, "target", oldValue, _target);
@@ -333,8 +330,8 @@ package reflex.skins
 					_target.removeChildAt(_target.numChildren-1);
 				}
 				renderers = reflex.display.addItemsAt(_target, items, 0, template); // todo: correct ordering
-				InvalidationEvent.invalidate(_target, MEASURE);
-				InvalidationEvent.invalidate(_target, LAYOUT);
+				RenderPhase.invalidate(_target, MEASURE);
+				RenderPhase.invalidate(_target, LAYOUT);
 			}
 		}
 		
@@ -364,7 +361,7 @@ package reflex.skins
 			
 		}
 		
-		private function onMeasure(event:InvalidationEvent):void {
+		private function onMeasure(event:Event):void {
 			var target:IMeasurable= this.target as IMeasurable;
 			if(layout && target && (isNaN(target.explicite.width) || isNaN(target.explicite.height))) {
 				var items:Array = [];
@@ -384,7 +381,7 @@ package reflex.skins
 			//InvalidationEvent.invalidate(this.target, LAYOUT);
 		}
 		
-		private function onLayout(event:InvalidationEvent):void {
+		private function onLayout(event:Event):void {
 			if(layout) {
 				var items:Array = [];
 				var length:int = _children.length;

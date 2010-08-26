@@ -1,8 +1,10 @@
 package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
 	import flight.position.IPosition;
@@ -68,6 +70,15 @@ package reflex.behaviors
 			}
 		}
 		
+		private var _snapThumb:Boolean = false;
+		
+		[Bindable(event="snapThumbChange")]
+		public function get snapThumb():Boolean { return _snapThumb; }
+		public function set snapThumb(value:Boolean):void {
+			_snapThumb = value;
+			dispatchEvent(new Event("snapThumbChange"));
+		}
+		
 		[PropertyListener(target="position.percent")]
 		public function onPosition(percent:Number):void
 		{
@@ -85,13 +96,29 @@ package reflex.behaviors
 		[EventListener(type="press", target="track")]
 		public function onTrackPress(event:ButtonEvent):void
 		{
-			var size:Number = horizontal ? track.width : track.height;
-			forwardPress = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * position.percent);
+			var size:Number = horizontal ? track.width - thumb.width : track.height - thumb.height;
+			var mousePoint:Number = horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y;
 			
-			if (forwardPress) {
-				position.skipForward();
+			if (snapThumb) {
+				thumb.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false, thumb.mouseX, thumb.mouseY));
+				
+				_percent = (mousePoint - thumb.width/2) / size;
+				_percent = _percent <= 0 ? 0 : _percent >= 1 ? 1 : _percent;
+				position.percent = _percent;
+				updatePosition();
+				
+				dragPoint = horizontal ? thumb.x + thumb.width/2 : thumb.y + thumb.height/2;
+				dragPercent = _percent;
+				
+				dispatchEvent(new Event("percentChange"));
 			} else {
-				position.skipBackward();
+				forwardPress = mousePoint > (thumb.width/2 + size*position.percent);
+				
+				if (forwardPress) {
+					position.skipForward();
+				} else {
+					position.skipBackward();
+				}
 			}
 			event.updateAfterEvent();
 		}
@@ -99,8 +126,9 @@ package reflex.behaviors
 		[EventListener(type="hold", target="track")]
 		public function onTrackHold(event:ButtonEvent):void
 		{
-			var size:Number = horizontal ? track.width : track.height;
-			var forwardHold:Boolean = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * position.percent);
+			var size:Number = horizontal ? track.width - thumb.width : track.height - thumb.height;
+			var mousePoint:Number = horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y;
+			var forwardHold:Boolean = mousePoint > (thumb.width/2 + size*position.percent);
 			
 			if (forwardPress != forwardHold) {
 				return;
@@ -152,7 +180,7 @@ package reflex.behaviors
 		}
 		
 		
-		protected function updatePosition():void
+		public function updatePosition():void
 		{
 			if(track && thumb) {
 				var p:Point = new Point();

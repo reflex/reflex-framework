@@ -29,6 +29,7 @@ package reflex.cursors
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
+	import flash.filters.DropShadowFilter;
 	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
@@ -93,7 +94,6 @@ package reflex.cursors
 		
 		protected function init():void
 		{
-			trace(ALIAS);
 			/*
 			registerCursor(ALIAS, DefaultCursors.ALIAS);
 			registerCursor(CELL, DefaultCursors.CELL);
@@ -139,6 +139,11 @@ package reflex.cursors
 			Cursor.getInstance().useCursor(interactiveObject, cursor);
 		}
 		
+		public static function getCursor(interactiveObject:IEventDispatcher):Object
+		{
+			return Cursor.getInstance().objects[interactiveObject]
+		}
+		
 		
 		public function registerCursor(name:String, cursor:Object):void
 		{
@@ -168,6 +173,11 @@ package reflex.cursors
 				delete objects[interactiveObject];
 				interactiveObject.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
 				interactiveObject.removeEventListener(MouseEvent.ROLL_OUT, onRollOut);
+			} else if (!cursor) {
+				hideObjectCursor(InteractiveObject(interactiveObject));
+				delete objects[interactiveObject];
+				interactiveObject.removeEventListener(MouseEvent.ROLL_OVER, onRollOver);
+				interactiveObject.removeEventListener(MouseEvent.ROLL_OUT, onRollOut);
 			} else {
 				objects[interactiveObject] = cursor;
 				interactiveObject.addEventListener(MouseEvent.ROLL_OVER, onRollOver);
@@ -181,11 +191,16 @@ package reflex.cursors
 		 */
 		private function onRollOver(event:MouseEvent):void
 		{
+			if (event.buttonDown) {
+				return;
+			}
 			showObjectCursor(event.target as InteractiveObject);
 			
 			// update the custom cursor right away if any
 			if (currentCursor) {
 				onMouseMove(event);
+			} else {
+				event.updateAfterEvent();
 			}
 		}
 		
@@ -194,11 +209,16 @@ package reflex.cursors
 		 */
 		private function onRollOut(event:MouseEvent):void
 		{
+			if (event.buttonDown) {
+				return;
+			}
 			hideObjectCursor(event.target as InteractiveObject);
 			
 			// update the next custom cursor right away if any
 			if (currentCursor) {
 				onMouseMove(event);
+			} else {
+				event.updateAfterEvent();
 			}
 		}
 		
@@ -207,8 +227,8 @@ package reflex.cursors
 		 */
 		private function onMouseMove(event:MouseEvent):void
 		{
-			currentCursor.x = event.stageX;
-			currentCursor.y = event.stageY;
+			currentCursor.x = Math.round(event.stageX);
+			currentCursor.y = Math.round(event.stageY);
 			event.updateAfterEvent();
 		}
 		
@@ -280,6 +300,11 @@ package reflex.cursors
 			
 			if (cursor is DisplayObject) {
 				Mouse.hide();
+				DisplayObject(cursor).filters = [new DropShadowFilter(2, 90, 0, 1, 4, 4, .3, 2)];
+				DisplayObject(cursor).cacheAsBitmap = true;
+				if (cursor is InteractiveObject) {
+					InteractiveObject(cursor).mouseEnabled = false;
+				}
 				interactiveObject.stage.addChild(cursor as DisplayObject);
 				currentCursor = cursor as DisplayObject;
 				interactiveObject.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
@@ -308,7 +333,9 @@ package reflex.cursors
 			if (cursor in cursors) {
 				Mouse.show();
 				var display:DisplayObject = cursors[cursor];
-				interactiveObject.stage.removeChild(display);
+				if (interactiveObject.stage.contains(display)) {
+					interactiveObject.stage.removeChild(display);
+				}
 				currentCursor = null;
 				interactiveObject.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				interactiveObject.stage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeave);
