@@ -62,7 +62,7 @@ package reflex.display
 		public function Container()
 		{
 			if(_template == null) {
-				_template = new ReflexDataTemplate();
+				//_template = new ReflexDataTemplate();
 			}
 			if(_layout == null) {
 				//_layout = new XYLayout();

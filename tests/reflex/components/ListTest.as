@@ -3,7 +3,6 @@ package reflex.components
 	import flight.list.ArrayList;
 	import flight.position.Position;
 	
-	import reflex.display.ReflexDataTemplate;
 	import reflex.layouts.XYLayout;
 	import reflex.tests.TestBase;
 	
@@ -22,12 +21,12 @@ package reflex.components
 		
 		[Test(async)]
 		public function testTemplateChange():void {
-			testPropertyChange(List, "template", new ReflexDataTemplate());
+			testPropertyChange(List, "template", {});
 		}
 		
 		[Test(async)]
 		public function testTemplateNotChanged():void {
-			testPropertyNotChanged(List, "template", new ReflexDataTemplate());
+			testPropertyNotChanged(List, "template", {});
 		}
 		
 		[Test(async)]

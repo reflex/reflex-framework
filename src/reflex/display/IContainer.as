@@ -27,6 +27,5 @@ package reflex.display
 		function get layout():ILayout;
 		function set layout(value:ILayout):void;
 		
-		//function setSize(width:Number, height:Number):void;
 	}
 }

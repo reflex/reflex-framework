@@ -19,12 +19,12 @@ package reflex.display
 		
 		[Test(async)]
 		public function testTemplateChange():void {
-			testPropertyChange(C, "template", new ReflexDataTemplate());
+			testPropertyChange(C, "template", {});
 		}
 		
 		[Test(async)]
 		public function testTemplateNotChanged():void {
-			testPropertyChange(C, "template", new ReflexDataTemplate());
+			testPropertyChange(C, "template", {});
 		}
 		
 	}

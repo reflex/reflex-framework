@@ -19,7 +19,7 @@ package reflex.skins
 	
 	import reflex.components.IStateful;
 	import reflex.display.IContainer;
-	import reflex.display.ReflexDataTemplate;
+	//import reflex.display.ReflexDataTemplate;
 	import reflex.display.addItemsAt;
 	import reflex.events.InvalidationEvent;
 	import reflex.layouts.ILayout;
@@ -51,7 +51,7 @@ package reflex.skins
 		private var _states:Array;
 		private var _currentState:String; 
 		//private var _transitions:Array;
-		private var _template:Object = new ReflexDataTemplate();
+		private var _template:Object; // = new ReflexDataTemplate();
 		
 		private var unscaledWidth:Number = 160;
 		private var unscaledHeight:Number = 22;

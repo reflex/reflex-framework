@@ -8,7 +8,7 @@ package reflex.display
 	// Think DisplayObject3D from PaperVision, etc.
 	public function addItem(container:Object, child:Object, template:Object = null):Object
 	{
-		var renderer:Object = getDataRenderer(child, template);
+		var renderer:Object = getDataRenderer(container, child, template);
 		container.addChild(renderer as DisplayObject);
 		return renderer;
 	}

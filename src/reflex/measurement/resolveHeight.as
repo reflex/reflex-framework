@@ -17,7 +17,7 @@ package reflex.measurement
 			measured = (object as IMeasurable).measured;
 			return isNaN(explicite.height) ? measured.height : explicite.height;
 		} */ else {
-			return (object!=null) ? object.height : NaN;
+			return object.height;
 		}
 		
 	}

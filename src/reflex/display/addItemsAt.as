@@ -15,12 +15,9 @@ package reflex.display
 			var child:Object = children[i];
 			var renderer:Object = addItemAt(container, child, index, template);
 			output.push(renderer);
-			index++;
-			// I think this is why Flex4 skins have a seperate graphics declaration.
-			// we'll have to account for this better later.
-			/*if(child is DisplayObject) {
+			if(renderer is DisplayObject) {
 				index++;
-			}*/
+			}
 		}
 		return output;
 	}

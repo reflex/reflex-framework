@@ -5,9 +5,9 @@ package reflex.graphics
 	{
 		
 		function set target(value:Object):void;
-		function render():void;
+		//function render():void;
 		
-		function setSize(w:Number, h:Number):void;
+		//function setSize(w:Number, h:Number):void;
 		
 	}
 }
