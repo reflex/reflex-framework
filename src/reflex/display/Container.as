@@ -33,7 +33,7 @@ package reflex.display
 	
 	[Event(name="initialize", type="reflex.events.InvalidationEvent")]
 	
-	[DefaultProperty("children")]
+	[DefaultProperty("content")]
 	
 	/**
 	 * Used to contain and layout children.
@@ -55,8 +55,8 @@ package reflex.display
 		
 		private var _layout:ILayout;
 		private var _template:Object;
-		private var _children:IList;
-		public var renderers:Array;
+		private var _content:IList;
+		private var renderers:Array;
 		
 		
 		public function Container()
@@ -86,41 +86,41 @@ package reflex.display
 		 * @inheritDoc
 		 */
 		[ArrayElementType("Object")]
-		[Bindable(event="childrenChange")]
-		public function get children():IList { return _children; }
-		public function set children(value:*):void
+		[Bindable(event="contentChange")]
+		public function get content():IList { return _content; }
+		public function set content(value:*):void
 		{
-			if(_children == value) {
+			if(_content == value) {
 				return;
 			}
 			
-			var oldChildren:IList = _children;
+			var oldContent:IList = _content;
 			
-			if(_children) {
-				_children.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			if(_content) {
+				_content.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
 			}
 			
 			if(value == null) {
-				_children = null;
+				_content = null;
 			} else if(value is IList) {
-				_children = value as IList;
+				_content = value as IList;
 			} else if(value is Array || value is Vector) {
-				_children = new ArrayList(value);
+				_content = new ArrayList(value);
 			} else {
-				_children = new ArrayList([value]);
+				_content = new ArrayList([value]);
 			}
 			
-			if(_children) {
-				_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			if(_content) {
+				_content.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
 				var items:Array = [];
-				for (var i:int = 0; i < _children.length; i++) {
-					items.push(_children.getItemAt(i));
+				for (var i:int = 0; i < _content.length; i++) {
+					items.push(_content.getItemAt(i));
 				}
 				reset(items);
 			}
 			InvalidationEvent.invalidate(this, MEASURE);
 			InvalidationEvent.invalidate(this, LAYOUT);
-			PropertyEvent.dispatchChange(this, "children", oldChildren, _children);
+			PropertyEvent.dispatchChange(this, "content", oldContent, _content);
 		}
 		
 		/**
@@ -149,11 +149,11 @@ package reflex.display
 			}
 			var oldTemplate:Object = _template;
 			_template = value;
-			if(children != null) {
+			if(_content != null) {
 				var items:Array = [];
-				var length:int = children.length;
+				var length:int = _content.length;
 				for(var i:int = 0; i < length; i++) {
-					var child:Object = children.getItemAt(i);
+					var child:Object = _content.getItemAt(i);
 					items.push(child);
 				}
 				reset(items);

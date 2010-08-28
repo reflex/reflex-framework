@@ -23,7 +23,7 @@ package reflex.skins
 			// need a better solution for this
 			Bind.addBinding(this, "container.width", this, "target.width");
 			Bind.addBinding(this, "container.height", this, "target.height");
-			children = new ArrayList([container]);
+			content = new ArrayList([container]);
 			//children.addItem(container);
 			
 		}

@@ -36,7 +36,7 @@ package reflex.skins
 	 * adding children to the Sprite, or both.
 	 * @alpha
 	 */
-	[DefaultProperty("children")]
+	[DefaultProperty("content")]
 	public class Skin extends EventDispatcher implements ISkin, IContainer, IStateful, IMeasurable
 	{
 		
@@ -191,7 +191,7 @@ package reflex.skins
 		//protected var containerPart:DisplayObjectContainer;
 		//protected var defaultContainer:Boolean = true;
 		private var _target:Sprite;
-		private var _children:IList = new ArrayList();
+		private var _content:IList = new ArrayList();
 		
 		public function Skin()
 		{
@@ -201,7 +201,7 @@ package reflex.skins
 			if(_layout == null) {
 				//_layout = new XYLayout();
 			}
-			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			_content.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
 			Bind.addListener(this, onLayoutChange, this, "target.layout");
 			Bind.addListener(this, onLayoutChange, this, "layout");
 			//Bind.addBinding(this, "data", this, "target.data");
@@ -277,8 +277,8 @@ package reflex.skins
 			
 			PropertyEvent.dispatchChange(this, "target", oldValue, _target);
 			var items:Array = [];
-			for (var i:int = 0; i < _children.length; i++) {
-				items.push(_children.getItemAt(i));
+			for (var i:int = 0; i < _content.length; i++) {
+				items.push(_content.getItemAt(i));
 			}
 			reset(items);
 		}
@@ -291,43 +291,44 @@ package reflex.skins
 		 * @inheritDoc
 		 */
 		[ArrayElementType("Object")]
-		public function get children():IList
+		[Bindable(event="contentChange")]
+		public function get content():IList
 		{
-			return _children;
+			return _content;
 		}
-		public function set children(value:*):void
+		public function set content(value:*):void
 		{
-			if(_children == value) {
+			if(_content == value) {
 				return;
 			}
 			
-			var oldChildren:IList = _children;
+			var oldContent:IList = _content;
 			
-			if(_children) {
-				_children.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			if(_content) {
+				_content.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
 			}
 			
 			if(value == null) {
-				_children = null;
+				_content = null;
 			} else if(value is IList) {
-				_children = value as IList;
+				_content = value as IList;
 			} else if(value is Array || value is Vector) {
-				_children = new ArrayList(value);
+				_content = new ArrayList(value);
 			} else {
-				_children = new ArrayList([value]);
+				_content = new ArrayList([value]);
 			}
 			
-			if(_children) {
-				_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			if(_content) {
+				_content.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
 				var items:Array = [];
-				for (var i:int = 0; i < _children.length; i++) {
-					items.push(_children.getItemAt(i));
+				for (var i:int = 0; i < _content.length; i++) {
+					items.push(_content.getItemAt(i));
 				}
 				reset(items);
 			}
 			
 			
-			PropertyEvent.dispatchChange(this, "children", oldChildren, _children);
+			PropertyEvent.dispatchChange(this, "content", oldContent, _content);
 		}
 		
 		public function getSkinPart(part:String):InteractiveObject
@@ -409,9 +410,9 @@ package reflex.skins
 			var target:IMeasurable= this.target as IMeasurable;
 			if(layout && target && (isNaN(target.explicite.width) || isNaN(target.explicite.height))) {
 				var items:Array = [];
-				var length:int = _children.length;
+				var length:int = _content.length;
 				for(var i:int = 0; i < length; i++) {
-					items.push(_children.getItemAt(i));
+					items.push(_content.getItemAt(i));
 				}
 				var point:Point = layout.measure(items);
 				// this if statement blocks an infinite loop
@@ -430,9 +431,9 @@ package reflex.skins
 		private function onLayout(event:InvalidationEvent):void {
 			if(layout) {
 				var items:Array = [];
-				var length:int = _children.length;
+				var length:int = _content.length;
 				for(var i:int = 0; i < length; i++) {
-					items.push(_children.getItemAt(i));
+					items.push(_content.getItemAt(i));
 				}
 				
 				//var width:Number = reflex.measurement.resolveWidth(this);

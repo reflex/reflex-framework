@@ -32,12 +32,12 @@ package reflex.display
 		
 		[Test(async)]
 		public function testChildrenChange():void {
-			testPropertyChange(C, "children", new ArrayList());
+			testPropertyChange(C, "content", new ArrayList());
 		}
 		
 		[Test(async)]
 		public function testChildrenNotChanged():void {
-			testPropertyNotChanged(C, "children", new ArrayList());
+			testPropertyNotChanged(C, "content", new ArrayList());
 		}
 		
 		[Test(async)]
@@ -57,8 +57,8 @@ package reflex.display
 			var test1:DisplayObject = new Sprite();
 			var test2:DisplayObject = new Shape();
 			var test3:DisplayObject = new Bitmap();
-			container.children = [test1, test2, test3];
-			var list:IList = container.children;
+			container.content = [test1, test2, test3];
+			var list:IList = container.content;
 			Assert.assertNotNull(list);
 			Assert.assertTrue(list is IList);
 			Assert.assertEquals(test1, list.getItemAt(0));
