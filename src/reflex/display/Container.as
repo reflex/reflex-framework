@@ -40,7 +40,7 @@ package reflex.display
 	 * 
 	 * @alpha
 	 */
-	public class Container extends StyleableSprite implements IContainer
+	public class Container extends StyleableSprite implements IContainer, IStateful
 	{
 		
 		static public const CREATE:String = "create";
@@ -57,6 +57,9 @@ package reflex.display
 		private var _template:Object;
 		private var _content:IList;
 		private var renderers:Array;
+		
+		private var _states:Array;
+		private var _currentState:String;
 		
 		
 		public function Container()
@@ -81,6 +84,27 @@ package reflex.display
 			InvalidationEvent.invalidate(this, LAYOUT);
 		}
 		
+		// IStateful implementation
+		
+		[Bindable(event="statesChange")]
+		public function get states():Array { return _states; }
+		public function set states(value:Array):void {
+			if(_states == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
+		}
+		
+		
+		[Bindable(event="currentStateChange")]
+		public function get currentState():String { return _currentState; }
+		public function set currentState(value:String):void
+		{
+			if(_currentState == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
+		}
 		
 		/**
 		 * @inheritDoc

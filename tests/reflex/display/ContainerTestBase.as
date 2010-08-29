@@ -18,10 +18,10 @@ package reflex.display
 	import reflex.layouts.XYLayout;
 	import reflex.tests.TestBase;
 	
-	public class ContainerTestBase extends TestBase
+	public class ContainerTestBase extends StatefulTestBase
 	{
 		
-		public var C:Class;
+		//public var C:Class;
 		
 		[Test(order=-1)]
 		public function testIContainer():void {

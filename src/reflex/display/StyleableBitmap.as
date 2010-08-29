@@ -12,7 +12,7 @@ package reflex.display
 	 * 
 	 * @alpha
 	 */
-	public class StyleableSprite extends MeasuredSprite implements IStyleable
+	public class StyleableBitmap extends MeasuredBitmap implements IStyleable
 	{
 		
 		private var _id:String;
@@ -20,7 +20,7 @@ package reflex.display
 		private var _style:Object;
 		
 		
-		public function StyleableSprite() {
+		public function StyleableBitmap() {
 			_style = new Object(); // need to make object props bindable - something like ObjectProxy but lighter?
 		}
 		

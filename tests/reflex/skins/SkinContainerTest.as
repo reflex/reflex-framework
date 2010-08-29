@@ -11,26 +11,6 @@ package reflex.skins
 		}
 		
 		[Test(async)]
-		public function testStatesChange():void {
-			testPropertyChange(C, "states", []);
-		}
-		
-		[Test(async)]
-		public function testStatesNotChanged():void {
-			testPropertyNotChanged(C, "states", []);
-		}
-		
-		[Test(async)]
-		public function testCurrentStateChange():void {
-			testPropertyChange(C, "currentState", "test");
-		}
-		
-		[Test(async)]
-		public function testCurrentStateNotChanged():void {
-			testPropertyNotChanged(C, "currentState", "test");
-		}
-		
-		[Test(async)]
 		public function testTemplateChange():void {
 			testPropertyChange(C, "template", {});
 		}

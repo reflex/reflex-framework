@@ -2,10 +2,16 @@ package reflex.components
 {
 	import flash.display.MovieClip;
 	
+	import reflex.display.StatefulTestBase;
 	import reflex.tests.TestBase;
 	
-	public class ComponentTest extends TestBase
+	public class ComponentTest extends StatefulTestBase
 	{
+		
+		public function ComponentTest() {
+			super();
+			C = Component;
+		}
 		
 		/*
 		[Test(async)]
@@ -16,12 +22,12 @@ package reflex.components
 		
 		[Test(async)]
 		public function testSkinChange():void {
-			testPropertyChange(Component, "skin", new MovieClip());
+			testPropertyChange(C, "skin", new MovieClip());
 		}
 		
 		[Test(async)]
 		public function testSkinNotChanged():void {
-			testPropertyNotChanged(Component, "skin", new MovieClip());
+			testPropertyNotChanged(C, "skin", new MovieClip());
 		}
 		
 	}

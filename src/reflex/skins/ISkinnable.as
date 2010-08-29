@@ -20,6 +20,7 @@ package reflex.skins
 		/**
 		 * The component's current state.
 		 **/
+		
 		function get currentState():String;
 		function set currentState(value:String):void;
 		

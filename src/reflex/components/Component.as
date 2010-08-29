@@ -42,6 +42,8 @@
 		private var _skin:Object;
 		private var _behaviors:CompositeBehavior;
 		
+		private var _states:Array;
+		private var _currentState:String;
 		
 		public function Component()
 		{
@@ -112,9 +114,26 @@
 			PropertyEvent.dispatchChange(this, "skin", oldSkin, _skin);
 		}
 		
-		[CommitProperties("width,height,skin")]
-		public function updateSkinSize():void {
-			
+		// IStateful implementation
+		
+		[Bindable(event="statesChange")]
+		public function get states():Array { return _states; }
+		public function set states(value:Array):void {
+			if(_states == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
+		}
+		
+		
+		[Bindable(event="currentStateChange")]
+		public function get currentState():String { return _currentState; }
+		public function set currentState(value:String):void
+		{
+			if(_currentState == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
 		}
 		
 		// needs more thought

@@ -13,6 +13,7 @@ package
 	import reflex.display.BindableSpriteTest;
 	import reflex.display.ContainerTest;
 	import reflex.display.DisplayFunctionsTest;
+	import reflex.display.MeasuredBitmapTest;
 	import reflex.display.MeasuredSpriteTest;
 	import reflex.display.StyleableSpriteTest;
 	import reflex.layouts.BasicLayoutTest;
@@ -32,6 +33,8 @@ package
 		public var bindableSprite:BindableSpriteTest;
 		public var measuredSprite:MeasuredSpriteTest;
 		public var styleableSprite:StyleableSpriteTest;
+		
+		public var measuredBitmap:MeasuredBitmapTest;
 		
 		public var container:ContainerTest;
 		
