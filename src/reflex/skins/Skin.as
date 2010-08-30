@@ -2,7 +2,6 @@ package reflex.skins
 {
 	
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -19,7 +18,6 @@ package reflex.skins
 	
 	import reflex.components.IStateful;
 	import reflex.display.IContainer;
-	import reflex.display.ReflexDataTemplate;
 	import reflex.display.addItemsAt;
 	import reflex.events.RenderPhase;
 	import reflex.layouts.ILayout;
@@ -46,7 +44,9 @@ package reflex.skins
 		private var renderers:Array = [];
 		private var _layout:ILayout;
 		private var _states:Array;
-		private var _transitions:Array;
+		private var _currentState:String; 
+		//private var _transitions:Array;
+		private var _template:Object; // = new ReflexDataTemplate();
 		
 		private var unscaledWidth:Number = 160;
 		private var unscaledHeight:Number = 22;
@@ -56,6 +56,9 @@ package reflex.skins
 		
 		//
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="widthChange")]
 		public function get width():Number { return unscaledWidth; }
 		public function set width(value:Number):void {
@@ -67,6 +70,9 @@ package reflex.skins
 			RenderPhase.invalidate(target, LAYOUT);
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="heightChange")]
 		public function get height():Number { return unscaledHeight; }
 		public function set height(value:Number):void {
@@ -78,6 +84,9 @@ package reflex.skins
 			RenderPhase.invalidate(target, LAYOUT);
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="expliciteChange")]
 		public function get explicite():IMeasurements { return _explicite; }
 		/*public function set explicite(value:IMeasurements):void {
@@ -90,6 +99,9 @@ package reflex.skins
 			}
 		}*/
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="measuredChange")]
 		public function get measured():IMeasurements { return _measured; }
 		/*public function set measured(value:IMeasurements):void {
@@ -102,17 +114,25 @@ package reflex.skins
 			}
 		}*/
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function setSize(width:Number, height:Number):void {
-			unscaledWidth = width;
-			unscaledHeight = height;
-			PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = width);
-			PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = height);
-			//InvalidationEvent.invalidate(target, LAYOUT);
+			if(unscaledWidth != width) { PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = width); }
+			if(unscaledHeight != height) { PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = height); }
+			RenderPhase.invalidate(target, LAYOUT);
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
+			if(_layout == value) {
+				return;
+			}
+			var oldLayout:ILayout = _layout;
 			if(_layout) { _layout.target = null; }
 			_layout = value;
 			_layout.target = target;
@@ -120,38 +140,51 @@ package reflex.skins
 				RenderPhase.invalidate(target, MEASURE);
 				RenderPhase.invalidate(target, LAYOUT);
 			}
-			dispatchEvent(new Event("layoutChange"));
+			PropertyEvent.dispatchChange(this, "layout", oldLayout, _layout);
 		}
 		
-		[Bindable]
-		public var template:Object = new ReflexDataTemplate();
+		[Bindable(event="templateChange")]
+		public function get template():Object { return _template; }
+		public function set template(value:Object):void {
+			if(_template == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "template", _template, _template = value);
+		}
 		
-		private var _currentState:String; [Bindable]
+		[Bindable(event="currentStateChange")]
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void {
-			_currentState = value;
+			if(_currentState == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
 		}
 		
-		[Bindable]
+		[Bindable(event="statesChange")]
 		public function get states():Array { return _states; }
-		public function set states(value:Array):void
-		{
-			_states = value;
+		public function set states(value:Array):void {
+			if(_states == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
 		}
 		
+		/*
 		[Bindable]
 		public function get transitions():Array { return _transitions; }
 		public function set transitions(value:Array):void
 		{
 			_transitions = value;
 		}
-		
+		*/
+		/*
 		public function hasState(state:String):Boolean {
 			return true;
 		}
-		
-		protected var containerPart:DisplayObjectContainer;
-		protected var defaultContainer:Boolean = true;
+		*/
+		//protected var containerPart:DisplayObjectContainer;
+		//protected var defaultContainer:Boolean = true;
 		private var _target:Sprite;
 		private var _children:IList = new ArrayList();
 		
@@ -169,15 +202,12 @@ package reflex.skins
 			//Bind.addBinding(this, "data", this, "target.data");
 			//Bind.addBinding(this, "state", this, "target.state");
 			//addEventListener(MEASURE, onMeasure, false, 0, true);
-			//addEventListener(LAYOUT, onLayout, false, 0, true);
+			addEventListener(LAYOUT, onLayout, false, 0, true);
 		}
 		
 		
-		[Bindable]
-		public function get target():Sprite
-		{
-			return _target;
-		}
+		[Bindable(event="targetChange")]
+		public function get target():Sprite { return _target; }
 		public function set target(value:Sprite):void
 		{
 			if (_target == value) {
@@ -252,6 +282,9 @@ package reflex.skins
 		{
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[ArrayElementType("Object")]
 		public function get children():IList
 		{
@@ -262,6 +295,8 @@ package reflex.skins
 			if(_children == value) {
 				return;
 			}
+			
+			var oldChildren:IList = _children;
 			
 			if(_children) {
 				_children.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
@@ -285,6 +320,9 @@ package reflex.skins
 				}
 				reset(items);
 			}
+			
+			
+			PropertyEvent.dispatchChange(this, "children", oldChildren, _children);
 		}
 		
 		public function getSkinPart(part:String):InteractiveObject
@@ -313,6 +351,7 @@ package reflex.skins
 					_target.addChildAt(event.items[0], loc);
 					break;
 				case ListEventKind.RESET :
+				default:
 					reset(event.items);
 					break;
 			}
@@ -372,11 +411,13 @@ package reflex.skins
 				var point:Point = layout.measure(items);
 				// this if statement blocks an infinite loop
 				// the lifecycle should be handled better here in some way
+				// update: target should update it's own sizing?
+				/*
 				if(point.x != target.measured.width || point.y != target.measured.height) {
 					target.measured.width = point.x;
 					target.measured.height = point.y;
 				}
-								
+				*/			
 			}
 			//InvalidationEvent.invalidate(this.target, LAYOUT);
 		}
@@ -392,7 +433,7 @@ package reflex.skins
 				//var width:Number = reflex.measurement.resolveWidth(this);
 				//var height:Number = reflex.measurement.resolveHeight(this);
 				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);
-				//layout.update(items, rectangle);
+				layout.update(items, rectangle);
 			}
 		}
 		

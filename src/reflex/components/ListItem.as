@@ -1,5 +1,7 @@
 package reflex.components
 {
+	import flight.events.PropertyEvent;
+	
 	import mx.core.IDataRenderer;
 	
 	import reflex.behaviors.ButtonBehavior;
@@ -11,25 +13,21 @@ package reflex.components
 	{
 		
 		private var _data:Object;
-		/*
-		[Bindable]
-		public var label:String;
 		
-		[Bindable]
-		public var selected:Boolean;
-		*/
-		[Bindable]
+		[Bindable(event="dataChange")]
 		public function get data():Object { return _data; }
 		public function set data(value:Object):void
 		{
-			_data = value;		
+			if(_data == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "data", _data, _data = value);
 		}
 		
 		public function ListItem()
 		{
 			super();
-			//behaviors = new ButtonBehavior();
-			//skin = new ButtonGraphic();
 		}
+		
 	}
 }

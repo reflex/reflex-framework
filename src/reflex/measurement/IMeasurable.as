@@ -1,5 +1,11 @@
 package reflex.measurement
 {
+	
+	/**
+	 * Implemented by objects that want to have implicite measurements.
+	 * In this system objects calculate implicite measurement preferences, but still allow explicite measurements to be set in AS3 or MXML.
+	 * This interface is NOT required for items to be added to containers or to participate in Reflex's layout system.
+	 */
 	public interface IMeasurable
 	{
 		
@@ -21,9 +27,21 @@ package reflex.measurement
 		function get maxHeight():Number;
 		function set maxHeight(value:Number):void;
 		*/
+		
+		/**
+		 * Holds explicite width/height values which have been assigned directly in AS3 or MXML.
+		 */
 		function get explicite():IMeasurements;
+		
+		/**
+		 * Holds implicite width/height values which have been calculated internally.
+		 */
 		function get measured():IMeasurements;
 		
+		/**
+		 * Sets width and height properties without effecting measurement.
+		 * Use cases include layout and animation/tweening.
+		 */
 		function setSize(width:Number, height:Number):void;
 		
 	}

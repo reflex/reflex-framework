@@ -5,10 +5,10 @@ package reflex.measurement
 	
 	import flight.events.PropertyEvent;
 	
-	// might break this up to multiples later
-	// ie. measured.height, explicite.minWidth, etc
 	
 	/**
+	 * The Measurements class holds values related to a object's dimensions.
+	 * 
 	 * @alpha
 	 */
 	public class Measurements implements IMeasurements
@@ -20,45 +20,50 @@ package reflex.measurement
 		private var _minWidth:Number;
 		private var _minHeight:Number;
 		
-		// todo: update for defined events
-		// should these even be bindable?
+		// should these be bindable?
 		
 		private var instance:IMeasurable;
 		
-		// [Bindable] public var maxWidth:Number;
-		// [Bindable] public var maxHeight:Number;
-		
-		[Bindable]
+		/**
+		 * @inheritDoc
+		 */
 		public function get width():Number { return _width; }
 		public function set width(value:Number):void {
 			_width = value;
-			instance.setSize(value, instance.height); // ?? this is incorrect. measured will update even when explicite is set.
-			//PropertyEvent.dispatchChange(instance, "width", instance["width"], value);
+			if(!(instance.measured== this && !isNaN(instance.explicite.width))) { // measured changes shouldn't update when explicite is set
+				instance.setSize(value, instance.height);
+			}
 		}
 		
-		[Bindable]
+		/**
+		 * @inheritDoc
+		 */
 		public function get height():Number { return _height; }
 		public function set height(value:Number):void {
 			_height = value;
-			instance.setSize(instance.width, value); // ?? this is incorrect. measured will update even when explicite is set.
-			//PropertyEvent.dispatchChange(instance, "height", instance["height"], value);
+			if(!(instance.measured== this && !isNaN(instance.explicite.height))) { // measured changes shouldn't update when explicite is set
+				instance.setSize(instance.width, value); 
+			}
 		}
 		
-		[Bindable]
+		/**
+		 * @inheritDoc
+		 */
 		public function get minWidth():Number { return _minWidth; }
 		public function set minWidth(value:Number):void {
 			_minWidth = value;
 		}
 		
-		[Bindable]
+		/**
+		 * @inheritDoc
+		 */
 		public function get minHeight():Number { return _minHeight; }
 		public function set minHeight(value:Number):void {
 			_minHeight = value;
 		}
 		
-		//private var _target:Object;
-		
-		public function Measurements(instance:IMeasurable, defaultWidth:Number = 160, defaultHeight:Number = 22) {
+		// 160, 22
+		public function Measurements(instance:IMeasurable, defaultWidth:Number = NaN, defaultHeight:Number = NaN) {
 			this.instance = instance;
 			_width = defaultWidth;
 			_height = defaultHeight;

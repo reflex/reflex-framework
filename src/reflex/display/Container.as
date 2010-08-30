@@ -27,9 +27,11 @@ package reflex.display
 	[DefaultProperty("children")]
 	
 	/**
+	 * Used to contain and layout children.
+	 * 
 	 * @alpha
 	 */
-	public class Container extends ReflexDisplay implements IContainer
+	public class Container extends StyleableSprite implements IContainer
 	{
 		
 		static public const CREATE:String = "create";
@@ -46,22 +48,22 @@ package reflex.display
 		private var _template:Object;
 		private var _children:IList;
 		public var renderers:Array;
-		private var _style:Object;
+		
 		
 		public function Container()
 		{
 			if(_template == null) {
-				_template = new ReflexDataTemplate();
+				//_template = new ReflexDataTemplate();
 			}
 			if(_layout == null) {
 				//_layout = new XYLayout();
 			}
-			_style = new Object();
+			
 			addEventListener(Event.ADDED, onAdded, false, 0, true);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 			addEventListener(LAYOUT, onLayout, false, 0, true);
-			addEventListener("widthChange", onSizeChange, false, 0, true);
-			addEventListener("heightChange", onSizeChange, false, 0, true);
+			//addEventListener("widthChange", onSizeChange, false, 0, true);
+			//addEventListener("heightChange", onSizeChange, false, 0, true);
 		}
 		
 		// width/height invalidation needs some thought
@@ -69,61 +71,11 @@ package reflex.display
 		private function onSizeChange(event:Event):void {
 			RenderPhase.invalidate(this, LAYOUT);
 		}
-		/*
-		override public function set width(value:Number):void {
-			if(value != width) {
-				super.width = value;
-				InvalidationEvent.invalidate(this, LAYOUT);
-			}
-		}
 		
-		override public function set height(value:Number):void {
-			if(value != height) {
-				super.height = value;
-				InvalidationEvent.invalidate(this, LAYOUT);
-			}
-		}
 		
-		override public function set actualWidth(value:Number):void {
-			if(value != width) {
-				super.actualWidth = value;
-				InvalidationEvent.invalidate(this, LAYOUT);
-			}
-		}
-		
-		override public function set actualHeight(value:Number):void {
-			if(value != height) {
-				super.actualHeight = value;
-				InvalidationEvent.invalidate(this, LAYOUT);
-			}
-		}
-		
-		override public function setSize(width:Number, height:Number):void {
-			if(width != this.width || height != this.height) {
-				super.setSize(width, height);
-				InvalidationEvent.invalidate(this, LAYOUT);
-			}
-		}
-		*/
-		[Bindable] 
-		public function get style():Object { return _style; }
-		public function set style(value:*):void {
-			if(value is String) {
-				var token:String = value as String;
-				var assignments:Array = token.split(";");
-				for each(var assignment:String in assignments) {
-					var split:Array = assignment.split(":");
-					var property:String = split[0];
-					var v:String = split[1];
-					_style[property] = v;
-				}
-			}
-		}
-		
-		public function setStyle(property:String, value:*):void {
-			style[property] = value;
-		}
-		
+		/**
+		 * @inheritDoc
+		 */
 		[ArrayElementType("Object")]
 		[Bindable(event="childrenChange")]
 		public function get children():IList { return _children; }
@@ -132,6 +84,8 @@ package reflex.display
 			if(_children == value) {
 				return;
 			}
+			
+			var oldChildren:IList = _children;
 			
 			if(_children) {
 				_children.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
@@ -155,14 +109,21 @@ package reflex.display
 				}
 				reset(items);
 			}
-			dispatchEvent( new Event("childrenChange") );
 			RenderPhase.invalidate(this, MEASURE);
 			RenderPhase.invalidate(this, LAYOUT);
+			dispatchEvent( new Event("childrenChange") );
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
+			if(_layout == value) {
+				return;
+			}
+			var oldLayout:ILayout = _layout;
 			if(_layout) { _layout.target = null; }
 			_layout = value;
 			if(_layout) { _layout.target = this; }
@@ -174,6 +135,10 @@ package reflex.display
 		[Bindable(event="templateChange")]
 		public function get template():Object { return _template; }
 		public function set template(value:Object):void {
+			if(_template == value) {
+				return;
+			}
+			var oldTemplate:Object = _template;
 			_template = value;
 			if(children != null) {
 				var items:Array = [];
@@ -184,9 +149,9 @@ package reflex.display
 				}
 				reset(items);
 			}
-			dispatchEvent( new Event("templateChange") );
 			RenderPhase.invalidate(this, MEASURE);
 			RenderPhase.invalidate(this, LAYOUT);
+			dispatchEvent( new Event("templateChange") );
 		}
 		
 		private function onAdded(event:Event):void {
@@ -230,6 +195,7 @@ package reflex.display
 					//addChildAt(event.items[0], loc);
 					break;
 				case ListEventKind.RESET :
+				default:
 					reset(event.items);
 					break;
 			}

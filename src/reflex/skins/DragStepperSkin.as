@@ -7,7 +7,7 @@ package reflex.skins
 	import flight.position.IPosition;
 	
 	import reflex.components.DragStepperGraphic;
-	import reflex.cursors.Cursor;
+	//import reflex.cursors.Cursor;
 
 	public class DragStepperSkin extends GraphicSkin
 	{
@@ -30,8 +30,8 @@ package reflex.skins
 		
 		protected function onTargetChange(oldTarget:Sprite, newTarget:Sprite):void
 		{
-			if (oldTarget) Cursor.useCursor(oldTarget, Cursor.AUTO);
-			if (newTarget) Cursor.useCursor(newTarget, Cursor.EAST_WEST);
+			//if (oldTarget) Cursor.useCursor(oldTarget, Cursor.AUTO);
+			//if (newTarget) Cursor.useCursor(newTarget, Cursor.EAST_WEST);
 		}
 		
 		protected function updateLabel(position:int):void

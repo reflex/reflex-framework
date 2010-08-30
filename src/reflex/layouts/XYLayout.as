@@ -18,6 +18,8 @@ package reflex.layouts
 	[LayoutProperty(name="height", measure="true")]
 	
 	/**
+	 * Provides basic measurement for containers which want to adjust children manually using x/y coordinates.
+	 * 
 	 * @alpha
 	 **/
 	public class XYLayout extends Layout implements ILayout
@@ -26,6 +28,7 @@ package reflex.layouts
 		
 		override public function measure(children:Array):Point
 		{
+			super.measure(children);
 			var point:Point = new Point(0, 0);
 			for each(var item:Object in children) {
 				var xp:Number = item.x + resolveWidth(item);
@@ -33,34 +36,13 @@ package reflex.layouts
 				point.x = Math.max(point.x, xp);
 				point.y = Math.max(point.y, yp);
 			}
-			//attachBindings(children);
 			return point;
 		}
 		
 		override public function update(children:Array, rectangle:Rectangle):void
 		{
-			//attachBindings(children);
+			super.update(children, rectangle);
 		}
 		
-		// update this for correct binding
-		// find the easiest Flash/AS3 option (add metadata functionality as well)
-		/*
-		private function attachBindings(children:Array):void {
-			for each(var child:IEventDispatcher in children) {
-				Bind.addListener(child, onInvalidateMeasure, child, "x");
-				Bind.addListener(child, onInvalidateMeasure, child, "y");
-				Bind.addListener(child, onInvalidateMeasure, child, "width");
-				Bind.addListener(child, onInvalidateMeasure, child, "height");
-				Bind.addListener(child, onInvalidateMeasure, child, "measurements");
-				Bind.addListener(child, onInvalidateMeasure, child, "layout");
-			}
-		}
-		
-		private function onInvalidateMeasure(object:*):void {
-			if(target is DisplayObject) {
-				InvalidationEvent.invalidate(target as DisplayObject, "measure");
-			}
-		}
-		*/
 	}
 }

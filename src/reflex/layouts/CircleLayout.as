@@ -10,6 +10,11 @@ package reflex.layouts
 	
 	//[LayoutProperty(name="width")]
 	//[LayoutProperty(name="height")]
+	
+	/**
+	 * Provides a measured, circular layout algorithm.
+	 * 
+	 */
 	public class CircleLayout extends Layout implements ILayout
 	{
 		

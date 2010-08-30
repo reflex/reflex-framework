@@ -18,6 +18,8 @@ package reflex.layouts
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]
 	/**
+	 * Recognizes style elements familiar to Flex developers such as left, right, top, bottom, horizontalCenter and verticalCenter.
+	 * 
 	 * @alpha
 	 **/
 	public class BasicLayout extends Layout implements ILayout
@@ -27,9 +29,40 @@ package reflex.layouts
 		{
 			super.measure(children);
 			var point:Point = new Point(0, 0);
-			for each(var item:Object in children) {
-				var xp:Number = item.x + resolveWidth(item);
-				var yp:Number = item.y + resolveHeight(item);
+			for each(var child:Object in children) {
+				
+				var width:Number = resolveWidth(child);
+				var height:Number = resolveHeight(child);
+				var left:Number = resolveStyle(child, "left") as Number;
+				var right:Number = resolveStyle(child, "right") as Number;
+				var top:Number = resolveStyle(child, "top") as Number;
+				var bottom:Number = resolveStyle(child, "bottom") as Number;
+				var horizontalCenter:Number = resolveStyle(child, "horizontalCenter") as Number;
+				var verticalCenter:Number = resolveStyle(child, "verticalCenter") as Number;
+				
+				var xp:Number = child.x + width;
+				var yp:Number = child.y + height;
+				
+				if(hasStyle(child, "left") && hasStyle(child, "right")) {
+					xp = left + width + right;
+				} else if(hasStyle(child, "left")) {
+					xp = left + width;
+				} else if(hasStyle(child, "right")) {
+					xp = width + right;
+				} else if(hasStyle(child, "horizontalCenter")) {
+					xp = width + Math.abs(horizontalCenter);
+				}
+				
+				if(hasStyle(child, "top") && hasStyle(child, "bottom")) {
+					yp = top + height + bottom;
+				} else if(hasStyle(child, "top")) {
+					yp = top + height;
+				} else if(hasStyle(child, "bottom")) {
+					yp = height + bottom;
+				} else if(hasStyle(child, "verticalCenter")) {
+					yp = height + Math.abs(verticalCenter);
+				}
+				
 				if(!isNaN(xp)) { point.x = Math.max(point.x, xp); }
 				if(!isNaN(yp)) { point.y = Math.max(point.y, yp); }
 			}
@@ -53,11 +86,11 @@ package reflex.layouts
 					child.x = left;
 					width = rectangle.width - child.x - right;
 				} else if(hasStyle(child, "left")) {
-					child.x = reflex.styles.resolveStyle(child, "left") as Number;
+					child.x = left;
 				} else if(hasStyle(child, "right")) {
 					child.x = rectangle.width - width - right;
 				} else if(hasStyle(child, "horizontalCenter")) {
-					child.x = rectangle.width/2 - width/2;
+					child.x = rectangle.width/2 - width/2 + horizontalCenter;
 				}
 				
 				if(hasStyle(child, "top") && hasStyle(child, "bottom")) {
@@ -68,7 +101,7 @@ package reflex.layouts
 				} else if(hasStyle(child, "bottom")) {
 					child.y = rectangle.height - height - bottom;
 				} else if(hasStyle(child, "verticalCenter")) {
-					child.y = rectangle.height/2 - height/2;
+					child.y = rectangle.height/2 - height/2 + verticalCenter;
 				}
 				
 				reflex.measurement.setSize(child, width, height);

@@ -6,7 +6,10 @@ package reflex.graphics
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
 	import mx.events.PropertyChangeEvent;
+	
+	import reflex.styles.IStyleable;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -16,14 +19,28 @@ package reflex.graphics
 	[Style(name="verticalCenter")]
 	[Style(name="dock")]
 	[Style(name="align")]
-	public class Rect extends EventDispatcher implements IDrawable
+	public class Rect extends EventDispatcher implements IDrawable, IStyleable
 	{
+		
+		private var _id:String;
+		private var _styleName:String;
 		
 		[Bindable] public var x:Number = 0;
 		[Bindable] public var y:Number = 0;
 		
 		[Bindable] public var style:Object = new Object();
 		
+		public function get id():String { return _id; }
+		public function set id(value:String):void {
+			_id = value;
+		}
+		
+		public function get styleName():String { return _styleName; }
+		public function set styleName(value:String):void {
+			_styleName = value;
+		}
+		
+		public function getStyle(property:String):* { return style[property]; }
 		public function setStyle(property:String, value:*):void {
 			style[property] = value;
 		}
@@ -41,13 +58,13 @@ package reflex.graphics
 			_height = value;
 			render();
 		}
-		
+		/*
 		public function setSize(width:Number, height:Number):void {
 			_width = width;
 			_height = height;
 			render();
 		}
-		
+		*/
 		private var _fill:*;
 		public function get fill():* { return _fill; }
 		public function set fill(value:*):void {
@@ -79,6 +96,7 @@ package reflex.graphics
 		public function render():void {
 			var graphics:Vector.<Graphics> = reflex.graphics.resolveGraphics(target);
 			for each(var g:Graphics in graphics) {
+				g.clear();
 				drawTo(g);
 			}
 		}

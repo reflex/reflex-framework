@@ -7,7 +7,7 @@ package reflex.display
 	
 	import reflex.events.RenderPhase;
 	
-	public class ImageDisplay extends ReflexDisplay
+	public class ImageDisplay extends MeasuredSprite
 	{
 		
 		public static const MEASURE:String = "measure";
@@ -22,6 +22,10 @@ package reflex.display
 		[Bindable(event="sourceChange")]
 		public function get source():Object { return _source; }
 		public function set source(value:Object):void {
+			if(_source == value) {
+				return
+			}
+			var oldSource:Object = _source;
 			_source = value;
 			RenderPhase.invalidate(this, SOURCE_CHANGED);
 			dispatchEvent(new Event("sourceChange"));
@@ -31,7 +35,7 @@ package reflex.display
 		{
 			super();
 			addEventListener(SOURCE_CHANGED, onSourceChanged, false, 0, true);
-			addEventListener(MEASURE, onMeasure, false, 0, true);
+			//addEventListener(MEASURE, onMeasure, false, 0, true);
 		}
 		
 		private function onSourceChanged(event:Event):void {
@@ -59,6 +63,5 @@ package reflex.display
 		private function onMeasure(event:Event):void {
 			
 		}
-		
 	}
 }

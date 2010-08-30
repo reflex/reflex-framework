@@ -1,5 +1,9 @@
 package reflex.measurement
 {
+	
+	/**
+	 * Implemented by objects which hold values related to display dimensions (width/height).
+	 */
 	public interface IMeasurements
 	{
 		

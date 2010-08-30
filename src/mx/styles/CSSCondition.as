@@ -2,7 +2,8 @@ package mx.styles
 {
 	import flash.display.DisplayObject;
 	
-	import reflex.styles.IStylable;
+	import reflex.components.IStateful;
+	import reflex.styles.IStyleable;
 
 	public class CSSCondition
 	{
@@ -35,7 +36,7 @@ package mx.styles
 		
 		public function match(obj:Object):Boolean
 		{
-			var stylable:IStylable = obj as IStylable;
+			var stylable:IStyleable = obj as IStyleable;
 			var displayObject:DisplayObject = obj as DisplayObject;
 			
 			if (stylable) {
@@ -45,7 +46,10 @@ package mx.styles
 					try {
 						if (displayObject[_value] is Boolean) return displayObject[_value];
 					} catch (e:Error) {}
-					return stylable.state == _value;
+					if(stylable is IStateful) {
+						return (stylable as IStateful).currentState == _value;
+					}
+					return true;
 				}
 			} else if (_kind == "id" && displayObject) {
 				return displayObject.name == _value;

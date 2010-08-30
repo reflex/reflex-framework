@@ -5,7 +5,12 @@ package reflex.display
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
 	
-	public function getDataRenderer(data:*, template:Object):Object
+	import reflex.graphics.IDrawable;
+	
+	/**
+	 * Returns a renderer to be used for the given data according to the given template.
+	 */
+	public function getDataRenderer(container:Object, data:*, template:Object):Object
 	{
 		var instance:Object;
 		if(template is IDataTemplate) {
@@ -22,7 +27,10 @@ package reflex.display
 		if (instance is IDataRenderer) {
 			(instance as IDataRenderer).data = data;
 		}
-		return instance;
+		if(data is IDrawable) {
+			(data as IDrawable).target = container;
+		}
+		return instance != null ? instance : data;
 	}
 	
 }

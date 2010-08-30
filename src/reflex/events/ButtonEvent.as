@@ -350,7 +350,7 @@ package reflex.events
 				} else {
 					button[callback]();
 				}
-				//event.updateAfterEvent();
+				event.updateAfterEvent();
 			}
 		}
 		

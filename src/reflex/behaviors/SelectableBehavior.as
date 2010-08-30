@@ -1,6 +1,7 @@
 package reflex.behaviors
 {
 	import flash.display.InteractiveObject;
+	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
 	/**
@@ -13,7 +14,7 @@ package reflex.behaviors
 		[Binding(target="target.selected")]
 		public var selected:Boolean;
 		
-		public function SelectableBehavior(target:InteractiveObject = null)
+		public function SelectableBehavior(target:IEventDispatcher= null)
 		{
 			super(target);
 		}

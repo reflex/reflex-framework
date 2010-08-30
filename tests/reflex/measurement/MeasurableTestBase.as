@@ -8,8 +8,10 @@ package reflex.measurement
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
 	
+	import reflex.tests.TestBase;
+	
 
-	public class MeasurableTestBase extends EventDispatcher
+	public class MeasurableTestBase extends TestBase
 	{
 		
 		public var C:Class;
@@ -21,43 +23,40 @@ package reflex.measurement
 			Assert.assertTrue(instance is IEventDispatcher);
 		}
 		
-		/*
 		[Test(async)]
-		public function testExpliciteChange():void {
-			var instance:IMeasurable = new C() as IMeasurable;
-			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "expliciteChange", timeoutHandler);
-			(instance as IEventDispatcher).addEventListener("expliciteChange", listener, false, 0, false);
-			instance.explicite = new Measurements(this);
+		public function testWidthChange():void {
+			testPropertyChange(C, "width", 100);
 		}
 		
 		[Test(async)]
-		public function testMeasuredChange():void {
-			var instance:IMeasurable = new C() as IMeasurable;
-			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "measuredChange", timeoutHandler);
-			(instance as IEventDispatcher).addEventListener("measuredChange", listener, false, 0, false);
-			instance.measured = new Measurements(this);
+		public function testWidthNotChanged():void {
+			testPropertyNotChanged(C, "width", 100);
 		}
-		*/
+		
 		[Test(async)]
+		public function testHeightChange():void {
+			testPropertyChange(C, "height", 100);
+		}
+		
+		[Test(async)]
+		public function testHeightNotChanged():void {
+			testPropertyNotChanged(C, "height", 100);
+		}
+		
+		[Test]
 		public function testExpliciteWidth():void {
 			var instance:IMeasurable = new C() as IMeasurable;
-			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "widthChange", timeoutHandler);
-			(instance as IEventDispatcher).addEventListener("widthChange", listener, false, 0, false);
-			
-			instance.width = 5;
-			Assert.assertEquals(5, instance.width);
-			Assert.assertEquals(5, instance.explicite.width);
+			instance.width = 100;
+			Assert.assertEquals(100, instance.width);
+			Assert.assertEquals(100, instance.explicite.width);
 		}
 		
-		[Test(async)]
+		[Test]
 		public function testExpliciteHeight():void {
 			var instance:IMeasurable = new C() as IMeasurable;
-			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "heightChange", timeoutHandler);
-			(instance as IEventDispatcher).addEventListener("heightChange", listener, false, 0, false);
-			
-			instance.height = 5;
-			Assert.assertEquals(5, instance.height);
-			Assert.assertEquals(5, instance.explicite.height);
+			instance.height = 100;
+			Assert.assertEquals(100, instance.height);
+			Assert.assertEquals(100, instance.explicite.height);
 		}
 		
 		[Test(async)]
@@ -66,9 +65,9 @@ package reflex.measurement
 			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "widthChange", timeoutHandler);
 			(instance as IEventDispatcher).addEventListener("widthChange", listener, false, 0, false);
 			
-			instance.measured.width = 5;
-			Assert.assertEquals(5, instance.width);
-			Assert.assertEquals(5, instance.measured.width);
+			instance.measured.width = 100;
+			Assert.assertEquals(100, instance.width);
+			Assert.assertEquals(100, instance.measured.width);
 		}
 		
 		[Test(async)]
@@ -77,12 +76,34 @@ package reflex.measurement
 			var listener:Function = Async.asyncHandler(this, changeHandler, 500, "heightChange", timeoutHandler);
 			(instance as IEventDispatcher).addEventListener("heightChange", listener, false, 0, false);
 			
-			instance.measured.height = 5;
-			Assert.assertEquals(5, instance.height);
-			Assert.assertEquals(5, instance.measured.height);
+			instance.measured.height = 100;
+			Assert.assertEquals(100, instance.height);
+			Assert.assertEquals(100, instance.measured.height);
 		}
 		
 		[Test(async)]
+		public function testMeasuredWidthEvent():void {
+			var instance:IMeasurable = new C() as IMeasurable;
+			instance.width = 100; // there should be no change event for measured changes now
+			Async.failOnEvent(this, instance as IEventDispatcher, "widthChange", 500);
+			
+			instance.measured.width = 5;
+			Assert.assertEquals(100, instance.width);
+			Assert.assertEquals(100, instance.explicite.width);
+		}
+		
+		[Test(async)]
+		public function testMeasuredHeightEvent():void {
+			var instance:IMeasurable = new C() as IMeasurable;
+			instance.height = 100; // there should be no change event for measured changes now
+			Async.failOnEvent(this, instance as IEventDispatcher, "heightChange", 500);
+			
+			instance.measured.height = 5;
+			Assert.assertEquals(100, instance.height);
+			Assert.assertEquals(100, instance.explicite.height);
+		}
+		
+		[Test(async)] // binding events should fire for width/height changes, but explicite/measured should not be updated
 		public function testSetSize():void {
 			var instance:IMeasurable = new C() as IMeasurable;
 			var widthListener:Function = Async.asyncHandler(this, changeHandler, 500, "widthChange", timeoutHandler);
@@ -90,19 +111,20 @@ package reflex.measurement
 			(instance as IEventDispatcher).addEventListener("widthChange", widthListener, false, 0, false);
 			(instance as IEventDispatcher).addEventListener("heightChange", heightListener, false, 0, false);
 			
-			instance.setSize(5, 5);
-			Assert.assertEquals(5, instance.width);
-			Assert.assertEquals(5, instance.height);
-			Assert.assertFalse(instance.explicite.width == 5);
-			Assert.assertFalse(instance.explicite.height == 5);
+			instance.setSize(100, 100);
+			Assert.assertEquals(100, instance.width);
+			Assert.assertEquals(100, instance.height);
+			Assert.assertFalse(instance.explicite.width == 100);
+			Assert.assertFalse(instance.explicite.height == 100);
 		}
 		
-		private function changeHandler(event:Event, type:String):void {
-			Assert.assertEquals(event.type, type);
-		}
-		
-		private function timeoutHandler(type:String):void {
-			Assert.fail(type + ": timed out.");
+		[Test(async)] //  no events should fire if size hasn't changed
+		public function testSetSizeNotChanged():void {
+			var instance:IMeasurable = new C() as IMeasurable;
+			instance.setSize(100, 100);
+			Async.failOnEvent(this, instance as IEventDispatcher, "widthChange", 500, timeoutHandler);
+			Async.failOnEvent(this, instance as IEventDispatcher, "heightChange", 500, timeoutHandler);
+			instance.setSize(100, 100);
 		}
 		
 	}

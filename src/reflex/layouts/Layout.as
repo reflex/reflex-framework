@@ -8,6 +8,7 @@ package reflex.layouts
 	import flash.utils.Dictionary;
 	
 	import flight.binding.Bind;
+	import flight.events.PropertyEvent;
 	
 	import reflex.events.RenderPhase;
 	import reflex.metadata.resolveBindings;
@@ -18,6 +19,9 @@ package reflex.layouts
 	//[LayoutProperty(name="layout", measure="true")]
 	//[LayoutProperty(name="measurements", measure="true")]
 	/**
+	 * The Layout class provides automated metadata handling for layouts which extend it.
+	 * It is recommended that you extend this class to create custom layouts, but it's not required.
+	 * 
 	 * @alpha
 	 **/
 	public class Layout extends EventDispatcher
@@ -26,11 +30,14 @@ package reflex.layouts
 		private var attached:Dictionary = new Dictionary(true);
 		private var _target:IEventDispatcher;
 		
-		[Bindable]
+		[Bindable(event="targetChange")]
 		public function get target():IEventDispatcher { return _target; }
 		public function set target(value:IEventDispatcher):void
 		{
-			_target = value;
+			if(_target == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "target", _target, _target = value);
 		}
 		
 		public function Layout() {

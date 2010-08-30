@@ -10,12 +10,14 @@ package reflex.layouts
 	[LayoutProperty(name="height", measure="true")]
 	
 	/**
+	 * Provides a measured layout from left to right.
+	 * 
 	 * @alpha
 	 **/
 	public class HorizontalLayout extends Layout implements ILayout
 	{
 		
-		[Bindable] public var gap:Number = 5;
+		public var gap:Number = 5;
 		
 		override public function measure(children:Array):Point
 		{
