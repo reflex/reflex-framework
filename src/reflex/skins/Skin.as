@@ -175,19 +175,6 @@ package reflex.skins
 			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
 		}
 		
-		/*
-		[Bindable]
-		public function get transitions():Array { return _transitions; }
-		public function set transitions(value:Array):void
-		{
-			_transitions = value;
-		}
-		*/
-		/*
-		public function hasState(state:String):Boolean {
-			return true;
-		}
-		*/
 		//protected var containerPart:DisplayObjectContainer;
 		//protected var defaultContainer:Boolean = true;
 		private var _target:Sprite;

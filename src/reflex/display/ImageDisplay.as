@@ -35,6 +35,8 @@ package reflex.display
 		
 		private var _source:Object;
 		private var _scaling:String = BEST_FILL;
+		private var _backgroundColor:uint = 0xFFFFFF;
+		private var _backgroundAlpha:Number = 0;
 		
 		[Bindable(event="sourceChange")]
 		public function get source():Object { return _source; }
@@ -52,6 +54,24 @@ package reflex.display
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "scaling", _scaling, _scaling = value);
+		}
+		
+		[Bindable(event="backgroundColorChanged")]
+		public function get backgroundColor():uint { return _backgroundColor; }
+		public function set backgroundColor(value:uint):void {
+			if(_backgroundColor == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "backgroundColor", _backgroundColor, _backgroundColor = value);
+		}
+		
+		[Bindable(event="backgroundAlphaChanged")]
+		public function get backgroundAlpha():Number { return _backgroundAlpha; }
+		public function set backgroundAlpha(value:Number):void {
+			if(_backgroundAlpha == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "backgroundAlpha", _backgroundAlpha, _backgroundAlpha = value);
 		}
 		
 		public function ImageDisplay()
@@ -83,9 +103,10 @@ package reflex.display
 			draw();
 		}
 		
-		[CommitProperties(target="width, height, scaling")]
+		[CommitProperties(target="width, height, scaling, backgroundColor, backgroundAlpha")]
 		public function onSizeChange(event:InvalidationEvent):void {
-			this.bitmapData = new BitmapData(unscaledWidth, unscaledHeight, true, 0x00000000);
+			var color:uint = (_backgroundAlpha*255) << 24 | _backgroundColor
+			this.bitmapData = new BitmapData(unscaledWidth, unscaledHeight, true, color);
 			this.smoothing = true;
 			draw();
 		}

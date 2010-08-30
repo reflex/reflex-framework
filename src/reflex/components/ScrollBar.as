@@ -1,13 +1,26 @@
 package reflex.components
 {
+	import flight.events.PropertyEvent;
 	import flight.position.IPosition;
+	
 	import legato.components.ScrollBarGraphic;
+	
 	import reflex.behaviors.SlideBehavior;
 	import reflex.behaviors.StepBehavior;
 	
 	public class ScrollBar extends Component
 	{
-		[Bindable] public var position:IPosition;
+		
+		private var _position:IPosition;
+		
+		[Bindable(event="positionChange")]
+		public function get position():IPosition { return _position; }
+		public function set position(value:IPosition):void {
+			if(_position == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "position", _position, _position = value);
+		}
 		
 		public function ScrollBar()
 		{

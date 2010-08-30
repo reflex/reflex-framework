@@ -4,15 +4,26 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
+	import flight.events.PropertyEvent;
+	
 	/**
 	 * @description Adds selection toggling functionality to the target. When clicked, the target's selected property will be flipped.
 	 * @alpha
 	 */
 	public class SelectableBehavior extends Behavior implements IBehavior
 	{
-		[Bindable]
+		
+		private var _selected:Boolean;
+		
+		[Bindable(event="selectedChange")]
 		[Binding(target="target.selected")]
-		public var selected:Boolean;
+		public function get selected():Boolean { return _selected; }
+		public function set selected(value:Boolean):void {
+			if(_selected == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "selected", _selected, _selected = value);
+		}
 		
 		public function SelectableBehavior(target:IEventDispatcher= null)
 		{

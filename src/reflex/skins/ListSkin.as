@@ -10,8 +10,7 @@ package reflex.skins
 	public class ListSkin extends Skin
 	{
 		
-		[Bindable]
-		public var container:Container;
+		private var container:Container;
 		
 		public function ListSkin()
 		{

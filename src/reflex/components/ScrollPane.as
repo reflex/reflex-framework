@@ -2,25 +2,47 @@ package reflex.components
 {
 	
 	import flash.display.InteractiveObject;
+	
 	import flight.binding.Bind;
+	import flight.events.PropertyEvent;
 	import flight.position.IPosition;
+	
 	import reflex.measurement.resolveHeight;
 	
 	[DefaultProperty("container")]
 	public class ScrollPane extends Component
 	{
-		[Bindable]
-		public var horizontal:IPosition;
 		
-		[Bindable]
-		public var vertical:IPosition;
+		private var _horizontal:IPosition;
+		private var _vertical:IPosition;
+		private var _container:InteractiveObject; 
 		
-		private var _container:InteractiveObject; [Bindable]
+		[Bindable(event="horizontalChange")]
+		public function get horizontal():IPosition { return _horizontal; }
+		public function set horizontal(value:IPosition):void {
+			if(_horizontal == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "horizontal", _horizontal, _horizontal = value);
+		}
+		
+		[Bindable(event="verticalChange")]
+		public function get vertical():IPosition { return _vertical; }
+		public function set vertical(value:IPosition):void {
+			if(_vertical == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "vertical", _vertical, _vertical = value);
+		}
+		
+		[Bindable(event="containerChange")]
 		public function get container():InteractiveObject { return _container; }
 		public function set container(value:InteractiveObject):void {
 			if(_container) { this.removeChild(_container); }
+			var oldContainer:InteractiveObject = _container;
 			_container = value;
 			if(_container) { this.addChild(_container); }
+			PropertyEvent.dispatchChange(this, "container", oldContainer, _container);
 		}
 		
 		public function ScrollPane()

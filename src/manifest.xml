@@ -15,11 +15,8 @@
 	<component id="ImageDisplay" class="reflex.display.ImageDisplay"/>
 	
 	<!-- skins -->
-	<component id="ButtonSkin" class="reflex.skins.ButtonSkin"/>
-	<component id="ScrollBarSkin" class="reflex.skins.ScrollBarSkin"/>
 	<component id="Skin" class="reflex.skins.Skin"/>
-	<component id="StepperSkin" class="reflex.skins.StepperSkin"/>
-	<component id="DragStepperSkin" class="reflex.skins.DragStepperSkin"/>
+	<component id="ListSkin" class="reflex.skins.ListSkin"/>
 	
 	<!-- behaviors -->
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
@@ -39,7 +36,6 @@
 	<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>
 	<component id="HorizontalLayout" class="reflex.layouts.HorizontalLayout"/>
 	<component id="DockLayout" class="reflex.layouts.DockLayout"/>
-	<component id="CircleLayout" class="reflex.layouts.CircleLayout"/>
 	
 	<!-- measurement -->
 	<component id="Measurements" class="reflex.measurement.Measurements"/>

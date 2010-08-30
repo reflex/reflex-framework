@@ -8,7 +8,6 @@ package reflex.components
 	
 	import reflex.layouts.ILayout;
 	import reflex.layouts.VerticalLayout;
-	import reflex.skins.ListBoxSkin;
 	import reflex.skins.ListSkin;
 	
 	/**

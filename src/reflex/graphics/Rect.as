@@ -7,6 +7,8 @@ package reflex.graphics
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import flight.events.PropertyEvent;
+	
 	import mx.events.PropertyChangeEvent;
 	
 	import reflex.styles.IStyleable;
@@ -22,49 +24,106 @@ package reflex.graphics
 	public class Rect extends EventDispatcher implements IDrawable, IStyleable
 	{
 		
+		// todo: drawing still needs invalidation, but InvalidationEvent is based on DisplayObject
+		
 		private var _id:String;
 		private var _styleName:String;
+		private var _style:Object;
 		
-		[Bindable] public var x:Number = 0;
-		[Bindable] public var y:Number = 0;
+		private var _x:Number = 0;
+		private var _y:Number = 0;
+		private var _width:Number = 0;
+		private var _height:Number = 0;
 		
-		[Bindable] public var style:Object = new Object();
+		[Bindable(event="xChange")]
+		public function get x():Number { return _x; }
+		public function set x(value:Number):void {
+			if (_x == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "x", _x, _x = value);
+			render();
+		}
 		
+		[Bindable(event="yChange")]
+		public function get y():Number { return _y; }
+		public function set y(value:Number):void {
+			if (_y == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "y", _y, _y = value);
+			render();
+		}
+		
+		
+		[Bindable(event="widthChange")]
+		public function get width():Number { return _width; }
+		public function set width(value:Number):void {
+			if (_width == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "width", _width, _width = value);
+			render();
+		}
+		
+		[Bindable(event="heightChange")]
+		public function get height():Number { return _height; }
+		public function set height(value:Number):void {
+			if (_height == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "height", _height, _height = value);
+			render();
+		}
+		
+		
+		// IStyleable implementation
+		
+		[Bindable(event="idChange")]
 		public function get id():String { return _id; }
 		public function set id(value:String):void {
-			_id = value;
+			if(_id == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "id", _id, _id = value);
 		}
 		
-		public function get styleName():String { return _styleName; }
+		[Bindable(event="styleNameChange")]
+		public function get styleName():String { return _styleName;}
 		public function set styleName(value:String):void {
-			_styleName = value;
+			if(_styleName == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "styleName", _styleName, _styleName= value);
 		}
 		
-		public function getStyle(property:String):* { return style[property]; }
+		[Bindable(event="styleChange")]
+		public function get style():Object { return _style; }
+		public function set style(value:*):void { // this needs expanding in the future
+			if(value is String) {
+				var token:String = value as String;
+				var assignments:Array = token.split(";");
+				for each(var assignment:String in assignments) {
+					var split:Array = assignment.split(":");
+					if(split.length == 2) {
+						var property:String = split[0].replace(/\s+/g, "");
+						var v:String = split[1].replace(/\s+/g, "");
+						_style[property] = v;
+					}
+				}
+			}
+		}
+		
+		public function getStyle(property:String):* {
+			return style[property];
+		}
+		
 		public function setStyle(property:String, value:*):void {
 			style[property] = value;
 		}
 		
-		private var _width:Number = 0; [Bindable]
-		public function get width():Number { return _width; }
-		public function set width(value:Number):void {
-			_width = value;
-			render(); // add invalidation later
-		}
+		// rect
 		
-		private var _height:Number = 0; [Bindable]
-		public function get height():Number { return _height; }
-		public function set height(value:Number):void {
-			_height = value;
-			render();
-		}
-		/*
-		public function setSize(width:Number, height:Number):void {
-			_width = width;
-			_height = height;
-			render();
-		}
-		*/
 		private var _fill:*;
 		public function get fill():* { return _fill; }
 		public function set fill(value:*):void {
@@ -91,6 +150,7 @@ package reflex.graphics
 		public function Rect(target:Object = null)
 		{
 			this.target = target;
+			_style = {};
 		}
 		
 		public function render():void {
