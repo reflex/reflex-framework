@@ -21,7 +21,7 @@ package reflex.display
 	[Style(name="dock")]
 	[Style(name="align")]
 	
-	public class ImageDisplay extends StyleableBitmap
+	public class Image extends BitmapDisplay
 	{
 		
 		static public const BEST_FIT:String = "bestFit";
@@ -74,7 +74,7 @@ package reflex.display
 			PropertyEvent.dispatchChange(this, "backgroundAlpha", _backgroundAlpha, _backgroundAlpha = value);
 		}
 		
-		public function ImageDisplay()
+		public function Image()
 		{
 			super();
 			reflex.metadata.resolveCommitProperties(this, resolve);

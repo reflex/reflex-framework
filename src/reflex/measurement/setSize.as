@@ -2,7 +2,6 @@ package reflex.measurement
 {
 	import flash.display.DisplayObject;
 	
-	import reflex.display.MeasuredSprite;
 	import reflex.graphics.IDrawable;
 	import reflex.graphics.Rect;
 	

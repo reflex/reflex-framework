@@ -8,8 +8,7 @@
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
-	import reflex.display.MeasuredSprite;
-	import reflex.display.StyleableSprite;
+	import reflex.display.Display;
 	import reflex.display.addItem;
 	import reflex.events.InvalidationEvent;
 	import reflex.measurement.resolveHeight;
@@ -32,7 +31,7 @@
 	/**
 	 * @alpha
 	 */
-	public class Component extends StyleableSprite implements IBehavioral, ISkinnable
+	public class Component extends Display implements IBehavioral, ISkinnable
 	{
 		
 		static public const MEASURE:String = "measure";

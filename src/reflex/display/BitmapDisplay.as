@@ -1,39 +1,95 @@
 package reflex.display
 {
-	import flash.display.BitmapData;
 	import flash.events.Event;
 	
 	import flight.events.PropertyEvent;
 	
-	import reflex.events.InvalidationEvent;
+	import reflex.components.IStateful;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
 	import reflex.measurement.Measurements;
-	import reflex.measurement.resolveHeight;
-	import reflex.measurement.resolveWidth;
+	import reflex.styles.IStyleable;
 	
 	[PercentProxy("percentWidth")]
 	[PercentProxy("percentHeight")]
 	
-	
-	public class MeasuredBitmap extends BindableBitmap implements IMeasurable, IMeasurablePercent
+	/**
+	 * Provides a styling and state management implementation
+	 * 
+	 * @alpha
+	 */
+	public class BitmapDisplay extends BindableBitmap implements IStyleable, IMeasurable, IMeasurablePercent
 	{
-		public function MeasuredBitmap(bitmapData:BitmapData=null, pixelSnapping:String="auto", smoothing:Boolean=false)
-		{
-			super(bitmapData, pixelSnapping, smoothing);
-			_explicite = new Measurements(this, NaN, NaN);
-			_measured = new Measurements(this, 160, 22);
-		}
 		
-		protected var unscaledWidth:Number = 160;
-		protected var unscaledHeight:Number = 22;
+		private var _id:String;
+		private var _styleName:String;
+		private var _style:Object;
 		
 		private var _explicite:IMeasurements;
 		private var _measured:IMeasurements;
 		
 		private var _percentWidth:Number;
 		private var _percentHeight:Number;
+		
+		protected var unscaledWidth:Number = 160;
+		protected var unscaledHeight:Number = 22;
+		
+		public function BitmapDisplay() {
+			super(null, "auto", true);
+			_style = new Object(); // need to make object props bindable - something like ObjectProxy but lighter?
+			_explicite = new Measurements(this, NaN, NaN);
+			_measured = new Measurements(this, 160, 22);
+		}
+		
+		
+		// IStyleable implementation
+		
+		[Bindable(event="idChange")]
+		public function get id():String { return _id; }
+		public function set id(value:String):void {
+			if(_id == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "id", _id, _id = value);
+		}
+		
+		[Bindable(event="styleNameChange")]
+		public function get styleName():String { return _styleName;}
+		public function set styleName(value:String):void {
+			if(_styleName == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "styleName", _styleName, _styleName= value);
+		}
+		
+		[Bindable(event="styleChange")]
+		public function get style():Object { return _style; }
+		public function set style(value:*):void { // this needs expanding in the future
+			if(value is String) {
+				var token:String = value as String;
+				var assignments:Array = token.split(";");
+				for each(var assignment:String in assignments) {
+					var split:Array = assignment.split(":");
+					if(split.length == 2) {
+						var property:String = split[0].replace(/\s+/g, "");
+						var v:String = split[1].replace(/\s+/g, "");
+						_style[property] = v;
+					}
+				}
+			}
+		}
+		
+		public function getStyle(property:String):* {
+			return style[property];
+		}
+		
+		public function setStyle(property:String, value:*):void {
+			style[property] = value;
+		}
+		
+		
+		// IMeasurable implementation
 		
 		// these width/height setters need review in regards to scaling.
 		// I think I would perfer following Flex's lead here.

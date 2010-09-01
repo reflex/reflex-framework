@@ -12,7 +12,6 @@
 	<component id="ScrollBar" class="reflex.components.ScrollBar"/>
 	<component id="ScrollPane" class="reflex.components.ScrollPane"/>
 	<component id="Stepper" class="reflex.components.Stepper"/>
-	<component id="ImageDisplay" class="reflex.display.ImageDisplay"/>
 	
 	<!-- skins -->
 	<component id="Skin" class="reflex.skins.Skin"/>
@@ -39,6 +38,11 @@
 	
 	<!-- measurement -->
 	<component id="Measurements" class="reflex.measurement.Measurements"/>
+	
+	<!-- display -->
+	<component id="Text" class="reflex.display.Text" />
+	<component id="Image" class="reflex.display.Image"/>
+	
 	
 	<!-- graphics -->
 	<component id="IDrawable" class="reflex.graphics.IDrawable"/>

@@ -2,12 +2,12 @@ package reflex.display
 {
 	import reflex.measurement.MeasurableTestBase;
 	
-	public class MeasuredBitmapTest extends MeasurableTestBase
+	public class BitmapDisplayMeasurableTest extends MeasurableTestBase
 	{
-		public function MeasuredBitmapTest()
+		public function BitmapDisplayMeasurableTest()
 		{
 			super();
-			C = MeasuredBitmap;
+			C = BitmapDisplay;
 		}
 		
 		[Test(async)]

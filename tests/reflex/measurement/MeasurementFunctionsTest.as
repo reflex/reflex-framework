@@ -2,7 +2,7 @@ package reflex.measurement
 {
 	import org.flexunit.Assert;
 	
-	import reflex.display.MeasuredSprite;
+	import reflex.display.Display;
 
 	public class MeasurementFunctionsTest
 	{
@@ -16,7 +16,7 @@ package reflex.measurement
 		
 		[Test]
 		public function testResolveWidthMeasured():void {
-			var instance:MeasuredSprite = new MeasuredSprite();
+			var instance:IMeasurable = new Display();
 			instance.measured.width = 100;
 			var v:Number = reflex.measurement.resolveWidth(instance);
 			Assert.assertEquals(100, v);
@@ -24,7 +24,7 @@ package reflex.measurement
 		
 		[Test]
 		public function testResolveWidthExplicite():void {
-			var instance:MeasuredSprite = new MeasuredSprite();
+			var instance:IMeasurable = new Display();
 			instance.measured.width = 5;
 			instance.explicite.width = 100;
 			var v:Number = reflex.measurement.resolveWidth(instance);
@@ -40,7 +40,7 @@ package reflex.measurement
 		
 		[Test]
 		public function testResolveHeightMeasured():void {
-			var instance:MeasuredSprite = new MeasuredSprite();
+			var instance:IMeasurable = new Display();
 			instance.measured.height = 100;
 			var v:Number = reflex.measurement.resolveHeight(instance);
 			Assert.assertEquals(100, v);
@@ -48,7 +48,7 @@ package reflex.measurement
 		
 		[Test]
 		public function testResolveHeightExplicite():void {
-			var instance:MeasuredSprite = new MeasuredSprite();
+			var instance:IMeasurable = new Display();
 			instance.measured.height= 5;
 			instance.explicite.height = 100;
 			var v:Number = reflex.measurement.resolveHeight(instance);
@@ -65,7 +65,7 @@ package reflex.measurement
 		
 		[Test]
 		public function testSetSizeMeasurable():void {
-			var instance:MeasuredSprite = new MeasuredSprite();
+			var instance:IMeasurable = new Display();
 			instance.measured.width = 5;
 			instance.measured.height = 5;
 			instance.explicite.width = 5;

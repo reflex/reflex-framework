@@ -13,9 +13,9 @@ package
 	import reflex.display.BindableSpriteTest;
 	import reflex.display.ContainerTest;
 	import reflex.display.DisplayFunctionsTest;
-	import reflex.display.MeasuredBitmapTest;
-	import reflex.display.MeasuredSpriteTest;
-	import reflex.display.StyleableSpriteTest;
+	import reflex.display.BitmapDisplayMeasurableTest;
+	import reflex.display.DisplayMeasurableTest;
+	import reflex.display.DisplayStyleableTest;
 	import reflex.layouts.BasicLayoutTest;
 	import reflex.layouts.XYLayoutTest;
 	import reflex.measurement.MeasurementFunctionsTest;
@@ -31,10 +31,10 @@ package
 		//static public var stage:Stage;
 		
 		public var bindableSprite:BindableSpriteTest;
-		public var measuredSprite:MeasuredSpriteTest;
-		public var styleableSprite:StyleableSpriteTest;
+		public var measuredSprite:DisplayMeasurableTest;
+		public var styleableSprite:DisplayStyleableTest;
 		
-		public var measuredBitmap:MeasuredBitmapTest;
+		public var measuredBitmap:BitmapDisplayMeasurableTest;
 		
 		public var container:ContainerTest;
 		

@@ -40,7 +40,7 @@ package reflex.display
 	 * 
 	 * @alpha
 	 */
-	public class Container extends StyleableSprite implements IContainer, IStateful
+	public class Container extends Display implements IContainer, IStateful
 	{
 		
 		static public const CREATE:String = "create";
