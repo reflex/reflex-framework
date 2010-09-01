@@ -2,8 +2,8 @@ package reflex.metadata
 {
 	import flash.events.IEventDispatcher;
 	
-	import flight.binding.Bind;
-	import flight.utils.Type;
+	import reflex.binding.Bind;
+	import reflex.metadata.Type;
 	
 	/**
 	 * @experimental

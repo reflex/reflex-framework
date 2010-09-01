@@ -40,7 +40,7 @@
 	<component id="Measurements" class="reflex.measurement.Measurements"/>
 	
 	<!-- display -->
-	<component id="Text" class="reflex.display.Text" />
+	<!--<component id="Text" class="reflex.display.Text" />-->
 	<component id="Image" class="reflex.display.Image"/>
 	
 	

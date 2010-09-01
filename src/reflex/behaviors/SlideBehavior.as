@@ -5,9 +5,9 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	
-	import flight.position.IPosition;
-	import flight.position.Position;
-	
+	import reflex.data.IPosition;
+	import reflex.data.Position;
+	import reflex.data.PositionUtil;
 	import reflex.events.ButtonEvent;
 	import reflex.measurement.resolveHeight;
 	
@@ -76,7 +76,7 @@ package reflex.behaviors
 			}
 			
 			if (!dragging) {
-				_percent = position.percent;
+				_percent = PositionUtil.resolvePercent(position);
 				updatePosition();
 				dispatchEvent(new Event("percentChange"));
 			}
@@ -86,12 +86,12 @@ package reflex.behaviors
 		public function onTrackPress(event:ButtonEvent):void
 		{
 			var size:Number = horizontal ? track.width : track.height;
-			forwardPress = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * position.percent);
+			forwardPress = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * PositionUtil.resolvePercent(position));
 			
 			if (forwardPress) {
-				position.skipForward();
+				PositionUtil.pageForward(position);
 			} else {
-				position.skipBackward();
+				PositionUtil.pageBackward(position);
 			}
 			event.updateAfterEvent();
 		}
@@ -100,16 +100,16 @@ package reflex.behaviors
 		public function onTrackHold(event:ButtonEvent):void
 		{
 			var size:Number = horizontal ? track.width : track.height;
-			var forwardHold:Boolean = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * position.percent);
+			var forwardHold:Boolean = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * PositionUtil.resolvePercent(position));
 			
 			if (forwardPress != forwardHold) {
 				return;
 			}
 			
 			if (forwardPress) {
-				position.skipForward();
+				PositionUtil.pageForward(position);
 			} else {
-				position.skipBackward();
+				PositionUtil.pageBackward(position);
 			}
 			event.updateAfterEvent();
 		}
@@ -130,7 +130,7 @@ package reflex.behaviors
 			var delta:Number = (mousePoint - dragPoint) / size;
 			_percent = dragPercent + delta;
 			_percent = _percent <= 0 ? 0 : (_percent >= 1 ? 1 : _percent);
-			position.percent = _percent;
+			PositionUtil.setPercent(position, _percent);
 			updatePosition();
 			dispatchEvent(new Event("percentChange"));
 			

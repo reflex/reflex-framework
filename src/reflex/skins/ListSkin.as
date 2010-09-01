@@ -1,7 +1,7 @@
 package reflex.skins
 {
-	import flight.binding.Bind;
-	import flight.list.ArrayList;
+	import reflex.binding.Bind;
+	import reflex.collections.SimpleCollection;
 	
 	import reflex.display.Container;
 	
@@ -22,7 +22,7 @@ package reflex.skins
 			// need a better solution for this
 			Bind.addBinding(this, "container.width", this, "target.width");
 			Bind.addBinding(this, "container.height", this, "target.height");
-			content = new ArrayList([container]);
+			content = new SimpleCollection([container]);
 			//children.addItem(container);
 			
 		}

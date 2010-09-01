@@ -3,7 +3,7 @@
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	
-	import flight.events.PropertyEvent;
+	import reflex.events.PropertyEvent;
 	
 	import reflex.behaviors.ButtonBehavior;
 	import reflex.behaviors.MovieClipSkinBehavior;

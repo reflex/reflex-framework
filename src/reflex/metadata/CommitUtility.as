@@ -8,7 +8,7 @@ package reflex.metadata
 	import flash.utils.clearInterval;
 	import flash.utils.getQualifiedClassName;
 	
-	import flight.binding.Bind;
+	import reflex.binding.Bind;
 	
 	import reflex.events.InvalidationEvent;
 	

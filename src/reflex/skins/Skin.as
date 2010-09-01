@@ -10,18 +10,17 @@ package reflex.skins
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import flight.binding.Bind;
-	import flight.events.ListEvent;
-	import flight.events.ListEventKind;
-	import flight.events.PropertyEvent;
-	import flight.list.ArrayList;
-	import flight.list.IList;
+	import mx.collections.IList;
+	import mx.events.CollectionEvent;
+	import mx.events.CollectionEventKind;
 	
+	import reflex.binding.Bind;
+	import reflex.collections.SimpleCollection;
 	import reflex.components.IStateful;
 	import reflex.display.IContainer;
-	//import reflex.display.ReflexDataTemplate;
 	import reflex.display.addItemsAt;
 	import reflex.events.InvalidationEvent;
+	import reflex.events.PropertyEvent;
 	import reflex.layouts.ILayout;
 	import reflex.layouts.XYLayout;
 	import reflex.measurement.IMeasurable;
@@ -178,17 +177,18 @@ package reflex.skins
 		//protected var containerPart:DisplayObjectContainer;
 		//protected var defaultContainer:Boolean = true;
 		private var _target:Sprite;
-		private var _content:IList = new ArrayList();
+		private var _content:IList;
 		
 		public function Skin()
 		{
 			super();
+			_content = new SimpleCollection();
 			_explicite = new Measurements(this);
 			_measured = new Measurements(this);
 			if(_layout == null) {
 				//_layout = new XYLayout();
 			}
-			_content.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			Bind.addListener(this, onLayoutChange, this, "target.layout");
 			Bind.addListener(this, onLayoutChange, this, "layout");
 			//Bind.addBinding(this, "data", this, "target.data");
@@ -292,7 +292,7 @@ package reflex.skins
 			var oldContent:IList = _content;
 			
 			if(_content) {
-				_content.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			}
 			
 			if(value == null) {
@@ -300,13 +300,13 @@ package reflex.skins
 			} else if(value is IList) {
 				_content = value as IList;
 			} else if(value is Array || value is Vector) {
-				_content = new ArrayList(value);
+				_content = new SimpleCollection(value);
 			} else {
-				_content = new ArrayList([value]);
+				_content = new SimpleCollection([value]);
 			}
 			
 			if(_content) {
-				_content.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 				var items:Array = [];
 				for (var i:int = 0; i < _content.length; i++) {
 					items.push(_content.getItemAt(i));
@@ -323,27 +323,27 @@ package reflex.skins
 			return (part in this) ? this[part] : null;
 		}
 		
-		private function onChildrenChange(event:ListEvent):void
+		private function onChildrenChange(event:CollectionEvent):void
 		{
 			if (_target == null) {
 				return;
 			}
 			var child:DisplayObject;
-			var loc:int = event.location1;
+			var loc:int = event.location;
 			switch (event.kind) {
-				case ListEventKind.ADD :
+				case CollectionEventKind.ADD :
 					add(event.items, loc++);
 					break;
-				case ListEventKind.REMOVE :
+				case CollectionEventKind.REMOVE :
 					for each (child in event.items) {
 					_target.removeChild(child);
 					}
 					break;
-				case ListEventKind.REPLACE :
+				case CollectionEventKind.REPLACE :
 					_target.removeChild(event.items[1]);
 					_target.addChildAt(event.items[0], loc);
 					break;
-				case ListEventKind.RESET :
+				case CollectionEventKind.RESET :
 				default:
 					reset(event.items);
 					break;

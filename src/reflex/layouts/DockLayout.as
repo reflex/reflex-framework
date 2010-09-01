@@ -5,8 +5,6 @@ package reflex.layouts
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import flight.binding.Bind;
-	
 	import reflex.events.InvalidationEvent;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;

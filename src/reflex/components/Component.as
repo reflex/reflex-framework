@@ -3,7 +3,7 @@
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import flight.events.PropertyEvent;
+	import reflex.events.PropertyEvent;
 	
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;

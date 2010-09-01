@@ -2,8 +2,6 @@ package reflex.display
 {
 	import flash.events.Event;
 	
-	import flight.list.ArrayList;
-	
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
 	

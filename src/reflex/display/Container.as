@@ -6,12 +6,13 @@ package reflex.display
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import flight.binding.Bind;
-	import flight.events.ListEvent;
-	import flight.events.ListEventKind;
-	import flight.events.PropertyEvent;
-	import flight.list.ArrayList;
-	import flight.list.IList;
+	import reflex.binding.Bind;
+	import reflex.events.PropertyEvent;
+	import reflex.collections.SimpleCollection;
+	
+	import mx.collections.IList;
+	import mx.events.CollectionEvent;
+	import mx.events.CollectionEventKind;
 	
 	import reflex.components.IStateful;
 	import reflex.events.InvalidationEvent;
@@ -121,7 +122,7 @@ package reflex.display
 			var oldContent:IList = _content;
 			
 			if(_content) {
-				_content.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			}
 			
 			if(value == null) {
@@ -129,13 +130,13 @@ package reflex.display
 			} else if(value is IList) {
 				_content = value as IList;
 			} else if(value is Array || value is Vector) {
-				_content = new ArrayList(value);
+				_content = new SimpleCollection(value);
 			} else {
-				_content = new ArrayList([value]);
+				_content = new SimpleCollection([value]);
 			}
 			
 			if(_content) {
-				_content.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 				var items:Array = [];
 				for (var i:int = 0; i < _content.length; i++) {
 					items.push(_content.getItemAt(i));
@@ -210,24 +211,25 @@ package reflex.display
 			}
 		}
 		
-		private function onChildrenChange(event:ListEvent):void
+		private function onChildrenChange(event:CollectionEvent):void
 		{
 			var child:DisplayObject;
-			var loc:int = event.location1;
+			var loc:int = event.location;
 			switch (event.kind) {
-				case ListEventKind.ADD :
+				//case ListEventKind.ADD :
+				case CollectionEventKind.ADD :
 					add(event.items, loc);
 					break;
-				case ListEventKind.REMOVE :
+				case CollectionEventKind.REMOVE :
 					for each (child in event.items) {
 						removeChild(child);
 					}
 					break;
-				case ListEventKind.REPLACE :
+				case CollectionEventKind.REPLACE :
 					removeChild(event.items[1]);
 					//addChildAt(event.items[0], loc);
 					break;
-				case ListEventKind.RESET :
+				case CollectionEventKind.RESET :
 				default:
 					reset(event.items);
 					break;

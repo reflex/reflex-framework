@@ -2,9 +2,9 @@ package reflex.display
 {
 	import flash.events.Event;
 	
-	import flight.binding.Bind;
-	import flight.events.PropertyEvent;
-	import flight.position.IPosition;
+	import reflex.binding.Bind;
+	import reflex.events.PropertyEvent;
+	import reflex.data.IPosition;
 	
 	public class ScrollContainer extends Container
 	{

@@ -1,7 +1,7 @@
 package reflex.components
 {
-	import flight.list.ArrayList;
-	import flight.position.Position;
+	import reflex.collections.SimpleCollection;
+	import reflex.data.Position;
 	
 	import reflex.layouts.XYLayout;
 	import reflex.tests.TestBase;
@@ -11,12 +11,12 @@ package reflex.components
 		
 		[Test(async)]
 		public function testDataProviderChange():void {
-			testPropertyChange(List, "dataProvider", new ArrayList());
+			testPropertyChange(List, "dataProvider", new SimpleCollection());
 		}
 		
 		[Test(async)]
 		public function testDataProviderNotChanged():void {
-			testPropertyNotChanged(List, "dataProvider", new ArrayList());
+			testPropertyNotChanged(List, "dataProvider", new SimpleCollection());
 		}
 		
 		[Test(async)]

@@ -2,9 +2,9 @@ package reflex.metadata
 {
 	import flash.events.IEventDispatcher;
 	
-	import flight.binding.Bind;
-	import flight.events.PropertyEvent;
-	import flight.utils.Type;
+	import reflex.binding.Bind;
+	import reflex.events.PropertyEvent;
+	import reflex.metadata.Type;
 	
 	import reflex.events.InvalidationEvent;
 	

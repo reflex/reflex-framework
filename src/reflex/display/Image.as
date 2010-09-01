@@ -7,7 +7,7 @@ package reflex.display
 	import flash.geom.Matrix;
 	import flash.net.URLRequest;
 	
-	import flight.events.PropertyEvent;
+	import reflex.events.PropertyEvent;
 	
 	import reflex.events.InvalidationEvent;
 	import reflex.metadata.resolveCommitProperties;

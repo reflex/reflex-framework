@@ -4,9 +4,8 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
-	import flight.events.PropertyEvent;
-	import flight.position.IPosition;
-	import flight.position.Position;
+	import reflex.events.PropertyEvent;
+	import reflex.data.IPosition;
 	
 	import reflex.events.ButtonEvent;
 	

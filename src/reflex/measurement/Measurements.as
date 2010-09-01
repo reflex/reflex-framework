@@ -3,7 +3,7 @@ package reflex.measurement
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
-	import flight.events.PropertyEvent;
+	import reflex.events.PropertyEvent;
 	
 	
 	/**

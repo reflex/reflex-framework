@@ -1,6 +1,7 @@
 package reflex.display
 {
-	import flight.list.IList;
+	//import flight.list.IList;
+	import mx.collections.IList
 	
 	import reflex.layouts.ILayout;
 	

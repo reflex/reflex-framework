@@ -3,10 +3,10 @@ package reflex.components
 	
 	import flash.display.InteractiveObject;
 	
-	import flight.binding.Bind;
-	import flight.events.PropertyEvent;
-	import flight.position.IPosition;
-	
+	import reflex.binding.Bind;
+	import reflex.data.IPosition;
+	import reflex.data.PositionUtil;
+	import reflex.events.PropertyEvent;
 	import reflex.measurement.resolveHeight;
 	
 	[DefaultProperty("container")]
@@ -57,7 +57,7 @@ package reflex.components
 			if(vertical) {
 				vertical.min = 0;
 				vertical.max = containerHeight;
-				container.y = potential * vertical.percent * -1;
+				container.y = potential * PositionUtil.resolvePercent(vertical) * -1;
 			}
 		}
 		

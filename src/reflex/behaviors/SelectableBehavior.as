@@ -4,7 +4,7 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
-	import flight.events.PropertyEvent;
+	import reflex.events.PropertyEvent;
 	
 	/**
 	 * @description Adds selection toggling functionality to the target. When clicked, the target's selected property will be flipped.

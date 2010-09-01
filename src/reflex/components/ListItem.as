@@ -1,6 +1,6 @@
 package reflex.components
 {
-	import flight.events.PropertyEvent;
+	import reflex.events.PropertyEvent;
 	
 	import mx.core.IDataRenderer;
 	

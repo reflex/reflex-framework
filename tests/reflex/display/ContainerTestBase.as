@@ -8,8 +8,8 @@ package reflex.display
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
-	import flight.list.ArrayList;
-	import flight.list.IList;
+	import reflex.collections.SimpleCollection;
+	import mx.collections.IList;
 	
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
@@ -32,12 +32,12 @@ package reflex.display
 		
 		[Test(async)]
 		public function testChildrenChange():void {
-			testPropertyChange(C, "content", new ArrayList());
+			testPropertyChange(C, "content", new SimpleCollection());
 		}
 		
 		[Test(async)]
 		public function testChildrenNotChanged():void {
-			testPropertyNotChanged(C, "content", new ArrayList());
+			testPropertyNotChanged(C, "content", new SimpleCollection());
 		}
 		
 		[Test(async)]

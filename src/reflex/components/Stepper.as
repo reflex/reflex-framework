@@ -1,8 +1,8 @@
 package reflex.components
 {
-	import flight.events.PropertyEvent;
-	import flight.position.IPosition;
-	import flight.position.Position;
+	import reflex.events.PropertyEvent;
+	import reflex.data.IPosition;
+	import reflex.data.Position;
 	
 	import reflex.behaviors.StepBehavior;
 

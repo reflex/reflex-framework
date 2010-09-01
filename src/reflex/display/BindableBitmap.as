@@ -2,7 +2,7 @@ package reflex.display
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flight.events.PropertyEvent;
+	import reflex.events.PropertyEvent;
 	
 	public class BindableBitmap extends Bitmap
 	{

@@ -4,10 +4,10 @@ package reflex.behaviors
 	import flash.display.MovieClip;
 	import flash.events.IEventDispatcher;
 	
-	import flight.binding.Bind;
-	import flight.position.IPosition;
-	import flight.position.Position;
-	
+	import reflex.binding.Bind;
+	import reflex.data.IPosition;
+	import reflex.data.Position;
+	import reflex.data.PositionUtil;
 	import reflex.events.ButtonEvent;
 	
 	public class StepBehavior extends Behavior
@@ -53,7 +53,7 @@ package reflex.behaviors
 		[EventListener(type="hold", target="fwdBtn")]
 		public function onFwdPress(event:ButtonEvent):void
 		{
-			position.forward();
+			PositionUtil.forward(position);
 			event.updateAfterEvent();
 		}
 		
@@ -61,7 +61,7 @@ package reflex.behaviors
 		[EventListener(type="hold", target="bwdBtn")]
 		public function onBwdPress(event:ButtonEvent):void
 		{
-			position.backward();
+			PositionUtil.backward(position);
 			event.updateAfterEvent();
 		}
 		

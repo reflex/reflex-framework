@@ -7,7 +7,7 @@ package reflex.graphics
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import flight.events.PropertyEvent;
+	import reflex.events.PropertyEvent;
 	
 	import mx.events.PropertyChangeEvent;
 	

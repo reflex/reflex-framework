@@ -1,7 +1,7 @@
 package reflex.components
 {
-	import flight.events.PropertyEvent;
-	import flight.position.IPosition;
+	import reflex.events.PropertyEvent;
+	import reflex.data.IPosition;
 	
 	import legato.components.ScrollBarGraphic;
 	
