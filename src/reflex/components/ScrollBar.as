@@ -24,11 +24,11 @@ package reflex.components
 		
 		public function ScrollBar()
 		{
-			//skin = new ScrollBarGraphic();
+			skin = new ScrollBarGraphic();
 			behaviors.slide = new SlideBehavior(this);
 		}
 		
-		/*override */protected function init():void
+		/*protected function init():void
 		{
 			//var scrollBarSkin:ScrollBarSkin = new ScrollBarSkin();
 			skin = new ScrollBarGraphic();
@@ -38,6 +38,6 @@ package reflex.components
 			behaviors.step = stepBehavior;
 //			position = scrollBarSkin.position = slideBehavior.position = stepBehavior.position;
 		}
-		
+		*/
 	}
 }

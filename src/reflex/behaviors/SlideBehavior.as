@@ -5,7 +5,9 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	
+	import reflex.data.IPagingControl;
 	import reflex.data.IPosition;
+	import reflex.data.IPositionControl;
 	import reflex.data.Position;
 	import reflex.data.PositionUtil;
 	import reflex.events.ButtonEvent;
@@ -28,7 +30,8 @@ package reflex.behaviors
 		
 		[Bindable]
 		[Binding(target="target.position")]
-		public var position:IPosition = new Position();		// TODO: implement lazy instantiation of position
+		public var position:IPosition= new Position();		// TODO: implement lazy instantiation of position
+		
 		
 		private var _percent:Number = 0;
 		private var dragPercent:Number;
@@ -55,8 +58,8 @@ package reflex.behaviors
 				return;
 			}
 			
-			track = getSkinPart("track");
-			thumb = getSkinPart("thumb");
+			//track = getSkinPart("track");
+			//thumb = getSkinPart("thumb");
 			if(track) { ButtonEvent.initialize(track); }
 			if(thumb) { ButtonEvent.initialize(thumb); }
 			
@@ -76,7 +79,7 @@ package reflex.behaviors
 			}
 			
 			if (!dragging) {
-				_percent = PositionUtil.resolvePercent(position);
+				_percent = PositionUtil.getPercent(position);
 				updatePosition();
 				dispatchEvent(new Event("percentChange"));
 			}
@@ -86,12 +89,16 @@ package reflex.behaviors
 		public function onTrackPress(event:ButtonEvent):void
 		{
 			var size:Number = horizontal ? track.width : track.height;
-			forwardPress = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * PositionUtil.resolvePercent(position));
+			forwardPress = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * PositionUtil.getPercent(position));
 			
-			if (forwardPress) {
-				PositionUtil.pageForward(position);
-			} else {
-				PositionUtil.pageBackward(position);
+			var control:IPagingControl = position as IPagingControl;
+			
+			if(control) {
+				if (forwardPress) {
+					control.pageForward();
+				} else {
+					control.pageBackward();
+				}
 			}
 			event.updateAfterEvent();
 		}
@@ -100,16 +107,20 @@ package reflex.behaviors
 		public function onTrackHold(event:ButtonEvent):void
 		{
 			var size:Number = horizontal ? track.width : track.height;
-			var forwardHold:Boolean = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * PositionUtil.resolvePercent(position));
+			var forwardHold:Boolean = (horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y) > (size * PositionUtil.getPercent(position));
 			
 			if (forwardPress != forwardHold) {
 				return;
 			}
 			
-			if (forwardPress) {
-				PositionUtil.pageForward(position);
-			} else {
-				PositionUtil.pageBackward(position);
+			var control:IPagingControl = position as IPagingControl;
+			
+			if(control) {
+				if (forwardPress) {
+					control.pageForward();
+				} else {
+					control.pageBackward();
+				}
 			}
 			event.updateAfterEvent();
 		}

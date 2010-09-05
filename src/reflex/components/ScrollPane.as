@@ -57,7 +57,7 @@ package reflex.components
 			if(vertical) {
 				vertical.min = 0;
 				vertical.max = containerHeight;
-				container.y = potential * PositionUtil.resolvePercent(vertical) * -1;
+				container.y = potential * PositionUtil.getPercent(vertical) * -1;
 			}
 		}
 		

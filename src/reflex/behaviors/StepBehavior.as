@@ -6,6 +6,7 @@ package reflex.behaviors
 	
 	import reflex.binding.Bind;
 	import reflex.data.IPosition;
+	import reflex.data.IPositionControl;
 	import reflex.data.Position;
 	import reflex.data.PositionUtil;
 	import reflex.events.ButtonEvent;
@@ -53,7 +54,10 @@ package reflex.behaviors
 		[EventListener(type="hold", target="fwdBtn")]
 		public function onFwdPress(event:ButtonEvent):void
 		{
-			PositionUtil.forward(position);
+			var control:IPositionControl = position as IPositionControl;
+			if(control) {
+				control.stepForward();
+			}
 			event.updateAfterEvent();
 		}
 		
@@ -61,7 +65,10 @@ package reflex.behaviors
 		[EventListener(type="hold", target="bwdBtn")]
 		public function onBwdPress(event:ButtonEvent):void
 		{
-			PositionUtil.backward(position);
+			var control:IPositionControl = position as IPositionControl;
+			if(control) {
+				control.stepBackward();
+			}
 			event.updateAfterEvent();
 		}
 		

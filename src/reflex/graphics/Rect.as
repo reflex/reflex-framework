@@ -7,10 +7,9 @@ package reflex.graphics
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import reflex.events.PropertyEvent;
-	
 	import mx.events.PropertyChangeEvent;
 	
+	import reflex.events.PropertyEvent;
 	import reflex.styles.IStyleable;
 	
 	[Style(name="left")]
@@ -34,6 +33,8 @@ package reflex.graphics
 		private var _y:Number = 0;
 		private var _width:Number = 0;
 		private var _height:Number = 0;
+		private var _radiusX:Number = 0;
+		private var _radiusY:Number = 0;
 		
 		[Bindable(event="xChange")]
 		public function get x():Number { return _x; }
@@ -76,6 +77,34 @@ package reflex.graphics
 			render();
 		}
 		
+		[Bindable(event="radiusXChange")]
+		public function get radiusX():Number { return _radiusX; }
+		public function set radiusX(value:Number):void {
+			if (_radiusX == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "radiusX", _radiusX, _radiusX = value);
+			render();
+		}
+		
+		[Bindable(event="radiusYChange")]
+		public function get radiusY():Number { return _radiusY; }
+		public function set radiusY(value:Number):void {
+			if (_radiusY == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "radiusY", _radiusY, _radiusY = value);
+			render();
+		}
+		
+		// topLeftRadiusX
+		// topLeftRadiusY
+		// topRightRadiusX
+		// topRightRadiusY
+		// bottomRightRadiusX
+		// botomRightRadiusY
+		// bottomLeftRadiusX
+		// bottomLeftRadiusY
 		
 		// IStyleable implementation
 		
@@ -166,7 +195,7 @@ package reflex.graphics
 				var rectangle:Rectangle = new Rectangle(0, 0, width, height);
 				if(stroke != null) { stroke.apply(graphics, rectangle, new Point()); }
 				if(fill != null) { fill.begin(graphics, rectangle, new Point()); }
-				graphics.drawRect(x, y, width, height);
+				graphics.drawRoundRect(_x, _y, _width, _height, _radiusX, _radiusY);
 				if(fill != null) { fill.end(graphics); }
 			}
 		}
