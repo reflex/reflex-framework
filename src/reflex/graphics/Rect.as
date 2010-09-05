@@ -9,7 +9,9 @@ package reflex.graphics
 	
 	import mx.events.PropertyChangeEvent;
 	
+	import reflex.events.InvalidationEvent;
 	import reflex.events.PropertyEvent;
+	import reflex.metadata.resolveCommitProperties;
 	import reflex.styles.IStyleable;
 	
 	[Style(name="left")]
@@ -43,7 +45,7 @@ package reflex.graphics
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "x", _x, _x = value);
-			render();
+			//render();
 		}
 		
 		[Bindable(event="yChange")]
@@ -53,7 +55,7 @@ package reflex.graphics
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "y", _y, _y = value);
-			render();
+			//render();
 		}
 		
 		
@@ -64,7 +66,7 @@ package reflex.graphics
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "width", _width, _width = value);
-			render();
+			//render();
 		}
 		
 		[Bindable(event="heightChange")]
@@ -74,7 +76,7 @@ package reflex.graphics
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "height", _height, _height = value);
-			render();
+			//render();
 		}
 		
 		[Bindable(event="radiusXChange")]
@@ -84,7 +86,7 @@ package reflex.graphics
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "radiusX", _radiusX, _radiusX = value);
-			render();
+			//render();
 		}
 		
 		[Bindable(event="radiusYChange")]
@@ -94,7 +96,7 @@ package reflex.graphics
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "radiusY", _radiusY, _radiusY = value);
-			render();
+			//render();
 		}
 		
 		// topLeftRadiusX
@@ -159,27 +161,38 @@ package reflex.graphics
 			_fill = value;
 			// update this to use binding correctly
 			(_fill as IEventDispatcher).addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, propertyChangeHandler);
-			render();
+			//render();
 		}
 		
 		private var _stroke:*;
 		public function get stroke():* { return _stroke; }
 		public function set stroke(value:*):void {
 			_stroke = value;
-			render();
+			//render();
 		}
 		
 		private var _target:Object;
 		public function get target():Object { return _target; }
 		public function set target(value:Object):void {
 			_target = value;
-			render();
+			if(_target != null) { // this needs to handle reassignment better (to clean up old bindings/listeners)
+				reflex.metadata.resolveCommitProperties(this);
+			}
+			//render();
 		}
 		
 		public function Rect(target:Object = null)
 		{
 			this.target = target;
 			_style = {};
+		}
+		
+		/**
+		 * @private
+		 */
+		[CommitProperties(target="x, y, width, height, radiusX, radiusY, fill, stroke, target")]
+		public function updateRender(event:InvalidationEvent):void {
+			render();
 		}
 		
 		public function render():void {

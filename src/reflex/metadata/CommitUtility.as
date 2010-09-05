@@ -9,8 +9,8 @@ package reflex.metadata
 	import flash.utils.getQualifiedClassName;
 	
 	import reflex.binding.Bind;
-	
 	import reflex.events.InvalidationEvent;
+	import reflex.graphics.IDrawable;
 	
 	// for lack of a better name
 	
@@ -44,23 +44,28 @@ package reflex.metadata
 			
 			var f:Function = resolver != null ? resolver(method) : instance[method];
 			//instance.addEventListener(token, commitHandler, false, 0, true);
-			instance.addEventListener(token, f, false, 0, true);
+			if(instance is IDrawable) {
+				if((instance as IDrawable).target) {
+					(instance as IDrawable).target.addEventListener(token, f, false, 0, true);
+				}
+			} else {
+				instance.addEventListener(token, f, false, 0, true);
+			}
 		}
 		
 		private function invalidationHandler(s1:Object, s2:Object = null, s3:Object = null, s4:Object = null):void {
 			//var binding:Binding = s1 as Binding;
-			if(s2 is DisplayObject) {
+			if(s2 is IEventDispatcher) {
 				var sourceToken:String =  flash.utils.getQualifiedClassName(s2) + "_" + s1.sourcePath;
 				var tokens:Array = dictionary[sourceToken];
 				for each(var token:String in tokens) {
-					InvalidationEvent.invalidate(s2 as DisplayObject, token);
+					if(s2 is IDrawable) {
+						InvalidationEvent.invalidate((s2 as IDrawable).target as DisplayObject, token);
+					} else  {
+						InvalidationEvent.invalidate(s2 as DisplayObject, token);
+					}
 				}
 			}
-		}
-		
-		private function commitHandler(event:InvalidationEvent):void {
-			//var instance:IEventDispatcher;
-			//var f:Function = instance[method];
 		}
 		
 	}

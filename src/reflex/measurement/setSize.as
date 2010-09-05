@@ -9,7 +9,7 @@ package reflex.measurement
 	{
 		if(child is IMeasurable) { // || child is IDrawable
 			child.setSize(width, height);
-		} else /*if(child is DisplayObject)*/ {
+		} else if(child != null) {
 			child.width = width;
 			child.height = height;
 		}

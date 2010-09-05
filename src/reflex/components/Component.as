@@ -3,14 +3,13 @@
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import reflex.events.PropertyEvent;
-	
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
 	import reflex.display.Display;
 	import reflex.display.addItem;
 	import reflex.events.InvalidationEvent;
+	import reflex.events.PropertyEvent;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
@@ -43,6 +42,8 @@
 		
 		private var _states:Array;
 		private var _currentState:String;
+		
+		private var _enabled:Boolean = true;
 		
 		public function Component()
 		{
@@ -113,8 +114,17 @@
 			PropertyEvent.dispatchChange(this, "skin", oldSkin, _skin);
 		}
 		
-		// IStateful implementation
+		[Bindable(event="enabledChange")]
+		public function get enabled():Boolean { return _enabled; }
+		public function set enabled(value:Boolean):void {
+			if(_enabled == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "enabled", _enabled, _enabled = value);
+		}
 		
+		// IStateful implementation
+		/*
 		[Bindable(event="statesChange")]
 		public function get states():Array { return _states; }
 		public function set states(value:Array):void {
@@ -123,7 +133,7 @@
 			}
 			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
 		}
-		
+		*/
 		
 		[Bindable(event="currentStateChange")]
 		public function get currentState():String { return _currentState; }

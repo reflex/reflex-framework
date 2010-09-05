@@ -11,12 +11,15 @@ package
 	import reflex.components.ListItemTest;
 	import reflex.components.ListTest;
 	import reflex.display.BindableSpriteTest;
+	import reflex.display.BitmapDisplayMeasurableTest;
 	import reflex.display.ContainerTest;
 	import reflex.display.DisplayFunctionsTest;
-	import reflex.display.BitmapDisplayMeasurableTest;
 	import reflex.display.DisplayMeasurableTest;
 	import reflex.display.DisplayStyleableTest;
+	import reflex.display.TextFieldDisplayMeasurableTest;
 	import reflex.layouts.BasicLayoutTest;
+	import reflex.layouts.HorizontalLayoutTest;
+	import reflex.layouts.VerticalLayoutTest;
 	import reflex.layouts.XYLayoutTest;
 	import reflex.measurement.MeasurementFunctionsTest;
 	import reflex.skins.SkinContainerTest;
@@ -35,6 +38,7 @@ package
 		public var styleableSprite:DisplayStyleableTest;
 		
 		public var measuredBitmap:BitmapDisplayMeasurableTest;
+		public var measuredTextField:TextFieldDisplayMeasurableTest;
 		
 		public var container:ContainerTest;
 		
@@ -55,8 +59,11 @@ package
 		public var listItem:ListItemTest;
 		public var list:ListTest;
 		
+		// layouts
 		public var xyLayout:XYLayoutTest;
 		public var basicLayout:BasicLayoutTest;
+		public var verticalLayout:VerticalLayoutTest;
+		public var horizontalLayout:HorizontalLayoutTest;
 		
 	}
 }

@@ -184,7 +184,7 @@ package reflex.skins
 			super();
 			_content = new SimpleCollection();
 			_explicite = new Measurements(this);
-			_measured = new Measurements(this);
+			_measured = new Measurements(this, 160, 22);
 			if(_layout == null) {
 				//_layout = new XYLayout();
 			}

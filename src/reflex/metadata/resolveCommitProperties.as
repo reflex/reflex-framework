@@ -11,6 +11,7 @@ package reflex.metadata
 	/**
 	 * @experimental
 	 */
+	// this needs some updates to handle non-DisplayObjects (like Rect) better
 	public function resolveCommitProperties(instance:IEventDispatcher, resolver:Function = null):void
 	{
 		var desc:XMLList = Type.describeMethods(instance, "CommitProperties");

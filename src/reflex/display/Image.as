@@ -80,6 +80,9 @@ package reflex.display
 			reflex.metadata.resolveCommitProperties(this, resolve);
 		}
 		
+		/**
+		 * @private
+		 */
 		[CommitProperties(target="source")]
 		public function onSourceChanged(event:InvalidationEvent):void {
 			if(source is String) {
@@ -103,6 +106,9 @@ package reflex.display
 			draw();
 		}
 		
+		/**
+		 * @private
+		 */
 		[CommitProperties(target="width, height, scaling, backgroundColor, backgroundAlpha")]
 		public function onSizeChange(event:InvalidationEvent):void {
 			var color:uint = (_backgroundAlpha*255) << 24 | _backgroundColor
