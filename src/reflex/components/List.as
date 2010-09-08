@@ -1,14 +1,12 @@
 package reflex.components
 {
-	import flight.binding.Bind;
-	import flight.events.PropertyEvent;
-	import flight.list.ArrayList;
-	import flight.list.IList;
-	import flight.position.IPosition;
 	
+	import mx.collections.IList;
+	
+	import reflex.data.IPosition;
+	import reflex.events.PropertyEvent;
 	import reflex.layouts.ILayout;
 	import reflex.layouts.VerticalLayout;
-	import reflex.skins.ListBoxSkin;
 	import reflex.skins.ListSkin;
 	
 	/**

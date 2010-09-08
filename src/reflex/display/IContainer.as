@@ -1,6 +1,7 @@
 package reflex.display
 {
-	import flight.list.IList;
+	//import flight.list.IList;
+	import mx.collections.IList;
 	
 	import reflex.layouts.ILayout;
 	
@@ -18,8 +19,8 @@ package reflex.display
 		 * Note that you can still manipulate the DisplayList directly using the addChild, removeChildAt, etc. methods of DisplayObjectContainer,
 		 * however children added manually will not be measured or positioned by the container.
 		 */
-		function get children():IList;
-		function set children(value:*):void;
+		function get content():IList;
+		function set content(value:*):void;
 		
 		/**
 		 * The layout used to measure and position this container's children.

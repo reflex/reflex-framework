@@ -1,17 +1,13 @@
 package reflex.skins
 {
-	import flight.binding.Bind;
-	import flight.list.ArrayList;
-	
+	import reflex.binding.Bind;
+	import reflex.collections.SimpleCollection;
 	import reflex.display.Container;
-	
-	import reflex.events.RenderPhase;
 
 	public class ListSkin extends Skin
 	{
 		
-		[Bindable]
-		public var container:Container;
+		private var container:Container;
 		
 		public function ListSkin()
 		{
@@ -23,7 +19,7 @@ package reflex.skins
 			// need a better solution for this
 			Bind.addBinding(this, "container.width", this, "target.width");
 			Bind.addBinding(this, "container.height", this, "target.height");
-			children = new ArrayList([container]);
+			content = new SimpleCollection([container]);
 			//children.addItem(container);
 			
 		}

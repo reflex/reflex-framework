@@ -1,16 +1,11 @@
 package reflex.display
 {
-	import org.flexunit.Assert;
-	
-	import reflex.styles.StyleableTestBase;
-	
-	public class StyleableSpriteTest extends StyleableTestBase
+	import reflex.tests.TestBase;
+
+	public class StatefulTestBase extends TestBase
 	{
-		public function StyleableSpriteTest()
-		{
-			super();
-			C = StyleableSprite;
-		}
+		
+		public var C:Class;
 		
 		[Test(async)]
 		public function testStatesChange():void {
@@ -30,14 +25,6 @@ package reflex.display
 		[Test(async)]
 		public function testCurrentStateNotChanged():void {
 			testPropertyNotChanged(C, "currentState", "test");
-		}
-		
-		[Test]
-		public function testStyleString():void {
-			var instance:StyleableSprite = new C();
-			instance.style = "testStyle: test;"; // more complex parsing needed later
-			var v:Object = instance.getStyle("testStyle");
-			Assert.assertEquals("test", v);
 		}
 		
 	}

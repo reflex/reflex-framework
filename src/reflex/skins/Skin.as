@@ -9,16 +9,16 @@ package reflex.skins
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import flight.binding.Bind;
-	import flight.events.ListEvent;
-	import flight.events.ListEventKind;
-	import flight.events.PropertyEvent;
-	import flight.list.ArrayList;
-	import flight.list.IList;
+	import mx.collections.IList;
+	import mx.events.CollectionEvent;
+	import mx.events.CollectionEventKind;
 	
+	import reflex.binding.Bind;
+	import reflex.collections.SimpleCollection;
 	import reflex.components.IStateful;
 	import reflex.display.IContainer;
 	import reflex.display.addItemsAt;
+	import reflex.events.PropertyEvent;
 	import reflex.events.RenderPhase;
 	import reflex.layouts.ILayout;
 	import reflex.measurement.IMeasurable;
@@ -31,7 +31,7 @@ package reflex.skins
 	 * adding children to the Sprite, or both.
 	 * @alpha
 	 */
-	[DefaultProperty("children")]
+	[DefaultProperty("content")]
 	public class Skin extends EventDispatcher implements ISkin, IContainer, IStateful, IMeasurable
 	{
 		
@@ -170,33 +170,21 @@ package reflex.skins
 			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
 		}
 		
-		/*
-		[Bindable]
-		public function get transitions():Array { return _transitions; }
-		public function set transitions(value:Array):void
-		{
-			_transitions = value;
-		}
-		*/
-		/*
-		public function hasState(state:String):Boolean {
-			return true;
-		}
-		*/
 		//protected var containerPart:DisplayObjectContainer;
 		//protected var defaultContainer:Boolean = true;
 		private var _target:Sprite;
-		private var _children:IList = new ArrayList();
+		private var _content:IList;
 		
 		public function Skin()
 		{
 			super();
+			_content = new SimpleCollection();
 			_explicite = new Measurements(this);
-			_measured = new Measurements(this);
+			_measured = new Measurements(this, 160, 22);
 			if(_layout == null) {
 				//_layout = new XYLayout();
 			}
-			_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			Bind.addListener(this, onLayoutChange, this, "target.layout");
 			Bind.addListener(this, onLayoutChange, this, "layout");
 			//Bind.addBinding(this, "data", this, "target.data");
@@ -272,8 +260,8 @@ package reflex.skins
 			
 			PropertyEvent.dispatchChange(this, "target", oldValue, _target);
 			var items:Array = [];
-			for (var i:int = 0; i < _children.length; i++) {
-				items.push(_children.getItemAt(i));
+			for (var i:int = 0; i < _content.length; i++) {
+				items.push(_content.getItemAt(i));
 			}
 			reset(items);
 		}
@@ -286,43 +274,44 @@ package reflex.skins
 		 * @inheritDoc
 		 */
 		[ArrayElementType("Object")]
-		public function get children():IList
+		[Bindable(event="contentChange")]
+		public function get content():IList
 		{
-			return _children;
+			return _content;
 		}
-		public function set children(value:*):void
+		public function set content(value:*):void
 		{
-			if(_children == value) {
+			if(_content == value) {
 				return;
 			}
 			
-			var oldChildren:IList = _children;
+			var oldContent:IList = _content;
 			
-			if(_children) {
-				_children.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			if(_content) {
+				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			}
 			
 			if(value == null) {
-				_children = null;
+				_content = null;
 			} else if(value is IList) {
-				_children = value as IList;
+				_content = value as IList;
 			} else if(value is Array || value is Vector) {
-				_children = new ArrayList(value);
+				_content = new SimpleCollection(value);
 			} else {
-				_children = new ArrayList([value]);
+				_content = new SimpleCollection([value]);
 			}
 			
-			if(_children) {
-				_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			if(_content) {
+				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 				var items:Array = [];
-				for (var i:int = 0; i < _children.length; i++) {
-					items.push(_children.getItemAt(i));
+				for (var i:int = 0; i < _content.length; i++) {
+					items.push(_content.getItemAt(i));
 				}
 				reset(items);
 			}
 			
 			
-			PropertyEvent.dispatchChange(this, "children", oldChildren, _children);
+			PropertyEvent.dispatchChange(this, "content", oldContent, _content);
 		}
 		
 		public function getSkinPart(part:String):InteractiveObject
@@ -330,27 +319,27 @@ package reflex.skins
 			return (part in this) ? this[part] : null;
 		}
 		
-		private function onChildrenChange(event:ListEvent):void
+		private function onChildrenChange(event:CollectionEvent):void
 		{
 			if (_target == null) {
 				return;
 			}
 			var child:DisplayObject;
-			var loc:int = event.location1;
+			var loc:int = event.location;
 			switch (event.kind) {
-				case ListEventKind.ADD :
+				case CollectionEventKind.ADD :
 					add(event.items, loc++);
 					break;
-				case ListEventKind.REMOVE :
+				case CollectionEventKind.REMOVE :
 					for each (child in event.items) {
 					_target.removeChild(child);
 					}
 					break;
-				case ListEventKind.REPLACE :
+				case CollectionEventKind.REPLACE :
 					_target.removeChild(event.items[1]);
 					_target.addChildAt(event.items[0], loc);
 					break;
-				case ListEventKind.RESET :
+				case CollectionEventKind.RESET :
 				default:
 					reset(event.items);
 					break;
@@ -404,9 +393,9 @@ package reflex.skins
 			var target:IMeasurable= this.target as IMeasurable;
 			if(layout && target && (isNaN(target.explicite.width) || isNaN(target.explicite.height))) {
 				var items:Array = [];
-				var length:int = _children.length;
+				var length:int = _content.length;
 				for(var i:int = 0; i < length; i++) {
-					items.push(_children.getItemAt(i));
+					items.push(_content.getItemAt(i));
 				}
 				var point:Point = layout.measure(items);
 				// this if statement blocks an infinite loop
@@ -425,9 +414,9 @@ package reflex.skins
 		private function onLayout(event:Event):void {
 			if(layout) {
 				var items:Array = [];
-				var length:int = _children.length;
+				var length:int = _content.length;
 				for(var i:int = 0; i < length; i++) {
-					items.push(_children.getItemAt(i));
+					items.push(_content.getItemAt(i));
 				}
 				
 				//var width:Number = reflex.measurement.resolveWidth(this);

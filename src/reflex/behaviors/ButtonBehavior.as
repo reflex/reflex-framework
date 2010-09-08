@@ -6,8 +6,7 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
-	import flight.binding.Bind;
-	
+	import reflex.binding.Bind;
 	import reflex.events.ButtonEvent;
 	
 	[SkinState("up")]

@@ -24,13 +24,14 @@ package reflex.layouts
 		override public function measure(children:Array):Point
 		{
 			super.measure(children);
-			var point:Point = new Point(gap, 0);
+			var point:Point = new Point(0, gap/2);
 			for each(var child:Object in children) {
 				var width:Number = reflex.measurement.resolveWidth(child);
 				var height:Number = reflex.measurement.resolveHeight(child);
 				point.x = Math.max(point.x, width);
 				point.y += height + gap;
 			}
+			point.y -= gap/2;
 			return point;
 		}
 		
@@ -38,7 +39,7 @@ package reflex.layouts
 		{
 			super.update(children, rectangle);
 			if(children) {
-				var position:Number = gap;
+				var position:Number = gap/2;
 				var length:int = children.length;
 				for(var i:int = 0; i < length; i++) {
 					var child:Object = children[i];

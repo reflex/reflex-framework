@@ -6,8 +6,9 @@
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
-	import reflex.display.StyleableSprite;
+	import reflex.display.Display;
 	import reflex.display.addItem;
+	import reflex.events.PropertyEvent;
 	import reflex.events.RenderPhase;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
@@ -28,7 +29,7 @@
 	/**
 	 * @alpha
 	 */
-	public class Component extends StyleableSprite implements IBehavioral, ISkinnable
+	public class Component extends Display implements IBehavioral, ISkinnable
 	{
 		
 		static public const MEASURE:String = "measure";
@@ -38,6 +39,10 @@
 		private var _skin:Object;
 		private var _behaviors:CompositeBehavior;
 		
+		private var _states:Array;
+		private var _currentState:String;
+		
+		private var _enabled:Boolean = true;
 		
 		public function Component()
 		{
@@ -108,9 +113,35 @@
 			RenderPhase.invalidate(this, MEASURE);
 		}
 		
-		[CommitProperties("width,height,skin")]
-		public function updateSkinSize():void {
-			
+		[Bindable(event="enabledChange")]
+		public function get enabled():Boolean { return _enabled; }
+		public function set enabled(value:Boolean):void {
+			if(_enabled == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "enabled", _enabled, _enabled = value);
+		}
+		
+		// IStateful implementation
+		/*
+		[Bindable(event="statesChange")]
+		public function get states():Array { return _states; }
+		public function set states(value:Array):void {
+			if(_states == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
+		}
+		*/
+		
+		[Bindable(event="currentStateChange")]
+		public function get currentState():String { return _currentState; }
+		public function set currentState(value:String):void
+		{
+			if(_currentState == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
 		}
 		
 		// needs more thought

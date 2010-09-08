@@ -1,14 +1,8 @@
 package reflex.layouts
 {
-	import flash.display.DisplayObject;
-	import flash.events.Event;
-	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import flight.binding.Bind;
-	
-	import reflex.events.RenderPhase;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	

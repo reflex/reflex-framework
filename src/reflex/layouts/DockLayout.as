@@ -1,16 +1,10 @@
 package reflex.layouts
 {
-	import flash.display.DisplayObject;
-	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import flight.binding.Bind;
-	
-	import reflex.events.RenderPhase;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
-	import reflex.styles.hasStyle;
 	import reflex.styles.resolveStyle;
 	
 	[LayoutProperty(name="style.dock", measure="true")]

@@ -7,7 +7,7 @@ package reflex.layouts
 	import org.flexunit.Assert;
 	
 	import reflex.display.BindableSprite;
-	import reflex.display.StyleableSprite;
+	import reflex.display.Display;
 
 	public class BasicLayoutTest extends EventDispatcher
 	{
@@ -40,7 +40,7 @@ package reflex.layouts
 		[Test]
 		public function testMeasurementLeft():void {
 			var layout:BasicLayout = new BasicLayout();
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			
 			child.width = 20;
 			child.setStyle("left", 5);
@@ -52,7 +52,7 @@ package reflex.layouts
 		[Test]
 		public function testMeasurementRight():void {
 			var layout:BasicLayout = new BasicLayout();
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			
 			child.width = 20;
 			child.setStyle("right", 5);
@@ -64,7 +64,7 @@ package reflex.layouts
 		[Test]
 		public function testMeasurementLeftRight():void {
 			var layout:BasicLayout = new BasicLayout();
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			
 			child.width = 20;
 			child.setStyle("left", 5);
@@ -77,7 +77,7 @@ package reflex.layouts
 		[Test]
 		public function testMeasurementTop():void {
 			var layout:BasicLayout = new BasicLayout();
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			
 			child.height = 20;
 			child.setStyle("top", 5);
@@ -89,7 +89,7 @@ package reflex.layouts
 		[Test]
 		public function testMeasurementBottom():void {
 			var layout:BasicLayout = new BasicLayout();
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			
 			child.height = 20;
 			child.setStyle("bottom", 5);
@@ -101,7 +101,7 @@ package reflex.layouts
 		[Test]
 		public function testMeasurementTopBottom():void {
 			var layout:BasicLayout = new BasicLayout();
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			
 			child.height = 20;
 			child.setStyle("top", 5);
@@ -114,7 +114,7 @@ package reflex.layouts
 		[Test]
 		public function testMeasurementHorizontalCenter():void {
 			var layout:BasicLayout = new BasicLayout();
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			
 			child.width = 20;
 			child.setStyle("horizontalCenter", -5);
@@ -126,7 +126,7 @@ package reflex.layouts
 		[Test]
 		public function testMeasurementVerticalCenter():void {
 			var layout:BasicLayout = new BasicLayout();
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			
 			child.height = 20;
 			child.setStyle("verticalCenter", -5);
@@ -140,7 +140,7 @@ package reflex.layouts
 		
 		[Test]
 		public function testLeft():void {
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			var layout:BasicLayout = new BasicLayout();
 			layout.target = this;
 			child.setStyle("left", 5);
@@ -150,7 +150,7 @@ package reflex.layouts
 		
 		[Test]
 		public function testRight():void {
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			var layout:BasicLayout = new BasicLayout();
 			layout.target = this;
 			child.width = 20;
@@ -161,7 +161,7 @@ package reflex.layouts
 		
 		[Test]
 		public function testLeftRight():void {
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			var layout:BasicLayout = new BasicLayout();
 			layout.target = this;
 			child.setStyle("left", 5);
@@ -173,7 +173,7 @@ package reflex.layouts
 		
 		[Test]
 		public function testTop():void {
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			var layout:BasicLayout = new BasicLayout();
 			layout.target = this;
 			child.setStyle("top", 5);
@@ -183,7 +183,7 @@ package reflex.layouts
 		
 		[Test]
 		public function testBottom():void {
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			var layout:BasicLayout = new BasicLayout();
 			layout.target = this;
 			child.height = 20;
@@ -194,7 +194,7 @@ package reflex.layouts
 		
 		[Test]
 		public function testTopBottom():void {
-			var child:StyleableSprite = new StyleableSprite();
+			var child:Display = new Display();
 			var layout:BasicLayout = new BasicLayout();
 			layout.target = this;
 			child.setStyle("top", 5);
@@ -206,8 +206,8 @@ package reflex.layouts
 		
 		[Test]
 		public function testHorizontalCenter():void {
-			var child1:StyleableSprite = new StyleableSprite();
-			var child2:StyleableSprite = new StyleableSprite();
+			var child1:Display = new Display();
+			var child2:Display = new Display();
 			var layout:BasicLayout = new BasicLayout();
 			layout.target = this;
 			child1.width = 20;
@@ -221,8 +221,8 @@ package reflex.layouts
 		
 		[Test]
 		public function testVerticalCenter():void {
-			var child1:StyleableSprite = new StyleableSprite();
-			var child2:StyleableSprite = new StyleableSprite();
+			var child1:Display = new Display();
+			var child2:Display = new Display();
 			var layout:BasicLayout = new BasicLayout();
 			layout.target = this;
 			child1.height = 20;

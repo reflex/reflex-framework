@@ -7,9 +7,8 @@ package reflex.layouts
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	import flight.binding.Bind;
-	import flight.events.PropertyEvent;
-	
+	import reflex.binding.Bind;
+	import reflex.events.PropertyEvent;
 	import reflex.events.RenderPhase;
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveEventListeners;

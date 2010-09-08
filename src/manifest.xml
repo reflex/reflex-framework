@@ -12,14 +12,10 @@
 	<component id="ScrollBar" class="reflex.components.ScrollBar"/>
 	<component id="ScrollPane" class="reflex.components.ScrollPane"/>
 	<component id="Stepper" class="reflex.components.Stepper"/>
-	<component id="ImageDisplay" class="reflex.display.ImageDisplay"/>
 	
 	<!-- skins -->
-	<component id="ButtonSkin" class="reflex.skins.ButtonSkin"/>
-	<component id="ScrollBarSkin" class="reflex.skins.ScrollBarSkin"/>
 	<component id="Skin" class="reflex.skins.Skin"/>
-	<component id="StepperSkin" class="reflex.skins.StepperSkin"/>
-	<component id="DragStepperSkin" class="reflex.skins.DragStepperSkin"/>
+	<component id="ListSkin" class="reflex.skins.ListSkin"/>
 	
 	<!-- behaviors -->
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
@@ -39,10 +35,14 @@
 	<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>
 	<component id="HorizontalLayout" class="reflex.layouts.HorizontalLayout"/>
 	<component id="DockLayout" class="reflex.layouts.DockLayout"/>
-	<component id="CircleLayout" class="reflex.layouts.CircleLayout"/>
 	
 	<!-- measurement -->
 	<component id="Measurements" class="reflex.measurement.Measurements"/>
+	
+	<!-- display -->
+	<!--<component id="Text" class="reflex.display.Text" />-->
+	<component id="Image" class="reflex.display.Image"/>
+	
 	
 	<!-- graphics -->
 	<component id="IDrawable" class="reflex.graphics.IDrawable"/>
@@ -52,11 +52,6 @@
 	<component id="ButtonEvent" class="reflex.events.ButtonEvent"/>
 	<component id="RenderPhase" class="reflex.events.RenderPhase"/>
 	
-	<!-- flight dependencies -->
-	<!--
-	<component id="IList" class="flight.list.IList"/>
-	<component id="ArrayList" class="flight.list.ArrayList"/>
-	-->
 	<!-- flex dependencies -->
 	<!-- <component id="FlexClasses" class="FlexClasses"/> -->
 	

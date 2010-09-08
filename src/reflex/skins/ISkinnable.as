@@ -1,11 +1,8 @@
 package reflex.skins
 {
-	import flash.events.IEventDispatcher;
 	
-	import flight.list.IList;
 	
-	import reflex.display.IContainer;
-	//import reflex.layout.ILayoutAlgorithm;
+	
 	
 	/**
 	 * @alpha
@@ -20,6 +17,7 @@ package reflex.skins
 		/**
 		 * The component's current state.
 		 **/
+		
 		function get currentState():String;
 		function set currentState(value:String):void;
 		

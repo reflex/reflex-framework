@@ -1,9 +1,9 @@
 package reflex.behaviors
 {
-	import flash.events.IEventDispatcher;
 	import flash.display.InteractiveObject;
-	import flight.binding.Bind;
+	import flash.events.IEventDispatcher;
 	
+	import reflex.binding.Bind;
 	import reflex.cursors.Cursor;
 	
 	public class CursorBehavior extends Behavior

@@ -2,15 +2,14 @@ package reflex.display
 {
 	import reflex.measurement.MeasurableTestBase;
 
-	public class MeasuredSpriteTest extends MeasurableTestBase
+	public class DisplayMeasurableTest extends MeasurableTestBase
 	{
 		
-		public function MeasuredSpriteTest()
+		public function DisplayMeasurableTest()
 		{
 			super();
-			C = MeasuredSprite;
+			C = Display;
 		}
-		
 		
 		[Test(async)]
 		public function testPercentWidthChange():void {

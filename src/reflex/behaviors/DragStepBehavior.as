@@ -4,16 +4,24 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
-	import flight.position.IPosition;
-	import flight.position.Position;
-	
+	import reflex.data.IPosition;
 	import reflex.events.ButtonEvent;
+	import reflex.events.PropertyEvent;
 	
 	public class DragStepBehavior extends Behavior
 	{
-		[Bindable]
+		
+		private var _position:IPosition;
+		
+		[Bindable(event="positionChange")]
 		[Binding(target="target.position")]
-		public var position:IPosition = new Position();		// TODO: implement lazy instantiation of position
+		public function get position():IPosition { return _position; }
+		public function set position(value:IPosition):void {
+			if(_position == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "position", _position, _position = value);
+		}
 		
 		public var increment:Number = 1;
 		public var dragTolerance:Number = 3;

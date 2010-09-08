@@ -2,7 +2,6 @@ package reflex.measurement
 {
 	import flash.display.DisplayObject;
 	
-	import reflex.display.MeasuredSprite;
 	import reflex.graphics.IDrawable;
 	import reflex.graphics.Rect;
 	
@@ -10,7 +9,7 @@ package reflex.measurement
 	{
 		if(child is IMeasurable) { // || child is IDrawable
 			child.setSize(width, height);
-		} else /*if(child is DisplayObject)*/ {
+		} else if(child != null) {
 			child.width = width;
 			child.height = height;
 		}

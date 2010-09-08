@@ -5,8 +5,6 @@ package mx.styles
 	import flash.events.Event;
 	import flash.utils.Dictionary;
 	
-	import flight.observers.PropertyChange;
-	
 	import mx.core.IMXMLObject;
 	
 	import reflex.styles.IStyleable;
@@ -19,7 +17,7 @@ package mx.styles
 		public static var declarations:Array = [];
 		protected static var instance:IStyleManager2 = new StyleManager();
 		protected static var targetChanges:Dictionary = new Dictionary(true);
-		PropertyChange.addObserver(DisplayObject, "*", null, propertyChange);
+		//PropertyChange.addObserver(DisplayObject, "*", null, propertyChange);		// deprecated functionailty, 'observer'
 		
 		public static function getStyleManager(type:String):IStyleManager2
 		{

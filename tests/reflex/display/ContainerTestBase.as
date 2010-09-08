@@ -8,8 +8,8 @@ package reflex.display
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
-	import flight.list.ArrayList;
-	import flight.list.IList;
+	import reflex.collections.SimpleCollection;
+	import mx.collections.IList;
 	
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
@@ -18,10 +18,10 @@ package reflex.display
 	import reflex.layouts.XYLayout;
 	import reflex.tests.TestBase;
 	
-	public class ContainerTestBase extends TestBase
+	public class ContainerTestBase extends StatefulTestBase
 	{
 		
-		public var C:Class;
+		//public var C:Class;
 		
 		[Test(order=-1)]
 		public function testIContainer():void {
@@ -32,12 +32,12 @@ package reflex.display
 		
 		[Test(async)]
 		public function testChildrenChange():void {
-			testPropertyChange(C, "children", new ArrayList());
+			testPropertyChange(C, "content", new SimpleCollection());
 		}
 		
 		[Test(async)]
 		public function testChildrenNotChanged():void {
-			testPropertyNotChanged(C, "children", new ArrayList());
+			testPropertyNotChanged(C, "content", new SimpleCollection());
 		}
 		
 		[Test(async)]
@@ -57,8 +57,8 @@ package reflex.display
 			var test1:DisplayObject = new Sprite();
 			var test2:DisplayObject = new Shape();
 			var test3:DisplayObject = new Bitmap();
-			container.children = [test1, test2, test3];
-			var list:IList = container.children;
+			container.content = [test1, test2, test3];
+			var list:IList = container.content;
 			Assert.assertNotNull(list);
 			Assert.assertTrue(list is IList);
 			Assert.assertEquals(test1, list.getItemAt(0));

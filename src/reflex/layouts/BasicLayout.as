@@ -3,11 +3,12 @@ package reflex.layouts
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import reflex.styles.resolveStyle;
+	
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
 	import reflex.styles.hasStyle;
+	import reflex.styles.resolveStyle;
 	
 	[LayoutProperty(name="style.left", measure="true")]
 	[LayoutProperty(name="style.right", measure="true")]

@@ -1,9 +1,6 @@
 package reflex.display
 {
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
-	
-	import reflex.graphics.IDrawable;
 	
 	// the generic objects here are suspect, but I'm leaving them in for now.
 	// Think DisplayObject3D from PaperVision, etc.

@@ -1,14 +1,7 @@
 ﻿package reflex.components
 {
-	import flash.display.DisplayObject;
-	import flash.display.MovieClip;
-	
-	import flight.events.PropertyEvent;
-	
-	import reflex.behaviors.ButtonBehavior;
-	import reflex.behaviors.MovieClipSkinBehavior;
-	import reflex.behaviors.SelectableBehavior;
-	import reflex.measurement.setSize;
+	import reflex.binding.Bind;
+	import reflex.events.PropertyEvent;
 	
 	/**
 	 * @alpha
@@ -27,9 +20,6 @@
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "label", _label, _label = value);
-			if(skin is ButtonGraphic) { // wow, this shouldn't be here at all
-				(skin as ButtonGraphic).label.text = label != null ? label : "";
-			}
 		}
 		
 		[Bindable(event="selectedChange")]
@@ -45,17 +35,8 @@
 		public function Button()
 		{
 			super();
-			// this hard coding shouldn't be here
-			behaviors.button = new ButtonBehavior(this);
-			behaviors.selectable = new SelectableBehavior(this);
-			behaviors.movieclip = new MovieClipSkinBehavior(this);
-			if(skin == null) {
-				if(this is MovieClip) {
-					skin = this;
-				} else {
-					skin = new ButtonGraphic();
-				}
-			}
+			//skin = this;
+			Bind.addBinding(this, "skin.label.text", this, "label", false);
 		}
 		
 	}

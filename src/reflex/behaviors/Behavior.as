@@ -2,13 +2,13 @@
 {
 	
 	import flash.display.InteractiveObject;
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-	import flash.events.Event;
+	
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveEventListeners;
 	import reflex.metadata.resolvePropertyListeners;
-	import reflex.skins.ISkinnable;
 	
 	/**
 	 * Behavior is a convenient base class for various behavior implementations.
@@ -55,9 +55,9 @@
 		
 		protected function getSkinPart(part:String):InteractiveObject
 		{
-			if (target is ISkinnable && ISkinnable(target).skin != null) {
+			/*if (target is ISkinnable && ISkinnable(target).skin != null) {
 				return ISkinnable(target).skin.getSkinPart(part) as InteractiveObject;
-			} else if (part in target) {
+			} else */if (part in target) {
 				return target[part] as InteractiveObject;
 			} else {
 				return null;

@@ -23,6 +23,17 @@ package reflex.measurement
 			Assert.assertTrue(instance is IEventDispatcher);
 		}
 		
+		[Test]
+		public function testDefaultSize():void {
+			var instance:IMeasurable = new C();
+			Assert.assertNotNull(instance.explicite);
+			Assert.assertNotNull(instance.measured);
+			Assert.assertFalse(isNaN(instance.measured.width));
+			Assert.assertFalse(isNaN(instance.measured.height));
+			Assert.assertTrue(isNaN(instance.explicite.width));
+			Assert.assertTrue(isNaN(instance.explicite.height));
+		}
+		
 		[Test(async)]
 		public function testWidthChange():void {
 			testPropertyChange(C, "width", 100);
@@ -126,6 +137,7 @@ package reflex.measurement
 			Async.failOnEvent(this, instance as IEventDispatcher, "heightChange", 500, timeoutHandler);
 			instance.setSize(100, 100);
 		}
+		
 		
 	}
 }

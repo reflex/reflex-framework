@@ -12,7 +12,7 @@ package reflex.layouts
 	{
 		
 		[Test]
-		public function testMeasurementXY():void {
+		public function testMeasurement():void {
 			var child1:BindableSprite = new BindableSprite();
 			var child2:BindableSprite = new BindableSprite();
 			

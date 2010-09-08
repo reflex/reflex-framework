@@ -2,7 +2,7 @@ package reflex.display
 {
 	import flash.display.Sprite;
 	
-	import flight.events.PropertyEvent;
+	import reflex.events.PropertyEvent;
 	
 	/**
 	 * The BindableSprite class makes most DisplayObject properties bindable.

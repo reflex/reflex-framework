@@ -1,47 +1,50 @@
 package reflex.behaviors
 {
 	import flash.display.Stage;
-	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
-	import flash.ui.Mouse;
-	
-	import mx.managers.SystemManager;
 	
 	import org.flexunit.asserts.assertEquals;
 	
-	import spark.components.Application;
+	import reflex.display.Container;
 
-	public class ButtonBehaviorTest extends EventDispatcher
+	public class ButtonBehaviorTest
 	{
 		
-		[Bindable]
-		public var currentState:String;
-		
 		public var stage:Stage;
+		public var display:Container;
 		
 		public function ButtonBehaviorTest() {
-			//stage = ReflexSuite.stage;
+			stage = ReflexSuite.stage;
+			display = new Container()
+		}
+		
+		[Before]
+		public function setup():void {
+			var behavior:ButtonBehavior = new ButtonBehavior(display);
+			stage.addChild(display);
+		}
+		
+		[After]
+		public function destroy():void {
+			stage.removeChild(display);
 		}
 		
 		[Test]
 		public function testButtonStateUp():void {
-			var behavior:ButtonBehavior = new ButtonBehavior(this);
-			this.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OUT, false));
-			assertEquals("up", currentState);
+			display.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OUT, true));
+			assertEquals("up", display.currentState);
 		}
 		
 		[Test]
 		public function testButtonStateOver():void {
-			var behavior:ButtonBehavior = new ButtonBehavior(this);
-			this.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OVER, false));
-			assertEquals("over", currentState);
+			display.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OVER, true));
+			assertEquals("over", display.currentState);
 		}
 		
 		[Test]
 		public function testButtonStateDown():void {
-			var behavior:ButtonBehavior = new ButtonBehavior(this);
-			this.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, false));
-			assertEquals("down", currentState);
+			display.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, true));
+			assertEquals("down", display.currentState);
 		}
 		
 		

@@ -1,16 +1,11 @@
 ﻿package reflex.display
 {
 	import flash.display.Sprite;
-	import flash.events.Event;
 	
-	import flight.events.PropertyEvent;
-	
-	import reflex.events.RenderPhase;
+	import reflex.events.PropertyEvent;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurements;
 	import reflex.measurement.Measurements;
-	import reflex.measurement.resolveHeight;
-	import reflex.measurement.resolveWidth;
 		
 	/**
 	 * Modifies common DisplayObject properties for improved usability.

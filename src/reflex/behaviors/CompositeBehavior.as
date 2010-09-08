@@ -8,7 +8,6 @@ package reflex.behaviors
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
 	
-
 	use namespace flash_proxy;
 	
 	/**

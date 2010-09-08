@@ -2,8 +2,7 @@ package reflex.metadata
 {
 	import flash.events.IEventDispatcher;
 	
-	import flight.binding.Bind;
-	import flight.utils.Type;
+	import reflex.binding.Bind;
 	
 	// this method of listening for layout invalidating changes is very much experimental
 	/**

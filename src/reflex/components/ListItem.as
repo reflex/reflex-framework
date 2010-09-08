@@ -1,10 +1,8 @@
 package reflex.components
 {
-	import flight.events.PropertyEvent;
-	
 	import mx.core.IDataRenderer;
 	
-	import reflex.behaviors.ButtonBehavior;
+	import reflex.events.PropertyEvent;
 	
 	/**
 	 * @alpha

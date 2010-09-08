@@ -5,11 +5,13 @@ package reflex.display
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import flight.events.ListEvent;
-	import flight.events.ListEventKind;
-	import flight.list.ArrayList;
-	import flight.list.IList;
+	import mx.collections.IList;
+	import mx.events.CollectionEvent;
+	import mx.events.CollectionEventKind;
 	
+	import reflex.collections.SimpleCollection;
+	import reflex.components.IStateful;
+	import reflex.events.PropertyEvent;
 	import reflex.events.RenderPhase;
 	import reflex.layouts.ILayout;
 	
@@ -24,14 +26,14 @@ package reflex.display
 	
 	[Event(name="initialize", type="reflex.events.RenderPhase")]
 	
-	[DefaultProperty("children")]
+	[DefaultProperty("content")]
 	
 	/**
 	 * Used to contain and layout children.
 	 * 
 	 * @alpha
 	 */
-	public class Container extends StyleableSprite implements IContainer
+	public class Container extends Display implements IContainer, IStateful
 	{
 		
 		static public const CREATE:String = "create";
@@ -46,8 +48,11 @@ package reflex.display
 		
 		private var _layout:ILayout;
 		private var _template:Object;
-		private var _children:IList;
-		public var renderers:Array;
+		private var _content:IList;
+		private var renderers:Array;
+		
+		private var _states:Array;
+		private var _currentState:String;
 		
 		
 		public function Container()
@@ -72,40 +77,61 @@ package reflex.display
 			RenderPhase.invalidate(this, LAYOUT);
 		}
 		
+		// IStateful implementation
+		
+		[Bindable(event="statesChange")]
+		public function get states():Array { return _states; }
+		public function set states(value:Array):void {
+			if(_states == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
+		}
+		
+		
+		[Bindable(event="currentStateChange")]
+		public function get currentState():String { return _currentState; }
+		public function set currentState(value:String):void
+		{
+			if(_currentState == value) {
+				return;
+			}
+			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
+		}
 		
 		/**
 		 * @inheritDoc
 		 */
 		[ArrayElementType("Object")]
-		[Bindable(event="childrenChange")]
-		public function get children():IList { return _children; }
-		public function set children(value:*):void
+		[Bindable(event="contentChange")]
+		public function get content():IList { return _content; }
+		public function set content(value:*):void
 		{
-			if(_children == value) {
+			if(_content == value) {
 				return;
 			}
 			
-			var oldChildren:IList = _children;
+			var oldContent:IList = _content;
 			
-			if(_children) {
-				_children.removeEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			if(_content) {
+				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			}
 			
 			if(value == null) {
-				_children = null;
+				_content = null;
 			} else if(value is IList) {
-				_children = value as IList;
+				_content = value as IList;
 			} else if(value is Array || value is Vector) {
-				_children = new ArrayList(value);
+				_content = new SimpleCollection(value);
 			} else {
-				_children = new ArrayList([value]);
+				_content = new SimpleCollection([value]);
 			}
 			
-			if(_children) {
-				_children.addEventListener(ListEvent.LIST_CHANGE, onChildrenChange);
+			if(_content) {
+				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 				var items:Array = [];
-				for (var i:int = 0; i < _children.length; i++) {
-					items.push(_children.getItemAt(i));
+				for (var i:int = 0; i < _content.length; i++) {
+					items.push(_content.getItemAt(i));
 				}
 				reset(items);
 			}
@@ -140,11 +166,11 @@ package reflex.display
 			}
 			var oldTemplate:Object = _template;
 			_template = value;
-			if(children != null) {
+			if(_content != null) {
 				var items:Array = [];
-				var length:int = children.length;
+				var length:int = _content.length;
 				for(var i:int = 0; i < length; i++) {
-					var child:Object = children.getItemAt(i);
+					var child:Object = _content.getItemAt(i);
 					items.push(child);
 				}
 				reset(items);
@@ -177,24 +203,25 @@ package reflex.display
 			}
 		}
 		
-		private function onChildrenChange(event:ListEvent):void
+		private function onChildrenChange(event:CollectionEvent):void
 		{
 			var child:DisplayObject;
-			var loc:int = event.location1;
+			var loc:int = event.location;
 			switch (event.kind) {
-				case ListEventKind.ADD :
+				//case ListEventKind.ADD :
+				case CollectionEventKind.ADD :
 					add(event.items, loc);
 					break;
-				case ListEventKind.REMOVE :
+				case CollectionEventKind.REMOVE :
 					for each (child in event.items) {
 						removeChild(child);
 					}
 					break;
-				case ListEventKind.REPLACE :
+				case CollectionEventKind.REPLACE :
 					removeChild(event.items[1]);
 					//addChildAt(event.items[0], loc);
 					break;
-				case ListEventKind.RESET :
+				case CollectionEventKind.RESET :
 				default:
 					reset(event.items);
 					break;
