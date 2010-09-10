@@ -3,7 +3,7 @@ package reflex.components
 	
 	import mx.collections.IList;
 	
-	import reflex.data.IPosition;
+	import reflex.data.ISpan;
 	import reflex.events.PropertyEvent;
 	import reflex.layouts.ILayout;
 	import reflex.layouts.VerticalLayout;
@@ -18,7 +18,7 @@ package reflex.components
 		private var _layout:ILayout;
 		private var _dataProvider:IList;
 		private var _template:Object;
-		private var _position:IPosition;
+		private var _position:ISpan;
 		
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
@@ -48,8 +48,8 @@ package reflex.components
 		}
 		
 		[Bindable(event="positionChange")]
-		public function get position():IPosition { return _position; }
-		public function set position(value:IPosition):void {
+		public function get position():ISpan { return _position; }
+		public function set position(value:ISpan):void {
 			if(_position == value) {
 				return;
 			}

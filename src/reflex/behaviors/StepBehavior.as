@@ -5,9 +5,8 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	
 	import reflex.binding.Bind;
-	import reflex.data.IPosition;
-	import reflex.data.IPositionControl;
-	import reflex.data.Position;
+	import reflex.data.ISpan;
+	import reflex.data.Span;
 	import reflex.events.ButtonEvent;
 	
 	public class StepBehavior extends Behavior
@@ -22,7 +21,7 @@ package reflex.behaviors
 		
 		[Bindable]
 		[Binding(target="target.position")]
-		public var position:IPosition = new Position();		// TODO: implement lazy instantiation of position
+		public var position:ISpan = new Span();		// TODO: implement lazy instantiation of position
 		
 		public function StepBehavior(target:InteractiveObject = null)
 		{
@@ -53,10 +52,7 @@ package reflex.behaviors
 		[EventListener(type="hold", target="fwdBtn")]
 		public function onFwdPress(event:ButtonEvent):void
 		{
-			var control:IPositionControl = position as IPositionControl;
-			if(control) {
-				control.stepForward();
-			}
+			position.stepForward();
 			event.updateAfterEvent();
 		}
 		
@@ -64,10 +60,7 @@ package reflex.behaviors
 		[EventListener(type="hold", target="bwdBtn")]
 		public function onBwdPress(event:ButtonEvent):void
 		{
-			var control:IPositionControl = position as IPositionControl;
-			if(control) {
-				control.stepBackward();
-			}
+			position.stepBackward();
 			event.updateAfterEvent();
 		}
 		

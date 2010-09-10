@@ -6,10 +6,9 @@ package reflex.behaviors
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import reflex.data.IPagingControl;
-	import reflex.data.IPosition;
-	import reflex.data.Position;
-	import reflex.data.PositionUtil;
+	import reflex.data.IScroll;
+	import reflex.data.ISpan;
+	import reflex.data.Span;
 	import reflex.events.ButtonEvent;
 	import reflex.measurement.resolveHeight;
 	
@@ -30,7 +29,7 @@ package reflex.behaviors
 		
 		[Bindable]
 		[Binding(target="target.position")]
-		public var position:IPosition= new Position();		// TODO: implement lazy instantiation of position
+		public var position:ISpan= new Span();		// TODO: implement lazy instantiation of position
 		
 		
 		private var _percent:Number = 0;
@@ -88,7 +87,7 @@ package reflex.behaviors
 			}
 			
 			if (!dragging) {
-				_percent = PositionUtil.getPercent(position);
+				_percent = position.percent;
 				updatePosition();
 				dispatchEvent(new Event("percentChange"));
 			}
@@ -105,7 +104,7 @@ package reflex.behaviors
 				
 				_percent = (mousePoint - thumb.width/2) / size;
 				_percent = _percent <= 0 ? 0 : _percent >= 1 ? 1 : _percent;
-				PositionUtil.setPercent(position, _percent);
+				position.percent = _percent;
 				updatePosition();
 				
 				dragPoint = horizontal ? thumb.x + thumb.width/2 : thumb.y + thumb.height/2;
@@ -113,15 +112,15 @@ package reflex.behaviors
 				
 				dispatchEvent(new Event("percentChange"));
 			} else {
-				forwardPress = mousePoint > ((horizontal ? thumb.width/2 : thumb.height/2) + size*PositionUtil.getPercent(position));
+				forwardPress = mousePoint > ((horizontal ? thumb.width/2 : thumb.height/2) + size*position.percent);
 				
-				var control:IPagingControl = position as IPagingControl;
+				var control:IScroll = position as IScroll;
 				
 				if(control) {
 					if (forwardPress) {
-						control.pageForward();
+						control.skipForward();
 					} else {
-						control.pageBackward();
+						control.skipBackward();
 					}
 				}
 			}
@@ -133,19 +132,19 @@ package reflex.behaviors
 		{
 			var size:Number = horizontal ? track.width - thumb.width : track.height - thumb.height;
 			var mousePoint:Number = horizontal ? track.parent.mouseX - track.x : track.parent.mouseY - track.y;
-			var forwardHold:Boolean = mousePoint > ((horizontal ? thumb.width/2 : thumb.height/2) + size*PositionUtil.getPercent(position));
+			var forwardHold:Boolean = mousePoint > ((horizontal ? thumb.width/2 : thumb.height/2) + size*position.percent);
 			
 			if (forwardPress != forwardHold) {
 				return;
 			}
 			
-			var control:IPagingControl = position as IPagingControl;
+			var control:IScroll = position as IScroll;
 			
 			if(control) {
 				if (forwardPress) {
-					control.pageForward();
+					control.skipForward();
 				} else {
-					control.pageBackward();
+					control.skipBackward();
 				}
 			}
 			event.updateAfterEvent();
@@ -167,7 +166,7 @@ package reflex.behaviors
 			var delta:Number = (mousePoint - dragPoint) / size;
 			_percent = dragPercent + delta;
 			_percent = _percent <= 0 ? 0 : (_percent >= 1 ? 1 : _percent);
-			PositionUtil.setPercent(position, _percent);
+			position.percent = _percent;
 			updatePosition();
 			dispatchEvent(new Event("percentChange"));
 			

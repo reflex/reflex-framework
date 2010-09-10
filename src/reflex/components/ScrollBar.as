@@ -3,17 +3,17 @@ package reflex.components
 	import legato.components.ScrollBarGraphic;
 	
 	import reflex.behaviors.SlideBehavior;
-	import reflex.data.IPosition;
+	import reflex.data.ISpan;
 	import reflex.events.PropertyEvent;
 	
 	public class ScrollBar extends Component
 	{
 		
-		private var _position:IPosition;
+		private var _position:ISpan;
 		
 		[Bindable(event="positionChange")]
-		public function get position():IPosition { return _position; }
-		public function set position(value:IPosition):void {
+		public function get position():ISpan { return _position; }
+		public function set position(value:ISpan):void {
 			if(_position == value) {
 				return;
 			}

@@ -4,19 +4,19 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
-	import reflex.data.IPosition;
+	import reflex.data.ISpan;
 	import reflex.events.ButtonEvent;
 	import reflex.events.PropertyEvent;
 	
 	public class DragStepBehavior extends Behavior
 	{
 		
-		private var _position:IPosition;
+		private var _position:ISpan;
 		
 		[Bindable(event="positionChange")]
 		[Binding(target="target.position")]
-		public function get position():IPosition { return _position; }
-		public function set position(value:IPosition):void {
+		public function get position():ISpan { return _position; }
+		public function set position(value:ISpan):void {
 			if(_position == value) {
 				return;
 			}
@@ -48,16 +48,16 @@ package reflex.behaviors
 		[EventListener(type="mouseDown", target="target")]
 		public function onDragStart(event:MouseEvent):void
 		{
-			startDragPosition = position.value;
+			startDragPosition = position.position;
 		}
 		
 		[EventListener(type="drag", target="target")]
 		public function onDrag(event:ButtonEvent):void
 		{
 			if (dragging) {
-				position.value = Math.round( (startDragPosition + event.deltaX) / increment) * increment;
+				position.position = Math.round( (startDragPosition + event.deltaX) / increment) * increment;
 			} else if ( Math.abs(startDragPosition - event.deltaX) > dragTolerance) {
-				position.value = Math.round( (startDragPosition + event.deltaX) / increment) * increment;
+				position.position = Math.round( (startDragPosition + event.deltaX) / increment) * increment;
 				dragging = true;
 			}
 		}

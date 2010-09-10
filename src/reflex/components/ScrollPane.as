@@ -4,8 +4,7 @@ package reflex.components
 	import flash.display.InteractiveObject;
 	
 	import reflex.binding.Bind;
-	import reflex.data.IPosition;
-	import reflex.data.PositionUtil;
+	import reflex.data.ISpan;
 	import reflex.events.PropertyEvent;
 	import reflex.measurement.resolveHeight;
 	
@@ -13,13 +12,13 @@ package reflex.components
 	public class ScrollPane extends Component
 	{
 		
-		private var _horizontal:IPosition;
-		private var _vertical:IPosition;
+		private var _horizontal:ISpan;
+		private var _vertical:ISpan;
 		private var _container:InteractiveObject; 
 		
 		[Bindable(event="horizontalChange")]
-		public function get horizontal():IPosition { return _horizontal; }
-		public function set horizontal(value:IPosition):void {
+		public function get horizontal():ISpan { return _horizontal; }
+		public function set horizontal(value:ISpan):void {
 			if(_horizontal == value) {
 				return;
 			}
@@ -27,8 +26,8 @@ package reflex.components
 		}
 		
 		[Bindable(event="verticalChange")]
-		public function get vertical():IPosition { return _vertical; }
-		public function set vertical(value:IPosition):void {
+		public function get vertical():ISpan { return _vertical; }
+		public function set vertical(value:ISpan):void {
 			if(_vertical == value) {
 				return;
 			}
@@ -57,7 +56,7 @@ package reflex.components
 			if(vertical) {
 				vertical.min = 0;
 				vertical.max = containerHeight;
-				container.y = potential * PositionUtil.getPercent(vertical) * -1;
+				container.y = potential * vertical.percent * -1;
 			}
 		}
 		

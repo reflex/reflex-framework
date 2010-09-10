@@ -8,6 +8,5 @@ package reflex.data
 		
 		function get max():Number;
 		function set max(value:Number):void;
-		
 	}
 }

@@ -1,17 +1,17 @@
 package reflex.display
 {
-	import reflex.data.IPosition;
+	import reflex.data.ISpan;
 	import reflex.events.PropertyEvent;
 	
 	public class ScrollContainer extends Container
 	{
 		
-		private var _horizontal:IPosition;
-		private var _vertical:IPosition;
+		private var _horizontal:ISpan;
+		private var _vertical:ISpan;
 		
 		[Bindable(event="horizontalChange")]
-		public function get horizontal():IPosition { return _horizontal; }
-		public function set horizontal(value:IPosition):void {
+		public function get horizontal():ISpan { return _horizontal; }
+		public function set horizontal(value:ISpan):void {
 			if(_horizontal == value) {
 				return;
 			}
@@ -19,8 +19,8 @@ package reflex.display
 		}
 		
 		[Bindable(event="verticalChange")]
-		public function get vertical():IPosition { return _vertical; }
-		public function set vertical(value:IPosition):void {
+		public function get vertical():ISpan { return _vertical; }
+		public function set vertical(value:ISpan):void {
 			if(_vertical == value) {
 				return;
 			}
