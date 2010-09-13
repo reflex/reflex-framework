@@ -4,20 +4,20 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
-	import reflex.data.ISpan;
+	import reflex.data.IRange;
 	import reflex.events.ButtonEvent;
 	import reflex.events.PropertyEvent;
 	
 	public class DragStepBehavior extends Behavior
 	{
 		
-		private var _position:ISpan;
+		private var _position:IRange;
 		
 		[Bindable(event="positionChange")]
 		[Binding(target="target.position")]
-		public function get position():ISpan { return _position; }
-		public function set position(value:ISpan):void {
-			if(_position == value) {
+		public function get position():IRange { return _position; }
+		public function set position(value:IRange):void {
+			if (_position == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "position", _position, _position = value);

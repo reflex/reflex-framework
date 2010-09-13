@@ -26,12 +26,12 @@ package reflex.measurement
 		[Test]
 		public function testDefaultSize():void {
 			var instance:IMeasurable = new C();
-			Assert.assertNotNull(instance.explicite);
+			Assert.assertNotNull(instance.explicit);
 			Assert.assertNotNull(instance.measured);
 			Assert.assertFalse(isNaN(instance.measured.width));
 			Assert.assertFalse(isNaN(instance.measured.height));
-			Assert.assertTrue(isNaN(instance.explicite.width));
-			Assert.assertTrue(isNaN(instance.explicite.height));
+			Assert.assertTrue(isNaN(instance.explicit.width));
+			Assert.assertTrue(isNaN(instance.explicit.height));
 		}
 		
 		[Test(async)]
@@ -55,19 +55,19 @@ package reflex.measurement
 		}
 		
 		[Test]
-		public function testExpliciteWidth():void {
+		public function testexplicitWidth():void {
 			var instance:IMeasurable = new C() as IMeasurable;
 			instance.width = 100;
 			Assert.assertEquals(100, instance.width);
-			Assert.assertEquals(100, instance.explicite.width);
+			Assert.assertEquals(100, instance.explicit.width);
 		}
 		
 		[Test]
-		public function testExpliciteHeight():void {
+		public function testexplicitHeight():void {
 			var instance:IMeasurable = new C() as IMeasurable;
 			instance.height = 100;
 			Assert.assertEquals(100, instance.height);
-			Assert.assertEquals(100, instance.explicite.height);
+			Assert.assertEquals(100, instance.explicit.height);
 		}
 		
 		[Test(async)]
@@ -100,7 +100,7 @@ package reflex.measurement
 			
 			instance.measured.width = 5;
 			Assert.assertEquals(100, instance.width);
-			Assert.assertEquals(100, instance.explicite.width);
+			Assert.assertEquals(100, instance.explicit.width);
 		}
 		
 		[Test(async)]
@@ -111,10 +111,10 @@ package reflex.measurement
 			
 			instance.measured.height = 5;
 			Assert.assertEquals(100, instance.height);
-			Assert.assertEquals(100, instance.explicite.height);
+			Assert.assertEquals(100, instance.explicit.height);
 		}
 		
-		[Test(async)] // binding events should fire for width/height changes, but explicite/measured should not be updated
+		[Test(async)] // binding events should fire for width/height changes, but explicit/measured should not be updated
 		public function testSetSize():void {
 			var instance:IMeasurable = new C() as IMeasurable;
 			var widthListener:Function = Async.asyncHandler(this, changeHandler, 500, "widthChange", timeoutHandler);
@@ -125,8 +125,8 @@ package reflex.measurement
 			instance.setSize(100, 100);
 			Assert.assertEquals(100, instance.width);
 			Assert.assertEquals(100, instance.height);
-			Assert.assertFalse(instance.explicite.width == 100);
-			Assert.assertFalse(instance.explicite.height == 100);
+			Assert.assertFalse(instance.explicit.width == 100);
+			Assert.assertFalse(instance.explicit.height == 100);
 		}
 		
 		[Test(async)] //  no events should fire if size hasn't changed

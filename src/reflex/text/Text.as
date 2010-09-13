@@ -1,4 +1,4 @@
-package reflex.display
+package reflex.text
 {
 	
 	import flash.events.Event;

@@ -1,8 +1,7 @@
 package reflex.components
 {
 	import reflex.collections.SimpleCollection;
-	import reflex.data.Position;
-	
+	import reflex.data.Range;
 	import reflex.layouts.XYLayout;
 	import reflex.tests.TestBase;
 	
@@ -41,12 +40,12 @@ package reflex.components
 		
 		[Test(async)]
 		public function testPositionChange():void {
-			testPropertyChange(List, "position", new Position());
+			testPropertyChange(List, "position", new Range());
 		}
 		
 		[Test(async)]
 		public function testPositionNotChanged():void {
-			testPropertyNotChanged(List, "position", new Position());
+			testPropertyNotChanged(List, "position", new Range());
 		}
 		
 	}

@@ -51,7 +51,7 @@ package reflex.skins
 		private var unscaledWidth:Number = 160;
 		private var unscaledHeight:Number = 22;
 		
-		private var _explicite:IMeasurements;
+		private var _explicit:IMeasurements;
 		private var _measured:IMeasurements;
 		
 		//
@@ -62,10 +62,10 @@ package reflex.skins
 		[Bindable(event="widthChange")]
 		public function get width():Number { return unscaledWidth; }
 		public function set width(value:Number):void {
-			if(unscaledWidth == value) {
+			if (unscaledWidth == value) {
 				return;
 			}
-			_explicite.width = value;
+			_explicit.width = value;
 			PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = value);
 			RenderPhase.invalidate(target, LAYOUT);
 		}
@@ -76,10 +76,10 @@ package reflex.skins
 		[Bindable(event="heightChange")]
 		public function get height():Number { return unscaledHeight; }
 		public function set height(value:Number):void {
-			if(unscaledHeight == value) {
+			if (unscaledHeight == value) {
 				return;
 			}
-			_explicite.height = value;
+			_explicit.height = value;
 			PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = value);
 			RenderPhase.invalidate(target, LAYOUT);
 		}
@@ -87,14 +87,14 @@ package reflex.skins
 		/**
 		 * @inheritDoc
 		 */
-		[Bindable(event="expliciteChange")]
-		public function get explicite():IMeasurements { return _explicite; }
-		/*public function set explicite(value:IMeasurements):void {
-			if(value == _explicite) {
+		[Bindable(event="explicitChange")]
+		public function get explicit():IMeasurements { return _explicit; }
+		/*public function set explicit(value:IMeasurements):void {
+			if (value == _explicit) {
 				return;
 			}
-			if(value != null) { // must not be null
-				PropertyEvent.dispatchChange(this, "explicite", _explicite, _explicite = value);
+			if (value != null) { // must not be null
+				PropertyEvent.dispatchChange(this, "explicit", _explicit, _explicit = value);
 				InvalidationEvent.invalidate(target, LAYOUT);
 			}
 		}*/
@@ -105,10 +105,10 @@ package reflex.skins
 		[Bindable(event="measuredChange")]
 		public function get measured():IMeasurements { return _measured; }
 		/*public function set measured(value:IMeasurements):void {
-			if(value == _measured) {
+			if (value == _measured) {
 				return;
 			}
-			if(value != null) { // must not be null
+			if (value != null) { // must not be null
 				PropertyEvent.dispatchChange(this, "measured", _measured, _measured = value);
 				InvalidationEvent.invalidate(target, LAYOUT);
 			}
@@ -118,8 +118,8 @@ package reflex.skins
 		 * @inheritDoc
 		 */
 		public function setSize(width:Number, height:Number):void {
-			if(unscaledWidth != width) { PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = width); }
-			if(unscaledHeight != height) { PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = height); }
+			if (unscaledWidth != width) { PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = width); }
+			if (unscaledHeight != height) { PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = height); }
 			RenderPhase.invalidate(target, LAYOUT);
 		}
 		
@@ -129,14 +129,14 @@ package reflex.skins
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
-			if(_layout == value) {
+			if (_layout == value) {
 				return;
 			}
 			var oldLayout:ILayout = _layout;
-			if(_layout) { _layout.target = null; }
+			if (_layout) { _layout.target = null; }
 			_layout = value;
 			_layout.target = target;
-			if(target) {
+			if (target) {
 				RenderPhase.invalidate(target, MEASURE);
 				RenderPhase.invalidate(target, LAYOUT);
 			}
@@ -146,7 +146,7 @@ package reflex.skins
 		[Bindable(event="templateChange")]
 		public function get template():Object { return _template; }
 		public function set template(value:Object):void {
-			if(_template == value) {
+			if (_template == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "template", _template, _template = value);
@@ -155,7 +155,7 @@ package reflex.skins
 		[Bindable(event="currentStateChange")]
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void {
-			if(_currentState == value) {
+			if (_currentState == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
@@ -164,7 +164,7 @@ package reflex.skins
 		[Bindable(event="statesChange")]
 		public function get states():Array { return _states; }
 		public function set states(value:Array):void {
-			if(_states == value) {
+			if (_states == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
@@ -179,9 +179,9 @@ package reflex.skins
 		{
 			super();
 			_content = new SimpleCollection();
-			_explicite = new Measurements(this);
+			_explicit = new Measurements(this);
 			_measured = new Measurements(this, 160, 22);
-			if(_layout == null) {
+			if (_layout == null) {
 				//_layout = new XYLayout();
 			}
 			_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
@@ -215,11 +215,11 @@ package reflex.skins
 			*/
 			var oldValue:Object = _target;
 			_target = value;
-			if(layout) {
+			if (layout) {
 				layout.target = _target;
 			}
 			
-			if(this.hasOwnProperty('hostComponent')) {
+			if (this.hasOwnProperty('hostComponent')) {
 				this['hostComponent'] = _target;
 			}
 			
@@ -281,27 +281,27 @@ package reflex.skins
 		}
 		public function set content(value:*):void
 		{
-			if(_content == value) {
+			if (_content == value) {
 				return;
 			}
 			
 			var oldContent:IList = _content;
 			
-			if(_content) {
+			if (_content) {
 				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			}
 			
-			if(value == null) {
+			if (value == null) {
 				_content = null;
-			} else if(value is IList) {
+			} else if (value is IList) {
 				_content = value as IList;
-			} else if(value is Array || value is Vector) {
+			} else if (value is Array || value is Vector) {
 				_content = new SimpleCollection(value);
 			} else {
 				_content = new SimpleCollection([value]);
 			}
 			
-			if(_content) {
+			if (_content) {
 				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 				var items:Array = [];
 				for (var i:int = 0; i < _content.length; i++) {
@@ -353,7 +353,7 @@ package reflex.skins
 		}
 		
 		private function reset(items:Array):void {
-			if(_target) {
+			if (_target) {
 				while (_target.numChildren) {
 					_target.removeChildAt(_target.numChildren-1);
 				}
@@ -391,10 +391,10 @@ package reflex.skins
 		
 		private function onMeasure(event:Event):void {
 			var target:IMeasurable= this.target as IMeasurable;
-			if(layout && target && (isNaN(target.explicite.width) || isNaN(target.explicite.height))) {
+			if (layout && target && (isNaN(target.explicit.width) || isNaN(target.explicit.height))) {
 				var items:Array = [];
 				var length:int = _content.length;
-				for(var i:int = 0; i < length; i++) {
+				for (var i:int = 0; i < length; i++) {
 					items.push(_content.getItemAt(i));
 				}
 				var point:Point = layout.measure(items);
@@ -402,7 +402,7 @@ package reflex.skins
 				// the lifecycle should be handled better here in some way
 				// update: target should update it's own sizing?
 				/*
-				if(point.x != target.measured.width || point.y != target.measured.height) {
+				if (point.x != target.measured.width || point.y != target.measured.height) {
 					target.measured.width = point.x;
 					target.measured.height = point.y;
 				}
@@ -412,10 +412,10 @@ package reflex.skins
 		}
 		
 		private function onLayout(event:Event):void {
-			if(layout) {
+			if (layout) {
 				var items:Array = [];
 				var length:int = _content.length;
-				for(var i:int = 0; i < length; i++) {
+				for (var i:int = 0; i < length; i++) {
 					items.push(_content.getItemAt(i));
 				}
 				

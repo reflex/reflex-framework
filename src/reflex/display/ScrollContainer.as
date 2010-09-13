@@ -1,27 +1,27 @@
 package reflex.display
 {
-	import reflex.data.ISpan;
+	import reflex.data.IRange;
 	import reflex.events.PropertyEvent;
 	
 	public class ScrollContainer extends Container
 	{
 		
-		private var _horizontal:ISpan;
-		private var _vertical:ISpan;
+		private var _horizontal:IRange;
+		private var _vertical:IRange;
 		
 		[Bindable(event="horizontalChange")]
-		public function get horizontal():ISpan { return _horizontal; }
-		public function set horizontal(value:ISpan):void {
-			if(_horizontal == value) {
+		public function get horizontal():IRange { return _horizontal; }
+		public function set horizontal(value:IRange):void {
+			if (_horizontal == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "horizontal", _horizontal, _horizontal = value);
 		}
 		
 		[Bindable(event="verticalChange")]
-		public function get vertical():ISpan { return _vertical; }
-		public function set vertical(value:ISpan):void {
-			if(_vertical == value) {
+		public function get vertical():IRange { return _vertical; }
+		public function set vertical(value:IRange):void {
+			if (_vertical == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "vertical", _vertical, _vertical = value);

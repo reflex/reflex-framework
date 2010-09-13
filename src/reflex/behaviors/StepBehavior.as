@@ -5,8 +5,8 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	
 	import reflex.binding.Bind;
-	import reflex.data.ISpan;
-	import reflex.data.Span;
+	import reflex.data.IRange;
+	import reflex.data.Range;
 	import reflex.events.ButtonEvent;
 	
 	public class StepBehavior extends Behavior
@@ -21,7 +21,7 @@ package reflex.behaviors
 		
 		[Bindable]
 		[Binding(target="target.position")]
-		public var position:ISpan = new Span();		// TODO: implement lazy instantiation of position
+		public var position:IRange = new Range();		// TODO: implement lazy instantiation of position
 		
 		public function StepBehavior(target:InteractiveObject = null)
 		{

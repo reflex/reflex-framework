@@ -57,10 +57,10 @@ package reflex.display
 		
 		public function Container()
 		{
-			if(_template == null) {
+			if (_template == null) {
 				//_template = new ReflexDataTemplate();
 			}
-			if(_layout == null) {
+			if (_layout == null) {
 				//_layout = new XYLayout();
 			}
 			
@@ -82,7 +82,7 @@ package reflex.display
 		[Bindable(event="statesChange")]
 		public function get states():Array { return _states; }
 		public function set states(value:Array):void {
-			if(_states == value) {
+			if (_states == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
@@ -93,7 +93,7 @@ package reflex.display
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void
 		{
-			if(_currentState == value) {
+			if (_currentState == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
@@ -107,27 +107,27 @@ package reflex.display
 		public function get content():IList { return _content; }
 		public function set content(value:*):void
 		{
-			if(_content == value) {
+			if (_content == value) {
 				return;
 			}
 			
 			var oldContent:IList = _content;
 			
-			if(_content) {
+			if (_content) {
 				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			}
 			
-			if(value == null) {
+			if (value == null) {
 				_content = null;
-			} else if(value is IList) {
+			} else if (value is IList) {
 				_content = value as IList;
-			} else if(value is Array || value is Vector) {
+			} else if (value is Array || value is Vector) {
 				_content = new SimpleCollection(value);
 			} else {
 				_content = new SimpleCollection([value]);
 			}
 			
-			if(_content) {
+			if (_content) {
 				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 				var items:Array = [];
 				for (var i:int = 0; i < _content.length; i++) {
@@ -137,7 +137,7 @@ package reflex.display
 			}
 			RenderPhase.invalidate(this, MEASURE);
 			RenderPhase.invalidate(this, LAYOUT);
-			dispatchEvent( new Event("childrenChange") );
+			dispatchEvent( new Event("contentChange") );
 		}
 		
 		/**
@@ -146,13 +146,13 @@ package reflex.display
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
-			if(_layout == value) {
+			if (_layout == value) {
 				return;
 			}
 			var oldLayout:ILayout = _layout;
-			if(_layout) { _layout.target = null; }
+			if (_layout) { _layout.target = null; }
 			_layout = value;
-			if(_layout) { _layout.target = this; }
+			if (_layout) { _layout.target = this; }
 			RenderPhase.invalidate(this, MEASURE);
 			RenderPhase.invalidate(this, LAYOUT);
 			dispatchEvent( new Event("layoutChange") );
@@ -161,15 +161,15 @@ package reflex.display
 		[Bindable(event="templateChange")]
 		public function get template():Object { return _template; }
 		public function set template(value:Object):void {
-			if(_template == value) {
+			if (_template == value) {
 				return;
 			}
 			var oldTemplate:Object = _template;
 			_template = value;
-			if(_content != null) {
+			if (_content != null) {
 				var items:Array = [];
 				var length:int = _content.length;
-				for(var i:int = 0; i < length; i++) {
+				for (var i:int = 0; i < length; i++) {
 					var child:Object = _content.getItemAt(i);
 					items.push(child);
 				}
@@ -187,7 +187,7 @@ package reflex.display
 		}
 		
 		private function onMeasure(event:Event):void {
-			if((isNaN(explicite.width) || isNaN(explicite.height)) && layout) {
+			if ((isNaN(explicit.width) || isNaN(explicit.height)) && layout) {
 				var point:Point = layout.measure(renderers);
 				measured.width = point.x;
 				measured.height = point.y;
@@ -195,7 +195,7 @@ package reflex.display
 		}
 		
 		private function onLayout(event:Event):void {
-			if(layout) {
+			if (layout) {
 				//var width:Number = reflex.measurement.resolveWidth(this);
 				//var height:Number = reflex.measurement.resolveHeight(this);
 				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);

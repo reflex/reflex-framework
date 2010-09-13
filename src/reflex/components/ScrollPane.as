@@ -4,7 +4,7 @@ package reflex.components
 	import flash.display.InteractiveObject;
 	
 	import reflex.binding.Bind;
-	import reflex.data.ISpan;
+	import reflex.data.IRange;
 	import reflex.events.PropertyEvent;
 	import reflex.measurement.resolveHeight;
 	
@@ -12,23 +12,23 @@ package reflex.components
 	public class ScrollPane extends Component
 	{
 		
-		private var _horizontal:ISpan;
-		private var _vertical:ISpan;
+		private var _horizontal:IRange;
+		private var _vertical:IRange;
 		private var _container:InteractiveObject; 
 		
 		[Bindable(event="horizontalChange")]
-		public function get horizontal():ISpan { return _horizontal; }
-		public function set horizontal(value:ISpan):void {
-			if(_horizontal == value) {
+		public function get horizontal():IRange { return _horizontal; }
+		public function set horizontal(value:IRange):void {
+			if (_horizontal == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "horizontal", _horizontal, _horizontal = value);
 		}
 		
 		[Bindable(event="verticalChange")]
-		public function get vertical():ISpan { return _vertical; }
-		public function set vertical(value:ISpan):void {
-			if(_vertical == value) {
+		public function get vertical():IRange { return _vertical; }
+		public function set vertical(value:IRange):void {
+			if (_vertical == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "vertical", _vertical, _vertical = value);
@@ -37,10 +37,10 @@ package reflex.components
 		[Bindable(event="containerChange")]
 		public function get container():InteractiveObject { return _container; }
 		public function set container(value:InteractiveObject):void {
-			if(_container) { this.removeChild(_container); }
+			if (_container) { this.removeChild(_container); }
 			var oldContainer:InteractiveObject = _container;
 			_container = value;
-			if(_container) { this.addChild(_container); }
+			if (_container) { this.addChild(_container); }
 			PropertyEvent.dispatchChange(this, "container", oldContainer, _container);
 		}
 		
@@ -53,7 +53,7 @@ package reflex.components
 			var height:Number = reflex.measurement.resolveHeight(this);
 			var containerHeight:Number = reflex.measurement.resolveHeight(container);
 			var potential:Number = containerHeight - height;
-			if(vertical) {
+			if (vertical) {
 				vertical.min = 0;
 				vertical.max = containerHeight;
 				container.y = potential * vertical.percent * -1;

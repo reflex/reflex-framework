@@ -14,7 +14,7 @@ package reflex.metadata
 		for each (var meth:XML in desc.factory[0]) {
 			var meta:XMLList = meth.metadata.(@name == "LayoutProperty");
 			
-			// to support multiple PropertyListener metadata tags on a single method
+			// to support multiple DataListener metadata tags on a single method
 			for each (var tag:XML in meta) {
 				var sourcePath:String = tag.arg.(@key == "name").@value;
 				Bind.addListener(child, listener, child, sourcePath);

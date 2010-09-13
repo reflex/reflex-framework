@@ -39,7 +39,7 @@ package reflex.display
 		[Bindable(event="sourceChange")]
 		public function get source():Object { return _source; }
 		public function set source(value:Object):void {
-			if(_source == value) {
+			if (_source == value) {
 				return
 			}
 			PropertyEvent.dispatchChange(this, "source", _source, _source = value);
@@ -48,7 +48,7 @@ package reflex.display
 		[Bindable(event="scalingChanged")]
 		public function get scaling():String { return _scaling; }
 		public function set scaling(value:String):void {
-			if(_scaling == value) {
+			if (_scaling == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "scaling", _scaling, _scaling = value);
@@ -57,7 +57,7 @@ package reflex.display
 		[Bindable(event="backgroundColorChanged")]
 		public function get backgroundColor():uint { return _backgroundColor; }
 		public function set backgroundColor(value:uint):void {
-			if(_backgroundColor == value) {
+			if (_backgroundColor == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "backgroundColor", _backgroundColor, _backgroundColor = value);
@@ -66,7 +66,7 @@ package reflex.display
 		[Bindable(event="backgroundAlphaChanged")]
 		public function get backgroundAlpha():Number { return _backgroundAlpha; }
 		public function set backgroundAlpha(value:Number):void {
-			if(_backgroundAlpha == value) {
+			if (_backgroundAlpha == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "backgroundAlpha", _backgroundAlpha, _backgroundAlpha = value);
@@ -83,12 +83,12 @@ package reflex.display
 		 */
 		[CommitProperties(target="source")]
 		public function onSourceChanged(event:Event):void {
-			if(source is String) {
+			if (source is String) {
 				var request:URLRequest = new URLRequest(source as String);
 				loader = new Loader();
 				loader.load(request);
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete, false, 0, true);
-			} else if(source is Class) {
+			} else if (source is Class) {
 				var display:Bitmap = new (source as Class)();
 				measured.width = display.width;
 				measured.height = display.height;
@@ -116,34 +116,34 @@ package reflex.display
 		}
 		
 		private function draw():void {
-			if(original) {
+			if (original) {
 				var mode:String = _scaling;
 				var matrix:Matrix;
 				
 				var originalRatio:Number = original.width/original.height;
 				var bitmapRatio:Number = unscaledWidth/unscaledHeight;
 				
-				if(_scaling == BEST_FIT) {
-					if(originalRatio > bitmapRatio) {
+				if (_scaling == BEST_FIT) {
+					if (originalRatio > bitmapRatio) {
 						mode = HORIZONTAL_FIT;
 					} else {
 						mode = VERTICAL_FIT;
 					}
-				} else if(_scaling == BEST_FILL) {
-					if(originalRatio > bitmapRatio) {
+				} else if (_scaling == BEST_FILL) {
+					if (originalRatio > bitmapRatio) {
 						mode = VERTICAL_FIT;
 					} else {
 						mode = HORIZONTAL_FIT;
 					}
 				}
 				
-				if(mode == HORIZONTAL_FIT) {
+				if (mode == HORIZONTAL_FIT) {
 					var hs:Number = unscaledWidth/original.width;
 					matrix = new Matrix(hs, 0, 0, hs, 0, (original.height*hs - unscaledHeight)/2 * -1);
-				} else if(mode == VERTICAL_FIT) {
+				} else if (mode == VERTICAL_FIT) {
 					var vs:Number = unscaledHeight/original.height;
 					matrix = new Matrix(vs, 0, 0, vs, (original.width*vs - unscaledWidth)/2 * -1, 0);
-				} else if(mode == SKEW) {
+				} else if (mode == SKEW) {
 					matrix = new Matrix(unscaledWidth/original.width, 0, 0, unscaledHeight/original.height, 0, 0);
 				}
 				this.bitmapData.draw(original, matrix, null, null, null, true);

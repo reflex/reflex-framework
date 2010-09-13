@@ -7,9 +7,10 @@ package reflex.behaviors
 	import flash.geom.Point;
 	
 	import reflex.data.IScroll;
-	import reflex.data.ISpan;
-	import reflex.data.Span;
+	import reflex.data.IRange;
+	import reflex.data.Range;
 	import reflex.events.ButtonEvent;
+	import reflex.events.RenderPhase;
 	import reflex.measurement.resolveHeight;
 	
 	public class SlideBehavior extends Behavior// extends StepBehavior
@@ -29,7 +30,7 @@ package reflex.behaviors
 		
 		[Bindable]
 		[Binding(target="target.position")]
-		public var position:ISpan= new Span();		// TODO: implement lazy instantiation of position
+		public var position:IRange= new Range();		// TODO: implement lazy instantiation of position
 		
 		
 		private var _percent:Number = 0;
@@ -59,13 +60,13 @@ package reflex.behaviors
 			
 			//track = getSkinPart("track");
 			//thumb = getSkinPart("thumb");
-			if(track) { ButtonEvent.initialize(track); }
-			if(thumb) { ButtonEvent.initialize(thumb); }
+			if (track) { ButtonEvent.initialize(track); }
+			if (thumb) { ButtonEvent.initialize(thumb); }
 			
 			if (track && track.width > track.height) {
 				horizontal = true;
 			}
-			if(track && thumb) {
+			if (track && thumb) {
 				updatePosition();
 			}
 		}
@@ -79,7 +80,7 @@ package reflex.behaviors
 			dispatchEvent(new Event("snapThumbChange"));
 		}
 		
-		[PropertyListener(target="position.percent")]
+		[DataListener(target="position.percent")]
 		public function onPosition(percent:Number):void
 		{
 			if (thumb == null || track == null) {
@@ -116,11 +117,11 @@ package reflex.behaviors
 				
 				var control:IScroll = position as IScroll;
 				
-				if(control) {
+				if (control) {
 					if (forwardPress) {
-						control.skipForward();
+						control.pageForward();
 					} else {
-						control.skipBackward();
+						control.pageBackward();
 					}
 				}
 			}
@@ -140,11 +141,11 @@ package reflex.behaviors
 			
 			var control:IScroll = position as IScroll;
 			
-			if(control) {
+			if (control) {
 				if (forwardPress) {
-					control.skipForward();
+					control.pageForward();
 				} else {
-					control.skipBackward();
+					control.pageBackward();
 				}
 			}
 			event.updateAfterEvent();
@@ -180,17 +181,18 @@ package reflex.behaviors
 			dragging = false;
 		}
 		
-		[PropertyListener(target="target.width")]
-		[PropertyListener(target="target.height")]
+		[DataListener(target="target.width")]
+		[DataListener(target="target.height")]
 		public function onResize(size:Number):void
 		{
+			// TODO: refactor to commit properties
 			updatePosition();
 		}
 		
 		
 		public function updatePosition():void
 		{
-			if(track && thumb) {
+			if (track && thumb) {
 				var p:Point = new Point();
 				
 				if (horizontal) {

@@ -6,15 +6,15 @@ package reflex.measurement
 	 */
 	public function resolveWidth(object:Object):Number
 	{
-		var explicite:IMeasurements;
+		var explicit:IMeasurements;
 		var measured:IMeasurements;
-		if(object is IMeasurable) {
-			explicite = (object as IMeasurable).explicite;
+		if (object is IMeasurable) {
+			explicit = (object as IMeasurable).explicit;
 			measured = (object as IMeasurable).measured;
-			return isNaN(explicite.width) ? measured.width : explicite.width;
-		} /* else if(object is IMeasurements) {
+			return isNaN(explicit.width) ? measured.width : explicit.width;
+		} /* else if (object is IMeasurements) {
 			measurements = (object as IMeasurements);
-			return isNaN(measurements.expliciteWidth) ? measurements.measuredWidth : measurements.expliciteWidth;
+			return isNaN(measurements.explicitWidth) ? measurements.measuredWidth : measurements.explicitWidth;
 		} */ else {
 			return object.width;
 		}

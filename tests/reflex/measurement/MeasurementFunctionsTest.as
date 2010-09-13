@@ -23,10 +23,10 @@ package reflex.measurement
 		}
 		
 		[Test]
-		public function testResolveWidthExplicite():void {
+		public function testResolveWidthexplicit():void {
 			var instance:IMeasurable = new Display();
 			instance.measured.width = 5;
-			instance.explicite.width = 100;
+			instance.explicit.width = 100;
 			var v:Number = reflex.measurement.resolveWidth(instance);
 			Assert.assertEquals(100, v);
 		}
@@ -47,10 +47,10 @@ package reflex.measurement
 		}
 		
 		[Test]
-		public function testResolveHeightExplicite():void {
+		public function testResolveHeightexplicit():void {
 			var instance:IMeasurable = new Display();
 			instance.measured.height= 5;
-			instance.explicite.height = 100;
+			instance.explicit.height = 100;
 			var v:Number = reflex.measurement.resolveHeight(instance);
 			Assert.assertEquals(100, v);
 		}
@@ -68,15 +68,15 @@ package reflex.measurement
 			var instance:IMeasurable = new Display();
 			instance.measured.width = 5;
 			instance.measured.height = 5;
-			instance.explicite.width = 5;
-			instance.explicite.height = 5;
+			instance.explicit.width = 5;
+			instance.explicit.height = 5;
 			reflex.measurement.setSize(instance, 100, 100);
 			Assert.assertEquals(100, instance.width);
 			Assert.assertEquals(100, instance.height);
 			Assert.assertEquals(5, instance.measured.width);
 			Assert.assertEquals(5, instance.measured.height);
-			Assert.assertEquals(5, instance.explicite.width);
-			Assert.assertEquals(5, instance.explicite.height);
+			Assert.assertEquals(5, instance.explicit.width);
+			Assert.assertEquals(5, instance.explicit.height);
 		}
 		
 	}

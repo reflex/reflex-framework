@@ -1,8 +1,8 @@
 package reflex.components
 {
 	import reflex.behaviors.StepBehavior;
-	import reflex.data.ISpan;
-	import reflex.data.Span;
+	import reflex.data.IRange;
+	import reflex.data.Range;
 	import reflex.events.PropertyEvent;
 
 	//import reflex.skins.StepperSkin;
@@ -10,12 +10,12 @@ package reflex.components
 	public class Stepper extends Component
 	{
 		
-		private var _position:ISpan;
+		private var _position:IRange;
 		
 		[Bindable(event="positionChange")]
-		public function get position():ISpan { return _position; }
-		public function set position(value:ISpan):void {
-			if(_position == value) {
+		public function get position():IRange { return _position; }
+		public function set position(value:IRange):void {
+			if (_position == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "position", _position, _position = value);
@@ -23,7 +23,7 @@ package reflex.components
 		
 		public function Stepper()
 		{
-			position = new Span();
+			position = new Range();
 			position.position = 0;
 			position.min = 0;
 			position.max = 100;

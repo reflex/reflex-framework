@@ -2,8 +2,8 @@ package reflex.measurement
 {
 	
 	/**
-	 * Implemented by objects that want to have implicite measurements.
-	 * In this system objects calculate implicite measurement preferences, but still allow explicite measurements to be set in AS3 or MXML.
+	 * Implemented by objects that want to have implicit measurements.
+	 * In this system objects calculate implicit measurement preferences, but still allow explicit measurements to be set in AS3 or MXML.
 	 * This interface is NOT required for items to be added to containers or to participate in Reflex's layout system.
 	 */
 	public interface IMeasurable
@@ -29,12 +29,12 @@ package reflex.measurement
 		*/
 		
 		/**
-		 * Holds explicite width/height values which have been assigned directly in AS3 or MXML.
+		 * Holds explicit width/height values which have been assigned directly in AS3 or MXML.
 		 */
-		function get explicite():IMeasurements;
+		function get explicit():IMeasurements;
 		
 		/**
-		 * Holds implicite width/height values which have been calculated internally.
+		 * Holds implicit width/height values which have been calculated internally.
 		 */
 		function get measured():IMeasurements;
 		

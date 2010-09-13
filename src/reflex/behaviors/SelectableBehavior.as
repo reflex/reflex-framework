@@ -18,7 +18,7 @@ package reflex.behaviors
 		[Binding(target="target.selected")]
 		public function get selected():Boolean { return _selected; }
 		public function set selected(value:Boolean):void {
-			if(_selected == value) {
+			if (_selected == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "selected", _selected, _selected = value);

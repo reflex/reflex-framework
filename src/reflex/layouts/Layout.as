@@ -13,7 +13,7 @@ package reflex.layouts
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveEventListeners;
 	import reflex.metadata.resolveLayoutProperties;
-	import reflex.metadata.resolvePropertyListeners;
+	import reflex.metadata.resolveDataListeners;
 	
 	//[LayoutProperty(name="layout", measure="true")]
 	//[LayoutProperty(name="measurements", measure="true")]
@@ -33,7 +33,7 @@ package reflex.layouts
 		public function get target():IEventDispatcher { return _target; }
 		public function set target(value:IEventDispatcher):void
 		{
-			if(_target == value) {
+			if (_target == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "target", _target, _target = value);
@@ -42,7 +42,7 @@ package reflex.layouts
 		public function Layout() {
 			reflex.metadata.resolveBindings(this);
 			reflex.metadata.resolveEventListeners(this);
-			reflex.metadata.resolvePropertyListeners(this);
+			reflex.metadata.resolveDataListeners(this);
 			Bind.addListener(this, onInvalidateLayout, this, "target.width");
 			Bind.addListener(this, onInvalidateLayout, this, "target.height");
 		}
@@ -50,7 +50,7 @@ package reflex.layouts
 		public function measure(children:Array):Point {
 			// this method of listening for layout invalidating changes is very much experimental
 			for each(var child:IEventDispatcher in children) {
-				if(attached[child] != true) {
+				if (attached[child] != true) {
 					reflex.metadata.resolveLayoutProperties(this, child, onInvalidateLayout);
 					attached[child] = true;
 				}
@@ -61,7 +61,7 @@ package reflex.layouts
 		public function update(children:Array, rectangle:Rectangle):void {
 			// this method of listening for layout invalidating changes is very much experimental
 			for each(var child:IEventDispatcher in children) {
-				if(attached[child] != true) {
+				if (attached[child] != true) {
 					reflex.metadata.resolveLayoutProperties(this, child, onInvalidateLayout);
 					attached[child] = true;
 				}
@@ -69,7 +69,7 @@ package reflex.layouts
 		}
 		
 		private function onInvalidateLayout(object:*):void {
-			if(target is DisplayObject) {
+			if (target is DisplayObject) {
 				RenderPhase.invalidate(target as DisplayObject, "measure");
 				RenderPhase.invalidate(target as DisplayObject, "layout");
 			}

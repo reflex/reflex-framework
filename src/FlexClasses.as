@@ -14,8 +14,6 @@ package
 		import mx.core.IMXMLObject;						IMXMLObject;
 		import mx.core.IFlexModuleFactory;				IFlexModuleFactory;
 		
-		import mx.collections.IList;					IList;
-		
 		// binding references for use of the [Bindable] metadata tag
 		import mx.binding.BindingManager;				BindingManager;
 		import mx.core.IPropertyChangeNotifier;			IPropertyChangeNotifier;

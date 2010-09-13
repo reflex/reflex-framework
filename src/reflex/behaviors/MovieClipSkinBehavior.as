@@ -25,7 +25,7 @@
 		[Binding(target="target.currentState")]
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void {
-			if(_currentState == value) {
+			if (_currentState == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
@@ -35,7 +35,7 @@
 		[Binding(target="target.skin")]
 		public function get movieclip():MovieClip { return _movieclip; }
 		public function set movieclip(value:MovieClip):void {
-			if(_movieclip == value) {
+			if (_movieclip == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "movieclip", _movieclip, _movieclip = value);
@@ -48,16 +48,16 @@
 		
 		// ====== Event Listeners ====== //
 		
-		[PropertyListener(target="movieclip")]
+		[DataListener(target="movieclip")]
 		public function onMovieClip(object:MovieClip):void
 		{
 			// trace(object);
 		}
 		
-		[PropertyListener(target="currentState")]
+		[DataListener(target="currentState")]
 		public function onState(object:String):void
 		{
-			if(movieclip) {
+			if (movieclip) {
 				gotoState(movieclip, object);
 			}
 		}
@@ -66,15 +66,15 @@
 		private function gotoState(clip:MovieClip, state:String):void {
 			var frames:Array = clip.currentLabels;
 			for each(var label:FrameLabel in frames) {
-				if(label.name == state) {
+				if (label.name == state) {
 					clip.gotoAndStop(label.frame);
 				}
 			}
 			
 			var length:int = clip.numChildren; // recurse (for now)
-			for(var i:int = 0; i < length; i++) {
+			for (var i:int = 0; i < length; i++) {
 				var child:DisplayObject = clip.getChildAt(i);
-				if(child is MovieClip) {
+				if (child is MovieClip) {
 					gotoState(child as MovieClip, state);
 				}
 			}

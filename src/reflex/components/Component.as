@@ -3,9 +3,12 @@
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
+	import mx.collections.IList;
+	
 	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
+	import reflex.collections.SimpleCollection;
 	import reflex.display.Display;
 	import reflex.display.addItem;
 	import reflex.events.PropertyEvent;
@@ -37,7 +40,7 @@
 		
 		
 		private var _skin:Object;
-		private var _behaviors:CompositeBehavior;
+		private var _behaviors:SimpleCollection;
 		
 		private var _states:Array;
 		private var _currentState:String;
@@ -46,7 +49,7 @@
 		
 		public function Component()
 		{
-			_behaviors = new CompositeBehavior(this);
+			_behaviors = new SimpleCollection();
 			reflex.metadata.resolveCommitProperties(this);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 		}
@@ -70,7 +73,7 @@
 		 *   &lt;/behaviors&gt;
 		 * &lt;/Component&gt;
 		 */
-		public function get behaviors():CompositeBehavior
+		public function get behaviors():IList
 		{
 			return _behaviors;
 		}
@@ -80,11 +83,10 @@
 			var change:PropertyChange = PropertyChange.begin();
 			value = change.add(this, "behaviors", _behaviors, value);
 			*/
-			_behaviors.clear();
 			if (value is Array) {
-				_behaviors.add(value);
+				_behaviors.source = value;
 			} else if (value is IBehavior) {
-				_behaviors.add([value]);
+				_behaviors.source = [value];
 			}
 			//change.commit();
 			dispatchEvent(new Event("behaviorsChange"));
@@ -98,14 +100,14 @@
 		}
 		public function set skin(value:Object):void
 		{
-			if(_skin == value) {
+			if (_skin == value) {
 				return;
 			}
 			var oldSkin:Object = _skin;
 			_skin = value;
-			if(_skin is ISkin) {
+			if (_skin is ISkin) {
 				(_skin as ISkin).target = this;
-			} else if(_skin is DisplayObject) {
+			} else if (_skin is DisplayObject) {
 				reflex.display.addItem(this, _skin);
 			}
 			reflex.measurement.setSize(skin, width, height);
@@ -116,7 +118,7 @@
 		[Bindable(event="enabledChange")]
 		public function get enabled():Boolean { return _enabled; }
 		public function set enabled(value:Boolean):void {
-			if(_enabled == value) {
+			if (_enabled == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "enabled", _enabled, _enabled = value);
@@ -127,7 +129,7 @@
 		[Bindable(event="statesChange")]
 		public function get states():Array { return _states; }
 		public function set states(value:Array):void {
-			if(_states == value) {
+			if (_states == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
@@ -138,7 +140,7 @@
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void
 		{
-			if(_currentState == value) {
+			if (_currentState == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
@@ -162,9 +164,9 @@
 		}
 		
 		private function onMeasure(event:Event):void {
-			if((isNaN(explicite.width) || isNaN(explicite.height)) && skin) {
-				measured.width = reflex.measurement.resolveWidth(skin); // explicite width of skin becomes measured width of component
-				measured.height = reflex.measurement.resolveHeight(skin); // explicite height of skin becomes measured height of component
+			if ((isNaN(explicit.width) || isNaN(explicit.height)) && skin) {
+				measured.width = reflex.measurement.resolveWidth(skin); // explicit width of skin becomes measured width of component
+				measured.height = reflex.measurement.resolveHeight(skin); // explicit height of skin becomes measured height of component
 			}
 		}
 		

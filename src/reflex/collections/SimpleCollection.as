@@ -21,7 +21,7 @@ package reflex.collections
 		public function SimpleCollection(source:Array = null)
 		{
 			super();
-			if(source == null) {
+			if (source == null) {
 				source = [];
 			}
 			_source = source;

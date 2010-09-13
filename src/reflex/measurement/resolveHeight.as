@@ -6,16 +6,16 @@ package reflex.measurement
 	 */
 	public function resolveHeight(object:Object):Number
 	{
-		var explicite:IMeasurements;
+		var explicit:IMeasurements;
 		var measured:IMeasurements;
-		if(object is IMeasurable) {
-			explicite = (object as IMeasurable).explicite;
+		if (object is IMeasurable) {
+			explicit = (object as IMeasurable).explicit;
 			measured = (object as IMeasurable).measured;
-			return isNaN(explicite.height) ? measured.height : explicite.height;
-		} /*else if(object is IMeasurements) {
-			explicite = (object as IMeasurable).explicite;
+			return isNaN(explicit.height) ? measured.height : explicit.height;
+		} /*else if (object is IMeasurements) {
+			explicit = (object as IMeasurable).explicit;
 			measured = (object as IMeasurable).measured;
-			return isNaN(explicite.height) ? measured.height : explicite.height;
+			return isNaN(explicit.height) ? measured.height : explicit.height;
 		} */ else {
 			return object.height;
 		}

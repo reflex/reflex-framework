@@ -38,7 +38,7 @@ package reflex.events
 		
 		public static function invalidate(display:DisplayObject, type:String):void
 		{
-			if(display == null) {
+			if (display == null) {
 				return;
 			}
 			

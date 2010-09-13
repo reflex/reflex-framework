@@ -1,11 +1,11 @@
 package reflex.data
 {
-	public interface IScroll extends ISpan
+	public interface IScroll extends IRange
 	{
-		
-		function get filled():Boolean;
-		
 		function get pageSize():Number;
 		function set pageSize(value:Number):void;
+		
+		function pageBackward():Number;
+		function pageForward():Number;
 	}
 }

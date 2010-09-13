@@ -8,7 +8,7 @@
 	
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveEventListeners;
-	import reflex.metadata.resolvePropertyListeners;
+	import reflex.metadata.resolveDataListeners;
 	
 	/**
 	 * Behavior is a convenient base class for various behavior implementations.
@@ -49,7 +49,7 @@
 		{
 			this.target = target;
 			reflex.metadata.resolveBindings(this);
-			reflex.metadata.resolvePropertyListeners(this);
+			reflex.metadata.resolveDataListeners(this);
 			reflex.metadata.resolveEventListeners(this);
 		}
 		
