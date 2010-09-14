@@ -6,7 +6,7 @@
 	/**
 	 * @alpha
 	 **/
-	public class Button extends Component
+	public class ButtonBase extends Component
 	{
 		
 		private var _label:String;
@@ -16,7 +16,7 @@
 		[Inspectable(name="Label", type=String, defaultValue="Label")]
 		public function get label():String { return _label; }
 		public function set label(value:String):void {
-			if(_label == value) {
+			if (_label == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "label", _label, _label = value);
@@ -26,13 +26,13 @@
 		[Inspectable(name="Selected", type=Boolean, defaultValue=false)]
 		public function get selected():Boolean {return _selected; }
 		public function set selected(value:Boolean):void {
-			if(_selected == value) {
+			if (_selected == value) {
 				return;
 			}
 			PropertyEvent.dispatchChange(this, "selected", _selected, _selected = value);
 		}
 		
-		public function Button()
+		public function ButtonBase()
 		{
 			super();
 			//skin = this;

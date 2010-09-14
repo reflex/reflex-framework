@@ -1,4 +1,4 @@
-package reflex.display
+package reflex.containers
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
@@ -11,6 +11,8 @@ package reflex.display
 	
 	import reflex.collections.SimpleCollection;
 	import reflex.components.IStateful;
+	import reflex.display.Display;
+	import reflex.templating.addItemsAt;
 	import reflex.events.PropertyEvent;
 	import reflex.events.RenderPhase;
 	import reflex.layouts.ILayout;
@@ -33,7 +35,7 @@ package reflex.display
 	 * 
 	 * @alpha
 	 */
-	public class Container extends Display implements IContainer, IStateful
+	public class Group extends Display implements IContainer, IStateful
 	{
 		
 		static public const CREATE:String = "create";
@@ -55,7 +57,7 @@ package reflex.display
 		private var _currentState:String;
 		
 		
-		public function Container()
+		public function Group()
 		{
 			if (_template == null) {
 				//_template = new ReflexDataTemplate();
@@ -230,7 +232,7 @@ package reflex.display
 		}
 		
 		private function add(items:Array, index:int):void {
-			var children:Array = reflex.display.addItemsAt(this, items, index, _template);
+			var children:Array = reflex.templating.addItemsAt(this, items, index, _template);
 			renderers.concat(children); // todo: correct ordering
 		}
 		
@@ -238,7 +240,7 @@ package reflex.display
 			while (numChildren) {
 				removeChildAt(numChildren-1);
 			}
-			renderers = reflex.display.addItemsAt(this, items, 0, _template); // todo: correct ordering
+			renderers = reflex.templating.addItemsAt(this, items, 0, _template); // todo: correct ordering
 			RenderPhase.invalidate(this, LAYOUT);
 		}
 		

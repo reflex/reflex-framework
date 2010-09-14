@@ -1,6 +1,5 @@
-package reflex.display
+package reflex.containers
 {
-	//import flight.list.IList;
 	import mx.collections.IList;
 	
 	import reflex.layouts.ILayout;

@@ -10,7 +10,7 @@
 	import reflex.behaviors.IBehavioral;
 	import reflex.collections.SimpleCollection;
 	import reflex.display.Display;
-	import reflex.display.addItem;
+	import reflex.templating.addItem;
 	import reflex.events.PropertyEvent;
 	import reflex.events.RenderPhase;
 	import reflex.measurement.resolveHeight;
@@ -108,7 +108,7 @@
 			if (_skin is ISkin) {
 				(_skin as ISkin).target = this;
 			} else if (_skin is DisplayObject) {
-				reflex.display.addItem(this, _skin);
+				reflex.templating.addItem(this, _skin);
 			}
 			reflex.measurement.setSize(skin, width, height);
 			dispatchEvent(new Event("skinChange"));

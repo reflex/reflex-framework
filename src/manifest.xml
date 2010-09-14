@@ -2,20 +2,13 @@
 <componentPackage>
 	
 	<!-- components -->
-	<component id="Application" class="reflex.components.Application"/>
-	<component id="Container" class="reflex.display.Container"/>
-	<component id="ScrollContainer" class="reflex.display.ScrollContainer"/>
-	<component id="Button" class="reflex.components.Button"/>
+	<component id="Application" class="reflex.containers.Application"/>
+	<component id="Group" class="reflex.containers.Group"/>
+	<component id="Scroller" class="reflex.containers.Scroller"/>
 	<component id="Component" class="reflex.components.Component"/>
-	<component id="List" class="reflex.components.List"/>
-	<component id="ListItem" class="reflex.components.ListItem"/>
-	<component id="ScrollBar" class="reflex.components.ScrollBar"/>
-	<component id="ScrollPane" class="reflex.components.ScrollPane"/>
-	<component id="Stepper" class="reflex.components.Stepper"/>
 	
 	<!-- skins -->
 	<component id="Skin" class="reflex.skins.Skin"/>
-	<component id="ListSkin" class="reflex.skins.ListSkin"/>
 	
 	<!-- behaviors -->
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
@@ -23,7 +16,7 @@
 	<component id="ListBehavior" class="reflex.behaviors.ListBehavior"/>
 	<component id="ListSelectBehavior" class="reflex.behaviors.ListSelectBehavior"/>
 	<component id="SlideBehavior" class="reflex.behaviors.SlideBehavior"/>
-	<component id="SelectableBehavior" class="reflex.behaviors.SelectableBehavior"/>
+	<component id="SelectBehavior" class="reflex.behaviors.SelectBehavior"/>
 	<component id="StepBehavior" class="reflex.behaviors.StepBehavior"/>
 	<component id="DragStepBehavior" class="reflex.behaviors.DragStepBehavior"/>
 	
@@ -41,16 +34,12 @@
 	
 	<!-- display -->
 	<!--<component id="Text" class="reflex.display.Text" />-->
-	<component id="Image" class="reflex.display.Image"/>
+	<component id="BitmapImage" class="reflex.graphics.BitmapImage"/>
 	
 	
 	<!-- graphics -->
 	<component id="IDrawable" class="reflex.graphics.IDrawable"/>
 	<component id="Rect" class="reflex.graphics.Rect"/>
-	
-	<!-- events -->
-	<component id="ButtonEvent" class="reflex.events.ButtonEvent"/>
-	<component id="RenderPhase" class="reflex.events.RenderPhase"/>
 	
 	<!-- flex dependencies -->
 	<!-- <component id="FlexClasses" class="FlexClasses"/> -->

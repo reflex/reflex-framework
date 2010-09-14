@@ -1,9 +1,9 @@
-package reflex.display
+package reflex.containers
 {
 	import reflex.data.IRange;
 	import reflex.events.PropertyEvent;
 	
-	public class ScrollContainer extends Container
+	public class Scroller extends Group
 	{
 		
 		private var _horizontal:IRange;

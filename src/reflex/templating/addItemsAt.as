@@ -1,4 +1,4 @@
-package reflex.display
+package reflex.templating
 {
 	import flash.display.DisplayObject;
 	
@@ -8,11 +8,11 @@ package reflex.display
 	{
 		var output:Array  = [];
 		var length:int = children.length;
-		for(var i:int = 0; i < length; i++) {
+		for (var i:int = 0; i < length; i++) {
 			var child:Object = children[i];
 			var renderer:Object = addItemAt(container, child, index, template);
 			output.push(renderer);
-			if(renderer is DisplayObject) {
+			if (renderer is DisplayObject) {
 				index++;
 			}
 		}

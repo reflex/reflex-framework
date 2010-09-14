@@ -1,9 +1,9 @@
 package reflex.behaviors
 {
+	import mx.collections.IList;
 
 	public interface IBehavioral
 	{
-		function get behaviors():CompositeBehavior;
-		function set behaviors(value:*):void;
+		function get behaviors():IList;
 	}
 }

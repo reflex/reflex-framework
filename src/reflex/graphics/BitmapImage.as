@@ -1,4 +1,4 @@
-package reflex.display
+package reflex.graphics
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -9,6 +9,7 @@ package reflex.display
 	
 	import reflex.events.PropertyEvent;
 	import reflex.metadata.resolveCommitProperties;
+	import reflex.display.BitmapDisplay;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -19,7 +20,7 @@ package reflex.display
 	[Style(name="dock")]
 	[Style(name="align")]
 	
-	public class Image extends BitmapDisplay
+	public class BitmapImage extends BitmapDisplay
 	{
 		
 		static public const BEST_FIT:String = "bestFit";
@@ -72,7 +73,7 @@ package reflex.display
 			PropertyEvent.dispatchChange(this, "backgroundAlpha", _backgroundAlpha, _backgroundAlpha = value);
 		}
 		
-		public function Image()
+		public function BitmapImage()
 		{
 			super();
 			reflex.metadata.resolveCommitProperties(this, resolve);

@@ -7,12 +7,11 @@ package reflex.components
 	import reflex.events.PropertyEvent;
 	import reflex.layouts.ILayout;
 	import reflex.layouts.VerticalLayout;
-	import reflex.skins.ListSkin;
 	
 	/**
 	 * @alpha
 	 */
-	public class List extends Component
+	public class ListBase extends Component
 	{
 		
 		private var _layout:ILayout;
@@ -56,16 +55,13 @@ package reflex.components
 			PropertyEvent.dispatchChange(this, "position", _position, _position = value);
 		}
 		
-		public function List()
+		public function ListBase()
 		{
-			if (skin == null) {
-				skin = new ListSkin();
-			}
 			if (layout == null) {
 				layout = new VerticalLayout();
 			}
 			if (template == null) {
-				template = Button;
+				template = ButtonBase;
 			}
 		}
 		

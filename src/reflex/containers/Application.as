@@ -1,11 +1,10 @@
-package reflex.components
+package reflex.containers
 {
 	
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
-	import reflex.display.Container;
 	
 	//[Frame(factoryClass="reflex.tools.flashbuilder.ReflexApplicationLoader")]
 	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
@@ -13,7 +12,7 @@ package reflex.components
 	/**
 	 * @alpha
 	 */
-	public class Application extends Container
+	public class Application extends Group
 	{
 		
 		public function Application()

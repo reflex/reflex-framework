@@ -1,4 +1,4 @@
-package reflex.display
+package reflex.templating
 {
 	public interface IDataTemplate
 	{

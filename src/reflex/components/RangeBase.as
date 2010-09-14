@@ -6,7 +6,7 @@ package reflex.components
 	import reflex.data.IRange;
 	import reflex.events.PropertyEvent;
 	
-	public class ScrollBar extends Component
+	public class RangeBase extends Component
 	{
 		
 		private var _position:IRange;
@@ -20,7 +20,7 @@ package reflex.components
 			PropertyEvent.dispatchChange(this, "position", _position, _position = value);
 		}
 		
-		public function ScrollBar()
+		public function RangeBase()
 		{
 			skin = new ScrollBarGraphic();
 			behaviors.addItem(new SlideBehavior(this));

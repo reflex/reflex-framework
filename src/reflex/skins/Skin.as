@@ -16,8 +16,8 @@ package reflex.skins
 	import reflex.binding.Bind;
 	import reflex.collections.SimpleCollection;
 	import reflex.components.IStateful;
-	import reflex.display.IContainer;
-	import reflex.display.addItemsAt;
+	import reflex.containers.IContainer;
+	import reflex.templating.addItemsAt;
 	import reflex.events.PropertyEvent;
 	import reflex.events.RenderPhase;
 	import reflex.layouts.ILayout;
@@ -348,7 +348,7 @@ package reflex.skins
 		
 		
 		private function add(items:Array, index:int):void {
-			var children:Array = reflex.display.addItemsAt(_target, items, index, template);
+			var children:Array = reflex.templating.addItemsAt(_target, items, index, template);
 			renderers.concat(children); // todo: correct ordering
 		}
 		
@@ -357,7 +357,7 @@ package reflex.skins
 				while (_target.numChildren) {
 					_target.removeChildAt(_target.numChildren-1);
 				}
-				renderers = reflex.display.addItemsAt(_target, items, 0, template); // todo: correct ordering
+				renderers = reflex.templating.addItemsAt(_target, items, 0, template); // todo: correct ordering
 				RenderPhase.invalidate(_target, MEASURE);
 				RenderPhase.invalidate(_target, LAYOUT);
 			}

@@ -1,4 +1,4 @@
-package reflex.display
+package reflex.templating
 {
 	import flash.display.DisplayObject;
 	
@@ -7,7 +7,7 @@ package reflex.display
 	public function addItemAt(container:Object, child:Object, index:int = 0, template:Object = null):Object
 	{
 		var renderer:Object = getDataRenderer(container, child, template);
-		if(renderer is DisplayObject) {
+		if (renderer is DisplayObject) {
 			container.addChildAt(renderer as DisplayObject, index);
 		}
 		return renderer;
