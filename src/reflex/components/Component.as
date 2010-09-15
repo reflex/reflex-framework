@@ -5,12 +5,10 @@
 	
 	import mx.collections.IList;
 	
-	import reflex.behaviors.CompositeBehavior;
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
 	import reflex.collections.SimpleCollection;
 	import reflex.display.Display;
-	import reflex.templating.addItem;
 	import reflex.events.PropertyEvent;
 	import reflex.events.RenderPhase;
 	import reflex.measurement.resolveHeight;
@@ -19,6 +17,7 @@
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
+	import reflex.templating.addItem;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -38,6 +37,7 @@
 		static public const MEASURE:String = "measure";
 		RenderPhase.registerPhase(MEASURE, 0, true);
 		
+		private var _data:Object;
 		
 		private var _skin:Object;
 		private var _behaviors:SimpleCollection;
@@ -54,6 +54,16 @@
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 		}
 		
+		[Bindable(event="dataChange")]
+		public function get data():Object { return _data; }
+		public function set data(value:Object):void
+		{
+			if (_data == value) {
+				return;
+			}
+			_data = value;
+			dispatchEvent(new Event("dataChange"));
+		}
 		
 		
 		[ArrayElementType("reflex.behaviors.IBehavior")]

@@ -5,18 +5,15 @@ package reflex.display
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
-	import reflex.collections.SimpleCollection;
 	import mx.collections.IList;
 	
 	import org.flexunit.Assert;
-	import org.flexunit.async.Async;
 	
-	import reflex.display.IContainer;
+	import reflex.collections.SimpleCollection;
+	import reflex.containers.IContainer;
 	import reflex.layouts.XYLayout;
-	import reflex.tests.TestBase;
 	
 	public class ContainerTestBase extends StatefulTestBase
 	{
@@ -57,7 +54,9 @@ package reflex.display
 			var test1:DisplayObject = new Sprite();
 			var test2:DisplayObject = new Shape();
 			var test3:DisplayObject = new Bitmap();
-			container.content = [test1, test2, test3];
+			container.content.addItem(test1);
+			container.content.addItem(test2);
+			container.content.addItem(test3);
 			var list:IList = container.content;
 			Assert.assertNotNull(list);
 			Assert.assertTrue(list is IList);

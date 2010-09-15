@@ -1,13 +1,14 @@
 package reflex.display
 {
 	import reflex.measurement.MeasurableTestBase;
+	import reflex.text.TextFieldDisplay;
 	
 	public class TextFieldDisplayMeasurableTest extends MeasurableTestBase
 	{
 		public function TextFieldDisplayMeasurableTest()
 		{
 			super();
-			C = TextFieldDisplay
+			C = TextFieldDisplay;
 		}
 		
 		[Test(async)]

@@ -4,18 +4,16 @@ package
 	
 	import reflex.behaviors.ButtonBehaviorTest;
 	import reflex.behaviors.CompositeBehaviorTest;
-	import reflex.behaviors.SelectableBehaviorTest;
-	import reflex.components.ApplicationTest;
+	import reflex.behaviors.SelectBehaviorTest;
 	import reflex.components.ButtonTest;
 	import reflex.components.ComponentTest;
-	import reflex.components.ListItemTest;
+	import reflex.components.DataChangeTest;
 	import reflex.components.ListTest;
-	import reflex.display.BindableSpriteTest;
 	import reflex.display.BitmapDisplayMeasurableTest;
-	import reflex.display.ContainerTest;
 	import reflex.display.DisplayFunctionsTest;
 	import reflex.display.DisplayMeasurableTest;
 	import reflex.display.DisplayStyleableTest;
+	import reflex.display.GroupTest;
 	import reflex.display.TextFieldDisplayMeasurableTest;
 	import reflex.layouts.BasicLayoutTest;
 	import reflex.layouts.HorizontalLayoutTest;
@@ -33,17 +31,16 @@ package
 		
 		static public var stage:Stage;
 		
-		public var bindableSprite:BindableSpriteTest;
 		public var measuredSprite:DisplayMeasurableTest;
 		public var styleableSprite:DisplayStyleableTest;
 		
 		public var measuredBitmap:BitmapDisplayMeasurableTest;
 		public var measuredTextField:TextFieldDisplayMeasurableTest;
 		
-		public var container:ContainerTest;
+		public var container:GroupTest;
 		
 		public var compositeBehavior:CompositeBehaviorTest;
-		public var selectabeBehavior:SelectableBehaviorTest;
+		public var selectabeBehavior:SelectBehaviorTest;
 		public var buttonBehavior:ButtonBehaviorTest;
 		
 		public var skinMeasurement:SkinMeasurementTest;
@@ -56,7 +53,7 @@ package
 		public var component:ComponentTest;
 		//public var application:ApplicationTest;
 		public var button:ButtonTest;
-		public var listItem:ListItemTest;
+		public var listItem:DataChangeTest;
 		public var list:ListTest;
 		
 		// layouts

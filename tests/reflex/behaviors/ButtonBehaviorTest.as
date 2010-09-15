@@ -5,17 +5,17 @@ package reflex.behaviors
 	
 	import org.flexunit.asserts.assertEquals;
 	
-	import reflex.display.Container;
+	import reflex.containers.Group;
 
 	public class ButtonBehaviorTest
 	{
 		
 		public var stage:Stage;
-		public var display:Container;
+		public var display:Group;
 		
 		public function ButtonBehaviorTest() {
 			stage = ReflexSuite.stage;
-			display = new Container()
+			display = new Group()
 		}
 		
 		[Before]

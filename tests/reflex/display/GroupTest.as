@@ -1,18 +1,13 @@
 package reflex.display
 {
-	import flash.events.Event;
+	import reflex.containers.Group;
 	
-	import org.flexunit.Assert;
-	import org.flexunit.async.Async;
-	
-	import reflex.layouts.XYLayout;
-
-	public class ContainerTest extends ContainerTestBase
+	public class GroupTest extends ContainerTestBase
 	{
 		
-		public function ContainerTest() {
+		public function GroupTest() {
 			super();
-			C = Container;
+			C = Group;
 		}
 		
 		[Test(async)]

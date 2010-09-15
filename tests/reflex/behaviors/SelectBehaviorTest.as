@@ -6,7 +6,7 @@ package reflex.behaviors
 	
 	import org.flexunit.Assert;
 
-	public class SelectableBehaviorTest extends EventDispatcher
+	public class SelectBehaviorTest extends EventDispatcher
 	{
 		
 		[Bindable]
@@ -15,7 +15,7 @@ package reflex.behaviors
 		[Test]
 		public function testClick():void {
 			this.selected = false;
-			var selectable:SelectableBehavior = new SelectableBehavior(this);
+			var selectable:SelectBehavior = new SelectBehavior(this);
 			this.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 			Assert.assertTrue(this.selected);
 		}

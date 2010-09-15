@@ -6,15 +6,15 @@ package reflex.layouts
 	
 	import org.flexunit.Assert;
 	
-	import reflex.display.BindableSprite;
+	import reflex.display.Display;
 	
 	public class XYLayoutTest extends EventDispatcher
 	{
 		
 		[Test]
 		public function testMeasurement():void {
-			var child1:BindableSprite = new BindableSprite();
-			var child2:BindableSprite = new BindableSprite();
+			var child1:Display = new Display();
+			var child2:Display = new Display();
 			
 			child1.x = 5;
 			child1.y = 5;
