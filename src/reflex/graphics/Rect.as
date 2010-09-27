@@ -10,7 +10,7 @@ package reflex.graphics
 	
 	import mx.events.PropertyChangeEvent;
 	
-	import reflex.events.PropertyEvent;
+	import reflex.binding.DataChange;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.styles.IStyleable;
 	
@@ -41,20 +41,14 @@ package reflex.graphics
 		[Bindable(event="xChange")]
 		public function get x():Number { return _x; }
 		public function set x(value:Number):void {
-			if (_x == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "x", _x, _x = value);
+			DataChange.change(this, "x", _x, _x = value);
 			//render();
 		}
 		
 		[Bindable(event="yChange")]
 		public function get y():Number { return _y; }
 		public function set y(value:Number):void {
-			if (_y == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "y", _y, _y = value);
+			DataChange.change(this, "y", _y, _y = value);
 			//render();
 		}
 		
@@ -62,40 +56,28 @@ package reflex.graphics
 		[Bindable(event="widthChange")]
 		public function get width():Number { return _width; }
 		public function set width(value:Number):void {
-			if (_width == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "width", _width, _width = value);
+			DataChange.change(this, "width", _width, _width = value);
 			//render();
 		}
 		
 		[Bindable(event="heightChange")]
 		public function get height():Number { return _height; }
 		public function set height(value:Number):void {
-			if (_height == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "height", _height, _height = value);
+			DataChange.change(this, "height", _height, _height = value);
 			//render();
 		}
 		
 		[Bindable(event="radiusXChange")]
 		public function get radiusX():Number { return _radiusX; }
 		public function set radiusX(value:Number):void {
-			if (_radiusX == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "radiusX", _radiusX, _radiusX = value);
+			DataChange.change(this, "radiusX", _radiusX, _radiusX = value);
 			//render();
 		}
 		
 		[Bindable(event="radiusYChange")]
 		public function get radiusY():Number { return _radiusY; }
 		public function set radiusY(value:Number):void {
-			if (_radiusY == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "radiusY", _radiusY, _radiusY = value);
+			DataChange.change(this, "radiusY", _radiusY, _radiusY = value);
 			//render();
 		}
 		
@@ -113,19 +95,13 @@ package reflex.graphics
 		[Bindable(event="idChange")]
 		public function get id():String { return _id; }
 		public function set id(value:String):void {
-			if(_id == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "id", _id, _id = value);
+			DataChange.change(this, "id", _id, _id = value);
 		}
 		
 		[Bindable(event="styleNameChange")]
 		public function get styleName():String { return _styleName;}
 		public function set styleName(value:String):void {
-			if(_styleName == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "styleName", _styleName, _styleName= value);
+			DataChange.change(this, "styleName", _styleName, _styleName= value);
 		}
 		
 		[Bindable(event="styleChange")]

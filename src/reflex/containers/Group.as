@@ -9,13 +9,13 @@ package reflex.containers
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
 	
+	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
 	import reflex.components.IStateful;
 	import reflex.display.Display;
-	import reflex.templating.addItemsAt;
-	import reflex.events.PropertyEvent;
-	import reflex.events.RenderPhase;
+	import reflex.invalidation.Invalidation;
 	import reflex.layouts.ILayout;
+	import reflex.templating.addItemsAt;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -26,7 +26,7 @@ package reflex.containers
 	[Style(name="dock")]
 	[Style(name="align")]
 	
-	[Event(name="initialize", type="reflex.events.RenderPhase")]
+	[Event(name="initialize", type="reflex.invalidation.Invalidation")]
 	
 	[DefaultProperty("content")]
 	
@@ -43,10 +43,10 @@ package reflex.containers
 		static public const MEASURE:String = "measure";
 		static public const LAYOUT:String = "layout";
 		
-		RenderPhase.registerPhase(CREATE, 0, true);
-		RenderPhase.registerPhase(INITIALIZE, 1, true);
-		RenderPhase.registerPhase(MEASURE, 2, true);
-		RenderPhase.registerPhase(LAYOUT, 3, false);
+		Invalidation.registerPhase(CREATE, 0, true);
+		Invalidation.registerPhase(INITIALIZE, 1, true);
+		Invalidation.registerPhase(MEASURE, 2, true);
+		Invalidation.registerPhase(LAYOUT, 3, false);
 		
 		private var _layout:ILayout;
 		private var _template:Object;
@@ -76,7 +76,7 @@ package reflex.containers
 		// width/height invalidation needs some thought
 		
 		private function onSizeChange(event:Event):void {
-			RenderPhase.invalidate(this, LAYOUT);
+			Invalidation.invalidate(this, LAYOUT);
 		}
 		
 		// IStateful implementation
@@ -84,21 +84,14 @@ package reflex.containers
 		[Bindable(event="statesChange")]
 		public function get states():Array { return _states; }
 		public function set states(value:Array):void {
-			if (_states == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
+			DataChange.change(this, "states", _states, _states = value);
 		}
 		
 		
 		[Bindable(event="currentStateChange")]
 		public function get currentState():String { return _currentState; }
-		public function set currentState(value:String):void
-		{
-			if (_currentState == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
+		public function set currentState(value:String):void {
+			DataChange.change(this, "currentState", _currentState, _currentState = value);
 		}
 		
 		/**
@@ -137,9 +130,10 @@ package reflex.containers
 				}
 				reset(items);
 			}
-			RenderPhase.invalidate(this, MEASURE);
-			RenderPhase.invalidate(this, LAYOUT);
-			dispatchEvent( new Event("contentChange") );
+			Invalidation.invalidate(this, MEASURE);
+			Invalidation.invalidate(this, LAYOUT);
+			//dispatchEvent( new Event("contentChange") );
+			DataChange.change(this, "content", oldContent, _content);
 		}
 		
 		/**
@@ -155,9 +149,10 @@ package reflex.containers
 			if (_layout) { _layout.target = null; }
 			_layout = value;
 			if (_layout) { _layout.target = this; }
-			RenderPhase.invalidate(this, MEASURE);
-			RenderPhase.invalidate(this, LAYOUT);
-			dispatchEvent( new Event("layoutChange") );
+			Invalidation.invalidate(this, MEASURE);
+			Invalidation.invalidate(this, LAYOUT);
+			//dispatchEvent( new Event("layoutChange") );
+			DataChange.change(this, "layout", oldLayout, _layout);
 		}
 		
 		[Bindable(event="templateChange")]
@@ -177,15 +172,16 @@ package reflex.containers
 				}
 				reset(items);
 			}
-			RenderPhase.invalidate(this, MEASURE);
-			RenderPhase.invalidate(this, LAYOUT);
-			dispatchEvent( new Event("templateChange") );
+			Invalidation.invalidate(this, MEASURE);
+			Invalidation.invalidate(this, LAYOUT);
+			//dispatchEvent( new Event("templateChange") );
+			DataChange.change(this, "template", oldTemplate, _template);
 		}
 		
 		private function onAdded(event:Event):void {
 			removeEventListener(Event.ADDED, onAdded, false);
-			RenderPhase.invalidate(this, CREATE);
-			RenderPhase.invalidate(this, INITIALIZE);
+			Invalidation.invalidate(this, CREATE);
+			Invalidation.invalidate(this, INITIALIZE);
 		}
 		
 		private function onMeasure(event:Event):void {
@@ -228,7 +224,7 @@ package reflex.containers
 					reset(event.items);
 					break;
 			}
-			RenderPhase.invalidate(this, LAYOUT);
+			Invalidation.invalidate(this, LAYOUT);
 		}
 		
 		private function add(items:Array, index:int):void {
@@ -241,7 +237,7 @@ package reflex.containers
 				removeChildAt(numChildren-1);
 			}
 			renderers = reflex.templating.addItemsAt(this, items, 0, _template); // todo: correct ordering
-			RenderPhase.invalidate(this, LAYOUT);
+			Invalidation.invalidate(this, LAYOUT);
 		}
 		
 		

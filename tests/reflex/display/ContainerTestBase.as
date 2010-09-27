@@ -54,9 +54,7 @@ package reflex.display
 			var test1:DisplayObject = new Sprite();
 			var test2:DisplayObject = new Shape();
 			var test3:DisplayObject = new Bitmap();
-			container.content.addItem(test1);
-			container.content.addItem(test2);
-			container.content.addItem(test3);
+			container.content = [test1, test2, test3];
 			var list:IList = container.content;
 			Assert.assertNotNull(list);
 			Assert.assertTrue(list is IList);

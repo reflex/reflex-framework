@@ -5,33 +5,44 @@
  * in accordance with the terms of the license agreement accompanying it.
  */
 
-package reflex.data
+package reflex.binding
 {
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	
+	import reflex.events.DataChangeEvent;
 	
 	/**
 	 * DataChange enables objects to broadcast when their properties change
 	 * value, allowing property watchers and data binding.
 	 */
-	public class DataChange
+	public class DataChange 
 	{
-		internal static var staticCallbacks:Vector.<Function> = new Vector.<Function>();
 		
+		internal static var staticCallbacks:Vector.<Function> = new Vector.<Function>();
+		/*
 		private static var headChange:Object = {};
 		private static var currentChanges:DataChange;
 		private static var objectPool:DataChange;
-		
+		*/
 		/**
 		 * The more concise approach to notifying a change in data when only a
 		 * single value is updated.
 		 */
 		public static function change(source:Object, property:String, oldValue:*, newValue:*, force:Boolean = false):void
 		{
-			queueChange(source, property, oldValue, newValue, force);
-			completeChange(source, property);
+			if(oldValue != newValue || force) {
+				var eventType:String = property + "Change";
+				if(source is IEventDispatcher && (source as IEventDispatcher).hasEventListener(eventType)) {
+					var event:DataChangeEvent = new DataChangeEvent(eventType, oldValue, newValue);
+					(source as IEventDispatcher).dispatchEvent(event);
+				}
+			}
+			//queueChange(source, property, oldValue, newValue, force);
+			//completeChange(source, property);
 		}
-		
+		/*
 		public static function queueChange(source:Object, property:String, oldValue:*, newValue:*, force:Boolean = false):DataChange
 		{
 			var dataChange:DataChange;
@@ -62,11 +73,12 @@ package reflex.data
 			
 			return dataChange;
 		}
-		
+		*/
 		/**
 		 * Completes the DataChange, broadcasting all changes to data since this
 		 * change started.
 		 */
+		/*
 		public static function completeChange(source:Object, initialProperty:String):void
 		{
 			if (headChange[initialProperty] != source) {
@@ -83,12 +95,13 @@ package reflex.data
 					// broadcast change to registered callbacks
 					for each (var callback:Function in staticCallbacks) {
 						callback(dataChange);
-						if (dataChange is IEventDispatcher) {
-							var dispatcher:IEventDispatcher = IEventDispatcher(dataChange)
-							var eventType:String = dataChange.property + "Change";
-							if (dispatcher.hasEventListener(eventType)) {
-								dispatcher.dispatchEvent(new Event(eventType));
-							}
+					
+					}
+					if (dataChange is IEventDispatcher) {
+						var dispatcher:IEventDispatcher = IEventDispatcher(dataChange)
+						var eventType:String = dataChange.property + "Change";
+						if (dispatcher.hasEventListener(eventType)) {
+							dispatcher.dispatchEvent(new Event(eventType));
 						}
 					}
 				}
@@ -116,5 +129,6 @@ package reflex.data
 		{
 			completeChange(source, property);
 		}
+		*/
 	}
 }

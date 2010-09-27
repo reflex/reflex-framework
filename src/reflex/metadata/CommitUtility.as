@@ -6,8 +6,9 @@ package reflex.metadata
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
+	import reflex.behaviors.IBehavior;
 	import reflex.binding.Bind;
-	import reflex.events.RenderPhase;
+	import reflex.invalidation.Invalidation;
 	import reflex.graphics.IDrawable;
 	
 	// for lack of a better name
@@ -27,7 +28,7 @@ package reflex.metadata
 		
 		public function register(instance:IEventDispatcher, method:String, properties:Array, resolver:Function):void {
 			var token:String = flash.utils.getQualifiedClassName(instance) + "_" + method + "Commit";
-			RenderPhase.registerPhase(token, 0, true);
+			Invalidation.registerPhase(token, 0, true);
 			for each(var sourcePath:String in properties) {
 				var sourceToken:String = flash.utils.getQualifiedClassName(instance) + "_" + sourcePath;
 				var array:Array = dictionary[sourceToken];
@@ -58,9 +59,11 @@ package reflex.metadata
 				var tokens:Array = dictionary[sourceToken];
 				for each(var token:String in tokens) {
 					if(s2 is IDrawable) {
-						RenderPhase.invalidate((s2 as IDrawable).target as DisplayObject, token);
+						Invalidation.invalidate((s2 as IDrawable).target as DisplayObject, token);
+					} else if(s2 is IBehavior) {
+						Invalidation.invalidate((s2 as IBehavior).target as DisplayObject, token);
 					} else  {
-						RenderPhase.invalidate(s2 as DisplayObject, token);
+						Invalidation.invalidate(s2 as DisplayObject, token);
 					}
 				}
 			}

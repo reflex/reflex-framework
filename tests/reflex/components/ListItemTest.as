@@ -1,18 +1,18 @@
 package reflex.components
 {
 	import reflex.tests.TestBase;
-	
-	public class DataChangeTest extends TestBase
+
+	public class ListItemTest extends TestBase
 	{
 		
 		[Test(async)]
 		public function testDataChange():void {
-			testPropertyChange(Component, "data", {});
+			testPropertyChange(ListItemDefinition, "data", "test");
 		}
 		
 		[Test(async)]
 		public function testDataNotChanged():void {
-			testPropertyNotChanged(Component, "data", {});
+			testPropertyNotChanged(ListItemDefinition, "data", "test");
 		}
 		
 	}

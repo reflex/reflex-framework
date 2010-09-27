@@ -2,7 +2,7 @@ package reflex.display
 {
 	import flash.display.Bitmap;
 	
-	import reflex.data.DataChange;
+	import reflex.binding.DataChange;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;

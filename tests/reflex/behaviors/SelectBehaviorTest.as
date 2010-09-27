@@ -9,15 +9,11 @@ package reflex.behaviors
 	public class SelectBehaviorTest extends EventDispatcher
 	{
 		
-		[Bindable]
-		public var selected:Boolean;
-		
 		[Test]
 		public function testClick():void {
-			this.selected = false;
-			var selectable:SelectBehavior = new SelectBehavior(this);
-			this.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-			Assert.assertTrue(this.selected);
+			var behavior:SelectBehavior = new SelectBehavior(this);
+			dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+			Assert.assertTrue(behavior.selected);
 		}
 		
 	}

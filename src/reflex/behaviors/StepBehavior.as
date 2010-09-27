@@ -4,74 +4,59 @@ package reflex.behaviors
 	import flash.display.MovieClip;
 	import flash.events.IEventDispatcher;
 	
-	import reflex.binding.Bind;
+	import reflex.binding.DataChange;
+	import reflex.data.IPosition;
 	import reflex.data.IRange;
+	import reflex.data.ISteppingPosition;
+	import reflex.data.Position;
 	import reflex.data.Range;
-	import reflex.events.ButtonEvent;
+
+	//import reflex.events.ButtonEvent;
 	
 	public class StepBehavior extends Behavior
 	{
-		public var fwdBehavior:ButtonBehavior;
-		public var bwdBehavior:ButtonBehavior;
+		
+		private var _incrementButton:Object;
+		private var _decrementButton:Object;
+		private var _position:ISteppingPosition;
 		
 		[Bindable]
-		public var fwdBtn:InteractiveObject;
+		[Binding(target="target.skin.incrementButton")]
+		public function get incrementButton():Object { return _incrementButton; }
+		public function set incrementButton(value:Object):void {
+			DataChange.change(this, "incrementButton", _incrementButton, _incrementButton = value);
+		}
+		
 		[Bindable]
-		public var bwdBtn:InteractiveObject;
+		[Binding(target="target.skin.decrementButton")]
+		public function get decrementButton():Object { return _decrementButton; }
+		public function set decrementButton(value:Object):void {
+			DataChange.change(this, "decrementButton", _decrementButton, _decrementButton = value);
+		}
 		
 		[Bindable]
 		[Binding(target="target.position")]
-		public var position:IRange = new Range();		// TODO: implement lazy instantiation of position
+		public function get position():ISteppingPosition { return _position; }
+		public function set position(value:ISteppingPosition):void {
+			DataChange.change(this, "position", _position, _position = value);
+		}
 		
-		public function StepBehavior(target:InteractiveObject = null)
+		public function StepBehavior(target:IEventDispatcher = null)
 		{
 			super(target);
 		}
 		
-		override public function set target(value:IEventDispatcher):void
+		[EventListener(type="click", target="incrementButton")]
+		public function onFwdPress(event:Event):void
 		{
-			super.target = value;
-			
-			if (target == null) {
-				return;
-			}
-			
-			fwdBtn = getSkinPart("fwdBtn");
-			bwdBtn = getSkinPart("bwdBtn");
-			fwdBehavior = new ButtonBehavior(fwdBtn);
-			bwdBehavior = new ButtonBehavior(bwdBtn);
-			if (fwdBtn is MovieClip) {
-				Bind.addListener(this, onFwdStateChange, fwdBehavior, "state");
-			}
-			if (bwdBtn is MovieClip) {
-				Bind.addListener(this, onBwdStateChange, bwdBehavior, "state");
-			}
+			_position.value += _position.stepSize;
 		}
 		
-		[EventListener(type="press", target="fwdBtn")]
-		[EventListener(type="hold", target="fwdBtn")]
-		public function onFwdPress(event:ButtonEvent):void
+		[EventListener(type="click", target="decrementButton")]
+		public function onBwdPress(event:Event):void
 		{
-			position.stepForward();
-			event.updateAfterEvent();
+			_position.value -= _position.stepSize;
 		}
 		
-		[EventListener(type="press", target="bwdBtn")]
-		[EventListener(type="hold", target="bwdBtn")]
-		public function onBwdPress(event:ButtonEvent):void
-		{
-			position.stepBackward();
-			event.updateAfterEvent();
-		}
-		
-		protected function onFwdStateChange(state:String):void
-		{
-			MovieClip(fwdBtn).gotoAndStop(state);
-		}
-		
-		protected function onBwdStateChange(state:String):void
-		{
-			MovieClip(bwdBtn).gotoAndStop(state);
-		}
 	}
 }

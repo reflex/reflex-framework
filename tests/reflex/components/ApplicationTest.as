@@ -5,19 +5,20 @@ package reflex.components
 	
 	import org.flexunit.Assert;
 	
+	import reflex.containers.Application;
 	import reflex.tests.TestBase;
 	
 	public class ApplicationTest extends TestBase
 	{
 		
-		/*
+		
 		[Test]
 		public function testApplication():void {
-			var application:Application = new Application();
-			Assert.assertEquals(StageScaleMode.NO_SCALE, application.stage.scaleMode);
-			Assert.assertEquals(StageAlign.TOP_LEFT, application.stage.align);
+			//var application:Application = new Application();
+			//Assert.assertEquals(StageScaleMode.NO_SCALE, application.stage.scaleMode);
+			//Assert.assertEquals(StageAlign.TOP_LEFT, application.stage.align);
 		}
-		*/
+		
 		
 	}
 }

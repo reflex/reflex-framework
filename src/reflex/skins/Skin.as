@@ -18,8 +18,8 @@ package reflex.skins
 	import reflex.components.IStateful;
 	import reflex.containers.IContainer;
 	import reflex.templating.addItemsAt;
-	import reflex.events.PropertyEvent;
-	import reflex.events.RenderPhase;
+	import reflex.binding.DataChange;
+	import reflex.invalidation.Invalidation;
 	import reflex.layouts.ILayout;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurements;
@@ -38,8 +38,8 @@ package reflex.skins
 		static public const MEASURE:String = "measure";
 		static public const LAYOUT:String = "layout";
 		
-		RenderPhase.registerPhase(MEASURE, 0, true);
-		RenderPhase.registerPhase(LAYOUT, 0, true);
+		Invalidation.registerPhase(MEASURE, 0, true);
+		Invalidation.registerPhase(LAYOUT, 0, true);
 		
 		private var renderers:Array = [];
 		private var _layout:ILayout;
@@ -66,8 +66,8 @@ package reflex.skins
 				return;
 			}
 			_explicit.width = value;
-			PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = value);
-			RenderPhase.invalidate(target, LAYOUT);
+			DataChange.change(this, "width", unscaledWidth, unscaledWidth = value);
+			Invalidation.invalidate(target, LAYOUT);
 		}
 		
 		/**
@@ -80,8 +80,8 @@ package reflex.skins
 				return;
 			}
 			_explicit.height = value;
-			PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = value);
-			RenderPhase.invalidate(target, LAYOUT);
+			DataChange.change(this, "height", unscaledHeight, unscaledHeight = value);
+			Invalidation.invalidate(target, LAYOUT);
 		}
 		
 		/**
@@ -118,9 +118,9 @@ package reflex.skins
 		 * @inheritDoc
 		 */
 		public function setSize(width:Number, height:Number):void {
-			if (unscaledWidth != width) { PropertyEvent.dispatchChange(this, "width", unscaledWidth, unscaledWidth = width); }
-			if (unscaledHeight != height) { PropertyEvent.dispatchChange(this, "height", unscaledHeight, unscaledHeight = height); }
-			RenderPhase.invalidate(target, LAYOUT);
+			if (unscaledWidth != width) { DataChange.change(this, "width", unscaledWidth, unscaledWidth = width); }
+			if (unscaledHeight != height) { DataChange.change(this, "height", unscaledHeight, unscaledHeight = height); }
+			Invalidation.invalidate(target, LAYOUT);
 		}
 		
 		/**
@@ -137,10 +137,10 @@ package reflex.skins
 			_layout = value;
 			_layout.target = target;
 			if (target) {
-				RenderPhase.invalidate(target, MEASURE);
-				RenderPhase.invalidate(target, LAYOUT);
+				Invalidation.invalidate(target, MEASURE);
+				Invalidation.invalidate(target, LAYOUT);
 			}
-			PropertyEvent.dispatchChange(this, "layout", oldLayout, _layout);
+			DataChange.change(this, "layout", oldLayout, _layout);
 		}
 		
 		[Bindable(event="templateChange")]
@@ -149,7 +149,7 @@ package reflex.skins
 			if (_template == value) {
 				return;
 			}
-			PropertyEvent.dispatchChange(this, "template", _template, _template = value);
+			DataChange.change(this, "template", _template, _template = value);
 		}
 		
 		[Bindable(event="currentStateChange")]
@@ -158,7 +158,7 @@ package reflex.skins
 			if (_currentState == value) {
 				return;
 			}
-			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
+			DataChange.change(this, "currentState", _currentState, _currentState = value);
 		}
 		
 		[Bindable(event="statesChange")]
@@ -167,7 +167,7 @@ package reflex.skins
 			if (_states == value) {
 				return;
 			}
-			PropertyEvent.dispatchChange(this, "states", _states, _states = value);
+			DataChange.change(this, "states", _states, _states = value);
 		}
 		
 		//protected var containerPart:DisplayObjectContainer;
@@ -254,11 +254,11 @@ package reflex.skins
 				*/
 				target.addEventListener(MEASURE, onMeasure, false, 0, true);
 				target.addEventListener(LAYOUT, onLayout, false, 0, true);
-				RenderPhase.invalidate(target, MEASURE);
-				RenderPhase.invalidate(target, LAYOUT);
+				Invalidation.invalidate(target, MEASURE);
+				Invalidation.invalidate(target, LAYOUT);
 			}
 			
-			PropertyEvent.dispatchChange(this, "target", oldValue, _target);
+			DataChange.change(this, "target", oldValue, _target);
 			var items:Array = [];
 			for (var i:int = 0; i < _content.length; i++) {
 				items.push(_content.getItemAt(i));
@@ -311,7 +311,7 @@ package reflex.skins
 			}
 			
 			
-			PropertyEvent.dispatchChange(this, "content", oldContent, _content);
+			DataChange.change(this, "content", oldContent, _content);
 		}
 		
 		public function getSkinPart(part:String):InteractiveObject
@@ -358,8 +358,8 @@ package reflex.skins
 					_target.removeChildAt(_target.numChildren-1);
 				}
 				renderers = reflex.templating.addItemsAt(_target, items, 0, template); // todo: correct ordering
-				RenderPhase.invalidate(_target, MEASURE);
-				RenderPhase.invalidate(_target, LAYOUT);
+				Invalidation.invalidate(_target, MEASURE);
+				Invalidation.invalidate(_target, LAYOUT);
 			}
 		}
 		

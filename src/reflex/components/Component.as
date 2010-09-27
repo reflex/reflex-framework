@@ -9,8 +9,8 @@
 	import reflex.behaviors.IBehavioral;
 	import reflex.collections.SimpleCollection;
 	import reflex.display.Display;
-	import reflex.events.PropertyEvent;
-	import reflex.events.RenderPhase;
+	import reflex.binding.DataChange;
+	import reflex.invalidation.Invalidation;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
@@ -35,9 +35,7 @@
 	{
 		
 		static public const MEASURE:String = "measure";
-		RenderPhase.registerPhase(MEASURE, 0, true);
-		
-		private var _data:Object;
+		Invalidation.registerPhase(MEASURE, 0, true);
 		
 		private var _skin:Object;
 		private var _behaviors:SimpleCollection;
@@ -52,17 +50,6 @@
 			_behaviors = new SimpleCollection();
 			reflex.metadata.resolveCommitProperties(this);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
-		}
-		
-		[Bindable(event="dataChange")]
-		public function get data():Object { return _data; }
-		public function set data(value:Object):void
-		{
-			if (_data == value) {
-				return;
-			}
-			_data = value;
-			dispatchEvent(new Event("dataChange"));
 		}
 		
 		
@@ -122,16 +109,13 @@
 			}
 			reflex.measurement.setSize(skin, width, height);
 			dispatchEvent(new Event("skinChange"));
-			RenderPhase.invalidate(this, MEASURE);
+			Invalidation.invalidate(this, MEASURE);
 		}
 		
 		[Bindable(event="enabledChange")]
 		public function get enabled():Boolean { return _enabled; }
 		public function set enabled(value:Boolean):void {
-			if (_enabled == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "enabled", _enabled, _enabled = value);
+			DataChange.change(this, "enabled", _enabled, _enabled = value);
 		}
 		
 		// IStateful implementation
@@ -150,10 +134,7 @@
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void
 		{
-			if (_currentState == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "currentState", _currentState, _currentState = value);
+			DataChange.change(this, "currentState", _currentState, _currentState = value);
 		}
 		
 		// needs more thought

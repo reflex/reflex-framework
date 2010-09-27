@@ -7,22 +7,22 @@ package reflex.components
 		
 		[Test(async)]
 		public function testLabelChange():void {
-			testPropertyChange(Button, "label", "test");
+			testPropertyChange(ButtonDefinition, "label", "test");
 		}
 		
 		[Test(async)]
 		public function testLabelNotChanged():void {
-			testPropertyNotChanged(Button, "label", "test");
+			testPropertyNotChanged(ButtonDefinition, "label", "test");
 		}
 		
 		[Test(async)]
 		public function testSelectedChange():void {
-			testPropertyChange(Button, "selected", true);
+			testPropertyChange(ButtonDefinition, "selected", true);
 		}
 		
 		[Test(async)]
 		public function testSelectedNotChanged():void {
-			testPropertyNotChanged(Button, "selected", true);
+			testPropertyNotChanged(ButtonDefinition, "selected", true);
 		}
 		
 	}

@@ -19,7 +19,8 @@ package reflex.metadata
 					tag.arg.(@key == "target").@value :
 					tag.arg.@value;
 				
-				Bind.addBinding(instance, targ, instance, prop.@name, true);
+				//Bind.addBinding(instance, targ, instance, prop.@name, true);
+				Bind.addBinding(instance, prop.@name, instance, targ, true);
 			}
 		}
 	}

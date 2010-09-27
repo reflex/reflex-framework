@@ -1,26 +1,25 @@
 package reflex.behaviors
 {
 	
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
+	import reflex.binding.DataChange;
+	import reflex.data.IPosition;
 	import reflex.data.IRange;
-	import reflex.events.ButtonEvent;
-	import reflex.events.PropertyEvent;
+	//import reflex.events.ButtonEvent;
 	
 	public class DragStepBehavior extends Behavior
 	{
 		
-		private var _position:IRange;
+		private var _position:IPosition;
 		
 		[Bindable(event="positionChange")]
 		[Binding(target="target.position")]
-		public function get position():IRange { return _position; }
-		public function set position(value:IRange):void {
-			if (_position == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "position", _position, _position = value);
+		public function get position():IPosition { return _position; }
+		public function set position(value:IPosition):void {
+			DataChange.change(this, "position", _position, _position = value);
 		}
 		
 		public var increment:Number = 1;
@@ -42,23 +41,23 @@ package reflex.behaviors
 				return;
 			}
 			
-			ButtonEvent.initialize(target);
+			//ButtonEvent.initialize(target);
 		}
 		
 		[EventListener(type="mouseDown", target="target")]
 		public function onDragStart(event:MouseEvent):void
 		{
-			startDragPosition = position.position;
+			startDragPosition = position.value;
 		}
 		
 		[EventListener(type="drag", target="target")]
-		public function onDrag(event:ButtonEvent):void
+		public function onDrag(event:Event):void
 		{
 			if (dragging) {
-				position.position = Math.round( (startDragPosition + event.deltaX) / increment) * increment;
-			} else if ( Math.abs(startDragPosition - event.deltaX) > dragTolerance) {
-				position.position = Math.round( (startDragPosition + event.deltaX) / increment) * increment;
-				dragging = true;
+				//position.value = Math.round( (startDragPosition + event.deltaX) / increment) * increment;
+			//} else if ( Math.abs(startDragPosition - event.deltaX) > dragTolerance) {
+				//position.value = Math.round( (startDragPosition + event.deltaX) / increment) * increment;
+				//dragging = true;
 			}
 		}
 		

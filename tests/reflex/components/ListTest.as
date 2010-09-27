@@ -10,42 +10,42 @@ package reflex.components
 		
 		[Test(async)]
 		public function testDataProviderChange():void {
-			testPropertyChange(List, "dataProvider", new SimpleCollection());
+			testPropertyChange(ListDefinition, "dataProvider", new SimpleCollection());
 		}
 		
 		[Test(async)]
 		public function testDataProviderNotChanged():void {
-			testPropertyNotChanged(List, "dataProvider", new SimpleCollection());
+			testPropertyNotChanged(ListDefinition, "dataProvider", new SimpleCollection());
 		}
 		
 		[Test(async)]
 		public function testTemplateChange():void {
-			testPropertyChange(List, "template", {});
+			testPropertyChange(ListDefinition, "template", {});
 		}
 		
 		[Test(async)]
 		public function testTemplateNotChanged():void {
-			testPropertyNotChanged(List, "template", {});
+			testPropertyNotChanged(ListDefinition, "template", {});
 		}
 		
 		[Test(async)]
 		public function testLayoutChange():void {
-			testPropertyChange(List, "layout", new XYLayout());
+			testPropertyChange(ListDefinition, "layout", new XYLayout());
 		}
 		
 		[Test(async)]
 		public function testLayoutNotChanged():void {
-			testPropertyNotChanged(List, "layout", new XYLayout());
+			testPropertyNotChanged(ListDefinition, "layout", new XYLayout());
 		}
 		
 		[Test(async)]
 		public function testPositionChange():void {
-			testPropertyChange(List, "position", new Range());
+			testPropertyChange(ListDefinition, "position", new Range());
 		}
 		
 		[Test(async)]
 		public function testPositionNotChanged():void {
-			testPropertyNotChanged(List, "position", new Range());
+			testPropertyNotChanged(ListDefinition, "position", new Range());
 		}
 		
 	}

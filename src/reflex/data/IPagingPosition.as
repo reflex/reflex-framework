@@ -1,11 +1,10 @@
 package reflex.data
 {
-	public interface IScroll extends IRange
+	public interface IPagingPosition extends IPosition
 	{
+		
 		function get pageSize():Number;
 		function set pageSize(value:Number):void;
 		
-		function pageBackward():Number;
-		function pageForward():Number;
 	}
 }

@@ -25,8 +25,8 @@ package reflex.behaviors
 			
 			//var skin:ISkin = ISkinnable(target).skin;
 			
-			hScrollBar = getSkinPart('hScrollBar');
-			vScrollBar = getSkinPart('vScrollBar');
+			//hScrollBar = getSkinPart('hScrollBar');
+			//vScrollBar = getSkinPart('vScrollBar');
 			
 			hSlideBehavior = new SlideBehavior();
 			vSlideBehavior = new SlideBehavior();

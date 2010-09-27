@@ -5,9 +5,12 @@ package
 	import reflex.behaviors.ButtonBehaviorTest;
 	import reflex.behaviors.CompositeBehaviorTest;
 	import reflex.behaviors.SelectBehaviorTest;
+	import reflex.behaviors.SlideBehaviorTest;
+	import reflex.behaviors.StepBehaviorTest;
+	import reflex.components.ApplicationTest;
 	import reflex.components.ButtonTest;
 	import reflex.components.ComponentTest;
-	import reflex.components.DataChangeTest;
+	import reflex.components.ListItemTest;
 	import reflex.components.ListTest;
 	import reflex.display.BitmapDisplayMeasurableTest;
 	import reflex.display.DisplayFunctionsTest;
@@ -31,30 +34,35 @@ package
 		
 		static public var stage:Stage;
 		
-		public var measuredSprite:DisplayMeasurableTest;
-		public var styleableSprite:DisplayStyleableTest;
+		// components
+		public var component:ComponentTest;
+		public var application:ApplicationTest;
+		public var button:ButtonTest;
+		public var listItem:ListItemTest;
+		public var list:ListTest;
 		
-		public var measuredBitmap:BitmapDisplayMeasurableTest;
-		public var measuredTextField:TextFieldDisplayMeasurableTest;
-		
-		public var container:GroupTest;
-		
+		// behaviors
 		public var compositeBehavior:CompositeBehaviorTest;
-		public var selectabeBehavior:SelectBehaviorTest;
 		public var buttonBehavior:ButtonBehaviorTest;
+		public var selectabeBehavior:SelectBehaviorTest;
+		public var slideBehavior:SlideBehaviorTest;
+		public var stepBehavior:StepBehaviorTest;
 		
-		public var skinMeasurement:SkinMeasurementTest;
+		// containers
+		public var container:GroupTest;
 		public var skinContainer:SkinContainerTest;
-		
-		public var measurementFunctions:MeasurementFunctionsTest;
-		public var styleFunctions:StyleFunctionsTest;
 		public var displayFunctions:DisplayFunctionsTest;
 		
-		public var component:ComponentTest;
-		//public var application:ApplicationTest;
-		public var button:ButtonTest;
-		public var listItem:DataChangeTest;
-		public var list:ListTest;
+		// styling
+		public var styleableSprite:DisplayStyleableTest;
+		public var styleFunctions:StyleFunctionsTest;
+		
+		// measurement
+		public var measurementFunctions:MeasurementFunctionsTest;
+		public var skinMeasurement:SkinMeasurementTest;
+		public var measuredBitmap:BitmapDisplayMeasurableTest;
+		public var measuredTextField:TextFieldDisplayMeasurableTest;
+		public var measuredSprite:DisplayMeasurableTest;
 		
 		// layouts
 		public var xyLayout:XYLayoutTest;

@@ -1,7 +1,7 @@
 package reflex.containers
 {
 	import reflex.data.IRange;
-	import reflex.events.PropertyEvent;
+	import reflex.binding.DataChange;
 	
 	public class Scroller extends Group
 	{
@@ -12,19 +12,13 @@ package reflex.containers
 		[Bindable(event="horizontalChange")]
 		public function get horizontal():IRange { return _horizontal; }
 		public function set horizontal(value:IRange):void {
-			if (_horizontal == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "horizontal", _horizontal, _horizontal = value);
+			DataChange.change(this, "horizontal", _horizontal, _horizontal = value);
 		}
 		
 		[Bindable(event="verticalChange")]
 		public function get vertical():IRange { return _vertical; }
 		public function set vertical(value:IRange):void {
-			if (_vertical == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "vertical", _vertical, _vertical = value);
+			DataChange.change(this, "vertical", _vertical, _vertical = value);
 		}
 		
 		/*

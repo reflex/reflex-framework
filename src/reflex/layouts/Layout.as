@@ -8,8 +8,8 @@ package reflex.layouts
 	import flash.utils.Dictionary;
 	
 	import reflex.binding.Bind;
-	import reflex.events.PropertyEvent;
-	import reflex.events.RenderPhase;
+	import reflex.binding.DataChange;
+	import reflex.invalidation.Invalidation;
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveEventListeners;
 	import reflex.metadata.resolveLayoutProperties;
@@ -33,10 +33,7 @@ package reflex.layouts
 		public function get target():IEventDispatcher { return _target; }
 		public function set target(value:IEventDispatcher):void
 		{
-			if (_target == value) {
-				return;
-			}
-			PropertyEvent.dispatchChange(this, "target", _target, _target = value);
+			DataChange.change(this, "target", _target, _target = value);
 		}
 		
 		public function Layout() {
@@ -70,8 +67,8 @@ package reflex.layouts
 		
 		private function onInvalidateLayout(object:*):void {
 			if (target is DisplayObject) {
-				RenderPhase.invalidate(target as DisplayObject, "measure");
-				RenderPhase.invalidate(target as DisplayObject, "layout");
+				Invalidation.invalidate(target as DisplayObject, "measure");
+				Invalidation.invalidate(target as DisplayObject, "layout");
 			}
 		}
 		

@@ -1,4 +1,4 @@
-package reflex.events
+package reflex.invalidation
 {
 	import flash.display.DisplayObject;
 	import flash.display.Stage;
@@ -10,7 +10,7 @@ package reflex.events
 	/**
 	 * @alpha
 	 **/
-	public class RenderPhase
+	public class Invalidation
 	{
 		
 		private static var rendering:Boolean = false;
@@ -21,13 +21,13 @@ package reflex.events
 		
 		public static function registerPhase(type:String, priority:int = 0, ascending:Boolean = true):Boolean
 		{
-			var phase:RenderPhase;
+			var phase:Invalidation;
 			if (phaseIndex[type] != null) {
 				phase = phaseIndex[type];
 				phase.priority = priority;
 				phase.ascending = ascending;
 			} else {
-				phase = new RenderPhase(type, priority, ascending);
+				phase = new Invalidation(type, priority, ascending);
 				phaseIndex[type] = phase;
 				phaseList.push(phase);
 			}
@@ -46,7 +46,7 @@ package reflex.events
 				throw new Error("DisplayObject cannot be invalidated in unknown phase '" + type + "'.");
 			}
 			
-			var phase:RenderPhase = phaseIndex[type];
+			var phase:Invalidation = phaseIndex[type];
 			if (phase.hasDisplay(display)) {
 				return;
 			}
@@ -77,7 +77,7 @@ package reflex.events
 		{
 			rendering = true;
 			validateStages();
-			for each (var phase:RenderPhase in phaseList) {
+			for each (var phase:Invalidation in phaseList) {
 				phase.render();
 			}
 			rendering = false;
@@ -124,7 +124,7 @@ package reflex.events
 			var display:DisplayObject = DisplayObject(event.target);
 			displayDepths[display] = getDepth(display);
 			
-			for each (var phase:RenderPhase in phaseList) {
+			for each (var phase:Invalidation in phaseList) {
 				if (phase.hasDisplay(display)) {
 					phase.removeDisplay(display);
 					invalidate(display, phase.type);
@@ -137,7 +137,7 @@ package reflex.events
 			var display:DisplayObject = DisplayObject(event.target);
 			delete displayDepths[display];
 			
-			for each (var phase:RenderPhase in phaseList) {
+			for each (var phase:Invalidation in phaseList) {
 				if (phase.hasDisplay(display)) {
 					phase.removeDisplay(display);
 					phase.addDisplay(display, -1);
@@ -155,7 +155,7 @@ package reflex.events
 		private var current:Dictionary = new Dictionary(true);
 		private var invalidated:Dictionary = new Dictionary(true);
 		
-		public function RenderPhase(type:String, priority:int = 0, ascending:Boolean = true)
+		public function Invalidation(type:String, priority:int = 0, ascending:Boolean = true)
 		{
 			_type = type;
 			this.ascending = ascending;

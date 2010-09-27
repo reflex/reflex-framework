@@ -12,7 +12,6 @@
 	
 	<!-- behaviors -->
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
-	<component id="DragBehavior" class="reflex.behaviors.DragBehavior"/>
 	<component id="ListBehavior" class="reflex.behaviors.ListBehavior"/>
 	<component id="ListSelectBehavior" class="reflex.behaviors.ListSelectBehavior"/>
 	<component id="SlideBehavior" class="reflex.behaviors.SlideBehavior"/>

@@ -19,6 +19,7 @@ package reflex.containers
 		 * however children added manually will not be measured or positioned by the container.
 		 */
 		function get content():IList;
+		function set content(value:*):void;
 		
 		/**
 		 * The layout used to measure and position this container's children.
