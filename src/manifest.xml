@@ -42,7 +42,7 @@
 	<!-- display -->
 	<!--<component id="Text" class="reflex.display.Text" />-->
 	<component id="BitmapImage" class="reflex.graphics.BitmapImage"/>
-	<component id="TextFieldDisplay" class="reflex.display.TextFieldDisplay"/>
+	<component id="TextFieldDisplay" class="reflex.text.TextFieldDisplay"/>
 	
 	<!-- graphics -->
 	<component id="IDrawable" class="reflex.graphics.IDrawable"/>
