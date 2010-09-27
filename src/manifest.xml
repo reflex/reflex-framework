@@ -6,11 +6,15 @@
 	<component id="Group" class="reflex.containers.Group"/>
 	<component id="Scroller" class="reflex.containers.Scroller"/>
 	<component id="Component" class="reflex.components.Component"/>
+	<component id="ListDefinition" class="reflex.components.ListDefinition"/>
+	<component id="ButtonDefinition" class="reflex.components.ButtonDefinition"/>
+	<component id="ListItemDefinition" class="reflex.components.ListItemDefinition"/>
 	
 	<!-- skins -->
 	<component id="Skin" class="reflex.skins.Skin"/>
 	
 	<!-- behaviors -->
+	<component id="CompositeBehavior" class="reflex.behaviors.CompositeBehavior"/>
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
 	<component id="ListBehavior" class="reflex.behaviors.ListBehavior"/>
 	<component id="ListSelectBehavior" class="reflex.behaviors.ListSelectBehavior"/>
@@ -28,13 +32,17 @@
 	<component id="HorizontalLayout" class="reflex.layouts.HorizontalLayout"/>
 	<component id="DockLayout" class="reflex.layouts.DockLayout"/>
 	
+	<!-- data -->
+	<component id="Position" class="reflex.data.Position" />
+	<component id="ScrollPosition" class="reflex.data.ScrollPosition"/>
+	
 	<!-- measurement -->
 	<component id="Measurements" class="reflex.measurement.Measurements"/>
 	
 	<!-- display -->
 	<!--<component id="Text" class="reflex.display.Text" />-->
 	<component id="BitmapImage" class="reflex.graphics.BitmapImage"/>
-	
+	<component id="TextFieldDisplay" class="reflex.display.TextFieldDisplay"/>
 	
 	<!-- graphics -->
 	<component id="IDrawable" class="reflex.graphics.IDrawable"/>
