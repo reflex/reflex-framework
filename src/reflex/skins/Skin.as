@@ -6,6 +6,7 @@ package reflex.skins
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
@@ -14,16 +15,17 @@ package reflex.skins
 	import mx.events.CollectionEventKind;
 	
 	import reflex.binding.Bind;
+	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
 	import reflex.components.IStateful;
 	import reflex.containers.IContainer;
-	import reflex.templating.addItemsAt;
-	import reflex.binding.DataChange;
 	import reflex.invalidation.Invalidation;
 	import reflex.layouts.ILayout;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurements;
 	import reflex.measurement.Measurements;
+	import reflex.metadata.resolveBindings;
+	import reflex.templating.addItemsAt;
 	
 	/**
 	 * Skin is a convenient base class for many skins, a swappable graphical
@@ -191,6 +193,7 @@ package reflex.skins
 			//Bind.addBinding(this, "state", this, "target.state");
 			//addEventListener(MEASURE, onMeasure, false, 0, true);
 			addEventListener(LAYOUT, onLayout, false, 0, true);
+			reflex.metadata.resolveBindings(this);
 		}
 		
 		
@@ -258,12 +261,12 @@ package reflex.skins
 				Invalidation.invalidate(target, LAYOUT);
 			}
 			
-			DataChange.change(this, "target", oldValue, _target);
 			var items:Array = [];
 			for (var i:int = 0; i < _content.length; i++) {
 				items.push(_content.getItemAt(i));
 			}
 			reset(items);
+			DataChange.change(this, "target", oldValue, _target);
 		}
 		
 		protected function init():void
