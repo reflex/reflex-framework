@@ -116,6 +116,8 @@
 		public function get enabled():Boolean { return _enabled; }
 		public function set enabled(value:Boolean):void {
 			DataChange.change(this, "enabled", _enabled, _enabled = value);
+            mouseEnabled = _enabled;
+            mouseChildren = _enabled;
 		}
 		
 		// IStateful implementation
