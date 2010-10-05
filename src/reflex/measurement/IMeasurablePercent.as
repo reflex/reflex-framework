@@ -6,13 +6,6 @@ package reflex.measurement
 	 */
 	public interface IMeasurablePercent
 	{
-		/*
-		function get width():Number;
-		function set width(value:Number):void;
-		
-		function get height():Number;
-		function set height(value:Number):void;
-		*/
 		
 		/**
 		 * Holds an object's preference for width as a percentage (0-100).

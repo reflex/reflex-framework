@@ -84,28 +84,28 @@ package reflex.layouts
 				var verticalCenter:Number = resolveStyle(child, "verticalCenter") as Number;
 				
 				if(hasStyle(child, "left") && hasStyle(child, "right")) {
-					child.x = left;
+					child.x = Math.round(left);
 					width = rectangle.width - child.x - right;
 				} else if(hasStyle(child, "left")) {
-					child.x = left;
+					child.x = Math.round(left);
 				} else if(hasStyle(child, "right")) {
-					child.x = rectangle.width - width - right;
+					child.x = Math.round(rectangle.width - width - right);
 				} else if(hasStyle(child, "horizontalCenter")) {
-					child.x = rectangle.width/2 - width/2 + horizontalCenter;
+					child.x = Math.round(rectangle.width/2 - width/2 + horizontalCenter);
 				}
 				
 				if(hasStyle(child, "top") && hasStyle(child, "bottom")) {
-					child.y = top;
+					child.y = Math.round(top);
 					height = rectangle.height - child.y - bottom;
 				} else if(hasStyle(child, "top")) {
-					child.y = top;
+					child.y = Math.round(top);
 				} else if(hasStyle(child, "bottom")) {
-					child.y = rectangle.height - height - bottom;
+					child.y = Math.round(rectangle.height - height - bottom);
 				} else if(hasStyle(child, "verticalCenter")) {
-					child.y = rectangle.height/2 - height/2 + verticalCenter;
+					child.y = Math.round(rectangle.height/2 - height/2 + verticalCenter);
 				}
 				
-				reflex.measurement.setSize(child, width, height);
+				reflex.measurement.setSize(child, Math.round(width), Math.round(height));
 			}
 		}
 		

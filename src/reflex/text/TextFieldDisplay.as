@@ -1,6 +1,7 @@
 ﻿package reflex.text
 {
 	import flash.text.TextField;
+	import flash.text.TextFormat;
 	
 	import reflex.binding.DataChange;
 	import reflex.measurement.IMeasurable;
@@ -25,8 +26,20 @@
 		private var _percentWidth:Number;
 		private var _percentHeight:Number;
 		
-		protected var unscaledWidth:Number = 160;
-		protected var unscaledHeight:Number = 22;
+		private var _unscaledWidth:Number = 160;
+		private var _unscaledHeight:Number = 22;
+		
+		protected function get unscaledWidth():Number { return _unscaledWidth; }
+		protected function set unscaledWidth(value:Number):void {
+			_unscaledWidth = value;
+			super.width = _unscaledWidth;
+		}
+		
+		protected function get unscaledHeight():Number { return _unscaledHeight; }
+		protected function set unscaledHeight(value:Number):void {
+			_unscaledHeight = value;
+			super.height = _unscaledHeight;
+		}
 		
 		public function TextFieldDisplay() {
 			super();
@@ -35,6 +48,19 @@
 			_measured = new Measurements(this, 160, 22);
 		}
 		
+		override public function set text(value:String):void {
+			if(value == null) { 
+				DataChange.change(this, "text", super.text, null);
+				super.text = "";
+			} else {
+				DataChange.change(this, "text", super.text, super.text = value);
+			}
+		}
+		
+		override public function set defaultTextFormat(value:TextFormat):void {
+			DataChange.change(this, "defaultTextFormat", super.defaultTextFormat, super.defaultTextFormat = value);
+			super.text = text;
+		}
 		
 		// IStyleable implementation
 		
@@ -95,6 +121,7 @@
 		/**
 		 * @inheritDoc
 		 */
+		[PercentProxy("percentWidth")]
 		[Bindable(event="widthChange", noEvent)]
 		override public function get width():Number { return unscaledWidth; }
 		override public function set width(value:Number):void {
@@ -105,6 +132,7 @@
 		/**
 		 * @inheritDoc
 		 */
+		[PercentProxy("percentHeight")]
 		[Bindable(event="heightChange", noEvent)]
 		override public function get height():Number { return unscaledHeight; }
 		override public function set height(value:Number):void {

@@ -6,6 +6,7 @@ package reflex.collections
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
 	
+	[DefaultProperty("source")]
 	public class SimpleCollection extends EventDispatcher implements IList
 	{
 		

@@ -17,7 +17,7 @@
 	<component id="CompositeBehavior" class="reflex.behaviors.CompositeBehavior"/>
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
 	<component id="ListBehavior" class="reflex.behaviors.ListBehavior"/>
-	<component id="ListSelectBehavior" class="reflex.behaviors.ListSelectBehavior"/>
+	<component id="ListSelectionBehavior" class="reflex.behaviors.ListSelectionBehavior"/>
 	<component id="SlideBehavior" class="reflex.behaviors.SlideBehavior"/>
 	<component id="SelectBehavior" class="reflex.behaviors.SelectBehavior"/>
 	<component id="StepBehavior" class="reflex.behaviors.StepBehavior"/>
@@ -33,8 +33,12 @@
 	<component id="DockLayout" class="reflex.layouts.DockLayout"/>
 	
 	<!-- data -->
-	<component id="Position" class="reflex.data.Position" />
+	<component id="Position" class="reflex.data.Position"/>
 	<component id="ScrollPosition" class="reflex.data.ScrollPosition"/>
+	<component id="Selection" class="reflex.data.Selection"/>
+	
+	<!-- collections -->
+	<component id="SimpleCollection" class="reflex.collections.SimpleCollection" />
 	
 	<!-- measurement -->
 	<component id="Measurements" class="reflex.measurement.Measurements"/>
@@ -43,6 +47,7 @@
 	<!--<component id="Text" class="reflex.display.Text" />-->
 	<component id="BitmapImage" class="reflex.graphics.BitmapImage"/>
 	<component id="TextFieldDisplay" class="reflex.text.TextFieldDisplay"/>
+	<component id="Text" class="reflex.text.Text" />
 	
 	<!-- graphics -->
 	<component id="IDrawable" class="reflex.graphics.IDrawable"/>

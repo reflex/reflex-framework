@@ -12,13 +12,14 @@ package reflex.templating
 	 */
 	public function getDataRenderer(container:Object, data:*, template:Object):Object
 	{
-		var instance:Object;
+		var instance:*;
 		if (template is IDataTemplate) {
 			instance = (template as IDataTemplate).createDisplayObject(data);
 		} else if (template is IFactory) {
 			instance = (template as IFactory).newInstance();
 		} else if (template is Class) {
-			instance = new (template as Class);
+			var C:Class = template as Class;
+			instance = new C();
 		} else if (template is Function) {
 			instance = (template as Function)(data);
 		} else if (data is DisplayObject) {

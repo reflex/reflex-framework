@@ -27,11 +27,11 @@ package reflex.text
 		/**
 		 * @private
 		 */
-		[CommitProperties(target="text")]
+		[CommitProperties(target="text, defaultTextFormat")]
 		public function measure(event:Event):void {
 			var metrics:TextLineMetrics = this.getLineMetrics(0);
-			measured.width = metrics.width;
-			measured.height = 12;
+			measured.width = metrics.width + metrics.x*2;
+			measured.height = metrics.height + metrics.descent;
 		}
 		
 	}

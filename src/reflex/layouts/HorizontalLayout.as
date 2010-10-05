@@ -37,15 +37,22 @@ package reflex.layouts
 		override public function update(children:Array, rectangle:Rectangle):void
 		{
 			super.update(children, rectangle);
-			var position:Number = gap/2;
-			var length:int = children.length;
-			for(var i:int = 0; i < length; i++) {
-				var child:Object = children[i];
-				var width:Number = reflex.measurement.resolveWidth(child);
-				var height:Number = reflex.measurement.resolveHeight(child);
-				child.x = position;
-				child.y = rectangle.height/2 - height/2;
-				position += width + gap;
+			if(children) {
+				// this takes a few passes for percent-based measurement. we can probably speed it up later
+				var availableSpace:Point = reflex.measurement.calculateAvailableSpace(children, rectangle);
+				var percentageTotals:Point = reflex.measurement.calculatePercentageTotals(children);
+				
+				var position:Number = gap/2;
+				var length:int = children.length;
+				for(var i:int = 0; i < length; i++) {
+					var child:Object = children[i];
+					var width:Number = reflex.measurement.resolveWidth(child, availableSpace.x - gap*length, percentageTotals.x);  // calculate percentWidths based on available width and normalized percentages
+					var height:Number = reflex.measurement.resolveHeight(child, rectangle.height); // calculate percentHeights based on full height and with no normalization
+					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					child.x = Math.round(position);
+					child.y = Math.round(rectangle.height/2 - height/2);
+					position += width + gap;
+				}
 			}
 		}
 		

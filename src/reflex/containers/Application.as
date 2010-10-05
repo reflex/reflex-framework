@@ -34,6 +34,7 @@ package reflex.containers
 		{
 			width = stage.stageWidth;
 			height = stage.stageHeight;
+			//setSize(stage.stageWidth, stage.stageHeight);
 		}
 	}
 }

@@ -14,6 +14,7 @@ package reflex.containers
 	import reflex.components.IStateful;
 	import reflex.display.Display;
 	import reflex.invalidation.Invalidation;
+	import reflex.layouts.BasicLayout;
 	import reflex.layouts.ILayout;
 	import reflex.templating.addItemsAt;
 	
@@ -26,7 +27,7 @@ package reflex.containers
 	[Style(name="dock")]
 	[Style(name="align")]
 	
-	[Event(name="initialize", type="reflex.invalidation.Invalidation")]
+	[Event(name="initialize", type="flash.events.Event")]
 	
 	[DefaultProperty("content")]
 	
@@ -63,7 +64,7 @@ package reflex.containers
 				//_template = new ReflexDataTemplate();
 			}
 			if (_layout == null) {
-				//_layout = new XYLayout();
+				_layout = new BasicLayout(); // need to move this to component library
 			}
 			
 			addEventListener(Event.ADDED, onAdded, false, 0, true);
@@ -176,6 +177,11 @@ package reflex.containers
 			Invalidation.invalidate(this, LAYOUT);
 			//dispatchEvent( new Event("templateChange") );
 			DataChange.change(this, "template", oldTemplate, _template);
+		}
+		
+		override public function setSize(width:Number, height:Number):void {
+			super.setSize(width, height);
+			Invalidation.invalidate(this, LAYOUT);
 		}
 		
 		private function onAdded(event:Event):void {

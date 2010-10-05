@@ -3,8 +3,10 @@ package reflex.components
 	
 	import mx.collections.IList;
 	
-	import reflex.data.IRange;
 	import reflex.binding.DataChange;
+	import reflex.data.IPosition;
+	import reflex.data.IRange;
+	import reflex.data.ISelection;
 	import reflex.layouts.ILayout;
 	import reflex.layouts.VerticalLayout;
 	
@@ -17,7 +19,8 @@ package reflex.components
 		private var _layout:ILayout;
 		private var _dataProvider:IList;
 		private var _template:Object;
-		private var _position:IRange;
+		private var _position:IPosition;
+		private var _selection:ISelection
 		
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
@@ -37,9 +40,15 @@ package reflex.components
 			DataChange.change(this, "template", _template, _template = value);
 		}
 		
+		[Bindable(event="selectionChange")]
+		public function get selection():ISelection { return _selection; }
+		public function set selection(value:ISelection):void {
+			DataChange.change(this, "selection", _selection, _selection = value);
+		}
+		
 		[Bindable(event="positionChange")]
-		public function get position():IRange { return _position; }
-		public function set position(value:IRange):void {
+		public function get position():IPosition { return _position; }
+		public function set position(value:IPosition):void {
 			DataChange.change(this, "position", _position, _position = value);
 		}
 		

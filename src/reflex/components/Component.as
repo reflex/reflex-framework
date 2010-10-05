@@ -47,6 +47,7 @@
 		
 		public function Component()
 		{
+			super();
 			_behaviors = new SimpleCollection();
 			reflex.metadata.resolveCommitProperties(this);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
@@ -115,6 +116,7 @@
 		[Bindable(event="enabledChange")]
 		public function get enabled():Boolean { return _enabled; }
 		public function set enabled(value:Boolean):void {
+			mouseEnabled = mouseChildren = value;
 			DataChange.change(this, "enabled", _enabled, _enabled = value);
 		}
 		

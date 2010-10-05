@@ -11,6 +11,7 @@ package reflex.graphics
 	import mx.events.PropertyChangeEvent;
 	
 	import reflex.binding.DataChange;
+	import reflex.measurement.IMeasurablePercent;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.styles.IStyleable;
 	
@@ -22,7 +23,7 @@ package reflex.graphics
 	[Style(name="verticalCenter")]
 	[Style(name="dock")]
 	[Style(name="align")]
-	public class Rect extends EventDispatcher implements IDrawable, IStyleable
+	public class Rect extends EventDispatcher implements IDrawable, IStyleable, IMeasurablePercent
 	{
 		
 		// todo: drawing still needs invalidation, but InvalidationEvent is based on DisplayObject
@@ -35,6 +36,8 @@ package reflex.graphics
 		private var _y:Number = 0;
 		private var _width:Number = 0;
 		private var _height:Number = 0;
+		private var _percentWidth:Number;
+		private var _percentHeight:Number;
 		private var _radiusX:Number = 0;
 		private var _radiusY:Number = 0;
 		
@@ -42,43 +45,56 @@ package reflex.graphics
 		public function get x():Number { return _x; }
 		public function set x(value:Number):void {
 			DataChange.change(this, "x", _x, _x = value);
-			//render();
 		}
 		
 		[Bindable(event="yChange")]
 		public function get y():Number { return _y; }
 		public function set y(value:Number):void {
 			DataChange.change(this, "y", _y, _y = value);
-			//render();
 		}
 		
-		
+		[PercentProxy("percentWidth")]
 		[Bindable(event="widthChange")]
 		public function get width():Number { return _width; }
 		public function set width(value:Number):void {
 			DataChange.change(this, "width", _width, _width = value);
-			//render();
 		}
 		
+		[PercentProxy("percentWidth")]
 		[Bindable(event="heightChange")]
 		public function get height():Number { return _height; }
 		public function set height(value:Number):void {
 			DataChange.change(this, "height", _height, _height = value);
-			//render();
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		[Bindable(event="percentWidthChange", noEvent)]
+		public function get percentWidth():Number { return _percentWidth; }
+		public function set percentWidth(value:Number):void {
+			DataChange.change(this, "percentWidth", _percentWidth, _percentWidth = value);
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		[Bindable(event="percentHeightChange", noEvent, noEvent)]
+		public function get percentHeight():Number { return _percentHeight; }
+		public function set percentHeight(value:Number):void {
+			DataChange.change(this, "percentHeight", _percentHeight, _percentHeight = value);
 		}
 		
 		[Bindable(event="radiusXChange")]
 		public function get radiusX():Number { return _radiusX; }
 		public function set radiusX(value:Number):void {
 			DataChange.change(this, "radiusX", _radiusX, _radiusX = value);
-			//render();
 		}
 		
 		[Bindable(event="radiusYChange")]
 		public function get radiusY():Number { return _radiusY; }
 		public function set radiusY(value:Number):void {
 			DataChange.change(this, "radiusY", _radiusY, _radiusY = value);
-			//render();
 		}
 		
 		// topLeftRadiusX
@@ -132,19 +148,19 @@ package reflex.graphics
 		// rect
 		
 		private var _fill:*;
+		
+		[Bindable(event="fillChange")]
 		public function get fill():* { return _fill; }
 		public function set fill(value:*):void {
-			_fill = value;
-			// update this to use binding correctly
-			(_fill as IEventDispatcher).addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, propertyChangeHandler);
-			//render();
+			DataChange.change(this, "fill", _fill, _fill = value);
 		}
 		
 		private var _stroke:*;
+		
+		[Bindable(event="strokeChange")]
 		public function get stroke():* { return _stroke; }
 		public function set stroke(value:*):void {
-			_stroke = value;
-			//render();
+			DataChange.change(this, "stroke", _stroke, _stroke = value);
 		}
 		
 		private var _target:Object;
@@ -154,7 +170,6 @@ package reflex.graphics
 			if(_target != null) { // this needs to handle reassignment better (to clean up old bindings/listeners)
 				reflex.metadata.resolveCommitProperties(this);
 			}
-			//render();
 		}
 		
 		public function Rect(target:Object = null)
@@ -166,7 +181,8 @@ package reflex.graphics
 		/**
 		 * @private
 		 */
-		[CommitProperties(target="x, y, width, height, radiusX, radiusY, fill, stroke, target")]
+		// we need to handle custom fill/stroke properties somehow
+		[CommitProperties(target="x, y, width, height, radiusX, radiusY, fill, fill.color, fill.alpha, stroke, stroke.color, stroke.alpha, stroke.weight, target")]
 		public function updateRender(event:Event):void {
 			render();
 		}
@@ -187,10 +203,6 @@ package reflex.graphics
 				graphics.drawRoundRect(_x, _y, _width, _height, _radiusX, _radiusY);
 				if(fill != null) { fill.end(graphics); }
 			}
-		}
-		
-		private function propertyChangeHandler(event:PropertyChangeEvent):void {
-			render();
 		}
 		
 	}
