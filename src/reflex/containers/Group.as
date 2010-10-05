@@ -27,7 +27,8 @@ package reflex.containers
 	[Style(name="dock")]
 	[Style(name="align")]
 	
-	[Event(name="initialize", type="reflex.invalidation.Invalidation")]
+	[Event(name="initialize", type="flash.events.Event")]
+	[Event(name="create", type="flash.events.Event")]
 	
 	[DefaultProperty("content")]
 	
