@@ -28,6 +28,7 @@ package reflex.containers
 	[Style(name="align")]
 	
 	[Event(name="initialize", type="flash.events.Event")]
+	[Event(name="create", type="flash.events.Event")]
 	
 	[DefaultProperty("content")]
 	

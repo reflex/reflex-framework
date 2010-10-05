@@ -118,6 +118,8 @@
 		public function set enabled(value:Boolean):void {
 			mouseEnabled = mouseChildren = value;
 			DataChange.change(this, "enabled", _enabled, _enabled = value);
+            mouseEnabled = _enabled;
+            mouseChildren = _enabled;
 		}
 		
 		// IStateful implementation
