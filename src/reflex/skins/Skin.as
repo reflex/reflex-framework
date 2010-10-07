@@ -47,7 +47,7 @@ package reflex.skins
 		private var _layout:ILayout;
 		private var _states:Array;
 		private var _currentState:String; 
-		//private var _transitions:Array;
+		private var _transitions:Array;
 		private var _template:Object; // = new ReflexDataTemplate();
 		
 		private var unscaledWidth:Number = 160;
@@ -154,6 +154,22 @@ package reflex.skins
 			DataChange.change(this, "template", _template, _template = value);
 		}
 		
+		
+		[Bindable(event="statesChange")]
+		public function get states():Array { return _states; }
+		public function set states(value:Array):void {
+			if (_states == value) {
+				return;
+			}
+			DataChange.change(this, "states", _states, _states = value);
+		}
+		
+		[Bindable(event="transitionsChange")]
+		public function get transitions():Array { return _transitions; }
+		public function set transitions(value:Array):void {
+			DataChange.change(this, "transitions", _transitions, _transitions = value);
+		}
+		
 		[Bindable(event="currentStateChange")]
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void {
@@ -163,13 +179,13 @@ package reflex.skins
 			DataChange.change(this, "currentState", _currentState, _currentState = value);
 		}
 		
-		[Bindable(event="statesChange")]
-		public function get states():Array { return _states; }
-		public function set states(value:Array):void {
-			if (_states == value) {
-				return;
+		public function hasState(state:String):Boolean {
+			for each(var s:Object in states) {
+				if(s.name == state) {
+					return true;
+				}
 			}
-			DataChange.change(this, "states", _states, _states = value);
+			return false;
 		}
 		
 		//protected var containerPart:DisplayObjectContainer;

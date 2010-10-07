@@ -27,7 +27,7 @@ package reflex.layouts
 			var layout:HorizontalLayout = new HorizontalLayout();
 			layout.gap = 10;
 			var point:Point = layout.measure([child1, child2]);
-			Assert.assertEquals(60, point.x);
+			Assert.assertEquals(50, point.x);
 			Assert.assertEquals(20, point.y);
 		}
 		
@@ -49,8 +49,8 @@ package reflex.layouts
 			var layout:HorizontalLayout = new HorizontalLayout();
 			layout.gap = 10;
 			layout.update([child1, child2], rectangle);
-			Assert.assertEquals(5, child1.x);
-			Assert.assertEquals(35, child2.x);
+			Assert.assertEquals(0, child1.x);
+			Assert.assertEquals(30, child2.x);
 		}
 		
 		[Test]

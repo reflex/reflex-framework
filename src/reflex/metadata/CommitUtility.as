@@ -52,6 +52,8 @@ package reflex.metadata
 			}
 		}
 		
+		// this is still a little hacky, but works for now
+		// + it's in a good spot to clean up later
 		private function invalidationHandler(s1:Object, s2:Object = null, s3:Object = null, s4:Object = null):void {
 			//var binding:Binding = s1 as Binding;
 			if(s2 is IEventDispatcher) {

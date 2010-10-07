@@ -3,7 +3,7 @@ package reflex.containers
 	import reflex.data.IRange;
 	import reflex.binding.DataChange;
 	
-	public class Scroller extends Group
+	public class Scroller extends Container
 	{
 		
 		private var _horizontal:IRange;

@@ -1,13 +1,13 @@
 package reflex.display
 {
-	import reflex.containers.Group;
+	import reflex.containers.Container;
 	
 	public class GroupTest extends ContainerTestBase
 	{
 		
 		public function GroupTest() {
 			super();
-			C = Group;
+			C = Container;
 		}
 		
 		[Test(async)]

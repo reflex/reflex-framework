@@ -2,13 +2,15 @@
 <componentPackage>
 	
 	<!-- components -->
-	<component id="Application" class="reflex.containers.Application"/>
-	<component id="Group" class="reflex.containers.Group"/>
 	<component id="Scroller" class="reflex.containers.Scroller"/>
 	<component id="Component" class="reflex.components.Component"/>
 	<component id="ListDefinition" class="reflex.components.ListDefinition"/>
 	<component id="ButtonDefinition" class="reflex.components.ButtonDefinition"/>
 	<component id="ListItemDefinition" class="reflex.components.ListItemDefinition"/>
+	
+	<!-- containers -->
+	<component id="Application" class="reflex.containers.Application"/>
+	<component id="Container" class="reflex.containers.Container"/>
 	
 	<!-- skins -->
 	<component id="Skin" class="reflex.skins.Skin"/>
@@ -52,6 +54,7 @@
 	<!-- graphics -->
 	<component id="IDrawable" class="reflex.graphics.IDrawable"/>
 	<component id="Rect" class="reflex.graphics.Rect"/>
+	<component id="Line" class="reflex.graphics.Line"/>
 	
 	<!-- flex dependencies -->
 	<!-- <component id="FlexClasses" class="FlexClasses"/> -->

@@ -27,7 +27,7 @@ package reflex.layouts
 			layout.gap = 10;
 			var point:Point = layout.measure([child1, child2]);
 			Assert.assertEquals(20, point.x);
-			Assert.assertEquals(60, point.y);
+			Assert.assertEquals(50, point.y);
 		}
 		
 		// need to test percent-based measurement
@@ -48,8 +48,8 @@ package reflex.layouts
 			var layout:VerticalLayout = new VerticalLayout();
 			layout.gap = 10;
 			layout.update([child1, child2], rectangle);
-			Assert.assertEquals(5, child1.y);
-			Assert.assertEquals(35, child2.y);
+			Assert.assertEquals(0, child1.y);
+			Assert.assertEquals(30, child2.y);
 		}
 		
 		[Test]

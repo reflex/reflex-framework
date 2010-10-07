@@ -6,7 +6,7 @@ package reflex.behaviors
 	
 	import org.flexunit.asserts.assertEquals;
 	
-	import reflex.containers.Group;
+	import reflex.containers.Container;
 
 	public class ButtonBehaviorTest extends EventDispatcher
 	{

@@ -1,9 +1,5 @@
 package reflex.measurement
 {
-	import flash.display.DisplayObject;
-	
-	import reflex.graphics.IDrawable;
-	import reflex.graphics.Rect;
 	
 	public function setSize(child:Object, width:Number, height:Number):void
 	{

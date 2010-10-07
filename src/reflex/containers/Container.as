@@ -6,8 +6,11 @@ package reflex.containers
 	import flash.geom.Rectangle;
 	
 	import mx.collections.IList;
+	import mx.core.mx_internal;
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
+	import mx.states.IOverride;
+	import mx.states.State;
 	
 	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
@@ -16,7 +19,11 @@ package reflex.containers
 	import reflex.invalidation.Invalidation;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.ILayout;
+	import reflex.states.applyState;
+	import reflex.states.removeState;
 	import reflex.templating.addItemsAt;
+	
+	use namespace mx_internal; // oh shit
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -37,7 +44,7 @@ package reflex.containers
 	 * 
 	 * @alpha
 	 */
-	public class Group extends Display implements IContainer, IStateful
+	public class Container extends Display implements IContainer, IStateful
 	{
 		
 		static public const CREATE:String = "create";
@@ -56,16 +63,16 @@ package reflex.containers
 		private var renderers:Array;
 		
 		private var _states:Array;
+		private var _transitions:Array;
 		private var _currentState:String;
 		
-		
-		public function Group()
+		public function Container()
 		{
 			if (_template == null) {
 				//_template = new ReflexDataTemplate();
 			}
 			if (_layout == null) {
-				_layout = new BasicLayout(); // need to move this to component library
+				//_layout = new BasicLayout();
 			}
 			
 			addEventListener(Event.ADDED, onAdded, false, 0, true);
@@ -89,11 +96,30 @@ package reflex.containers
 			DataChange.change(this, "states", _states, _states = value);
 		}
 		
+		[Bindable(event="transitionsChange")]
+		public function get transitions():Array { return _transitions; }
+		public function set transitions(value:Array):void {
+			DataChange.change(this, "transitions", _transitions, _transitions = value);
+		}
+		
+		
 		
 		[Bindable(event="currentStateChange")]
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void {
+			// might need to add invalidation for this later
+			reflex.states.removeState(this, _currentState, states);
 			DataChange.change(this, "currentState", _currentState, _currentState = value);
+			reflex.states.applyState(this, _currentState, states);
+		}
+		
+		public function hasState(state:String):Boolean {
+			for each(var s:Object in states) {
+				if(s.name == state) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		/**
@@ -218,9 +244,7 @@ package reflex.containers
 					add(event.items, loc);
 					break;
 				case CollectionEventKind.REMOVE :
-					for each (child in event.items) {
-						removeChild(child);
-					}
+					remove(event.items, loc);
 					break;
 				case CollectionEventKind.REPLACE :
 					removeChild(event.items[1]);
@@ -236,7 +260,26 @@ package reflex.containers
 		
 		private function add(items:Array, index:int):void {
 			var children:Array = reflex.templating.addItemsAt(this, items, index, _template);
-			renderers.concat(children); // todo: correct ordering
+			
+			var length:int = items.length;
+			for(var i:int = 0; i < length; i++) {
+				renderers.splice(index+i, 0, items[i]);
+			}
+			
+			Invalidation.invalidate(this, MEASURE);
+			Invalidation.invalidate(this, LAYOUT);
+		}
+		
+		private function remove(items:Array, index:int):void {
+			// this isn't working with templating yet
+			var child:Object;
+			for each (child in items) {
+				removeChild(child as DisplayObject);
+				var index:int = renderers.indexOf(child);
+				renderers.splice(index, 1);
+			}
+			Invalidation.invalidate(this, MEASURE);
+			Invalidation.invalidate(this, LAYOUT);
 		}
 		
 		private function reset(items:Array):void {

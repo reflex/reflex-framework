@@ -23,35 +23,18 @@ package reflex.graphics
 	[Style(name="verticalCenter")]
 	[Style(name="dock")]
 	[Style(name="align")]
-	public class Rect extends GraphicBase implements IDrawable
+	public class Path extends GraphicBase implements IDrawable
 	{
 		
-		private var _radiusX:Number = 0;
-		private var _radiusY:Number = 0;
+		private var _data:String;
 		
 		
-		[Bindable(event="radiusXChange")]
-		public function get radiusX():Number { return _radiusX; }
-		public function set radiusX(value:Number):void {
-			DataChange.change(this, "radiusX", _radiusX, _radiusX = value);
+		[Bindable(event="dataChange")]
+		public function get data():String { return _data; }
+		public function set data(value:String):void {
+			DataChange.change(this, "data", _data, _data = value);
 		}
 		
-		[Bindable(event="radiusYChange")]
-		public function get radiusY():Number { return _radiusY; }
-		public function set radiusY(value:Number):void {
-			DataChange.change(this, "radiusY", _radiusY, _radiusY = value);
-		}
-		
-		// topLeftRadiusX
-		// topLeftRadiusY
-		// topRightRadiusX
-		// topRightRadiusY
-		// bottomRightRadiusX
-		// botomRightRadiusY
-		// bottomLeftRadiusX
-		// bottomLeftRadiusY
-		
-		// rect
 		
 		private var _fill:*;
 		private var _stroke:*;
@@ -69,7 +52,7 @@ package reflex.graphics
 		}
 		
 		
-		public function Rect()
+		public function Path()
 		{
 			super();
 		}
@@ -78,7 +61,7 @@ package reflex.graphics
 		 * @private
 		 */
 		// we need to handle custom fill/stroke properties somehow
-		[CommitProperties(target="x, y, width, height, radiusX, radiusY, fill, fill.color, fill.alpha, stroke, stroke.color, stroke.alpha, stroke.weight, target")]
+		[CommitProperties(target="x, y, width, height, data, fill, fill.color, fill.alpha, stroke, stroke.color, stroke.alpha, stroke.weight, target")]
 		public function updateRender(event:Event):void {
 			render();
 		}
@@ -86,7 +69,7 @@ package reflex.graphics
 		public function render():void {
 			var graphics:Vector.<Graphics> = reflex.graphics.resolveGraphics(target);
 			for each(var g:Graphics in graphics) {
-				g.clear(); // will fix this later
+				g.clear();
 				drawTo(g);
 			}
 		}
@@ -104,11 +87,9 @@ package reflex.graphics
 				} else {
 					graphics.beginFill(0, 0);
 				}
-				if(_radiusX > 0 || _radiusY > 0) {
-					graphics.drawRoundRect(x, y, width, height, _radiusX, _radiusY);
-				} else {
-					graphics.drawRect(x, y, width, height);
-				}
+				
+				//graphics.drawPath();
+				
 				if(fill != null) {
 					fill.end(graphics);
 				} else {
