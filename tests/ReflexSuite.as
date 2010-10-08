@@ -8,7 +8,7 @@ package
 	import reflex.behaviors.SlideBehaviorTest;
 	import reflex.behaviors.StepBehaviorTest;
 	import reflex.collections.SimpleCollectionTest;
-	import reflex.components.ApplicationTest;
+	//import reflex.components.ApplicationTest;
 	import reflex.components.ButtonTest;
 	import reflex.components.ComponentTest;
 	import reflex.components.ListItemTest;
@@ -37,7 +37,7 @@ package
 		
 		// components
 		public var component:ComponentTest;
-		public var application:ApplicationTest;
+		//public var application:ApplicationTest;
 		public var button:ButtonTest;
 		public var listItem:ListItemTest;
 		public var list:ListTest;

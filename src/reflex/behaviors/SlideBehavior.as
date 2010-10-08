@@ -7,9 +7,9 @@ package reflex.behaviors
 	import flash.geom.Point;
 	
 	import reflex.binding.DataChange;
+	import reflex.data.IPagingPosition;
 	import reflex.data.IPosition;
 	import reflex.data.IRange;
-	import reflex.data.IPagingPosition;
 	import reflex.data.Position;
 	import reflex.data.Range;
 	import reflex.invalidation.Invalidation;
@@ -20,11 +20,16 @@ package reflex.behaviors
 	public class SlideBehavior extends Behavior// extends StepBehavior
 	{
 		
+		static public const HORIZONTAL:String = "horizontal";
+		static public const VERTICAL:String = "vertical";
+		
 		private var _track:Object;
 		private var _thumb:Object;
 		private var _position:IPosition;
 		
 		public var page:Boolean = false;
+		public var layoutChildren:Boolean = true;
+		public var direction:String = HORIZONTAL;
 		
 		[Bindable]
 		[Binding(target="target.skin.track")]
@@ -47,10 +52,11 @@ package reflex.behaviors
 			DataChange.change(this, "position", _position, _position = value);
 		}
 		
-		public function SlideBehavior(target:IEventDispatcher = null, page:Boolean = false) {
+		public function SlideBehavior(target:IEventDispatcher = null, direction:String = "horizontal", page:Boolean = false) {
 			super(target);
+			this.direction = direction;
 			this.page = page;
-			//reflex.metadata.resolveCommitProperties(this);
+			updateUILayout();
 		}
 		
 		// behavior
@@ -58,47 +64,49 @@ package reflex.behaviors
 		[EventListener(type="click", target="track")]
 		public function onTrackPress(event:MouseEvent):void
 		{
+			var t:Object = target as Object;
 			if(page) {
-				var scroll:IPagingPosition = position as IPagingPosition;
-				if(scroll) {
-					var center:Number = thumb.x + thumb.width/2;
-					if(event.localX < center) {
-						scroll.value -= scroll.pageSize;
-					} else {
-						scroll.value += scroll.pageSize;
-					}
+				if(direction == HORIZONTAL) {
+					pagePosition(t.mouseX - track.x, track.width);
+				} else if(direction == VERTICAL) {
+					pagePosition(t.mouseY - track.y, track.height);
 				}
 			} else {
-				var percent:Number = event.localX/track.width;
-				position.value = (position.maximum-position.minimum)*percent + position.minimum;
+				if(direction == HORIZONTAL) {
+					jumpToPosition(t.mouseX - track.x, track.width);
+				} else if(direction == VERTICAL) {
+					jumpToPosition(t.mouseY - track.y, track.height);
+				}
 			}
-			
-			onPositionChange(null);
+			updateUIPosition();
 		}
 		
-		
-		private var tx:Number = 0;
 		
 		[EventListener(type="mouseDown", target="thumb")]
 		public function onThumbDown(event:MouseEvent):void
 		{
-			tx = thumb.mouseX;
-			target.addEventListener(Event.ENTER_FRAME, onUpdatePosition, false, 0, true);
+			target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
 			(target as Object).stage.addEventListener(MouseEvent.MOUSE_UP, onThumbUp, false, 0, true);
 			(target as Object).stage.addEventListener(Event.MOUSE_LEAVE, onThumbUp, false, 0, true);
 		}
 		
 		private function onThumbUp(event:MouseEvent):void {
-			target.removeEventListener(Event.ENTER_FRAME, onUpdatePosition, false);
+			target.removeEventListener(Event.ENTER_FRAME, onEnterFrame, false);
 			(target as Object).stage.removeEventListener(MouseEvent.MOUSE_UP, onThumbUp, false);
 			(target as Object).stage.removeEventListener(Event.MOUSE_LEAVE, onThumbUp, false);
 		}
 		
-		private function onUpdatePosition(event:Event):void {
-			var percent:Number = (track.mouseX-track.x)/(track.width-thumb.width);
-			var p:Number = (position.maximum-position.minimum)*percent + position.minimum;
-			position.value = Math.max(position.minimum, Math.min(position.maximum, p));
-			onPositionChange(null);
+		private function onEnterFrame(event:Event):void {
+			var percent:Number = 0;
+			var t:Object = target as Object;
+			if(direction == HORIZONTAL) {
+				percent = (t.mouseX - track.x)/track.width;
+			} else if(direction == VERTICAL) {
+				percent = (t.mouseY - track.y)/track.height;
+			}
+			var value:Number = (position.maximum-position.minimum)*percent + position.minimum;
+			position.value = Math.max(position.minimum, Math.min(position.maximum, value));
+			updateUIPosition();
 		}
 		
 		
@@ -106,13 +114,50 @@ package reflex.behaviors
 		
 		//[CommitProperties(properties="position.min, position.max, position.position, position.pageSize")]
 		public function onPositionChange(event:Event):void {
+			updateUIPosition();
+		}
+		
+		[EventListener(type="heightChange", target="target")]
+		public function onSizeChange(event:Event):void {
+			updateUILayout();
+		}
+		
+		private function pagePosition(v:Number, length:Number):void {
+			var scroll:IPagingPosition = position as IPagingPosition;
+			if(scroll) {
+				var center:Number = length/2;
+				if(v < center) {
+					scroll.value -= scroll.pageSize;
+				} else {
+					scroll.value += scroll.pageSize;
+				}
+			}
+		}
+		
+		private function jumpToPosition(v:Number, length:Number):void {
+			var percent:Number = v/length;
+			position.value = (position.maximum-position.minimum)*percent + position.minimum;
+		}
+		
+		private function updateUIPosition():void {
 			var percent:Number = (position.value-position.minimum)/(position.maximum-position.minimum);
-			thumb.x = track.x + (track.width-thumb.width) * percent;
+			if(direction == HORIZONTAL) {
+				thumb.x = track.x + (track.width-thumb.width) * percent;
+			} else if(direction == VERTICAL) {
+				thumb.y = track.y + (track.height-thumb.height) * percent;
+			}
 		}
 		
-		public function onPageSizeChange(event:Event):void {
-			
+		private function updateUILayout():void {
+			if(direction == HORIZONTAL) {
+				var h2:Number = (target as Object).height/2;
+				track.y = h2 - track.height/2;
+				thumb.y = h2 - thumb.height/2;
+			} else {
+				var w2:Number = (target as Object).width/2;
+				track.x = w2 - track.width/2;
+				thumb.x = w2 - thumb.width/2;
+			}
 		}
-		
 	}
 }

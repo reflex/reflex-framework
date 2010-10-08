@@ -45,7 +45,6 @@
 	<component id="Measurements" class="reflex.measurement.Measurements"/>
 	
 	<!-- display -->
-	<!--<component id="Text" class="reflex.display.Text" />-->
 	<component id="BitmapImage" class="reflex.graphics.BitmapImage"/>
 	<component id="TextFieldDisplay" class="reflex.text.TextFieldDisplay"/>
 	<component id="Text" class="reflex.text.Text" />
