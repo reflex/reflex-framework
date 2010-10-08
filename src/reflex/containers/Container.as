@@ -23,7 +23,7 @@ package reflex.containers
 	import reflex.states.removeState;
 	import reflex.templating.addItemsAt;
 	
-	use namespace mx_internal; // oh shit
+	//use namespace mx_internal;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -102,11 +102,12 @@ package reflex.containers
 			DataChange.change(this, "transitions", _transitions, _transitions = value);
 		}
 		
-		
-		
 		[Bindable(event="currentStateChange")]
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void {
+			if (_currentState == value) {
+				return;
+			}
 			// might need to add invalidation for this later
 			reflex.states.removeState(this, _currentState, states);
 			DataChange.change(this, "currentState", _currentState, _currentState = value);

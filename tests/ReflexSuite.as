@@ -7,6 +7,7 @@ package
 	import reflex.behaviors.SelectBehaviorTest;
 	import reflex.behaviors.SlideBehaviorTest;
 	import reflex.behaviors.StepBehaviorTest;
+	import reflex.collections.SimpleCollectionTest;
 	import reflex.components.ApplicationTest;
 	import reflex.components.ButtonTest;
 	import reflex.components.ComponentTest;
@@ -69,6 +70,9 @@ package
 		public var basicLayout:BasicLayoutTest;
 		public var verticalLayout:VerticalLayoutTest;
 		public var horizontalLayout:HorizontalLayoutTest;
+		
+		// collections
+		public var collection:SimpleCollectionTest;
 		
 	}
 }

@@ -69,9 +69,9 @@ package reflex.layouts
 			layout.gap = 5; // gap spacing is removed from available width
 			layout.update([child1, child2], new Rectangle(0, 0, 100, 100));
 			
-			Assert.assertEquals(45, child1.width);
+			Assert.assertEquals(48, child1.width);
 			Assert.assertEquals(100, child1.height);
-			Assert.assertEquals(45, child2.width);
+			Assert.assertEquals(48, child2.width);
 			Assert.assertEquals(100, child2.height);
 		}
 		
@@ -94,7 +94,7 @@ package reflex.layouts
 			
 			Assert.assertEquals(20, child1.width);
 			Assert.assertEquals(20, child1.height);
-			Assert.assertEquals(70, child2.width);
+			Assert.assertEquals(75, child2.width);
 			Assert.assertEquals(100, child2.height);
 		}
 		

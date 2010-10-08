@@ -42,7 +42,6 @@ package reflex.layouts
 				// this takes a few passes for percent-based measurement. we can probably speed it up later
 				var availableSpace:Point = reflex.measurement.calculateAvailableSpace(children, rectangle);
 				var percentageTotals:Point = reflex.measurement.calculatePercentageTotals(children);
-				//availableSpace.x = 
 				
 				var position:Number = edging ? gap/2 : 0;
 				var length:int = children.length;

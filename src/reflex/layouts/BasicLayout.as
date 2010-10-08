@@ -74,8 +74,8 @@ package reflex.layouts
 		{
 			super.update(children, rectangle);
 			for each(var child:Object in children) {
-				var width:Number = resolveWidth(child);
-				var height:Number = resolveHeight(child);
+				var width:Number = resolveWidth(child, rectangle.width);
+				var height:Number = resolveHeight(child, rectangle.height);
 				var left:Number = resolveStyle(child, "left") as Number;
 				var right:Number = resolveStyle(child, "right") as Number;
 				var top:Number = resolveStyle(child, "top") as Number;

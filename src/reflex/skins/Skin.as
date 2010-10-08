@@ -26,6 +26,8 @@ package reflex.skins
 	import reflex.measurement.Measurements;
 	import reflex.metadata.resolveBindings;
 	import reflex.templating.addItemsAt;
+	import reflex.states.removeState;
+	import reflex.states.applyState;
 	
 	/**
 	 * Skin is a convenient base class for many skins, a swappable graphical
@@ -176,7 +178,10 @@ package reflex.skins
 			if (_currentState == value) {
 				return;
 			}
+			// might need to add invalidation for this later
+			reflex.states.removeState(this, _currentState, states);
 			DataChange.change(this, "currentState", _currentState, _currentState = value);
+			reflex.states.applyState(this, _currentState, states);
 		}
 		
 		public function hasState(state:String):Boolean {
@@ -347,12 +352,10 @@ package reflex.skins
 			var loc:int = event.location;
 			switch (event.kind) {
 				case CollectionEventKind.ADD :
-					add(event.items, loc++);
+					add(event.items, loc);
 					break;
 				case CollectionEventKind.REMOVE :
-					for each (child in event.items) {
-					_target.removeChild(child);
-					}
+					remove(event.items, loc);
 					break;
 				case CollectionEventKind.REPLACE :
 					_target.removeChild(event.items[1]);
@@ -367,8 +370,27 @@ package reflex.skins
 		
 		
 		private function add(items:Array, index:int):void {
-			var children:Array = reflex.templating.addItemsAt(_target, items, index, template);
-			renderers.concat(children); // todo: correct ordering
+			var children:Array = reflex.templating.addItemsAt(_target, items, index, _template);
+			
+			var length:int = items.length;
+			for(var i:int = 0; i < length; i++) {
+				renderers.splice(index+i, 0, items[i]);
+			}
+			
+			Invalidation.invalidate(_target, MEASURE);
+			Invalidation.invalidate(_target, LAYOUT);
+		}
+		
+		private function remove(items:Array, index:int):void {
+			// this isn't working with templating yet
+			var child:Object;
+			for each (child in items) {
+				_target.removeChild(child as DisplayObject);
+				var index:int = renderers.indexOf(child);
+				renderers.splice(index, 1);
+			}
+			Invalidation.invalidate(_target, MEASURE);
+			Invalidation.invalidate(_target, LAYOUT);
 		}
 		
 		private function reset(items:Array):void {

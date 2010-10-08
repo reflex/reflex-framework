@@ -24,7 +24,7 @@ package mx.states
 			//trace("init");
 		}
 		
-		public function apply(parent:DisplayObject):void {
+		public function apply(parent:Object):void {
 			var object:* = parent[propertyName];
 			item = (itemsFactory as DeferredInstanceFromFunction).getInstance();
 			if(object is IList) {
@@ -34,7 +34,7 @@ package mx.states
 			}*/
 		}
 		
-		public function remove(parent:DisplayObject):void {
+		public function remove(parent:Object):void {
 			var object:* = parent[propertyName];
 			if(object is IList) {
 				removeFromList(object as IList, item);

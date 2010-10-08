@@ -15,12 +15,12 @@ package mx.states
 			//trace("init");
 		}
 		
-		public function apply(parent:DisplayObject):void {
+		public function apply(parent:Object):void {
 			oldValue = parent[target].getStyle(name);
 			parent[target].setStyle(name, value);
 		}
 		
-		public function remove(parent:DisplayObject):void {
+		public function remove(parent:Object):void {
 			parent[target].setStyle(name, oldValue);
 			oldValue = null;
 		}

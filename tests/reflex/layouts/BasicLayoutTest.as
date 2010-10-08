@@ -233,5 +233,25 @@ package reflex.layouts
 			Assert.assertEquals(35, child2.y);
 		}
 		
+		[Test]
+		// percent-based layout test
+		public function testPercentLayout():void {
+			var child1:Display = new Display();
+			child1.percentWidth = 50;
+			child1.percentHeight = 60;
+			
+			var child2:Display = new Display();
+			child2.percentWidth = 70;
+			child2.percentHeight = 80;
+			
+			var layout:BasicLayout= new BasicLayout();
+			layout.update([child1, child2], new Rectangle(0, 0, 100, 100));
+			
+			Assert.assertEquals(50, child1.width);
+			Assert.assertEquals(60, child1.height);
+			Assert.assertEquals(70, child2.width);
+			Assert.assertEquals(80, child2.height);
+		}
+		
 	}
 }

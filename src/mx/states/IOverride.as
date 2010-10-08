@@ -6,8 +6,8 @@ package mx.states
 	{
 		
 		function initialize():void;
-		function apply(parent:DisplayObject):void;
-		function remove(parent:DisplayObject):void;
+		function apply(parent:Object):void;
+		function remove(parent:Object):void;
 		
 	}
 }
