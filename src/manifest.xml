@@ -2,11 +2,11 @@
 <componentPackage>
 	
 	<!-- components -->
-	<component id="Scroller" class="reflex.containers.Scroller"/>
 	<component id="Component" class="reflex.components.Component"/>
 	<component id="ListDefinition" class="reflex.components.ListDefinition"/>
 	<component id="ButtonDefinition" class="reflex.components.ButtonDefinition"/>
 	<component id="ListItemDefinition" class="reflex.components.ListItemDefinition"/>
+	<component id="ScrollerDefinition" class="reflex.components.ScrollerDefinition" />
 	
 	<!-- containers -->
 	<component id="Container" class="reflex.containers.Container"/>
@@ -45,6 +45,7 @@
 	<component id="Measurements" class="reflex.measurement.Measurements"/>
 	
 	<!-- display -->
+	<component id="Display" class="reflex.display.Display" />
 	<component id="BitmapImage" class="reflex.graphics.BitmapImage"/>
 	<component id="TextFieldDisplay" class="reflex.text.TextFieldDisplay"/>
 	<component id="Text" class="reflex.text.Text" />
@@ -60,7 +61,7 @@
 	<component id="SolidColorStroke" class="mx.graphics.SolidColorStroke" />
 	
 	<!-- states -->
-	<component id="State" class="mx.states.State" />
+	<!--<component id="State" class="mx.states.State" />-->
 	<component id="AddItems" class="mx.states.AddItems" />
 	<component id="SetProperty" class="mx.states.SetProperty" />
 	<component id="SetStyle" class="mx.states.SetStyle" />

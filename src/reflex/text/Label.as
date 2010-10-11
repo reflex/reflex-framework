@@ -15,6 +15,7 @@ package reflex.text
 	import flash.text.engine.TextLineValidity;
 	import flash.text.engine.TypographicCase;
 	
+	import reflex.binding.DataChange;
 	import reflex.display.Display;
 	import reflex.invalidation.Invalidation;
 	
@@ -30,18 +31,12 @@ package reflex.text
 	public class Label extends Display
 	{
 		public static const TEXT_RENDER:String = "textRender";
-		private static var textPhase:Boolean = Invalidation.registerPhase(TEXT_RENDER, 0x90, false);
-		
-		[Bindable]
-		public var freeform:Boolean = false;
-		
-		[Bindable]
-		public var editable:Boolean = false;
+		private static var textPhase:Boolean = Invalidation.registerPhase(TEXT_RENDER, 0, true);
 		
 		protected var fontFormat:FontDescription;
 		protected var format:ElementFormat;
 		protected var textElement:TextElement;
-		public var textBlock:TextBlock;
+		protected var textBlock:TextBlock;
 		protected var line:TextLine;
 		
 		
@@ -52,101 +47,83 @@ package reflex.text
 			textElement = new TextElement("");
 			textBlock = new TextBlock(textElement);
 			mouseChildren = false;
-			
-			initLayout();
-			addEventListener(Event.ADDED, onInit);
 			addEventListener(TEXT_RENDER, onTextRender);
-			
 		}
 		
-		public function get text():String
-		{
-			return textElement.text;
-		}
-		
-		public function set text(value:String):void
-		{
-			if (value == textElement.text) return;
-			textElement.text = value;
+		[Bindable(event="textChange")]
+		public function get text():String { return textElement.text; }
+		public function set text(value:String):void {
+			if (value == textElement.text) {
+				return;
+			}
 			Invalidation.invalidate(this, TEXT_RENDER);
+			DataChange.change(this, "text", textElement.text, textElement.text = value);
 		}
 		
-		public function get embed():Boolean
-		{
+		[Bindable(event="embedChange")]
+		public function get embed():Boolean {
 			return (fontFormat.fontLookup == FontLookup.EMBEDDED_CFF);
 		}
-		
-		public function set embed(value:Boolean):void
-		{
-			fontFormat.fontLookup = value ? FontLookup.EMBEDDED_CFF : FontLookup.DEVICE;
+		public function set embed(value:Boolean):void {
+			DataChange.change(this, "embed", fontFormat.fontLookup == FontLookup.EMBEDDED_CFF, fontFormat.fontLookup = value ? FontLookup.EMBEDDED_CFF : FontLookup.DEVICE);
 		}
 		
-		public function get color():uint
-		{
-			return format.color;
-		}
-		
-		public function set color(value:uint):void
-		{
-			if (value == format.color) return;
-			format.color = value;
+		[Bindable(event="colorChange")]
+		public function get color():uint { return format.color; }
+		public function set color(value:uint):void {
+			if (value == format.color) {
+				return;
+			}
 			Invalidation.invalidate(this, TEXT_RENDER);
+			DataChange.change(this, "color", format.color, format.color = value);
 		}
 		
-		public function get fontFamily():String
-		{
-			return fontFormat.fontName;
-		}
-		
-		public function set fontFamily(value:String):void
-		{
-			if (value == fontFormat.fontName) return;
-			fontFormat.fontName = value;
+		[Bindable(event="fontFamilyChange")]
+		public function get fontFamily():String { return fontFormat.fontName; }
+		public function set fontFamily(value:String):void {
+			if (value == fontFormat.fontName) {
+				return;
+			}
 			Invalidation.invalidate(this, TEXT_RENDER);
+			DataChange.change(this, "fontFamily", fontFormat.fontName, fontFormat.fontName = value);
 		}
 		
-		public function get fontSize():Number
-		{
-			return format.fontSize;
-		}
-		
-		public function set fontSize(value:Number):void
-		{
-			if (value == format.fontSize) return;
-			format.fontSize = value;
+		[Bindable(event="fontSizeChange")]
+		public function get fontSize():Number { return format.fontSize; }		
+		public function set fontSize(value:Number):void {
+			if (value == format.fontSize) {
+				return;
+			}
 			Invalidation.invalidate(this, TEXT_RENDER);
+			DataChange.change(this, "fontSize", format.fontSize, format.fontSize = value);
 		}
 		
-		public function get bold():Boolean
-		{
+		[Bindable(event="boldChange")]
+		public function get bold():Boolean {
 			return fontFormat.fontWeight == FontWeight.BOLD;
-		}
-		
-		public function set bold(value:Boolean):void
-		{
-			if (value == (fontFormat.fontWeight == FontWeight.BOLD)) return;
-			fontFormat.fontWeight = value ? FontWeight.BOLD : FontWeight.NORMAL;
+		}		
+		public function set bold(value:Boolean):void {
+			if (value == (fontFormat.fontWeight == FontWeight.BOLD)) {
+				return;
+			}
 			Invalidation.invalidate(this, TEXT_RENDER);
+			DataChange.change(this, "bold", fontFormat.fontWeight == FontWeight.BOLD, fontFormat.fontWeight = value ? FontWeight.BOLD : FontWeight.NORMAL);
 		}
 		
-		public function get italic():Boolean
-		{
+		[Bindable(event="italicChange")]
+		public function get italic():Boolean {
 			return fontFormat.fontPosture == FontPosture.ITALIC;
 		}
-		
 		public function set italic(value:Boolean):void
 		{
-			if (value == (fontFormat.fontPosture == FontPosture.ITALIC)) return;
-			fontFormat.fontPosture = value ? FontPosture.ITALIC : FontPosture.NORMAL;
+			if (value == (fontFormat.fontPosture == FontPosture.ITALIC)) {
+				return;
+			}
 			Invalidation.invalidate(this, TEXT_RENDER);
+			DataChange.change(this, "italic", fontFormat.fontPosture == FontPosture.ITALIC, fontFormat.fontPosture = value ? FontPosture.ITALIC : FontPosture.NORMAL);
 		}
 		
 		protected function onTextRender(event:Event):void
-		{
-			validateText();
-		}
-		
-		public function validateText():void
 		{
 			while (numChildren) removeChildAt(0);
 			
@@ -157,70 +134,19 @@ package reflex.text
 			fontFormat = fontFormat.clone();
 			
 			line = textBlock.createTextLine();
-						
+			
+			measured.width = line.width;
+			measured.height = line.height;
+			//setSize(line.width, line.height)
+			
 			if (line) {
 				line.x = 0;
-				line.y = line.height-2;
+				line.y = line.height-3;
 				addChild(line);
-			} else {
 			}
 			
-			setSize(line.width, line.height)
-		}
-						
-		public function invalidate(children:Boolean = false):void
-		{
 			
 		}
 		
-		public function validate():void
-		{
-			
-		}
-		
-		
-		protected function draw():void
-		{
-			
-		}
-		
-		protected function init():void
-		{
-		}
-		
-		protected function initLayout():void
-		{
-			
-		}
-		
-		private function onRender(event:Event):void
-		{
-			draw();
-		}
-		
-		private function onInit(event:Event):void
-		{
-			if (event.target != this) {
-				return;
-			}
-			removeEventListener(Event.ADDED, onInit);
-			
-			init();
-		}
-		
-		private function forwardEvent(event:Event):void
-		{
-			dispatchEvent(event);
-		}
-		
-		private function onWidthChange(event:Event):void
-		{
-			dispatchEvent( new Event("widthChange") );
-		}
-		
-		private function onHeightChange(event:Event):void
-		{
-			dispatchEvent( new Event("heightChange") );
-		}
 	}
 }

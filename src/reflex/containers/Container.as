@@ -53,9 +53,9 @@ package reflex.containers
 		static public const LAYOUT:String = "layout";
 		
 		Invalidation.registerPhase(CREATE, 0, true);
-		Invalidation.registerPhase(INITIALIZE, 1, true);
-		Invalidation.registerPhase(MEASURE, 2, true);
-		Invalidation.registerPhase(LAYOUT, 3, false);
+		Invalidation.registerPhase(INITIALIZE, 100, true);
+		Invalidation.registerPhase(MEASURE, 200, false);
+		Invalidation.registerPhase(LAYOUT, 300, true);
 		
 		private var _layout:ILayout;
 		private var _template:Object;
@@ -65,6 +65,8 @@ package reflex.containers
 		private var _states:Array;
 		private var _transitions:Array;
 		private var _currentState:String;
+		private var _styleDeclaration:* = {};
+		private var _styleManager:* = {};
 		
 		public function Container()
 		{
@@ -122,6 +124,16 @@ package reflex.containers
 			}
 			return false;
 		}
+		
+		// the compiler goes looking for styleDeclaration and styleManager properties when setting styles on root elements
+		// ... but they don't really have to be anything specific :)
+		
+		public function get styleDeclaration():* { return _styleDeclaration; }
+		public function set styleDeclaration(value:*):void {
+			_styleDeclaration = value;
+		}
+		
+		public function get styleManager():* { return _styleManager; }
 		
 		/**
 		 * @inheritDoc
@@ -219,17 +231,23 @@ package reflex.containers
 		}
 		
 		private function onMeasure(event:Event):void {
+			// the compiler gives us root styles like this. yay?
+			if(styleDeclaration.defaultFactory != null) {
+				var f:Function = styleDeclaration.defaultFactory;
+				var t:* = f.apply(style);
+				styleDeclaration.defaultFactory = null
+			}
 			if ((isNaN(explicit.width) || isNaN(explicit.height)) && layout) {
 				var point:Point = layout.measure(renderers);
-				measured.width = point.x;
-				measured.height = point.y;
+				if (point.x != measured.width || point.y != measured.height) {
+					measured.width = point.x;
+					measured.height = point.y;
+				}
 			}
 		}
 		
 		private function onLayout(event:Event):void {
 			if (layout) {
-				//var width:Number = reflex.measurement.resolveWidth(this);
-				//var height:Number = reflex.measurement.resolveHeight(this);
 				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);
 				layout.update(renderers, rectangle);
 			}

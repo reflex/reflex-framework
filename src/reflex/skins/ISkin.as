@@ -1,7 +1,9 @@
 package reflex.skins
 {
+	import flash.display.DisplayObjectContainer;
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
+	import flash.events.IEventDispatcher;
 	
 	//import reflex.layout.ILayoutAlgorithm;
 	
@@ -34,6 +36,6 @@ package reflex.skins
 		
 		// not sure if getSkinPart should be required
 		// maybe we could make it part of an extended interfaces?
-		function getSkinPart(part:String):InteractiveObject;
+		//function getSkinPart(part:String):InteractiveObject;
 	}
 }

@@ -11,10 +11,10 @@ package reflex.data
 		private var _value:Number = 0;
 		private var _stepSize:Number = 0;
 		
-		[Bindable(event="positionChange")]
+		[Bindable(event="valueChange")]
 		public function get value():Number { return _value; }
 		public function set value(value:Number):void {
-			DataChange.change(this, "position", _value, _value = value);
+			DataChange.change(this, "value", _value, _value = value);
 		}
 		
 		[Bindable(event="stepSizeChange")]

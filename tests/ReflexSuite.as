@@ -46,7 +46,7 @@ package
 		public var compositeBehavior:CompositeBehaviorTest;
 		public var buttonBehavior:ButtonBehaviorTest;
 		public var selectabeBehavior:SelectBehaviorTest;
-		public var slideBehavior:SlideBehaviorTest;
+		//public var slideBehavior:SlideBehaviorTest;
 		public var stepBehavior:StepBehaviorTest;
 		
 		// containers

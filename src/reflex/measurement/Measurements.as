@@ -26,6 +26,9 @@ package reflex.measurement
 		 */
 		public function get width():Number { return _width; }
 		public function set width(value:Number):void {
+			if(_width == value) {
+				return;
+			}
 			_width = value;
 			if (!(instance.measured== this && !isNaN(instance.explicit.width))) { // measured changes shouldn't update when explicit is set
 				instance.setSize(value, instance.height);
@@ -37,6 +40,9 @@ package reflex.measurement
 		 */
 		public function get height():Number { return _height; }
 		public function set height(value:Number):void {
+			if(_height == value) {
+				return;
+			}
 			_height = value;
 			if (!(instance.measured== this && !isNaN(instance.explicit.height))) { // measured changes shouldn't update when explicit is set
 				instance.setSize(instance.width, value); 
