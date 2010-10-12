@@ -113,6 +113,7 @@ package reflex.behaviors
 		// skinpart positioning
 		
 		//[CommitProperties(properties="position.min, position.max, position.position, position.pageSize")]
+		[EventListener(type="valueChange", target="position")]
 		public function onPositionChange(event:Event):void {
 			updateUIPosition();
 		}

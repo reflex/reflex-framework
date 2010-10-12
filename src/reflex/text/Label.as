@@ -135,9 +135,13 @@ package reflex.text
 			
 			line = textBlock.createTextLine();
 			
-			measured.width = line.width;
-			measured.height = line.height;
-			//setSize(line.width, line.height)
+			if(line) {
+				measured.width = line.width;
+				measured.height = line.height;
+			} else {
+				measured.width = 0;
+				measured.height = 0;
+			}
 			
 			if (line) {
 				line.x = 0;

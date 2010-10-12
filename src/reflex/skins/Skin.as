@@ -204,9 +204,9 @@ package reflex.skins
 			_content = new SimpleCollection();
 			_explicit = new Measurements(this);
 			_measured = new Measurements(this, 160, 22);
-			if (_layout == null) {
-				_layout = new BasicLayout();
-			}
+			//if (_layout == null) {
+				//_layout = new BasicLayout();
+			//}
 			_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			//Bind.addListener(this, onLayoutChange, this, "target.layout");
 			//Bind.addListener(this, onLayoutChange, this, "layout");
