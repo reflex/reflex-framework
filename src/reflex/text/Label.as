@@ -144,12 +144,19 @@ package reflex.text
 			}
 			
 			if (line) {
-				line.x = 0;
-				line.y = line.height-3;
+				line.x = width/2 - line.width/2;
+				line.y = height/2 + line.height/2-3;
 				addChild(line);
 			}
 			
-			
+		}
+		
+		override public function setSize(width:Number, height:Number):void {
+			super.setSize(width, height);
+			if (line) {
+				line.x = width/2 - line.width/2;
+				line.y = height/2 + line.height/2 - 3;
+			}
 		}
 		
 	}

@@ -152,6 +152,12 @@ package reflex.display
 			DataChange.change(this, "percentHeight", _percentHeight, _percentHeight = value);
 		}
 		
+		[Bindable(event="visibleChange")]
+		override public function get visible():Boolean { return super.visible; }
+		override public function set visible(value:Boolean):void {
+			DataChange.change(this, "visible", super.visible, super.visible = value);
+		}
+		
 		/**
 		 * @inheritDoc
 		 */
