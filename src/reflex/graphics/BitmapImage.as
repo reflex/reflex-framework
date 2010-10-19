@@ -6,10 +6,11 @@ package reflex.graphics
 	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.net.URLRequest;
+	import flash.system.LoaderContext;
 	
 	import reflex.binding.DataChange;
-	import reflex.metadata.resolveCommitProperties;
 	import reflex.display.BitmapDisplay;
+	import reflex.metadata.resolveCommitProperties;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -75,7 +76,7 @@ package reflex.graphics
 			if (source is String) {
 				var request:URLRequest = new URLRequest(source as String);
 				loader = new Loader();
-				loader.load(request);
+				loader.load(request, new LoaderContext(true));
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete, false, 0, true);
 			} else if (source is Class) {
 				var display:Bitmap = new (source as Class)();

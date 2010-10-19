@@ -16,12 +16,18 @@ package mx.states
 		}
 		
 		public function apply(parent:Object):void {
-			oldValue = parent[target][name];
-			parent[target][name] = value;
+			if(parent == null || target == null) { return; }
+			var item:Object = parent[target];
+			if(item == null) { return; }
+			oldValue = item[name];
+			item[name] = value;
 		}
 		
 		public function remove(parent:Object):void {
-			parent[target][name] = oldValue;
+			if(parent == null || target == null) { return; }
+			var item:Object = parent[target];
+			if(item == null) { return; }
+			item[name] = oldValue;
 			oldValue = null;
 		}
 		
