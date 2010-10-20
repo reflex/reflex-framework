@@ -9,6 +9,7 @@ package reflex.graphics
 	import flash.geom.Rectangle;
 	
 	import mx.events.PropertyChangeEvent;
+	import mx.graphics.IStroke;
 	
 	import reflex.binding.DataChange;
 	import reflex.measurement.IMeasurablePercent;
@@ -58,11 +59,11 @@ package reflex.graphics
 		}
 		
 		
-		private var _stroke:*;
+		private var _stroke:IStroke;
 		
 		[Bindable(event="strokeChange")]
-		public function get stroke():* { return _stroke; }
-		public function set stroke(value:*):void {
+		public function get stroke():IStroke { return _stroke; }
+		public function set stroke(value:IStroke):void {
 			DataChange.change(this, "stroke", _stroke, _stroke = value);
 		}
 		
