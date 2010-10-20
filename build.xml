@@ -80,7 +80,7 @@
 			<source-path path-element="${src.dir}" />
 			<!--<source-path path-element="../FlightCore/src"/>-->
 			<library-path dir="${flex-sdk.dir}/frameworks/libs" includes="*.swc" append="true" />
-			<library-path dir="${basedir}/libs" includes="*.swc" append="true" />
+			<!--<library-path dir="${basedir}/libs" includes="*.swc" append="true" />-->
 		</asdoc>
 	</target>
 	
