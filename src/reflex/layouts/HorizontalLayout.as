@@ -6,6 +6,7 @@ package reflex.layouts
 	
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
+	import reflex.styles.resolveStyle;
 		
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]
@@ -20,6 +21,7 @@ package reflex.layouts
 		
 		public var gap:Number = 5;
 		public var edging:Boolean = false;
+		public var verticalAlign:String = "top"; // bottom, middle, top
 		
 		override public function measure(children:Array):Point
 		{
@@ -39,6 +41,10 @@ package reflex.layouts
 		{
 			super.update(children, rectangle);
 			if(children) {
+				
+				var gap:Number = reflex.styles.resolveStyle(target, "gap", null, this.gap) as Number;
+				var verticalAlign:String = reflex.styles.resolveStyle(target, "verticalAlign", null, this.verticalAlign) as String;
+				
 				// this takes a few passes for percent-based measurement. we can probably speed it up later
 				var availableSpace:Point = reflex.measurement.calculateAvailableSpace(children, rectangle);
 				var percentageTotals:Point = reflex.measurement.calculatePercentageTotals(children);
@@ -53,7 +59,20 @@ package reflex.layouts
 					var height:Number = reflex.measurement.resolveHeight(child, rectangle.height); // calculate percentHeights based on full height and with no normalization
 					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
 					child.x = Math.round(position);
-					child.y = Math.round(rectangle.height/2 - height/2);
+					
+					switch(verticalAlign) {
+						case "middle":
+						case "center":
+							child.y = Math.round(rectangle.height/2 - height/2);
+							break;
+						case "top":
+							child.y = 0;
+							break;
+						case "bottom":
+							child.y = Math.round(rectangle.height - height);
+							break;
+					}
+					//child.y = Math.round(rectangle.height/2 - height/2);
 					position += width + gap;
 				}
 			}

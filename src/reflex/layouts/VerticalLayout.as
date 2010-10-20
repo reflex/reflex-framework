@@ -10,6 +10,7 @@ package reflex.layouts
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
+	import reflex.styles.resolveStyle;
 	
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]
@@ -22,9 +23,14 @@ package reflex.layouts
 	public class VerticalLayout extends Layout implements ILayout
 	{
 		
+		// not sure where these constants will go yet, use string for now
+		//static public const ALIGN_LEFT:String = "left";
+		//static public const ALIGN_RIGHT:String = "right";
+		//static public const ALIGN_CENTER:String = "center";
 		
 		public var gap:Number = 5;
 		public var edging:Boolean = false;
+		public var horizontalAlign:String = "left";
 		
 		override public function measure(children:Array):Point
 		{
@@ -44,6 +50,11 @@ package reflex.layouts
 		{
 			super.update(children, rectangle);
 			if(children) {
+				
+				// some style-binding might take care of this later
+				var gap:Number = reflex.styles.resolveStyle(target, "gap", Number, this.gap) as Number;
+				var horizontalAlign:String = reflex.styles.resolveStyle(target, "horizontalAlign", String, this.horizontalAlign) as String;
+				
 				// this takes a few passes for percent-based measurement. we can probably speed it up later
 				var availableSpace:Point = reflex.measurement.calculateAvailableSpace(children, rectangle);
 				var percentageTotals:Point = reflex.measurement.calculatePercentageTotals(children);
@@ -58,7 +69,20 @@ package reflex.layouts
 					var width:Number = reflex.measurement.resolveWidth(child, rectangle.width); // calculate percentWidths based on full width and with no normalization
 					var height:Number = reflex.measurement.resolveHeight(child, availableSpace.y, percentageTotals.y);  // calculate percentHeights based on available height and normalized percentages
 					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
-					child.x = Math.round(rectangle.width/2 - width/2);
+					
+					switch(horizontalAlign) {
+						case "center":
+						case "middle":
+							child.x = Math.round(rectangle.width/2 - width/2);
+							break;
+						case "left":
+							child.x = 0;
+							break;
+						case "right":
+							child.x = Math.round(rectangle.width - width);
+							break;
+					}
+					//child.x = Math.round(rectangle.width/2 - width/2);
 					child.y = Math.round(position);
 					position += height + gap;
 				}

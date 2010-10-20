@@ -32,7 +32,7 @@ package reflex.containers
 	[Style(name="horizontalCenter")]
 	[Style(name="verticalCenter")]
 	[Style(name="dock")]
-	[Style(name="align")]
+	//[Style(name="align")]
 	
 	[Event(name="initialize", type="flash.events.Event")]
 	[Event(name="create", type="flash.events.Event")]
