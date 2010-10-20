@@ -60,9 +60,9 @@
 				<include name="libs/*.swc" />
 				<include name="locale/${flex-sdk.locale}/*.swc" />
 			</library-path>
-			<library-path dir="libs" append="true">
+			<!--<library-path dir="libs" append="true">
 				<include name="*.swc" />
-			</library-path>
+			</library-path>-->
 			<keep-as3-metadata name="Binding" />
 			<keep-as3-metadata name="EventListener" />
 			<keep-as3-metadata name="LayoutProperty" />
