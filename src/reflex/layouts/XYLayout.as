@@ -22,8 +22,7 @@ package reflex.layouts
 		
 		override public function measure(children:Array):Point
 		{
-			super.measure(children);
-			var point:Point = new Point(0, 0);
+			var point:Point = super.measure(children);
 			for each(var item:Object in children) {
 				var xp:Number = item.x + resolveWidth(item);
 				var yp:Number = item.y + resolveHeight(item);
