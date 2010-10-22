@@ -22,6 +22,8 @@
 	public class Behavior extends EventDispatcher implements IBehavior
 	{
 		
+		
+		
 		private var _target:IEventDispatcher;
 		
 		/**

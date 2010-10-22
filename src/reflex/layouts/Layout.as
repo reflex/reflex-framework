@@ -40,6 +40,7 @@ package reflex.layouts
 			reflex.metadata.resolveBindings(this);
 			reflex.metadata.resolveEventListeners(this);
 			reflex.metadata.resolveDataListeners(this);
+			
 			Bind.addListener(this, onInvalidateLayout, this, "target.width");
 			Bind.addListener(this, onInvalidateLayout, this, "target.height");
 		}

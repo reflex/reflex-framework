@@ -59,6 +59,15 @@
 	<component id="Ellipse" class="reflex.graphics.Ellipse" />
 	<component id="SolidColor" class="mx.graphics.SolidColor" />
 	<component id="SolidColorStroke" class="mx.graphics.SolidColorStroke" />
+	<component id="GradientBase" class="mx.graphics.GradientBase" />
+	<component id="GradientStroke" class="mx.graphics.GradientStroke" />
+	<component id="LinearGradient" class="mx.graphics.LinearGradient" />
+	<component id="LinearGradientStroke" class="mx.graphics.LinearGradientStroke" />
+	<component id="RadialGradient" class="mx.graphics.RadialGradient" />
+	<component id="RadialGradientStroke" class="mx.graphics.RadialGradientStroke" />
+	<component id="GradientEntry" class="mx.graphics.GradientEntry" />
+	<component id="BitmapFill" class="mx.graphics.BitmapFill" />
+	<component id="BitmapFillMode" class="mx.graphics.BitmapFillMode" />
 	
 	<!-- states -->
 	<!--<component id="State" class="mx.states.State" />-->
@@ -69,5 +78,8 @@
 	<!-- text -->
 	<component id="Label" class="reflex.text.Label" />
 	<component id="Text" class="reflex.text.Text" />
+	
+	<!-- Flex dependencies -->
+	<!--<component id="IBindingClient" class="mx.binding.IBindingClient" />-->
 	
 </componentPackage>
