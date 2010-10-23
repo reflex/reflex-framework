@@ -60,5 +60,10 @@ package reflex.components
 			DataChange.change(this, "layout", _layout, _layout = value);
 		}
 		
+		public function ScrollerDefinition() {
+			super();
+			_content = new SimpleCollection();
+		}
+		
 	}
 }
