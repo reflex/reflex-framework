@@ -1,6 +1,6 @@
 package reflex.behaviors
 {
-	import flash.display.DisplayObject;
+	
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;

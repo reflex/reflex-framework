@@ -8,11 +8,11 @@ package
 	import reflex.behaviors.SlideBehaviorTest;
 	import reflex.behaviors.StepBehaviorTest;
 	import reflex.collections.SimpleCollectionTest;
-	//import reflex.components.ApplicationTest;
 	import reflex.components.ButtonTest;
 	import reflex.components.ComponentTest;
 	import reflex.components.ListItemTest;
 	import reflex.components.ListTest;
+	import reflex.containers.ContainerMeasurementTest;
 	import reflex.display.BitmapDisplayMeasurableTest;
 	import reflex.display.DisplayFunctionsTest;
 	import reflex.display.DisplayMeasurableTest;
@@ -53,6 +53,7 @@ package
 		public var container:GroupTest;
 		public var skinContainer:SkinContainerTest;
 		public var displayFunctions:DisplayFunctionsTest;
+		public var containerMeasurement:ContainerMeasurementTest;
 		
 		// styling
 		public var styleableSprite:DisplayStyleableTest;

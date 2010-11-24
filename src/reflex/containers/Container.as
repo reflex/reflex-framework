@@ -237,7 +237,9 @@ package reflex.containers
 				var t:* = f.apply(style);
 				styleDeclaration.defaultFactory = null
 			}
-			if ((isNaN(explicit.width) || isNaN(explicit.height)) && layout) {
+			if ((isNaN(explicit.width) || isNaN(explicit.height)) 
+				//|| (isNaN(percentWidth) || isNaN(percentHeight))
+				&& layout) {
 				var point:Point = layout.measure(renderers);
 				if (point.x != measured.width || point.y != measured.height) {
 					measured.width = point.x;

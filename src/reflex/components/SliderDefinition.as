@@ -1,6 +1,5 @@
 package reflex.components
 {
-	//import legato.components.ScrollBarGraphic;
 	
 	import reflex.behaviors.SlideBehavior;
 	import reflex.binding.DataChange;

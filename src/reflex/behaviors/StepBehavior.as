@@ -1,15 +1,12 @@
 package reflex.behaviors
 {
-	import flash.display.InteractiveObject;
-	import flash.display.MovieClip;
+	
 	import flash.events.IEventDispatcher;
 	
 	import reflex.binding.DataChange;
-	import reflex.data.IPosition;
-	import reflex.data.IRange;
 	import reflex.data.ISteppingPosition;
-	import reflex.data.Position;
-	import reflex.data.Range;
+
+	import flash.events.Event;
 
 	//import reflex.events.ButtonEvent;
 	

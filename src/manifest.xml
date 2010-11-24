@@ -13,6 +13,7 @@
 	
 	<!-- skins -->
 	<component id="Skin" class="reflex.skins.Skin"/>
+	<component id="MovieClipSkin" class="reflex.skins.MovieClipSkin"/>
 	
 	<!-- behaviors -->
 	<component id="CompositeBehavior" class="reflex.behaviors.CompositeBehavior"/>

@@ -72,7 +72,7 @@ package reflex.skins
 			}
 			_explicit.width = value;
 			Invalidation.invalidate(target, LAYOUT);
-			DataChange.change(this, "width", unscaledWidth, unscaledWidth = value);
+			//DataChange.change(this, "width", unscaledWidth, unscaledWidth = value);
 		}
 		
 		/**
@@ -86,7 +86,7 @@ package reflex.skins
 			}
 			_explicit.height = value;
 			Invalidation.invalidate(target, LAYOUT);
-			DataChange.change(this, "height", unscaledHeight, unscaledHeight = value);
+			//DataChange.change(this, "height", unscaledHeight, unscaledHeight = value);
 		}
 		
 		/**

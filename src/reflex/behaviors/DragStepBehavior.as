@@ -7,8 +7,6 @@ package reflex.behaviors
 	
 	import reflex.binding.DataChange;
 	import reflex.data.IPosition;
-	import reflex.data.IRange;
-	//import reflex.events.ButtonEvent;
 	
 	public class DragStepBehavior extends Behavior
 	{

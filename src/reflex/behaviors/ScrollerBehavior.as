@@ -6,7 +6,6 @@ package reflex.behaviors
 	
 	import reflex.binding.DataChange;
 	import reflex.data.IPosition;
-	import reflex.metadata.resolveCommitProperties;
 	
 	public class ScrollerBehavior extends Behavior
 	{

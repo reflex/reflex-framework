@@ -1,21 +1,13 @@
 package reflex.behaviors
 {
-	import flash.display.InteractiveObject;
+	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
-	import flash.geom.Point;
 	
 	import reflex.binding.DataChange;
 	import reflex.data.IPagingPosition;
 	import reflex.data.IPosition;
-	import reflex.data.IRange;
-	import reflex.data.Position;
-	import reflex.data.Range;
-	import reflex.invalidation.Invalidation;
-	import reflex.measurement.resolveHeight;
-	import reflex.measurement.resolveWidth;
-	import reflex.metadata.resolveCommitProperties;
 	
 	public class SlideBehavior extends Behavior// extends StepBehavior
 	{

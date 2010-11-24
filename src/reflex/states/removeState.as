@@ -1,7 +1,6 @@
 package reflex.states
 {
 	
-	import flash.display.DisplayObject;
 	import mx.states.IOverride;
 	import mx.states.State;
 	
@@ -9,8 +8,8 @@ package reflex.states
 	{
 		for each(var state:State in states) {
 			if(state.name == name) {
-				for each(var override:IOverride in state.overrides) {
-					override.remove(target);
+				for each(var o:IOverride in state.overrides) {
+					o.remove(target);
 				}
 				return;
 			}

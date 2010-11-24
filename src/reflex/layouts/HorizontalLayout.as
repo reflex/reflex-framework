@@ -7,6 +7,9 @@ package reflex.layouts
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.styles.resolveStyle;
+	import reflex.measurement.calculateAvailableSpace;
+	import reflex.measurement.calculatePercentageTotals;
+	import reflex.measurement.setSize;
 		
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]

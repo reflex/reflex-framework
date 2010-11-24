@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 package mx.geom
 {
-	import __AS3__.vec.Vector;
+	//import __AS3__.vec.Vector;
 	
 	import flash.events.Event;
 	import flash.geom.Matrix;

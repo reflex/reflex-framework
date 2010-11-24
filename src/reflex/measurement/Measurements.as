@@ -20,6 +20,7 @@ package reflex.measurement
 		// should these be bindable?
 		
 		private var instance:IMeasurable;
+		private var percent:IMeasurablePercent;
 		
 		/**
 		 * @inheritDoc
@@ -30,9 +31,19 @@ package reflex.measurement
 				return;
 			}
 			_width = value;
-			if (!(instance.measured== this && !isNaN(instance.explicit.width))) { // measured changes shouldn't update when explicit is set
+			if(instance.measured == this && (!isNaN(instance.explicit.width) || (percent != null && !isNaN(percent.percentWidth)))) {
+				return;
+			}
+			
+			/*
+			if (instance.measured== this 
+				&& isNaN(instance.explicit.width) 
+				//&& (percent == null || isNaN(percent.percentWidth))
+				) { // measured changes shouldn't update when explicit/percent is set
 				instance.setSize(value, instance.height);
 			}
+			*/
+			instance.setSize(value, instance.height);
 		}
 		
 		/**
@@ -44,9 +55,18 @@ package reflex.measurement
 				return;
 			}
 			_height = value;
-			if (!(instance.measured== this && !isNaN(instance.explicit.height))) { // measured changes shouldn't update when explicit is set
+			if(instance.measured == this && (!isNaN(instance.explicit.height) || (percent != null && !isNaN(percent.percentHeight)))) {
+				return;
+			}
+			/*
+			if (instance.measured == this 
+				&& isNaN(instance.explicit.height)
+				//&& (percent == null || isNaN(percent.percentHeight))
+				) { // measured changes shouldn't update when explicit is set
 				instance.setSize(instance.width, value); 
 			}
+			*/
+			instance.setSize(instance.width, value);
 		}
 		
 		/**
@@ -68,6 +88,7 @@ package reflex.measurement
 		// 160, 22
 		public function Measurements(instance:IMeasurable, defaultWidth:Number = NaN, defaultHeight:Number = NaN) {
 			this.instance = instance;
+			this.percent = instance as IMeasurablePercent;
 			_width = defaultWidth;
 			_height = defaultHeight;
 		}

@@ -12,7 +12,7 @@ package mx.geom
 {
 	import flash.geom.Matrix;
 	import flash.geom.Matrix3D;
-	import __AS3__.vec.Vector;
+	//import __AS3__.vec.Vector;
 	import flash.geom.Vector3D;
 	import flash.events.EventDispatcher;
 	import flash.events.Event;

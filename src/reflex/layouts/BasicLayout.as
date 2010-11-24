@@ -104,7 +104,9 @@ package reflex.layouts
 					child.y = Math.round(rectangle.height/2 - height/2 + verticalCenter);
 				}
 				
-				reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+				if(width > 0 && height > 0) { // for shapes which haven't been drawn to yet
+					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+				}
 			}
 		}
 		
