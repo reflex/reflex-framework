@@ -43,7 +43,7 @@ package reflex.text
 		public function Label()
 		{
 			fontFormat = new FontDescription();
-			format = new ElementFormat();
+			format = new ElementFormat(null, 24);
 			textElement = new TextElement("");
 			textBlock = new TextBlock(textElement);
 			mouseChildren = false;
