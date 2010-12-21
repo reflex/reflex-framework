@@ -27,7 +27,7 @@ package reflex.text
 		/**
 		 * @private
 		 */
-		[CommitProperties(target="text, defaultTextFormat")]
+		[Commit(properties="text, defaultTextFormat")]
 		public function measure(event:Event):void {
 			var metrics:TextLineMetrics = this.getLineMetrics(0);
 			measured.width = metrics.width + metrics.x*2;

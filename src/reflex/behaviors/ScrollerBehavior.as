@@ -38,7 +38,6 @@ package reflex.behaviors
 		public function ScrollerBehavior(target:IEventDispatcher=null)
 		{
 			super(target);
-			//reflex.metadata.resolveCommitProperties(this);
 		}
 		
 		[EventListener(type="valueChange", target="horizontalPosition")]

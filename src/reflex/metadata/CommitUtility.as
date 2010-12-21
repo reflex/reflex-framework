@@ -8,8 +8,9 @@ package reflex.metadata
 	
 	import reflex.behaviors.IBehavior;
 	import reflex.binding.Bind;
-	import reflex.invalidation.Invalidation;
 	import reflex.graphics.IDrawable;
+	import reflex.invalidation.Invalidation;
+	import reflex.skins.ISkin;
 	
 	// for lack of a better name
 	
@@ -43,9 +44,9 @@ package reflex.metadata
 			
 			var f:Function = resolver != null ? resolver(method) : instance[method];
 			//instance.addEventListener(token, commitHandler, false, 0, true);
-			if(instance is IDrawable) {
-				if((instance as IDrawable).target) {
-					(instance as IDrawable).target.addEventListener(token, f, false, 0, true);
+			if(instance is IDrawable || instance is IBehavior || instance is ISkin) { // we really need a common interface for ITarget or something
+				if((instance as Object).target) {
+					(instance as Object).target.addEventListener(token, f, false, 0, true);
 				}
 			} else {
 				instance.addEventListener(token, f, false, 0, true);
@@ -60,10 +61,12 @@ package reflex.metadata
 				var sourceToken:String =  flash.utils.getQualifiedClassName(s2) + "_" + s1.sourcePath;
 				var tokens:Array = dictionary[sourceToken];
 				for each(var token:String in tokens) {
-					if(s2 is IDrawable) {
+					if(s2 is IDrawable) { // we really need a common interface for ITarget or something
 						Invalidation.invalidate((s2 as IDrawable).target as DisplayObject, token);
 					} else if(s2 is IBehavior) {
 						Invalidation.invalidate((s2 as IBehavior).target as DisplayObject, token);
+					} else if(s2 is ISkin) {
+						Invalidation.invalidate((s2 as ISkin).target as DisplayObject, token);
 					} else  {
 						Invalidation.invalidate(s2 as DisplayObject, token);
 					}

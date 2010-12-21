@@ -4,12 +4,12 @@ package reflex.layouts
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import reflex.measurement.resolveHeight;
-	import reflex.measurement.resolveWidth;
-	import reflex.styles.resolveStyle;
 	import reflex.measurement.calculateAvailableSpace;
 	import reflex.measurement.calculatePercentageTotals;
+	import reflex.measurement.resolveHeight;
+	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
+	import reflex.styles.resolveStyle;
 		
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]
@@ -25,6 +25,13 @@ package reflex.layouts
 		public var gap:Number = 5;
 		public var edging:Boolean = false;
 		public var verticalAlign:String = "top"; // bottom, middle, top
+		
+		public function HorizontalLayout(gap:Number = 5, verticalAlign:String = "top", edging:Boolean = false):void {
+			super();
+			this.gap = gap;
+			this.verticalAlign = verticalAlign;
+			this.edging = edging;
+		}
 		
 		override public function measure(children:Array):Point
 		{

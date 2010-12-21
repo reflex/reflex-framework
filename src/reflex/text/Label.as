@@ -40,7 +40,7 @@ package reflex.text
 		protected var line:TextLine;
 		
 		
-		public function Label()
+		public function Label(text:String = "")
 		{
 			fontFormat = new FontDescription();
 			format = new ElementFormat(null, 24);
@@ -48,6 +48,7 @@ package reflex.text
 			textBlock = new TextBlock(textElement);
 			mouseChildren = false;
 			addEventListener(TEXT_RENDER, onTextRender);
+			this.text = text;
 		}
 		
 		[Bindable(event="textChange")]

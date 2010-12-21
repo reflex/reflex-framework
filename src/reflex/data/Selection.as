@@ -1,5 +1,6 @@
 package reflex.data
 {
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
 	import mx.collections.IList;
@@ -29,6 +30,8 @@ package reflex.data
 				_selectedItems.addItem(value);
 			}
 			DataChange.change(this, "selectedItem", _selectedItem, _selectedItem = value);
+			
+			//dispatcheEvent(new Event("selectionChanged"));
 		}
 		
 		public function get selectedItems():IList { return _selectedItems; }

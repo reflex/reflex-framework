@@ -26,6 +26,7 @@ package reflex.skins
 	import reflex.measurement.IMeasurements;
 	import reflex.measurement.Measurements;
 	import reflex.metadata.resolveBindings;
+	import reflex.metadata.resolveCommitProperties;
 	import reflex.states.applyState;
 	import reflex.states.removeState;
 	import reflex.templating.addItemsAt;
@@ -53,8 +54,8 @@ package reflex.skins
 		private var _transitions:Array;
 		private var _template:Object; // = new ReflexDataTemplate();
 		
-		private var unscaledWidth:Number = 160;
-		private var unscaledHeight:Number = 22;
+		protected var unscaledWidth:Number = 160;
+		protected var unscaledHeight:Number = 22;
 		
 		private var _explicit:IMeasurements;
 		private var _measured:IMeasurements;
@@ -269,6 +270,7 @@ package reflex.skins
 				target.addEventListener(LAYOUT, onLayout, false, 0, true);
 				Invalidation.invalidate(_target, MEASURE);
 				Invalidation.invalidate(_target, LAYOUT);
+				reflex.metadata.resolveCommitProperties(this);
 			}
 			
 			var items:Array = _content.toArray();

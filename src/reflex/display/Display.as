@@ -65,7 +65,11 @@ package reflex.display
 					if (split.length == 2) {
 						var property:String = split[0].replace(/\s+/g, "");
 						var v:String = split[1].replace(/\s+/g, "");
-						_style[property] = v;
+						if(!isNaN( Number(v) )) {
+							_style[property] = Number(v);
+						} else {
+							_style[property] = v;
+						}
 					}
 				}
 			}

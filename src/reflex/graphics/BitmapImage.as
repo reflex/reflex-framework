@@ -71,7 +71,7 @@ package reflex.graphics
 		/**
 		 * @private
 		 */
-		[CommitProperties(target="source")]
+		[Commit(properties="source")]
 		public function onSourceChanged(event:Event):void {
 			if (source is String) {
 				var request:URLRequest = new URLRequest(source as String);
@@ -97,7 +97,7 @@ package reflex.graphics
 		/**
 		 * @private
 		 */
-		[CommitProperties(target="width, height, scaling, backgroundColor, backgroundAlpha")]
+		[Commit(properties="width, height, scaling, backgroundColor, backgroundAlpha")]
 		public function onSizeChange(event:Event):void {
 			var color:uint = (_backgroundAlpha*255) << 24 | _backgroundColor
 			this.bitmapData = new BitmapData(unscaledWidth, unscaledHeight, true, color);

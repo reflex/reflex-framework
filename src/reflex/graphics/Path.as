@@ -61,7 +61,7 @@ package reflex.graphics
 		 * @private
 		 */
 		// we need to handle custom fill/stroke properties somehow
-		[CommitProperties(target="x, y, width, height, data, fill, fill.color, fill.alpha, stroke, stroke.color, stroke.alpha, stroke.weight, target")]
+		[Commit(properties="x, y, width, height, data, fill, fill.color, fill.alpha, stroke, stroke.color, stroke.alpha, stroke.weight, target")]
 		public function updateRender(event:Event):void {
 			render();
 		}

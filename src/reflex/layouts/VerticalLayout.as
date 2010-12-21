@@ -32,6 +32,13 @@ package reflex.layouts
 		public var edging:Boolean = false;
 		public var horizontalAlign:String = "left";
 		
+		public function VerticalLayout(gap:Number = 5, horizontalAlign:String = "top", edging:Boolean = false):void {
+			super();
+			this.gap = gap;
+			this.horizontalAlign = horizontalAlign;
+			this.edging = edging;
+		}
+		
 		override public function measure(children:Array):Point
 		{
 			var point:Point = super.measure(children);
