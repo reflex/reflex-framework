@@ -15,7 +15,7 @@ package reflex.collections
 		public function get source():Array { return _source; }
 		public function set source(value:Array):void {
 			_source = value;
-			var event:CollectionEvent = new CollectionEvent(CollectionEvent.COLLECTION_CHANGE, false, false, CollectionEventKind.RESET, -1, -1, _source.concat());
+			var event:CollectionEvent = new CollectionEvent(CollectionEvent.COLLECTION_CHANGE, false, false, CollectionEventKind.RESET, -1, -1, (_source == null) ? null : _source.concat());
 			dispatchEvent(event);
 		}
 		
