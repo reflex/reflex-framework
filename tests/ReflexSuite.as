@@ -2,6 +2,9 @@ package
 {
 	import flash.display.Stage;
 	
+	import mx.states.AddItemsTest;
+	import mx.states.OverrideBaseTest;
+	
 	import reflex.behaviors.ButtonBehaviorTest;
 	import reflex.behaviors.CompositeBehaviorTest;
 	import reflex.behaviors.SelectBehaviorTest;
@@ -27,6 +30,7 @@ package
 	import reflex.skins.SkinContainerTest;
 	import reflex.skins.SkinMeasurementTest;
 	import reflex.styles.StyleFunctionsTest;
+	import reflex.templating.addItemAtTest;
 	
 	[Suite]
     [RunWith("org.flexunit.runners.Suite")]
@@ -74,6 +78,13 @@ package
 		
 		// collections
 		public var collection:SimpleCollectionTest;
+		
+		//templating
+		public var addItemAt:addItemAtTest;
+		
+		// states
+		public var addItems:AddItemsTest;
+		//public var overrideBase:OverrideBaseTest; // no tests yet
 		
 	}
 }

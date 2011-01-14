@@ -62,7 +62,7 @@ package mx.states
 		private function getInsertIndex(parent:Object, position:String, dest:*):int {
 			switch(position) {
 				case FIRST: return 0;
-				case LAST: return (dest[propertyName] as IList).length-1;
+				case LAST: return (dest[propertyName] as IList).length; // last = added to new index
 				case AFTER: return getRelatedIndex(parent, dest)+1;
 				case BEFORE: return getRelatedIndex(parent, dest);
 			}

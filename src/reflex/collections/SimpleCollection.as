@@ -35,7 +35,7 @@ package reflex.collections
 		
 		public function addItem(item:Object):void
 		{
-			var index:uint = _source.push(item);
+			var index:uint = _source.push(item)-1;
 			var event:CollectionEvent = new CollectionEvent(CollectionEvent.COLLECTION_CHANGE, false, false, CollectionEventKind.ADD, index, -1, [item]);
 			dispatchEvent(event);
 		}
