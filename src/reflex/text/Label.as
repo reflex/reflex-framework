@@ -8,9 +8,12 @@ package reflex.text
 	import flash.text.engine.FontLookup;
 	import flash.text.engine.FontPosture;
 	import flash.text.engine.FontWeight;
+	import flash.text.engine.LineJustification;
 	import flash.text.engine.RenderingMode;
+	import flash.text.engine.SpaceJustifier;
 	import flash.text.engine.TextBlock;
 	import flash.text.engine.TextElement;
+	import flash.text.engine.TextJustifier;
 	import flash.text.engine.TextLine;
 	import flash.text.engine.TextLineValidity;
 	import flash.text.engine.TypographicCase;
@@ -18,6 +21,7 @@ package reflex.text
 	import reflex.binding.DataChange;
 	import reflex.display.Display;
 	import reflex.invalidation.Invalidation;
+	import reflex.styles.resolveStyle;
 	
 	
 	[Style(name="left")]
@@ -28,8 +32,15 @@ package reflex.text
 	[Style(name="verticalCenter")]
 	[Style(name="dock")]
 	[Style(name="align")]
+	[Style(name="textAlign", format="String", enumeration="left,right,center,justify")]
 	public class Label extends Display
 	{
+		
+		public static const LEFT:String = "left";
+		public static const RIGHT:String = "right";
+		public static const CENTER:String = "center";
+		public static const JUSTIFY:String = "justify";
+		
 		public static const TEXT_RENDER:String = "textRender";
 		private static var textPhase:Boolean = Invalidation.registerPhase(TEXT_RENDER, 0, true);
 		
@@ -38,7 +49,10 @@ package reflex.text
 		protected var textElement:TextElement;
 		protected var textBlock:TextBlock;
 		protected var line:TextLine;
+		protected var lineJustifier:SpaceJustifier = new SpaceJustifier("en", LineJustification.UNJUSTIFIED);
 		
+		protected var _allowWrap:Boolean = false;
+		protected var _clipText:Boolean = false;
 		
 		public function Label(text:String = "")
 		{
@@ -59,6 +73,22 @@ package reflex.text
 			}
 			Invalidation.invalidate(this, TEXT_RENDER);
 			DataChange.change(this, "text", textElement.text, textElement.text = value);
+		}
+		
+		[Bindable(event="allowWrapChange")]
+		public function get allowWrap():Boolean {
+			return _allowWrap;
+		}
+		public function set allowWrap(value:Boolean):void {
+			DataChange.change(this, "allowWrap", _allowWrap, _allowWrap = value);
+		}
+		
+		[Bindable(event="clipTextChange")]
+		public function get clipText():Boolean {
+			return _clipText;
+		}
+		public function set clipText(value:Boolean):void {
+			DataChange.change(this, "clipText", _clipText, _clipText = value);
 		}
 		
 		[Bindable(event="embedChange")]
@@ -124,8 +154,23 @@ package reflex.text
 			DataChange.change(this, "italic", fontFormat.fontPosture == FontPosture.ITALIC, fontFormat.fontPosture = value ? FontPosture.ITALIC : FontPosture.NORMAL);
 		}
 		
+		protected function alignText(align:String, line:TextLine):void {
+			switch(align) {
+				case LEFT:
+					line.x = 0;
+					break;
+				case RIGHT:
+					line.x = width-line.textWidth;
+					break;
+				case CENTER:
+					line.x = width/2-line.textWidth/2;
+					break;
+			}
+		}
+		
 		protected function onTextRender(event:Event):void
 		{
+			
 			while (numChildren) removeChildAt(0);
 			
 			format.fontDescription = fontFormat;
@@ -134,30 +179,53 @@ package reflex.text
 			format = format.clone();
 			fontFormat = fontFormat.clone();
 			
-			line = textBlock.createTextLine();
+			var startY:int = 0;
+			var maxWidth:int = 0;
+			var align:String = resolveStyle(this, "textAlign", String, CENTER) as String;
+		
+			lineJustifier.lineJustification = (align == JUSTIFY) ? LineJustification.ALL_BUT_LAST : LineJustification.UNJUSTIFIED;
+			textBlock.textJustifier = lineJustifier;
 			
-			if(line) {
-				measured.width = line.width;
+			var w:Number = (!clipText && !allowWrap) ? 1000000 : width;
+			
+			line = textBlock.createTextLine(null, w);
+			if(allowWrap) {
+				while(line) {
+					startY += line.height;
+					line.y = startY;
+					maxWidth = Math.max(line.width, maxWidth);
+					alignText(align, line);
+					addChild(line);
+					line = textBlock.createTextLine(line, w);
+				}
+				if(!clipText && !allowWrap) {
+					measured.width = maxWidth;
+				}
+				measured.height = startY;
+			}
+			else if(line) {
+				
+				addChild(line);
+				
+				alignText(align, line);
+				line.y = height/2 + line.height/2-3;
+				
+				if(!clipText && !allowWrap) {
+					measured.width = line.width;
+				}
 				measured.height = line.height;
-			} else {
+				
+			}
+			else {
 				measured.width = 0;
 				measured.height = 0;
-			}
-			
-			if (line) {
-				line.x = width/2 - line.width/2;
-				line.y = height/2 + line.height/2-3;
-				addChild(line);
 			}
 			
 		}
 		
 		override public function setSize(width:Number, height:Number):void {
 			super.setSize(width, height);
-			if (line) {
-				line.x = width/2 - line.width/2;
-				line.y = height/2 + line.height/2 - 3;
-			}
+			Invalidation.invalidate(this, TEXT_RENDER);
 		}
 		
 	}
