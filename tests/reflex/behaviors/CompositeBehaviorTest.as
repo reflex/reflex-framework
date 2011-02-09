@@ -44,7 +44,8 @@ package reflex.behaviors
 		[Test]
 		public function testForLoop():void {
 			var items:Array = [new MockBehavior(), new MockBehavior(), new MockBehavior()];
-			behaviors.push(items[0], items[1], items[2]);
+			behaviors.add([items[0], items[1], items[2]]);
+			Assert.assertEquals(behaviors.length, 3);
 			for(var i:int = 0; i < behaviors.length; i++) {
 				Assert.assertEquals(items[i], behaviors[i])
 			}
@@ -55,7 +56,8 @@ package reflex.behaviors
 			var items:Array = [new MockBehavior(), new MockBehavior(), new MockBehavior()];
 			
 			var index:int = 0;
-			behaviors.push(items[0], items[1], items[2]);
+			behaviors.add([items[0], items[1], items[2]]);
+			Assert.assertEquals(behaviors.length, 3);
 			for each(var behavior:Object in behaviors) {
 				Assert.assertEquals(items[index], behavior);
 				index++;
@@ -67,7 +69,8 @@ package reflex.behaviors
 			var items:Array = [new MockBehavior(), new MockBehavior(), new MockBehavior()];
 			
 			var index:int = 0;
-			behaviors.push(items[0], items[1], items[2]);
+			behaviors.add([items[0], items[1], items[2]]);
+			Assert.assertEquals(behaviors.length, 3);
 			for(var key:String in behaviors) {
 				Assert.assertEquals(items[index], behaviors[key]);
 				index++;

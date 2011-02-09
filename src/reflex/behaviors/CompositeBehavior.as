@@ -10,9 +10,12 @@ package reflex.behaviors
 	
 	use namespace flash_proxy;
 	
+	[Deprecated("CompositeBehavior functionality is no longer supported. Please use a component's behaviors collection instead.")]
+	
 	/**
 	 * A dynamic proxy for compositing multiple behaviors. The CompositeBehavior
 	 * may be iterated through just as an Array might be.
+	 * @deprecated
 	 */
 	public dynamic class CompositeBehavior extends Proxy implements IBehavior, IEventDispatcher
 	{
@@ -68,14 +71,16 @@ package reflex.behaviors
 		//[ArrayElementType("reflex.core.IBehavior")]
 		public function add(item:Object):uint
 		{
-			if(item is IBehavior) {
-				(item as IBehavior).target = _target;
-				behaviors.push(item as IBehavior);
-			} else if(item is Array) {
-				for each (var behavior:IBehavior in item) {
-					behavior.target = _target;
-					behaviors.push(behavior);
+			if(item is Array) {
+				for each (var behavior:Object in item) {
+					if(behavior is IBehavior || (behavior is Object && behavior.hasOwnProperty("target"))) {
+						behavior.target = _target;
+						behaviors.push(behavior);
+					}
 				}
+			} else if(item is IBehavior || (item is Object && item.hasOwnProperty("target"))) {
+				item.target = _target;
+				behaviors.push(item as IBehavior);
 			}
 			return behaviors.length;
 		}
