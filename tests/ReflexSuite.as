@@ -22,6 +22,7 @@ package
 	import reflex.display.DisplayStyleableTest;
 	import reflex.display.GroupTest;
 	import reflex.display.TextFieldDisplayMeasurableTest;
+	import reflex.graphics.GraphicBaseMeasurementTest;
 	import reflex.layouts.BasicLayoutTest;
 	import reflex.layouts.HorizontalLayoutTest;
 	import reflex.layouts.VerticalLayoutTest;
@@ -85,6 +86,9 @@ package
 		// states
 		public var addItems:AddItemsTest;
 		//public var overrideBase:OverrideBaseTest; // no tests yet
+		
+		//graphics
+		public var graphicMeasurement:GraphicBaseMeasurementTest;
 		
 	}
 }

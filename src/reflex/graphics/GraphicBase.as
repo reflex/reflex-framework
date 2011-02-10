@@ -5,25 +5,41 @@ package reflex.graphics
 	import flash.events.IEventDispatcher;
 	
 	import reflex.binding.DataChange;
+	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
+	import reflex.measurement.IMeasurements;
+	import reflex.measurement.Measurements;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.styles.IStyleable;
+	import reflex.styles.Style;
 	
-	public class GraphicBase extends Shape implements IStyleable, IMeasurablePercent
+	public class GraphicBase extends Shape implements IStyleable, IMeasurable, IMeasurablePercent
 	{
+		
+		protected var unscaledWidth:Number = 0;
+		protected var unscaledHeight:Number = 0;
 		
 		private var _x:Number = 0;
 		private var _y:Number = 0;
-		private var _width:Number = 0;
-		private var _height:Number = 0;
 		private var _percentWidth:Number;
 		private var _percentHeight:Number;
+		private var _explicit:IMeasurements;
+		private var _measured:IMeasurements;
 		
 		private var _id:String;
 		private var _styleName:String;
 		private var _style:Object;
 		
 		private var _target:Object;
+		
+		public function GraphicBase():void {
+			super();
+			_target = this;
+			_style = new Style(); // need to make object props bindable - something like ObjectProxy but lighter?
+			_explicit = new Measurements(this, NaN, NaN);
+			_measured = new Measurements(this, 0, 0);
+			reflex.metadata.resolveCommitProperties(this);
+		}
 		
 		[Bindable(event="targetChange")]
 		public function get target():Object { return _target; }
@@ -49,17 +65,19 @@ package reflex.graphics
 		
 		[PercentProxy("percentWidth")]
 		[Bindable(event="widthChange")]
-		override public function get width():Number { return _width; }
+		override public function get width():Number { return unscaledWidth; }
 		override public function set width(value:Number):void {
-			DataChange.change(this, "width", _width, _width = value);
+			unscaledWidth = _explicit.width = value; // this will dispatch for us if needed
 		}
 		
 		[PercentProxy("percentWidth")]
 		[Bindable(event="heightChange")]
-		override public function get height():Number { return _height; }
+		override public function get height():Number { return unscaledHeight; }
 		override public function set height(value:Number):void {
-			DataChange.change(this, "height", _height, _height = value);
+			unscaledHeight  = _explicit.height = value; // this will dispatch for us if needed (order is important)
 		}
+		
+		
 		
 		/**
 		 * @inheritDoc
@@ -77,6 +95,21 @@ package reflex.graphics
 		public function get percentHeight():Number { return _percentHeight; }
 		public function set percentHeight(value:Number):void {
 			DataChange.change(this, "percentHeight", _percentHeight, _percentHeight = value);
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get explicit():IMeasurements { return _explicit; }
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get measured():IMeasurements { return _measured; }
+		
+		public function setSize(width:Number, height:Number):void {
+			if (unscaledWidth != width) { DataChange.change(this, "width", unscaledWidth, unscaledWidth = width); }
+			if (unscaledHeight != height) { DataChange.change(this, "height", unscaledHeight, unscaledHeight = height); }
 		}
 		
 		// IStyleable implementation
@@ -122,14 +155,6 @@ package reflex.graphics
 			style[property] = value;
 		}
 		
-		public function GraphicBase()
-		{
-			super();
-			//this.target = target;
-			_target = this;
-			_style = {};
-			reflex.metadata.resolveCommitProperties(this);
-		}
 		
 	}
 }
