@@ -67,8 +67,8 @@ package reflex.invalidation
 			
 			if (!rendering) {
 				invalidateStage(display.stage);
-			} else if ( (phase.ascending && depth <= phase.renderingDepth) ||
-				(!phase.ascending && depth >= phase.renderingDepth) ) {
+			} else /*if ( (phase.ascending && depth <= phase.renderingDepth) ||
+				(!phase.ascending && depth >= phase.renderingDepth) ) */{
 				setTimeout(invalidateStage, 0, display.stage);
 			}
 		}
@@ -121,7 +121,7 @@ package reflex.invalidation
 		
 		private static function onAddedToStage(event:Event):void
 		{
-			var display:DisplayObject = DisplayObject(event.target);
+			var display:DisplayObject = DisplayObject(event.currentTarget);
 			displayDepths[display] = getDepth(display);
 			
 			for each (var phase:Invalidation in phaseList) {
@@ -134,7 +134,7 @@ package reflex.invalidation
 		
 		private static function onRemovedFromStage(event:Event):void
 		{
-			var display:DisplayObject = DisplayObject(event.target);
+			var display:DisplayObject = DisplayObject(event.currentTarget);
 			delete displayDepths[display];
 			
 			for each (var phase:Invalidation in phaseList) {
