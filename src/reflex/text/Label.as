@@ -32,7 +32,7 @@ package reflex.text
 	[Style(name="verticalCenter")]
 	[Style(name="dock")]
 	[Style(name="align")]
-	[Style(name="textAlign", format="String", enumeration="left,right,center,justify")]
+	//[Style(name="textAlign", format="String", enumeration="left,right,center,justify")]
 	public class Label extends Display
 	{
 		
@@ -80,6 +80,10 @@ package reflex.text
 			return _allowWrap;
 		}
 		public function set allowWrap(value:Boolean):void {
+			if(value == _allowWrap) {
+				return;
+			}
+			Invalidation.invalidate(this, TEXT_RENDER);
 			DataChange.change(this, "allowWrap", _allowWrap, _allowWrap = value);
 		}
 		
@@ -88,6 +92,10 @@ package reflex.text
 			return _clipText;
 		}
 		public function set clipText(value:Boolean):void {
+			if(value == _clipText) {
+				return;
+			}
+			Invalidation.invalidate(this, TEXT_RENDER);
 			DataChange.change(this, "clipText", _clipText, _clipText = value);
 		}
 		
@@ -160,10 +168,10 @@ package reflex.text
 					line.x = 0;
 					break;
 				case RIGHT:
-					line.x = width-line.textWidth;
+					line.x = unscaledWidth-line.textWidth;
 					break;
 				case CENTER:
-					line.x = width/2-line.textWidth/2;
+					line.x = unscaledWidth/2-line.textWidth/2;
 					break;
 			}
 		}
@@ -180,53 +188,51 @@ package reflex.text
 			fontFormat = fontFormat.clone();
 			
 			var startY:int = 0;
-			var maxWidth:int = 0;
 			var align:String = resolveStyle(this, "textAlign", String, CENTER) as String;
 		
 			lineJustifier.lineJustification = (align == JUSTIFY) ? LineJustification.ALL_BUT_LAST : LineJustification.UNJUSTIFIED;
 			textBlock.textJustifier = lineJustifier;
 			
-			var w:Number = (!clipText && !allowWrap) ? 1000000 : width;
-			
-			line = textBlock.createTextLine(null, w);
 			if(allowWrap) {
-				while(line) {
-					startY += line.height;
-					line.y = startY;
-					maxWidth = Math.max(line.width, maxWidth);
-					alignText(align, line);
-					addChild(line);
-					line = textBlock.createTextLine(line, w);
-				}
-				if(!clipText && !allowWrap) {
-					measured.width = maxWidth;
+				var l:TextLine = line = textBlock.createTextLine(null, unscaledWidth);
+				while(l) {
+					startY += l.height;
+					l.y = startY;
+					alignText(align, l);
+					addChild(l);
+					l = textBlock.createTextLine(l, unscaledWidth);
 				}
 				measured.height = startY;
-			}
-			else if(line) {
-				
-				addChild(line);
-				
-				alignText(align, line);
-				line.y = height/2 + line.height/2-3;
-				
-				if(!clipText && !allowWrap) {
+			} else {
+				line = textBlock.createTextLine(null, clipText ? unscaledWidth : 100000);
+				if(line) {
 					measured.width = line.width;
+					measured.height = line.height;
+					line.y = line.height; //height/2 + line.height/2-3;
+					alignText(align, line);
+					addChild(line);
+				} else {
+					measured.width = 0;
+					measured.height = 0;
 				}
-				measured.height = line.height;
-				
-			}
-			else {
-				measured.width = 0;
-				measured.height = 0;
 			}
 			
 		}
 		
+		
 		override public function setSize(width:Number, height:Number):void {
 			super.setSize(width, height);
-			Invalidation.invalidate(this, TEXT_RENDER);
+			// we'll need to invalidate seperate measurement and layout passes later
+			if(line) {
+				var l:TextLine = line;
+				var align:String = resolveStyle(this, "textAlign", String, CENTER) as String;
+				while(l) {
+					alignText(align, l);
+					l = l.nextLine;
+				}
+			}
 		}
+		
 		
 	}
 }
