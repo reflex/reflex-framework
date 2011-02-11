@@ -14,6 +14,7 @@ package reflex.behaviors
 		[Bindable]
 		public var enabled:Boolean = true;
 		
+		
 		[Test]
 		public function testButtonStateUp():void {
 			var behavior:ButtonBehavior = new ButtonBehavior(this);

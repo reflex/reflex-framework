@@ -107,7 +107,7 @@ package reflex.behaviors
 					return mouseState;
 				}	
 			}
-			return null;
+			return _selected ? mouseState + "AndSelected" : mouseState;
 		}
 		
 	}

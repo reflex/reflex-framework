@@ -32,7 +32,7 @@ package reflex.text
 	[Style(name="verticalCenter")]
 	[Style(name="dock")]
 	[Style(name="align")]
-	//[Style(name="textAlign", format="String", enumeration="left,right,center,justify")]
+	[Style(name="txtAlign", format="String", enumeration="left,right,center,justify")]
 	public class Label extends Display
 	{
 		
@@ -188,7 +188,7 @@ package reflex.text
 			fontFormat = fontFormat.clone();
 			
 			var startY:int = 0;
-			var align:String = resolveStyle(this, "textAlign", String, CENTER) as String;
+			var align:String = resolveStyle(this, "txtAlign", String, CENTER) as String;
 		
 			lineJustifier.lineJustification = (align == JUSTIFY) ? LineJustification.ALL_BUT_LAST : LineJustification.UNJUSTIFIED;
 			textBlock.textJustifier = lineJustifier;
@@ -225,7 +225,7 @@ package reflex.text
 			// we'll need to invalidate seperate measurement and layout passes later
 			if(line) {
 				var l:TextLine = line;
-				var align:String = resolveStyle(this, "textAlign", String, CENTER) as String;
+				var align:String = resolveStyle(this, "txtAlign", String, CENTER) as String;
 				while(l) {
 					alignText(align, l);
 					l = l.nextLine;
