@@ -100,7 +100,8 @@
 			_skin = value;
 			if (_skin is ISkin) {
 				(_skin as ISkin).target = this;
-			} else if (_skin is DisplayObject) {
+			}
+			if (_skin is DisplayObject) {
 				reflex.templating.addItem(this, _skin);
 			}
 			Invalidation.invalidate(this, MEASURE);

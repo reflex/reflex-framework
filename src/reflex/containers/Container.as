@@ -169,8 +169,8 @@ package reflex.containers
 				for (var i:int = 0; i < _content.length; i++) {
 					items.push(_content.getItemAt(i));
 				}
-				reset(items);
 			}
+			reset(items);
 			Invalidation.invalidate(this, MEASURE);
 			Invalidation.invalidate(this, LAYOUT);
 			//dispatchEvent( new Event("contentChange") );
@@ -230,7 +230,7 @@ package reflex.containers
 			Invalidation.invalidate(this, INITIALIZE);
 		}
 		
-		private function onMeasure(event:Event):void {
+		protected function onMeasure(event:Event):void {
 			// the compiler gives us root styles like this. yay?
 			if(styleDeclaration.defaultFactory != null) {
 				var f:Function = styleDeclaration.defaultFactory;

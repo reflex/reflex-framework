@@ -5,6 +5,8 @@ package reflex.behaviors
 	import flash.events.MouseEvent;
 	
 	import reflex.binding.DataChange;
+	import reflex.skins.ISkin;
+
 	//import reflex.events.ButtonEvent;
 	
 	[SkinState("up")]
@@ -25,15 +27,16 @@ package reflex.behaviors
 		public static const DOWN:String = "down";
 		public static const DISABLED:String = "disabled";
 		
-		public static const SELECTED_UP:String = "selectedUp";
-		public static const SELECTED_OVER:String = "selectedOver";
-		public static const SELECTED_DOWN:String = "selectedDown";
+		//public static const SELECTED_UP:String = "upAndSelected";
+		//public static const SELECTED_OVER:String = "overAndSelected";
+		//public static const SELECTED_DOWN:String = "downAndSelected";
 		
 		
 		private var _currentState:String = UP;
 		private var _enabled:Boolean = true;
 		private var _selected:Boolean = false;
 		private var mouseState:String = UP;
+		private var _skin:ISkin;
 		
 		[Bindable(event="currentStateChange")]
 		[Binding(target="target.currentState")]
@@ -55,6 +58,14 @@ package reflex.behaviors
 		public function get selected():Boolean { return _selected; }
 		public function set selected(value:Boolean):void {
 			DataChange.change(this, "selected", _selected, _selected = value);
+			currentState = resolveState(mouseState);
+		}
+		
+		[Bindable(event="skinChange")]
+		[Binding(target="target.skin")]
+		public function get skin():ISkin { return _skin; }
+		public function set skin(value:ISkin):void {
+			DataChange.change(this, "skin", _skin, _skin = value);
 			currentState = resolveState(mouseState);
 		}
 		
@@ -85,25 +96,18 @@ package reflex.behaviors
 		}
 		
 		private function resolveState(mouseState:String):String {
-			if(!_enabled) {
-				return DISABLED;
-			} else if(selected) {
-				switch(mouseState) {
-					case UP: 
-						return SELECTED_UP;
-						break;
-					case OVER: 
-						return SELECTED_OVER;
-						break;
-					case DOWN: 
-						return SELECTED_DOWN;
-						break;
-					default: 
-						return UP;
+			if(_skin) {
+				if(!_enabled && _skin.hasState(DISABLED)) {
+					return DISABLED;
+				} 
+				if(_selected && _skin.hasState(mouseState + "AndSelected")) {
+					return mouseState + "AndSelected";
 				}
-			} else {
-				return mouseState;
+				if(_skin.hasState(mouseState)) {
+					return mouseState;
+				}	
 			}
+			return null;
 		}
 		
 	}

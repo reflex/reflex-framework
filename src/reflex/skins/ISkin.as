@@ -19,6 +19,8 @@ package reflex.skins
 		
 		// I don't like referencing concrete classes in interfaces
 		// but will have to dig into better use cases later
+		
+		// I need to change invalidation to be comfortable off the display list and I can fix this
 		function get target():Sprite;				// but I prefer ISkinnable targets, they're my favorite
 		function set target(value:Sprite):void;		// cause then I'll use data, children, layout, state, etc
 		/*
@@ -37,5 +39,8 @@ package reflex.skins
 		// not sure if getSkinPart should be required
 		// maybe we could make it part of an extended interfaces?
 		//function getSkinPart(part:String):InteractiveObject;
+		
+		function hasState( state:String ):Boolean;
+		
 	}
 }

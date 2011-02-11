@@ -220,7 +220,7 @@ package reflex.skins
 		
 		
 		[Bindable(event="targetChange")]
-		public function get target():Sprite{ return _target; }
+		public function get target():Sprite { return _target; }
 		public function set target(value:Sprite):void
 		{
 			if (_target == value) {
