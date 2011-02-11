@@ -41,8 +41,8 @@ package reflex.skins
 	public class Skin extends EventDispatcher implements ISkin, IContainer, IStateful, IMeasurable
 	{
 		
-		static public const MEASURE:String = "skinMeasure";
-		static public const LAYOUT:String = "skinLayout";
+		static public const MEASURE:String = "measure";
+		static public const LAYOUT:String = "layout";
 		
 		Invalidation.registerPhase(MEASURE, 201, false);
 		Invalidation.registerPhase(LAYOUT, 299, true);
@@ -266,8 +266,9 @@ package reflex.skins
 					}
 				}
 				*/
-				target.addEventListener(MEASURE, onMeasure, false, 0, true);
-				target.addEventListener(LAYOUT, onLayout, false, 0, true);
+				// skin measurement occurs before component measurement
+				target.addEventListener(MEASURE, onMeasure, false, 1, true);
+				target.addEventListener(LAYOUT, onLayout, false, 1, true);
 				Invalidation.invalidate(_target, MEASURE);
 				Invalidation.invalidate(_target, LAYOUT);
 				reflex.metadata.resolveCommitProperties(this);
@@ -395,7 +396,7 @@ package reflex.skins
 		}
 		*/
 		private function onMeasure(event:Event):void {
-			var target:IMeasurable= this.target as IMeasurable;
+			//var target:IMeasurable= this.target as IMeasurable;
 			if (layout && (isNaN(explicit.width) || isNaN(explicit.height))) {
 				var items:Array = content.toArray();
 				var point:Point = layout.measure(items);
