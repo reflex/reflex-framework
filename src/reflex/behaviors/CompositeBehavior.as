@@ -10,12 +10,11 @@ package reflex.behaviors
 	
 	use namespace flash_proxy;
 	
-	[Deprecated("CompositeBehavior functionality is no longer supported. Please use a component's behaviors collection instead.")]
+	[Deprecated]
 	
 	/**
 	 * A dynamic proxy for compositing multiple behaviors. The CompositeBehavior
 	 * may be iterated through just as an Array might be.
-	 * @deprecated
 	 */
 	public dynamic class CompositeBehavior extends Proxy implements IBehavior, IEventDispatcher
 	{
