@@ -85,7 +85,7 @@ package reflex.skins
 			var frames:Array = clip.currentLabels;
 			for each(var label:FrameLabel in frames) {
 				if (label.name == state) {
-					clip.gotoAndPlay(label.frame);
+					clip.gotoAndStop(label.frame);
 				}
 			}
 			var length:int = clip.numChildren; // recurse (for now)
