@@ -75,9 +75,10 @@
 		public function set behaviors(value:*):void
 		{
 			if (value is Array) {
-				var length:int = (value as Array).length;
+				var valueArray:Array = value as Array;
+				var length:int = valueArray.length;
 				for(var i:int = 0; i < length; i++) {
-					var behavior:IBehavior = (value as Array)[0];
+					var behavior:IBehavior = valueArray[i];
 					_behaviors.addItem(behavior);
 				}
 				//_behaviors.source = value;

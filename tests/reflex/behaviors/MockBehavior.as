@@ -1,13 +1,13 @@
 package reflex.behaviors
 {
-	//import reflex.core.IBehavior;
+	import flash.events.IEventDispatcher;
 
-	public class MockBehavior //implements IBehavior
+	public class MockBehavior implements IBehavior
 	{
 		
-		private var _target:Object;
-		public function get target():Object { return _target; }
-		public function set target(value:Object):void {
+		private var _target:IEventDispatcher;
+		public function get target():IEventDispatcher { return _target; }
+		public function set target(value:IEventDispatcher):void {
 			_target = value;
 		}
 		
