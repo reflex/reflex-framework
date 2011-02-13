@@ -41,6 +41,16 @@ package reflex.components
 		}
 		
 		[Test(async)]
+		public function testSelectionChange():void {
+			testPropertyChange(ListDefinition, "selection", new Selection());
+		}
+		
+		[Test(async)]
+		public function testSelectionNotChanged():void {
+			testPropertyNotChanged(ListDefinition, "selection", new Selection());
+		}
+		
+		[Test(async)]
 		public function testPositionChange():void {
 			testPropertyChange(ListDefinition, "position", new Position());
 		}
