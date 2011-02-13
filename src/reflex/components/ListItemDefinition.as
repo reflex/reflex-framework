@@ -24,7 +24,10 @@ package reflex.components
 			var n:String = flash.utils.getQualifiedClassName(this);
 			var C:Class = flash.utils.getDefinitionByName(n) as Class;
 			var instance:ListItemDefinition = new C();
-			
+
+			if (skin == null)
+				throw new Error("Trying to create a new instance of ListItemDefinition using a ListItemDefinition object that does not have a skin defined.  ListItemDefinition.newInstance() requires that a skin is defined.");
+
 			var sn:String = flash.utils.getQualifiedClassName(skin);
 			var sC:Class = flash.utils.getDefinitionByName(sn) as Class;
 			instance.skin = new sC() as ISkin;
