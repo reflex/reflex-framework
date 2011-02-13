@@ -3,6 +3,7 @@ package reflex.components
 	import reflex.collections.SimpleCollection;
 	import reflex.data.Position;
 	import reflex.data.Range;
+	import reflex.data.Selection;
 	import reflex.layouts.XYLayout;
 	import reflex.tests.TestBase;
 	
