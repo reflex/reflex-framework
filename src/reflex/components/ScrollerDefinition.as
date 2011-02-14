@@ -18,16 +18,16 @@ package reflex.components
 		private var _content:IList;
 		private var _layout:ILayout;
 		
-		[Bindable(event="horizontalChange")]
+		[Bindable(event="horizontalPositionChange")]
 		public function get horizontalPosition():IPosition { return _horizontal; }
 		public function set horizontalPosition(value:IPosition):void {
-			DataChange.change(this, "horizontal", _horizontal, _horizontal = value);
+			DataChange.change(this, "horizontalPosition", _horizontal, _horizontal = value);
 		}
 		
-		[Bindable(event="verticalChange")]
+		[Bindable(event="verticalPositionChange")]
 		public function get verticalPosition():IPosition { return _vertical; }
 		public function set verticalPosition(value:IPosition):void {
-			DataChange.change(this, "vertical", _vertical, _vertical = value);
+			DataChange.change(this, "verticalPosition", _vertical, _vertical = value);
 		}
 		
 		[Bindable(event="contentChange")]

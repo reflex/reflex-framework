@@ -14,18 +14,18 @@ package reflex.behaviors
 		private var _verticalPosition:IPosition;
 		private var _container:DisplayObject;
 		
-		[Bindable(event="horizontalChange")]
+		[Bindable(event="horizontalPositionChange")]
 		[Binding(target="target.horizontalPosition")]
 		public function get horizontalPosition():IPosition { return _horizontalPosition; }
 		public function set horizontalPosition(value:IPosition):void {
-			DataChange.change(this, "horizontal", _horizontalPosition, _horizontalPosition = value);
+			DataChange.change(this, "horizontalPosition", _horizontalPosition, _horizontalPosition = value);
 		}
 		
-		[Bindable(event="verticalChange")]
+		[Bindable(event="verticalPositionChange")]
 		[Binding(target="target.verticalPosition")]
 		public function get verticalPosition():IPosition { return _verticalPosition; }
 		public function set verticalPosition(value:IPosition):void {
-			DataChange.change(this, "vertical", _verticalPosition, _verticalPosition = value);
+			DataChange.change(this, "verticalPosition", _verticalPosition, _verticalPosition = value);
 		}
 		
 		[Bindable(event="containerChange")]
