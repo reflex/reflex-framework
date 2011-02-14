@@ -45,8 +45,10 @@ package reflex.components
 				_content = null;
 			} else if (value is IList) {
 				_content = value as IList;
-			} else if (value is Array || value is Vector) {
+			} else if (value is Array) {
 				_content = new SimpleCollection(value);
+			} else if (isVector(value)) {
+				_content = new SimpleCollection(convertVectorToArray(value));
 			} else {
 				_content = new SimpleCollection([value]);
 			}
@@ -54,6 +56,30 @@ package reflex.components
 			DataChange.change(this, "content", oldContent,  _content);
 		}
 		
+		private function isVector(value:*):Boolean {
+			var valueIsVector:Boolean = true;
+			
+			try {
+				var vector:Vector.<Object> = Vector.<Object>(value);
+			} catch (e:Error) {
+				valueIsVector = false;
+			}
+			
+			return valueIsVector;
+		}
+
+		private function convertVectorToArray(vector:Object):Array {
+			var array:Array = [];
+
+			var vectorLength:int = vector.length;
+
+			for (var i:int = 0; i < vectorLength; i++ ) {
+				array[i] = vector[i];
+			}
+
+			return array;
+		}
+
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {

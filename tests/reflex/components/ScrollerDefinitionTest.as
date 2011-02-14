@@ -77,6 +77,24 @@ package reflex.components
 			Assert.assertTrue(firstItemInSimpleCollection is String);
 			Assert.assertEquals("testArray", firstItemInSimpleCollection);
 		}
+		
+		[Test]
+		public function testSetContentWithVector():void {
+			var scrollerDefinition:ScrollerDefinition = new ScrollerDefinition();
+			
+			var vector:Vector.<String> = new Vector.<String>();
+			vector.push("testVector");
+			
+			scrollerDefinition.content = vector;
+			Assert.assertTrue(scrollerDefinition.content is SimpleCollection);
+			
+			var simpleCollection:SimpleCollection = scrollerDefinition.content as SimpleCollection;
+			Assert.assertEquals(1, simpleCollection.length);
+			
+			var firstItemInSimpleCollection:Object = simpleCollection.getItemAt(0);
+			Assert.assertTrue(firstItemInSimpleCollection is String);
+			Assert.assertEquals("testVector", firstItemInSimpleCollection);
+		}
 
 		[Test(async)]
 		public function testLayoutChange():void {
