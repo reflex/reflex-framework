@@ -16,7 +16,9 @@ package
 	import reflex.components.ListItemTest;
 	import reflex.components.ListTest;
 	import reflex.components.ScrollerDefinitionTest;
+	import reflex.components.SliderDefinitionTest;
 	import reflex.containers.ContainerMeasurementTest;
+	import reflex.containers.ContainerTest;
 	import reflex.display.BitmapDisplayMeasurableTest;
 	import reflex.display.DisplayFunctionsTest;
 	import reflex.display.DisplayMeasurableTest;
@@ -48,6 +50,7 @@ package
 		public var listItem:ListItemTest;
 		public var list:ListTest;
 		public var scrollerDefinition:ScrollerDefinitionTest;
+		public var sliderDefinition:SliderDefinitionTest;
 		
 		// behaviors
 		public var compositeBehavior:CompositeBehaviorTest;
@@ -61,6 +64,7 @@ package
 		public var skinContainer:SkinContainerTest;
 		public var displayFunctions:DisplayFunctionsTest;
 		public var containerMeasurement:ContainerMeasurementTest;
+		public var containerTest:ContainerTest;
 		
 		// styling
 		public var styleableSprite:DisplayStyleableTest;
