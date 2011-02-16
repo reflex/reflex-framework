@@ -41,17 +41,7 @@ package reflex.components
 			
 			var oldContent:IList = _content;
 			
-			if (value == null) {
-				_content = null;
-			} else if (value is IList) {
-				_content = value as IList;
-			} else if (value is Array) {
-				_content = new SimpleCollection(value);
-			} else if (isVector(value)) {
-				_content = new SimpleCollection(convertVectorToArray(value));
-			} else {
-				_content = new SimpleCollection([value]);
-			}
+			_content = reflex.collections.convertToIList(value);
 			
 			DataChange.change(this, "content", oldContent,  _content);
 		}

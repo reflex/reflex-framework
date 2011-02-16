@@ -153,15 +153,7 @@ package reflex.containers
 				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			}
 			
-			if (value == null) {
-				_content = null;
-			} else if (value is IList) {
-				_content = value as IList;
-			} else if (value is Array || value is Vector) {
-				_content = new SimpleCollection(value);
-			} else {
-				_content = new SimpleCollection([value]);
-			}
+			_content = reflex.collections.convertToIList(value);
 			
 			if (_content) {
 				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
