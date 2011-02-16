@@ -15,7 +15,7 @@ package reflex.display
 	import reflex.containers.IContainer;
 	import reflex.layouts.XYLayout;
 	
-	public class ContainerTestBase extends StatefulTestBase
+	public class StatefulContainerTestBase extends StatefulTestBase
 	{
 		
 		//public var C:Class;

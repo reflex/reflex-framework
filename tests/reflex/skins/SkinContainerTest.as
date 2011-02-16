@@ -1,8 +1,8 @@
 package reflex.skins
 {
-	import reflex.display.ContainerTestBase;
+	import reflex.display.StatefulContainerTestBase;
 	
-	public class SkinContainerTest extends ContainerTestBase
+	public class SkinContainerTest extends StatefulContainerTestBase
 	{
 		public function SkinContainerTest()
 		{

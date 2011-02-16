@@ -2,7 +2,7 @@ package reflex.display
 {
 	import reflex.containers.Container;
 	
-	public class GroupTest extends ContainerTestBase
+	public class GroupTest extends StatefulContainerTestBase
 	{
 		
 		public function GroupTest() {
