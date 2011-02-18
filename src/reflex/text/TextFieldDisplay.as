@@ -1,7 +1,10 @@
 ﻿package reflex.text
 {
+	import flash.events.Event;
+	import flash.events.TextEvent;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
+	import flash.text.TextLineMetrics;
 	
 	import reflex.binding.DataChange;
 	import reflex.measurement.IMeasurable;
@@ -10,7 +13,6 @@
 	import reflex.measurement.Measurements;
 	import reflex.styles.IStyleable;
 	import reflex.styles.Style;
-	
 	
 	
 	public class TextFieldDisplay extends TextField implements IStyleable, IMeasurable, IMeasurablePercent
@@ -46,6 +48,8 @@
 			_style = new Style(); // need to make object props bindable - something like ObjectProxy but lighter?
 			_explicit = new Measurements(this);
 			_measured = new Measurements(this, 160, 22);
+			addEventListener(Event.CHANGE, onMeasure, false, 0, true);
+			onMeasure(null);
 		}
 		
 		override public function set text(value:String):void {
@@ -55,6 +59,7 @@
 			} else {
 				DataChange.change(this, "text", super.text, super.text = value);
 			}
+			onMeasure(null);
 		}
 		
 		override public function set defaultTextFormat(value:TextFormat):void {
@@ -192,6 +197,14 @@
 		public function setSize(width:Number, height:Number):void {
 			if (unscaledWidth != width) { DataChange.change(this, "width", unscaledWidth, unscaledWidth = width); }
 			if (unscaledHeight != height) { DataChange.change(this, "height", unscaledHeight, unscaledHeight = height); }
+			
+		}
+		
+		private function onMeasure(event:Event):void {
+			//var metrics:TextLineMetrics = this.getLineMetrics(0);
+			measured.width = textWidth + 20; //metrics.width + 10; // + metrics.x*2;
+			measured.height = textHeight + 1; //metrics.height + 10; // + metrics.descent;
+			//this.scrollV = 0.5;
 		}
 		
 	}

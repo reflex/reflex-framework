@@ -2,6 +2,7 @@ package reflex.text
 {
 	
 	import flash.events.Event;
+	import flash.text.TextFieldType;
 	import flash.text.TextLineMetrics;
 	
 	import reflex.metadata.resolveCommitProperties;
@@ -20,18 +21,8 @@ package reflex.text
 		public function Text()
 		{
 			super();
-			this.selectable = false;
+			//this.selectable = false;
 			reflex.metadata.resolveCommitProperties(this);
-		}
-		
-		/**
-		 * @private
-		 */
-		[Commit(properties="text, defaultTextFormat")]
-		public function measure(event:Event):void {
-			var metrics:TextLineMetrics = this.getLineMetrics(0);
-			measured.width = metrics.width + metrics.x*2;
-			measured.height = metrics.height + metrics.descent;
 		}
 		
 	}
