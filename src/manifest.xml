@@ -79,9 +79,12 @@
 	<!-- text -->
 	<component id="Label" class="reflex.text.Label" />
 	<component id="Text" class="reflex.text.Text" />
+	<!--
+	<component id="TextInput" class="reflex.text.TextInput" />
+	-->
 	
-	<!-- Flex dependencies -->
-	<!--<component id="IBindingClient" class="mx.binding.IBindingClient" />-->
+	<!-- Flex references -->
+	<component id="FlexReferences" class="mx.mxml.FlexReferences" />
 	
 	
 </componentPackage>
