@@ -206,8 +206,8 @@ package reflex.text
 			} else {
 				line = textBlock.createTextLine(null, clipText ? unscaledWidth : 100000);
 				if(line) {
-					measured.width = line.width;
-					measured.height = line.height;
+					measured.width = line.textWidth;
+					measured.height = line.textHeight;
 					line.y = line.height; //height/2 + line.height/2-3;
 					alignText(align, line);
 					addChild(line);

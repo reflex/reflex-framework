@@ -24,6 +24,7 @@
 	<component id="SelectBehavior" class="reflex.behaviors.SelectBehavior"/>
 	<component id="StepBehavior" class="reflex.behaviors.StepBehavior"/>
 	<component id="DragStepBehavior" class="reflex.behaviors.DragStepBehavior"/>
+	<component id="TextAreaBehavior" class="reflex.behaviors.TextAreaBehavior"/>
 	
 	<!-- layouts -->
 	<component id="ILayout" class="reflex.layouts.ILayout"/>

@@ -9,9 +9,11 @@ package mx.mxml
 	import mx.binding.StaticPropertyWatcher;
 	import mx.binding.XMLWatcher;
 	import mx.core.ClassFactory;
+	import mx.core.DeferredInstanceFromClass;
 	import mx.core.FontAsset;
 	import mx.core.IStateClient2;
 	import mx.core.Repeater;
+	import mx.filters.IBitmapFilter;
 	import mx.styles.CSSStyleDeclaration;
 	
 	/**
@@ -40,6 +42,9 @@ package mx.mxml
 		// states & styles
 		static private var sc2:mx.core.IStateClient2;
 		static private var csd:CSSStyleDeclaration;
+		
+		static private var bf:IBitmapFilter;
+		static private var difc:DeferredInstanceFromClass;
 		
 	}
 }

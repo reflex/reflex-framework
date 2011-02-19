@@ -388,8 +388,9 @@ package reflex.skins
 		}
 		*/
 		private function onMeasure(event:Event):void {
-			//var target:IMeasurable= this.target as IMeasurable;
-			if (layout && (isNaN(explicit.width) || isNaN(explicit.height))) {
+			var t:Object= _target as Object;
+			if (layout && (isNaN(explicit.width) || isNaN(explicit.height)) 
+			&& _target && (isNaN(t.explicit.width) || isNaN(t.explicit.height))) {
 				var items:Array = content.toArray();
 				var point:Point = layout.measure(items);
 				if (point.x != measured.width || point.y != measured.height) {

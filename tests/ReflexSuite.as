@@ -35,6 +35,7 @@ package
 	import reflex.skins.SkinMeasurementTest;
 	import reflex.styles.StyleFunctionsTest;
 	import reflex.templating.addItemAtTest;
+	import reflex.text.LabelTest;
 	
 	[Suite]
     [RunWith("org.flexunit.runners.Suite")]
@@ -95,6 +96,9 @@ package
 		
 		//graphics
 		public var graphicMeasurement:GraphicBaseMeasurementTest;
+		
+		//text
+		public var label:LabelTest;
 		
 	}
 }

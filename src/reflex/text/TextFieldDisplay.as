@@ -3,6 +3,7 @@
 	import flash.events.Event;
 	import flash.events.TextEvent;
 	import flash.text.TextField;
+	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
 	
@@ -92,7 +93,11 @@
 					if (split.length == 2) {
 						var property:String = split[0].replace(/\s+/g, "");
 						var v:String = split[1].replace(/\s+/g, "");
-						_style[property] = v;
+						if(!isNaN( Number(v) )) {
+							_style[property] = Number(v);
+						} else {
+							_style[property] = v;
+						}
 					}
 				}
 			}
@@ -201,10 +206,12 @@
 		}
 		
 		private function onMeasure(event:Event):void {
-			//var metrics:TextLineMetrics = this.getLineMetrics(0);
-			measured.width = textWidth + 20; //metrics.width + 10; // + metrics.x*2;
-			measured.height = textHeight + 1; //metrics.height + 10; // + metrics.descent;
-			//this.scrollV = 0.5;
+			if(type == TextFieldType.INPUT) {
+				measured.width = textWidth + 30;
+			} else {
+				measured.width = textWidth;
+			}
+			measured.height = textHeight + 5;
 		}
 		
 	}

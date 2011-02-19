@@ -21,7 +21,7 @@ package reflex.text
 		public function Text()
 		{
 			super();
-			//this.selectable = false;
+			this.selectable = false;
 			reflex.metadata.resolveCommitProperties(this);
 		}
 		
