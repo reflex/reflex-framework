@@ -25,6 +25,8 @@ package reflex.data
 		[Bindable(event="selectedItemChange")]
 		public function get selectedItem():Object { return _selectedItem; }
 		public function set selectedItem(value:Object):void {
+			if (_selectedItem == value) return;
+
 			_selectedItems.removeAll();
 			if(value != null) {
 				_selectedItems.addItem(value);
