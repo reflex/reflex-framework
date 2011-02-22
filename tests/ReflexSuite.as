@@ -21,6 +21,7 @@ package
 	import reflex.containers.ContainerTest;
 	import reflex.data.PositionTest;
 	import reflex.data.RangeTest;
+	import reflex.data.ScrollPositionTest;
 	import reflex.display.BitmapDisplayMeasurableTest;
 	import reflex.display.DisplayFunctionsTest;
 	import reflex.display.DisplayMeasurableTest;
@@ -72,6 +73,7 @@ package
 		// data
 		public var position:PositionTest;
 		public var range:RangeTest;
+		public var scrollPosition:ScrollPositionTest;
 
 		// styling
 		public var styleableSprite:DisplayStyleableTest;
