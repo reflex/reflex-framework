@@ -40,28 +40,28 @@ package reflex.behaviors
 			super(target);
 		}
 		
-		[EventListener(type="valueChange", target="horizontalPosition")]
-		[EventListener(type="minimumChange", target="horizontalPosition")]
-		[EventListener(type="maximumChange", target="horizontalPosition")]
+		[EventListener(event="valueChange", target="horizontalPosition")]
+		[EventListener(event="minimumChange", target="horizontalPosition")]
+		[EventListener(event="maximumChange", target="horizontalPosition")]
 		public function onHorizontalChange(event:Event):void {
 			var percent:Number = (horizontalPosition.value-horizontalPosition.minimum)/(horizontalPosition.maximum-horizontalPosition.minimum);
 			//_container.x = (_container.width-(target as Object).width)*percent*-1;
 			_textField.scrollH = (_textField.maxScrollV)*percent;
 		}
 		
-		[EventListener(type="valueChange", target="verticalPosition")]
-		[EventListener(type="minimumChange", target="verticalPosition")]
-		[EventListener(type="maximumChange", target="verticalPosition")]
+		[EventListener(event="valueChange", target="verticalPosition")]
+		[EventListener(event="minimumChange", target="verticalPosition")]
+		[EventListener(event="maximumChange", target="verticalPosition")]
 		public function onVerticalChange(event:Event):void {
 			var percent:Number = (verticalPosition.value-verticalPosition.minimum)/(verticalPosition.maximum-verticalPosition.minimum);
 			//_container.y = (_container.height-(target as Object).height)*percent*-1;
 			_textField.scrollV = (_textField.maxScrollV)*percent;
 		}
 		
-		[EventListener(type="scroll", target="textField")]
-		[EventListener(type="change", target="textField")]
-		[EventListener(type="widthChange", target="target")]
-		[EventListener(type="heightChange", target="target")]
+		[EventListener(event="scroll", target="textField")]
+		[EventListener(event="change", target="textField")]
+		[EventListener(event="widthChange", target="target")]
+		[EventListener(event="heightChange", target="target")]
 		public function onScrollChange(event:Event):void {
 			if(_textField && _textField.maxScrollV > 1) {
 				var percent:Number = _textField.scrollV/_textField.maxScrollV;

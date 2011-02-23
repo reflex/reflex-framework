@@ -49,10 +49,13 @@
 			_style = new Style(); // need to make object props bindable - something like ObjectProxy but lighter?
 			_explicit = new Measurements(this);
 			_measured = new Measurements(this, 160, 22);
+			addEventListener(Event.CHANGE, textChange, false, 0, true);
 			addEventListener(Event.CHANGE, onMeasure, false, 0, true);
 			onMeasure(null);
 		}
 		
+		[Bindable(event="textChange", noEvent)]
+		override public function get text():String { return super.text; }
 		override public function set text(value:String):void {
 			if(value == null) { 
 				DataChange.change(this, "text", super.text, null);
@@ -203,6 +206,10 @@
 			if (unscaledWidth != width) { DataChange.change(this, "width", unscaledWidth, unscaledWidth = width); }
 			if (unscaledHeight != height) { DataChange.change(this, "height", unscaledHeight, unscaledHeight = height); }
 			
+		}
+		
+		private function textChange(event:Event):void {
+			DataChange.change(this, "text", null, super.text);
 		}
 		
 		private function onMeasure(event:Event):void {

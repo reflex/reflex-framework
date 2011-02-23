@@ -15,8 +15,8 @@ package reflex.metadata
 			
 			// to support multiple EventListener metadata tags on a single method
 			for each (var tag:XML in meta) {
-				var type:String = ( tag.arg.(@key == "type").length() > 0 ) ?
-					tag.arg.(@key == "type").@value :
+				var type:String = ( tag.arg.(@key == "event").length() > 0 ) ?
+					tag.arg.(@key == "event").@value :
 					tag.arg.@value;
 				var targ:String = tag.arg.(@key == "target").@value;
 				

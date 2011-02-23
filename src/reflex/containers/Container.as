@@ -22,6 +22,7 @@ package reflex.containers
 	import reflex.states.applyState;
 	import reflex.states.removeState;
 	import reflex.templating.addItemsAt;
+	import reflex.collections.convertToIList;
 	
 	//use namespace mx_internal;
 	

@@ -8,6 +8,7 @@ package reflex.components
 	import reflex.data.IPosition;
 	import reflex.data.IRange;
 	import reflex.layouts.ILayout;
+	import reflex.collections.convertToIList;
 	
 	[DefaultProperty("content")]
 	public class ScrollerDefinition extends Component implements IContainer

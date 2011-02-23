@@ -40,18 +40,18 @@ package reflex.behaviors
 			super(target);
 		}
 		
-		[EventListener(type="valueChange", target="horizontalPosition")]
-		[EventListener(type="minimumChange", target="horizontalPosition")]
-		[EventListener(type="maximumChange", target="horizontalPosition")]
+		[EventListener(event="valueChange", target="horizontalPosition")]
+		[EventListener(event="minimumChange", target="horizontalPosition")]
+		[EventListener(event="maximumChange", target="horizontalPosition")]
 		public function onHorizontalChange(event:Event):void {
 			var percent:Number = (horizontalPosition.value-horizontalPosition.minimum)/(horizontalPosition.maximum-horizontalPosition.minimum);
 			//_container.x = (_container.width-(target as Object).width)*percent*-1;
 			_container.x = Math.round(((_container  as Object).measured.width-(target as Object).width)*percent*-1);
 		}
 		
-		[EventListener(type="valueChange", target="verticalPosition")]
-		[EventListener(type="minimumChange", target="verticalPosition")]
-		[EventListener(type="maximumChange", target="verticalPosition")]
+		[EventListener(event="valueChange", target="verticalPosition")]
+		[EventListener(event="minimumChange", target="verticalPosition")]
+		[EventListener(event="maximumChange", target="verticalPosition")]
 		public function onVerticalChange(event:Event):void {
 			var percent:Number = (verticalPosition.value-verticalPosition.minimum)/(verticalPosition.maximum-verticalPosition.minimum);
 			//_container.y = (_container.height-(target as Object).height)*percent*-1;

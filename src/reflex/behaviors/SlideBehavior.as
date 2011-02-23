@@ -53,7 +53,7 @@ package reflex.behaviors
 		
 		// behavior
 		
-		[EventListener(type="click", target="track")]
+		[EventListener(event="click", target="track")]
 		public function onTrackPress(event:MouseEvent):void
 		{
 			var t:Object = target as Object;
@@ -74,7 +74,7 @@ package reflex.behaviors
 		}
 		
 		
-		[EventListener(type="mouseDown", target="thumb")]
+		[EventListener(event="mouseDown", target="thumb")]
 		public function onThumbDown(event:MouseEvent):void
 		{
 			target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
@@ -105,12 +105,12 @@ package reflex.behaviors
 		// skinpart positioning
 		
 		//[CommitProperties(properties="position.min, position.max, position.position, position.pageSize")]
-		[EventListener(type="valueChange", target="position")]
+		[EventListener(event="valueChange", target="position")]
 		public function onPositionChange(event:Event):void {
 			updateUIPosition();
 		}
 		
-		[EventListener(type="heightChange", target="target")]
+		[EventListener(event="heightChange", target="target")]
 		public function onSizeChange(event:Event):void {
 			updateUILayout();
 		}

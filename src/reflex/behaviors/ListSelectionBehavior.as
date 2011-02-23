@@ -38,7 +38,7 @@ package reflex.behaviors
 			super(target);
 		}
 		
-		[EventListener(type="added", target="container")]
+		[EventListener(event="added", target="container")]
 		public function onRendererAdded(event:Event):void {
 			var renderer:Object = event.target;
 			if(renderer.parent == container) {

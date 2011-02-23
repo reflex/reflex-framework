@@ -43,13 +43,13 @@ package reflex.behaviors
 			super(target);
 		}
 		
-		[EventListener(type="click", target="incrementButton")]
+		[EventListener(event="click", target="incrementButton")]
 		public function onFwdPress(event:Event):void
 		{
 			_position.value += _position.stepSize;
 		}
 		
-		[EventListener(type="click", target="decrementButton")]
+		[EventListener(event="click", target="decrementButton")]
 		public function onBwdPress(event:Event):void
 		{
 			_position.value -= _position.stepSize;

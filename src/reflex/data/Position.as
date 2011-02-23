@@ -23,7 +23,7 @@ package reflex.data
 			DataChange.change(this, "stepSize", _stepSize, _stepSize = value);
 		}
 		
-		public function Position(minimum:Number = 0, maximum:Number = 100, value:Number = 0, stepSize:Number = 0)
+		public function Position(minimum:Number = 0, maximum:Number = 100, value:Number = 0, stepSize:Number = 1)
 		{
 			super(minimum, maximum);
 			_value = value;

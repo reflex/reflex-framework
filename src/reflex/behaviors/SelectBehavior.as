@@ -29,7 +29,7 @@ package reflex.behaviors
 		/**
 		 * @private
 		 */
-		[EventListener(type="click", target="target")]
+		[EventListener(event="click", target="target")]
 		public function onClick(event:MouseEvent):void
 		{
 			selected = !selected;

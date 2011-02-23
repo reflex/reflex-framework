@@ -30,6 +30,7 @@ package reflex.skins
 	import reflex.states.applyState;
 	import reflex.states.removeState;
 	import reflex.templating.addItemsAt;
+	import reflex.collections.convertToIList;
 	
 	/**
 	 * Skin is a convenient base class for many skins, a swappable graphical

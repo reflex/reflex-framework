@@ -42,13 +42,13 @@ package reflex.behaviors
 			//ButtonEvent.initialize(target);
 		}
 		
-		[EventListener(type="mouseDown", target="target")]
+		[EventListener(event="mouseDown", target="target")]
 		public function onDragStart(event:MouseEvent):void
 		{
 			startDragPosition = position.value;
 		}
 		
-		[EventListener(type="drag", target="target")]
+		[EventListener(event="drag", target="target")]
 		public function onDrag(event:Event):void
 		{
 			if (dragging) {
