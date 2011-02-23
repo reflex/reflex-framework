@@ -19,6 +19,10 @@ package
 	import reflex.components.SliderDefinitionTest;
 	import reflex.containers.ContainerMeasurementTest;
 	import reflex.containers.ContainerTest;
+	import reflex.data.PositionTest;
+	import reflex.data.RangeTest;
+	import reflex.data.ScrollPositionTest;
+	import reflex.data.SelectionTest;
 	import reflex.display.BitmapDisplayMeasurableTest;
 	import reflex.display.DisplayFunctionsTest;
 	import reflex.display.DisplayMeasurableTest;
@@ -66,7 +70,13 @@ package
 		public var displayFunctions:DisplayFunctionsTest;
 		public var containerMeasurement:ContainerMeasurementTest;
 		public var containerTest:ContainerTest;
-		
+
+		// data
+		public var position:PositionTest;
+		public var range:RangeTest;
+		public var scrollPosition:ScrollPositionTest;
+		public var selection:SelectionTest;
+
 		// styling
 		public var styleableSprite:DisplayStyleableTest;
 		public var styleFunctions:StyleFunctionsTest;

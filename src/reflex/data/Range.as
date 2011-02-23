@@ -12,13 +12,13 @@ package reflex.data
 		[Bindable(event="minimumChange", noEvent)]
 		public function get minimum():Number { return _minimum; }
 		public function set minimum(value:Number):void {
-			DataChange.change(this, "min", _minimum, _minimum = value);
+			DataChange.change(this, "minimum", _minimum, _minimum = value);
 		}
 		
 		[Bindable(event="maximumChange", noEvent)]
 		public function get maximum():Number { return _maximum;}
 		public function set maximum(value:Number):void {
-			DataChange.change(this, "max", _maximum, _maximum = value);
+			DataChange.change(this, "maximum", _maximum, _maximum = value);
 		}
 		
 		public function Range(minimum:Number = 0, maximum:Number = 100)
