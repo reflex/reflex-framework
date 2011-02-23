@@ -45,7 +45,7 @@ package reflex.data {
 			Assert.assertEquals(0, position.minimum);
 			Assert.assertEquals(100, position.maximum);
 			Assert.assertEquals(0, position.value);
-			Assert.assertEquals(0, position.stepSize);
+			Assert.assertEquals(1, position.stepSize);
 		}
 	}
 }
