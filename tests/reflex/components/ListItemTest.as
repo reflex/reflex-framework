@@ -20,7 +20,8 @@ package reflex.components
 		[Test]
 		public function testNewInstance():void {
 			var listItemDefinition:ListItemDefinition = new ListItemDefinition();
-			listItemDefinition.skin = new ListItemSkin();
+			// ListItemSkin caused test build to fail because it doesn't reference ReflexSkins.swc
+			listItemDefinition.skin = {}; //new ListItemSkin();
 			
 			var newInstance:* = listItemDefinition.newInstance();
 			
