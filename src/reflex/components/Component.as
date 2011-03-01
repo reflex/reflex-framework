@@ -97,6 +97,12 @@
 			if (_skin == value) {
 				return;
 			}
+			
+			graphics.clear();
+			
+			if (_skin is ISkin) {
+				(_skin as ISkin).target = null;
+			}
 			var oldSkin:Object = _skin;
 			_skin = value;
 			if (_skin is ISkin) {
@@ -138,12 +144,14 @@
 		
 		override public function set width(value:Number):void {
 			super.width = value;
-			reflex.measurement.setSize(skin, value, height);
+			//reflex.measurement.setSize(skin, value, height);
+			skin.width = value;
 		}
 		
 		override public function set height(value:Number):void {
 			super.height = value;
-			reflex.measurement.setSize(skin, width, value);
+			//reflex.measurement.setSize(skin, width, value);
+			skin.height = value;
 		}
 		
 		override public function setSize(width:Number, height:Number):void {
@@ -152,11 +160,15 @@
 		}
 		
 		private function onMeasure(event:Event):void {
-			if ((isNaN(explicit.width) || isNaN(explicit.height)) && skin) {
-				var w:Number = reflex.measurement.resolveWidth(skin);
-				var h:Number = reflex.measurement.resolveHeight(skin);
-				measured.width = w; // explicit width of skin becomes measured width of component
-				measured.height = h; // explicit height of skin becomes measured height of component
+			if(skin) {
+				if (isNaN(explicit.width)) {
+					var w:Number = reflex.measurement.resolveWidth(skin);
+					measured.width = w; // explicit width of skin becomes measured width of component
+				}
+				if(isNaN(explicit.height)) {
+					var h:Number = reflex.measurement.resolveHeight(skin);
+					measured.height = h; // explicit height of skin becomes measured height of component
+				}
 			}
 		}
 		

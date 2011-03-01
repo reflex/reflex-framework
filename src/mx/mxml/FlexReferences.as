@@ -8,6 +8,7 @@ package mx.mxml
 	import mx.binding.RepeaterItemWatcher;
 	import mx.binding.StaticPropertyWatcher;
 	import mx.binding.XMLWatcher;
+	import mx.core.BitmapAsset;
 	import mx.core.ClassFactory;
 	import mx.core.DeferredInstanceFromClass;
 	import mx.core.FontAsset;
@@ -38,6 +39,7 @@ package mx.mxml
 		// core
 		static private var cf:ClassFactory;
 		static private var fa:FontAsset;
+		static private var ba:BitmapAsset;
 		
 		// states & styles
 		static private var sc2:mx.core.IStateClient2;

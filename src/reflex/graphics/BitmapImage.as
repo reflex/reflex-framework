@@ -136,7 +136,9 @@ package reflex.graphics
 				} else if (mode == SKEW) {
 					matrix = new Matrix(unscaledWidth/original.width, 0, 0, unscaledHeight/original.height, 0, 0);
 				}
-				this.bitmapData.draw(original, matrix, null, null, null, true);
+				if(bitmapData) {
+					bitmapData.draw(original, matrix, null, null, null, true);
+				}
 			}
 		}
 		

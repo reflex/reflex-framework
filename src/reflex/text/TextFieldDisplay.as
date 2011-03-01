@@ -51,7 +51,7 @@
 			_measured = new Measurements(this, 160, 22);
 			addEventListener(Event.CHANGE, textChange, false, 0, true);
 			addEventListener(Event.CHANGE, onMeasure, false, 0, true);
-			onMeasure(null);
+			//onMeasure(null);
 		}
 		
 		[Bindable(event="textChange", noEvent)]
@@ -63,7 +63,7 @@
 			} else {
 				DataChange.change(this, "text", super.text, super.text = value);
 			}
-			onMeasure(null);
+			//onMeasure(null);
 		}
 		
 		override public function set defaultTextFormat(value:TextFormat):void {
@@ -205,7 +205,6 @@
 		public function setSize(width:Number, height:Number):void {
 			if (unscaledWidth != width) { DataChange.change(this, "width", unscaledWidth, unscaledWidth = width); }
 			if (unscaledHeight != height) { DataChange.change(this, "height", unscaledHeight, unscaledHeight = height); }
-			
 		}
 		
 		private function textChange(event:Event):void {
@@ -213,12 +212,16 @@
 		}
 		
 		private function onMeasure(event:Event):void {
-			if(type == TextFieldType.INPUT) {
-				measured.width = textWidth + 30;
-			} else {
-				measured.width = textWidth;
+			if(isNaN(_explicit.width)) {
+				if(type == TextFieldType.INPUT) {
+					measured.width = textWidth + 30;
+				} else {
+					measured.width = textWidth;
+				}
 			}
-			measured.height = textHeight + 5;
+			if(isNaN(_explicit.height)) {
+				measured.height = textHeight + 5;
+			}
 		}
 		
 	}

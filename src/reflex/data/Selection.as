@@ -10,6 +10,9 @@ package reflex.data
 	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
 	
+	/**
+	 * Holds the selected data for list components.
+	 */
 	public class Selection extends EventDispatcher implements ISelection
 	{
 		
@@ -23,6 +26,10 @@ package reflex.data
 		}
 		
 		[Bindable(event="selectedItemChange")]
+		/**
+		 * The selected item related to this selection.
+		 * If multiple items are selected this property will hold the most recently selected item.
+		 */
 		public function get selectedItem():Object { return _selectedItem; }
 		public function set selectedItem(value:Object):void {
 			if (_selectedItem == value) return;
@@ -36,6 +43,10 @@ package reflex.data
 			//dispatcheEvent(new Event("selectionChanged"));
 		}
 		
+		/**
+		 * A collection of selected items.
+		 * Add new items to the selection by calling selectedItems.addItem.
+		 */
 		public function get selectedItems():IList { return _selectedItems; }
 		
 		private function onCollectionChange(event:CollectionEvent):void {

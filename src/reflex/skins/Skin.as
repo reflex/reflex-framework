@@ -17,12 +17,14 @@ package reflex.skins
 	import reflex.binding.Bind;
 	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
+	import reflex.collections.convertToIList;
 	import reflex.components.IStateful;
 	import reflex.containers.IContainer;
 	import reflex.invalidation.Invalidation;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.ILayout;
 	import reflex.measurement.IMeasurable;
+	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
 	import reflex.measurement.Measurements;
 	import reflex.metadata.resolveBindings;
@@ -30,7 +32,6 @@ package reflex.skins
 	import reflex.states.applyState;
 	import reflex.states.removeState;
 	import reflex.templating.addItemsAt;
-	import reflex.collections.convertToIList;
 	
 	/**
 	 * Skin is a convenient base class for many skins, a swappable graphical
@@ -69,12 +70,12 @@ package reflex.skins
 		[Bindable(event="widthChange")]
 		public function get width():Number { return unscaledWidth; }
 		public function set width(value:Number):void {
-			if (unscaledWidth == value) {
-				return;
-			}
+			//if (unscaledWidth == value) {
+			//	return;
+			//}
 			_explicit.width = value;
 			Invalidation.invalidate(target, LAYOUT);
-			//DataChange.change(this, "width", unscaledWidth, unscaledWidth = value);
+			DataChange.change(this, "width", unscaledWidth, unscaledWidth = value);
 		}
 		
 		/**
@@ -83,12 +84,12 @@ package reflex.skins
 		[Bindable(event="heightChange")]
 		public function get height():Number { return unscaledHeight; }
 		public function set height(value:Number):void {
-			if (unscaledHeight == value) {
-				return;
-			}
+			//if (unscaledHeight == value) {
+				//return;
+			//}
 			_explicit.height = value;
 			Invalidation.invalidate(target, LAYOUT);
-			//DataChange.change(this, "height", unscaledHeight, unscaledHeight = value);
+			DataChange.change(this, "height", unscaledHeight, unscaledHeight = value);
 		}
 		
 		/**
@@ -395,8 +396,13 @@ package reflex.skins
 				var items:Array = content.toArray();
 				var point:Point = layout.measure(items);
 				if (point.x != measured.width || point.y != measured.height) {
-					measured.width = point.x;
-					measured.height = point.y;
+					var pm:IMeasurablePercent = _target as IMeasurablePercent;
+					if(pm == null || isNaN(pm.percentWidth)) {
+						measured.width = point.x;
+					}
+					if(pm == null || isNaN(pm.percentHeight)) {
+						measured.height = point.y;
+					}
 				}
 			}
 			
