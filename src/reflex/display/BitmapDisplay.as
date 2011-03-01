@@ -3,6 +3,7 @@ package reflex.display
 	import flash.display.Bitmap;
 	
 	import reflex.binding.DataChange;
+	import reflex.data.checkPropertyValueDelimiters;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
@@ -57,6 +58,9 @@ package reflex.display
 		public function set style(value:*):void { // this needs expanding in the future
 			if (value is String) {
 				var token:String = value as String;
+
+				reflex.data.checkPropertyValueDelimiters(token);
+
 				var assignments:Array = token.split(";");
 				for each(var assignment:String in assignments) {
 					var split:Array = assignment.split(":");
@@ -66,6 +70,8 @@ package reflex.display
 						_style[property] = v;
 					}
 				}
+			} else {
+				throw new Error("BitmapDisplay.set style() does not currently accept a parameter of type: " + value);
 			}
 		}
 		

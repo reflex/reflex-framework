@@ -20,6 +20,7 @@ package
 	import reflex.containers.ContainerMeasurementTest;
 	import reflex.containers.ContainerTest;
 	import reflex.data.PositionTest;
+	import reflex.data.PropertyValueDelimitersTest;
 	import reflex.data.RangeTest;
 	import reflex.data.ScrollPositionTest;
 	import reflex.data.SelectionTest;
@@ -76,6 +77,7 @@ package
 		public var range:RangeTest;
 		public var scrollPosition:ScrollPositionTest;
 		public var selection:SelectionTest;
+		public var propertyValueDelimiters:PropertyValueDelimitersTest;
 
 		// styling
 		public var styleableSprite:DisplayStyleableTest;
