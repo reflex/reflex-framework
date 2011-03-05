@@ -12,6 +12,7 @@ package reflex.graphics
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.styles.IStyleable;
 	import reflex.styles.Style;
+	import reflex.styles.parseStyles;
 	
 	public class GraphicBase extends Shape implements IStyleable, IMeasurable, IMeasurablePercent
 	{
@@ -131,19 +132,9 @@ package reflex.graphics
 		public function set style(value:*):void { // this needs expanding in the future
 			if(value is String) {
 				var token:String = value as String;
-				var assignments:Array = token.split(";");
-				for each(var assignment:String in assignments) {
-					var split:Array = assignment.split(":");
-					if(split.length == 2) {
-						var property:String = split[0].replace(/\s+/g, "");
-						var v:String = split[1].replace(/\s+/g, "");
-						if(!isNaN( Number(v) )) {
-							_style[property] = Number(v);
-						} else {
-							_style[property] = v;
-						}
-					}
-				}
+				reflex.styles.parseStyles(_style, token);
+			} else {
+				throw new Error("BitmapDisplay.set style() does not currently accept a parameter of type: " + value);
 			}
 		}
 		

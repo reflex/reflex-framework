@@ -10,6 +10,7 @@ package reflex.display
 	import reflex.measurement.Measurements;
 	import reflex.styles.IStyleable;
 	import reflex.styles.Style;
+	import reflex.styles.parseStyles;
 	
 	/**
 	 * Provides a styling and state management implementation
@@ -58,18 +59,11 @@ package reflex.display
 		public function set style(value:*):void { // this needs expanding in the future
 			if (value is String) {
 				var token:String = value as String;
-
-				reflex.data.checkPropertyValueDelimiters(token);
-
-				var assignments:Array = token.split(";");
-				for each(var assignment:String in assignments) {
-					var split:Array = assignment.split(":");
-					if (split.length == 2) {
-						var property:String = split[0].replace(/\s+/g, "");
-						var v:String = split[1].replace(/\s+/g, "");
-						_style[property] = v;
-					}
-				}
+				
+				// css specs dictate that this should fail silently
+				// reflex.data.checkPropertyValueDelimiters(token);
+				
+				reflex.styles.parseStyles(_style, token);
 			} else {
 				throw new Error("BitmapDisplay.set style() does not currently accept a parameter of type: " + value);
 			}

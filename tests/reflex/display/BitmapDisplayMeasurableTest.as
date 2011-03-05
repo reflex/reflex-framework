@@ -69,7 +69,8 @@ package reflex.display
 			Assert.assertEquals("testValue2", testValue2);
 		}
 		
-		[Test]
+		/*
+		[Test] [Ignore]
 		public function testSetStyleWithIncorrectDelimiterUsage():void {
 			var testPassed:Boolean = false;
 
@@ -81,6 +82,7 @@ package reflex.display
 
 			Assert.assertTrue("Trying to set the style when using delimiters other than \":\" and \";\" should have caused an error.", testPassed);
 		}
+		*/
 		
 		[Test]
 		public function testSetStyleWithNonStringAssignment():void {

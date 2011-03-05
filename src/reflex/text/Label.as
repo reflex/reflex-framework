@@ -33,6 +33,7 @@ package reflex.text
 	[Style(name="dock")]
 	[Style(name="align")]
 	[Style(name="txtAlign", format="String", enumeration="left,right,center,justify")]
+	[Style(name="verticalAlign")]
 	public class Label extends Display
 	{
 		
@@ -174,6 +175,10 @@ package reflex.text
 					line.x = unscaledWidth/2-line.textWidth/2;
 					break;
 			}
+		}
+		
+		protected function verticalAlignText(align:String):void {
+			
 		}
 		
 		protected function onTextRender(event:Event):void
