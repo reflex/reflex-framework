@@ -29,6 +29,7 @@ package
 	import reflex.display.DisplayFunctionsTest;
 	import reflex.display.DisplayMeasurableTest;
 	import reflex.display.DisplayStyleableTest;
+	import reflex.display.DisplayTest;
 	import reflex.display.GroupTest;
 	import reflex.display.TextFieldDisplayMeasurableTest;
 	import reflex.graphics.GraphicBaseMeasurementTest;
@@ -80,6 +81,9 @@ package
 		public var scrollPosition:ScrollPositionTest;
 		public var selection:SelectionTest;
 		public var propertyValueDelimiters:PropertyValueDelimitersTest;
+
+		// display
+		public var display:DisplayTest;
 
 		// styling
 		public var styleableSprite:DisplayStyleableTest;
