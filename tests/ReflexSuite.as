@@ -5,6 +5,7 @@ package
 	import mx.states.AddItemsTest;
 	import mx.states.OverrideBaseTest;
 	
+	import reflex.behaviors.BehaviorTest;
 	import reflex.behaviors.ButtonBehaviorTest;
 	import reflex.behaviors.CompositeBehaviorTest;
 	import reflex.behaviors.SelectBehaviorTest;
@@ -59,6 +60,7 @@ package
 		public var sliderDefinition:SliderDefinitionTest;
 		
 		// behaviors
+		public var behavior:BehaviorTest;
 		public var compositeBehavior:CompositeBehaviorTest;
 		public var buttonBehavior:ButtonBehaviorTest;
 		public var selectabeBehavior:SelectBehaviorTest;
