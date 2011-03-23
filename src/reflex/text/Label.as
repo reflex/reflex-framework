@@ -33,7 +33,7 @@ package reflex.text
 	[Style(name="dock")]
 	[Style(name="align")]
 	[Style(name="txtAlign", format="String", enumeration="left,right,center,justify")]
-	[Style(name="verticalAlign")]
+	//[Style(name="verticalAlign")]
 	public class Label extends Display
 	{
 		
@@ -177,8 +177,8 @@ package reflex.text
 			}
 		}
 		
-		protected function verticalAlignText(align:String):void {
-			
+		protected function verticalAlignText(line:TextLine):void {
+			line.y = unscaledHeight/2 + line.textHeight/2;
 		}
 		
 		protected function onTextRender(event:Event):void
@@ -215,6 +215,7 @@ package reflex.text
 					measured.height = line.textHeight;
 					line.y = line.height; //height/2 + line.height/2-3;
 					alignText(align, line);
+					verticalAlignText(line);
 					addChild(line);
 				} else {
 					measured.width = 0;
@@ -229,12 +230,16 @@ package reflex.text
 			super.setSize(width, height);
 			// we'll need to invalidate seperate measurement and layout passes later
 			if(line) {
+				if(!allowWrap) {
+					verticalAlignText(line);
+				}
 				var l:TextLine = line;
 				var align:String = resolveStyle(this, "txtAlign", String, CENTER) as String;
 				while(l) {
 					alignText(align, l);
 					l = l.nextLine;
 				}
+				
 			}
 		}
 		
