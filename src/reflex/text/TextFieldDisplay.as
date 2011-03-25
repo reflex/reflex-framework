@@ -15,7 +15,12 @@
 	import reflex.styles.IStyleable;
 	import reflex.styles.Style;
 	
-	
+	[Style(name="left")]
+	[Style(name="right")]
+	[Style(name="top")]
+	[Style(name="bottom")]
+	[Style(name="horizontalCenter")]
+	[Style(name="verticalCenter")]
 	public class TextFieldDisplay extends TextField implements IStyleable, IMeasurable, IMeasurablePercent
 	{
 		

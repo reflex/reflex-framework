@@ -48,7 +48,7 @@ package reflex.behaviors
 			super(target);
 			this.direction = direction;
 			this.page = page;
-			updateUILayout();
+			//updateUILayout();
 		}
 		
 		// behavior

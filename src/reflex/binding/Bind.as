@@ -10,7 +10,7 @@ package reflex.binding
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 	
-	//import mx.core.IMXMLObject;
+	import mx.core.IMXMLObject;
 	
 	/**
 	 * The Bind class stands as the primary API for data binding, whether through Bind instances
@@ -18,7 +18,7 @@ package reflex.binding
 	 * that allow global binding access. Bind's can be instantiated via ActionScript or MXML and
 	 * simplify management of a single binding, allowing target and source to be changed anytime.
 	 */
-	public class Bind //implements IMXMLObject
+	public class Bind implements IMXMLObject
 	{
 		public var twoWay:Boolean;
 		public var target:String;
