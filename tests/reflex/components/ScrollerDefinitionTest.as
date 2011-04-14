@@ -13,27 +13,27 @@ package reflex.components
 	{
 		public function ScrollerDefinitionTest() {
 			super();
-			C = ScrollerDefinition;
+			C = Scroller;
 		}
 		
 		[Test(async)]
 		public function testHorizontalPositionChange():void {
-			testPropertyChange(ScrollerDefinition, "horizontalPosition", new MockPosition());
+			testPropertyChange(Scroller, "horizontalPosition", new MockPosition());
 		}
 		
 		[Test(async)]
 		public function testHorizontalPositionNotChanged():void {
-			testPropertyNotChanged(ScrollerDefinition, "horizontalPosition", new MockPosition());
+			testPropertyNotChanged(Scroller, "horizontalPosition", new MockPosition());
 		}
 		
 		[Test(async)]
 		public function testVerticalPositionChange():void {
-			testPropertyChange(ScrollerDefinition, "verticalPosition", new MockPosition());
+			testPropertyChange(Scroller, "verticalPosition", new MockPosition());
 		}
 		
 		[Test(async)]
 		public function testVerticalPositionNotChanged():void {
-			testPropertyNotChanged(ScrollerDefinition, "verticalPosition", new MockPosition());
+			testPropertyNotChanged(Scroller, "verticalPosition", new MockPosition());
 		}
 	}
 }

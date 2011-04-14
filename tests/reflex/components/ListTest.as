@@ -12,52 +12,52 @@ package reflex.components
 		
 		[Test(async)]
 		public function testDataProviderChange():void {
-			testPropertyChange(ListDefinition, "dataProvider", new SimpleCollection());
+			testPropertyChange(List, "dataProvider", new SimpleCollection());
 		}
 		
 		[Test(async)]
 		public function testDataProviderNotChanged():void {
-			testPropertyNotChanged(ListDefinition, "dataProvider", new SimpleCollection());
+			testPropertyNotChanged(List, "dataProvider", new SimpleCollection());
 		}
 		
 		[Test(async)]
 		public function testTemplateChange():void {
-			testPropertyChange(ListDefinition, "template", {});
+			testPropertyChange(List, "template", {});
 		}
 		
 		[Test(async)]
 		public function testTemplateNotChanged():void {
-			testPropertyNotChanged(ListDefinition, "template", {});
+			testPropertyNotChanged(List, "template", {});
 		}
 		
 		[Test(async)]
 		public function testLayoutChange():void {
-			testPropertyChange(ListDefinition, "layout", new XYLayout());
+			testPropertyChange(List, "layout", new XYLayout());
 		}
 		
 		[Test(async)]
 		public function testLayoutNotChanged():void {
-			testPropertyNotChanged(ListDefinition, "layout", new XYLayout());
+			testPropertyNotChanged(List, "layout", new XYLayout());
 		}
 		
 		[Test(async)]
 		public function testSelectionChange():void {
-			testPropertyChange(ListDefinition, "selection", new Selection());
+			testPropertyChange(List, "selection", new Selection());
 		}
 		
 		[Test(async)]
 		public function testSelectionNotChanged():void {
-			testPropertyNotChanged(ListDefinition, "selection", new Selection());
+			testPropertyNotChanged(List, "selection", new Selection());
 		}
 		
 		[Test(async)]
 		public function testPositionChange():void {
-			testPropertyChange(ListDefinition, "position", new Position());
+			testPropertyChange(List, "position", new Position());
 		}
 		
 		[Test(async)]
 		public function testPositionNotChanged():void {
-			testPropertyNotChanged(ListDefinition, "position", new Position());
+			testPropertyNotChanged(List, "position", new Position());
 		}
 		
 	}

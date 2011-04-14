@@ -10,12 +10,12 @@ package reflex.components
 		
 		[Test(async)]
 		public function testPositionChange():void {
-			testPropertyChange(SliderDefinition, "position", new MockPosition());
+			testPropertyChange(SliderComponent, "position", new MockPosition());
 		}
 		
 		[Test(async)]
 		public function testPositionNotChanged():void {
-			testPropertyNotChanged(SliderDefinition, "position", new MockPosition());
+			testPropertyNotChanged(SliderComponent, "position", new MockPosition());
 		}
 	}
 }

@@ -9,32 +9,32 @@ package reflex.components
 		
 		[Test(async)]
 		public function testDataChange():void {
-			testPropertyChange(ListItemDefinition, "data", "test");
+			testPropertyChange(ListItem, "data", "test");
 		}
 		
 		[Test(async)]
 		public function testDataNotChanged():void {
-			testPropertyNotChanged(ListItemDefinition, "data", "test");
+			testPropertyNotChanged(ListItem, "data", "test");
 		}
 		
 		[Test]
 		public function testNewInstance():void {
-			var listItemDefinition:ListItemDefinition = new ListItemDefinition();
+			var listItemDefinition:ListItem = new ListItem();
 			// ListItemSkin caused test build to fail because it doesn't reference ReflexSkins.swc
 			listItemDefinition.skin = {}; //new ListItemSkin();
 			
 			var newInstance:* = listItemDefinition.newInstance();
 			
 			Assert.assertNotNull(newInstance);
-			Assert.assertTrue(newInstance is ListItemDefinition);
+			Assert.assertTrue(newInstance is ListItem);
 			
-			var newInstanceOfListItemDefinition:ListItemDefinition = newInstance as ListItemDefinition;
-			Assert.assertNotNull(newInstanceOfListItemDefinition);
+			var newInstanceOfListItem:ListItem = newInstance as ListItem;
+			Assert.assertNotNull(newInstanceOfListItem);
 		}
 		
 		[Test]
 		public function testNewInstanceWithoutSettingSkin():void {
-			var listItemDefinition:ListItemDefinition = new ListItemDefinition();
+			var listItemDefinition:ListItem = new ListItem();
 			
 			try {
 				var newInstance:* = listItemDefinition.newInstance();
