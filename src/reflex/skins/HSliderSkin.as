@@ -12,13 +12,13 @@ package reflex.skins
 	import reflex.text.Label;
 	import reflex.text.TextFieldDisplay;
 
-	public class GraphicHSliderSkin extends GraphicSkin
+	public class HSliderSkin extends GraphicSkin
 	{
 		
 		public var thumb:Sprite;
 		public var track:Sprite;
 		
-		public function GraphicHSliderSkin()
+		public function HSliderSkin()
 		{
 			super();
 			unscaledHeight = 14;

@@ -10,12 +10,12 @@ package reflex.skins
 	import reflex.text.Label;
 	import reflex.text.TextFieldDisplay;
 
-	public class GraphicListItemSkin extends GraphicSkin
+	public class ButtonSkin extends GraphicSkin
 	{
 		
 		public var labelDisplay:Label;
 		
-		public function GraphicListItemSkin()
+		public function ButtonSkin()
 		{
 			super();
 			labelDisplay = new Label();
@@ -25,8 +25,6 @@ package reflex.skins
 			labelDisplay.style = "left: 10; right: 10; top: 5; bottom: 5;";
 			layout = new BasicLayout();
 			content = [labelDisplay];
-			measured.width = 250;
-			measured.height = 64;
 		}
 		
 		override protected function render(currentState:String):void {
@@ -40,15 +38,6 @@ package reflex.skins
 						renderOver();
 						break;
 					case "down":
-						renderDown();
-						break;
-					case "upAndSelected":
-						renderDown();
-						break;
-					case "overAndSelected":
-						renderDown();
-						break;
-					case "downAndSelected":
 						renderDown();
 						break;
 					default:

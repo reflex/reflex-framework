@@ -7,7 +7,7 @@ package reflex.components
 	import reflex.data.Position;
 	import reflex.skins.StepperSkin;
 
-	public class Stepper extends SliderDefinition
+	public class Stepper extends SliderComponent
 	{
 		
 		public function Stepper()

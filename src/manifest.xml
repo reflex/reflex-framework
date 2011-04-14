@@ -3,9 +3,6 @@
 	
 	<!-- components -->
 	<component id="Component" class="reflex.components.Component"/>
-	<component id="ListDefinition" class="reflex.components.ListDefinition"/>
-	<component id="ButtonDefinition" class="reflex.components.ButtonDefinition"/>
-	<component id="ListItemDefinition" class="reflex.components.ListItemDefinition"/>
 	<component id="ScrollerDefinition" class="reflex.components.ScrollerDefinition" />
 	<component id="SliderDefinition" class="reflex.components.SliderDefinition"/>
 	<component id="Button" class="reflex.components.Button" />

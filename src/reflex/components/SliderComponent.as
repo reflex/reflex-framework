@@ -1,12 +1,10 @@
 package reflex.components
 {
-	
-	import reflex.behaviors.SlideBehavior;
 	import reflex.binding.DataChange;
 	import reflex.data.IPosition;
-	import reflex.data.IRange;
 	
-	public class SliderDefinition extends Component
+	
+	public class SliderComponent extends Component
 	{
 		
 		private var _position:IPosition;
@@ -18,4 +16,5 @@ package reflex.components
 		}
 		
 	}
+	
 }
