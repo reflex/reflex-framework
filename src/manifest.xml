@@ -3,8 +3,7 @@
 	
 	<!-- components -->
 	<component id="Component" class="reflex.components.Component"/>
-	<component id="ScrollerDefinition" class="reflex.components.ScrollerDefinition" />
-	<component id="SliderDefinition" class="reflex.components.SliderDefinition"/>
+	<component id="SliderComponent" class="reflex.components.SliderComponent"/>
 	<component id="Button" class="reflex.components.Button" />
 	<component id="CheckBox" class="reflex.components.CheckBox" />
 	<component id="RadioButton" class="reflex.components.RadioButton" />

@@ -4,7 +4,6 @@ package reflex.components
 	import reflex.behaviors.ScrollerBehavior;
 	import reflex.binding.Bind;
 	import reflex.collections.SimpleCollection;
-	import reflex.components.ScrollerDefinition;
 	import reflex.data.Position;
 	import reflex.layouts.BasicLayout;
 	import reflex.skins.ScrollerSkin;
