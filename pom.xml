@@ -82,7 +82,7 @@
 	</dependencies>
 	<repositories>
 		<repository>
-			<id>flex-mojos-repository</id>
+			<id>flexmojos-repository</id>
 			<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
 			<releases>
 				<enabled>true</enabled>
@@ -94,7 +94,7 @@
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>flex-mojos-plugin-repository</id>
+			<id>flexmojos-plugin-repository</id>
 			<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
 			<releases>
 				<enabled>true</enabled>
@@ -102,6 +102,17 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>flexpmd.opensource.adobe</id>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<name>FlexPMD repository on opensource.adobe.com</name>
+			<url>http://opensource.adobe.com/svn/opensource/flexpmd/maven-repository/release/</url>
 		</pluginRepository>
 	</pluginRepositories>
 </project>
