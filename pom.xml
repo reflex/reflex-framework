@@ -43,6 +43,14 @@
 				<configuration>
 					<reportPlugins>
 						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-project-info-reports-plugin</artifactId>
+							<version>2.2</version>
+							<reports>
+								<report>index</report>
+							</reports>
+						</plugin>
+						<plugin>
 							<groupId>com.adobe.ac</groupId>
 							<artifactId>flex-pmd-maven-plugin</artifactId>
 							<version>1.2</version>
