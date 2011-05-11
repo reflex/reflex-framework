@@ -36,6 +36,14 @@
 						<keepAs3Metadata>Commit</keepAs3Metadata>
 					</keepAs3Metadatas>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>site</phase>
+						<goals>
+							<goal>asdoc</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-site-plugin</artifactId>
