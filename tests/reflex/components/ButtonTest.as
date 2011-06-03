@@ -1,8 +1,8 @@
 package reflex.components
 {
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 	
-	public class ButtonTest extends TestBase
+	public class ButtonTest extends BaseClass
 	{
 		
 		[Test(async)]

@@ -7,7 +7,7 @@ package reflex.components
 	
 	import reflex.collections.SimpleCollection;
 	import reflex.containers.ContainerTestBase;
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 	
 	public class ScrollerDefinitionTest extends ContainerTestBase
 	{

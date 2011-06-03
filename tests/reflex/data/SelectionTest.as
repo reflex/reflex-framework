@@ -3,9 +3,9 @@ package reflex.data {
 	
 	import mx.collections.IList;
 	
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 
-	public class SelectionTest extends TestBase {
+	public class SelectionTest extends BaseClass {
 
 		public function SelectionTest() {
 		}

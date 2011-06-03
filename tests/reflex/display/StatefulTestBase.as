@@ -3,9 +3,9 @@ package reflex.display
 	import flexunit.framework.Assert;
 	
 	import reflex.components.IStateful;
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 
-	public class StatefulTestBase extends TestBase
+	public class StatefulTestBase extends BaseClass
 	{
 		
 		public var C:Class;

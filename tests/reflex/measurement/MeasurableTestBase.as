@@ -8,10 +8,10 @@ package reflex.measurement
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
 	
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 	
 
-	public class MeasurableTestBase extends TestBase
+	public class MeasurableTestBase extends BaseClass
 	{
 		
 		public var C:Class;

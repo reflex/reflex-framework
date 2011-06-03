@@ -1,9 +1,9 @@
 package reflex.behaviors {
 	import flexunit.framework.Assert;
 	
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 	
-	public class BehaviorTest extends TestBase {
+	public class BehaviorTest extends BaseClass {
 		
 		public var C:Class = Behavior;
 
