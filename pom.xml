@@ -9,7 +9,9 @@
 	<properties>
 		<flex.sdk.version>4.5.0.20967</flex.sdk.version>
 		<flexmojos.version>4.0-beta-7</flexmojos.version>
+		<library>true</library>
 	</properties>
+	
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>tests</testSourceDirectory>
@@ -89,6 +91,43 @@
 							<version>1.2</version>
 						</plugin>
 					</reportPlugins>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-help-plugin</artifactId>
+				<version>2.1.1</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>effective-pom</goal>
+						</goals>
+						<configuration>
+							<output>${project.build.outputDirectory}/effective-pom.xml</output>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+					<goals>
+						<goal>exec</goal>
+					</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<executable>ruby</executable>
+					<arguments>
+						<argument>/Users/Shared/scripts/flashbuilder4_generator_reflex.rb</argument>
+						<argument>-p</argument>
+						<argument>${basedir}</argument>
+					</arguments>
 				</configuration>
 			</plugin>
 		</plugins>
