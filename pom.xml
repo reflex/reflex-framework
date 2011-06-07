@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <artifactId>MindshapesParent</artifactId>
+    <groupId>com.mindshapes</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>reflex</groupId>
 	<artifactId>reflex-framework</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>swc</packaging>
 	<name>reflex framework</name>
-	<properties>
-		<flex.sdk.version>4.5.0.20967</flex.sdk.version>
-		<flexmojos.version>4.0-beta-7</flexmojos.version>
-		<library>true</library>
-	</properties>
 	
+	<dependencies>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>flex-framework</artifactId>
+			<version>${flex.sdk.version}</version>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>com.adobe.flex.framework</groupId>
+					<artifactId>playerglobal</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+  <properties>
+    <library>true</library>
+  </properties>
+  	
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>tests</testSourceDirectory>
@@ -109,76 +130,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-					<goals>
-						<goal>exec</goal>
-					</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<executable>ruby</executable>
-					<arguments>
-						<argument>/Users/Shared/scripts/flashbuilder4_generator_reflex.rb</argument>
-						<argument>-p</argument>
-						<argument>${basedir}</argument>
-					</arguments>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
-	<dependencies>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>flex-framework</artifactId>
-      <version>${flex.sdk.version}</version>
-      <type>pom</type>
-      <exclusions>
-        <exclusion>
-          <groupId>com.adobe.flex.framework</groupId>
-          <artifactId>playerglobal</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>playerglobal</artifactId>
-      <version>${flex.sdk.version}</version>
-      <type>swc</type>
-      <classifier>molehill</classifier>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flexunit</groupId>
-      <artifactId>flexunit</artifactId>
-      <version>4.0.1.277662</version>
-      <type>swc</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flexunit</groupId>
-      <artifactId>flexunitextended</artifactId>
-      <version>4.0.1.277662</version>
-      <type>swc</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flexbuilder.flexunit</groupId>
-      <artifactId>flexunittestrunner</artifactId>
-      <version>4.0.1.277662</version>
-      <type>swc</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>hamcrest-as3</groupId>
-      <artifactId>hamcrest-as3</artifactId>
-      <version>1.0.2</version>
-      <type>swc</type>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 </project>
