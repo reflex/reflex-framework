@@ -1,9 +1,9 @@
 package reflex.data {
 	import flexunit.framework.Assert;
 	
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 
-	public class PositionTest extends TestBase {
+	public class PositionTest extends BaseClass {
 
 		public function PositionTest() {
 		}

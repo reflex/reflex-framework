@@ -1,22 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <artifactId>MindshapesParent</artifactId>
+    <groupId>com.mindshapes</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>reflex</groupId>
 	<artifactId>reflex-framework</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>swc</packaging>
 	<name>reflex framework</name>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>flex-framework</artifactId>
+			<version>${flex.sdk.version}</version>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>com.adobe.flex.framework</groupId>
+					<artifactId>playerglobal</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+  <properties>
+    <library>true</library>
+  </properties>
+  	
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>tests</testSourceDirectory>
+		<resources>
+			<resource>
+				<directory>src</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.sonatype.flexmojos</groupId>
 				<artifactId>flexmojos-maven-plugin</artifactId>
-				<version>4.0-SNAPSHOT</version>
+				<version>${flexmojos.version}</version>
 				<extensions>true</extensions>
 				<configuration>
 					<coverage>false</coverage>
+					<verboseStacktraces>true</verboseStacktraces>
+					<configurationReport>true</configurationReport>
+					<ignoreVersionIssues>true</ignoreVersionIssues>
 					<includeNamespaces>
 						<namespace>http://rx.reflex.io/2010</namespace>
 					</includeNamespaces>
@@ -26,15 +61,20 @@
 							<manifest>${project.build.sourceDirectory}/manifest.xml</manifest>
 						</namespace>
 					</namespaces>
-					<strict>true</strict>
-					<optimize>true</optimize>
-					<warnings>true</warnings>
 					<keepAs3Metadatas>
 						<keepAs3Metadata>Binding</keepAs3Metadata>
 						<keepAs3Metadata>EventListener</keepAs3Metadata>
 						<keepAs3Metadata>LayoutProperty</keepAs3Metadata>
 						<keepAs3Metadata>Commit</keepAs3Metadata>
 					</keepAs3Metadatas>
+					<includeClasses>
+			            <scan>
+			              <includes>
+			                <include>mx.*</include>
+			                <include>reflex.*</include>
+			              </includes>
+			            </scan>
+			          </includeClasses>
 				</configuration>
 				<executions>
 					<execution>
@@ -79,56 +119,22 @@
 					</reportPlugins>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-help-plugin</artifactId>
+				<version>2.1.1</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>effective-pom</goal>
+						</goals>
+						<configuration>
+							<output>${project.build.outputDirectory}/effective-pom.xml</output>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-	<dependencies>
-		<dependency>
-			<groupId>com.adobe.flex.framework</groupId>
-			<artifactId>flex-framework</artifactId>
-			<version>4.5.0.17689</version>
-			<type>pom</type>
-		</dependency>
-		<dependency>
-			<groupId>com.adobe.flexunit</groupId>
-			<artifactId>flexunit</artifactId>
-			<version>4.0-rc-1</version>
-			<type>swc</type>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-	<repositories>
-		<repository>
-			<id>flexmojos-repository</id>
-			<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>flexmojos-plugin-repository</id>
-			<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>flexpmd.opensource.adobe</id>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<name>FlexPMD repository on opensource.adobe.com</name>
-			<url>http://opensource.adobe.com/svn/opensource/flexpmd/maven-repository/release/</url>
-		</pluginRepository>
-	</pluginRepositories>
 </project>

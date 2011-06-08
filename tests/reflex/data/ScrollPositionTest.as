@@ -1,9 +1,9 @@
 package reflex.data {
 	import flexunit.framework.Assert;
 	
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 
-	public class ScrollPositionTest extends TestBase {
+	public class ScrollPositionTest extends BaseClass {
 
 		public function ScrollPositionTest() {
 		}
