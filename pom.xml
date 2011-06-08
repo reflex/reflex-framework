@@ -36,6 +36,11 @@
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>tests</testSourceDirectory>
+		<resources>
+			<resource>
+				<directory>src</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.sonatype.flexmojos</groupId>
