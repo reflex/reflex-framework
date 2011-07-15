@@ -71,6 +71,14 @@
 			            <scan>
 			              <includes>
 			                <include>mx.*</include>
+											<include>mx.collections.*</include>
+											<include>mx.core.*</include>
+											<include>mx.events.*</include>
+											<include>mx.geom.*</include>
+											<include>mx.graphics.*</include>
+											<include>mx.mxml.*</include>
+											<include>mx.states.*</include>
+											<include>mx.utils.*</include>
 			                <include>reflex.*</include>
 			              </includes>
 			            </scan>
