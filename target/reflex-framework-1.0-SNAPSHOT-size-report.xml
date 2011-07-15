@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report>
+  <swf size="312085" compressedSize="144572">
+
+    <!-- Header data (SWF attributes, product info, markers, etc.) -->
+    <headerData totalSize="480">
+      <data type="metaData" size="378"/>
+      <data type="productInfo" size="28"/>
+      <data type="swfHeader" size="21"/>
+      <data type="debugID" size="18"/>
+      <data type="enableDebugger" size="16"/>
+      <data type="fileAttributes" size="6"/>
+      <data type="scriptLimits" size="6"/>
+      <data type="backgroundColor" size="5"/>
+      <data type="endMarker" size="2"/>
+    </headerData>
+
+    <!-- Cumulative frame size summary. -->
+    <frames totalSize="311605">
+      <frame size="311605" frame="1"/>
+    </frames>
+
+    <!-- Actionscript code and constant data. -->
+    <actionScript totalSize="311506">
+      <abc name="mx/utils/MatrixUtil" size="13981" frame="1"/>
+      <abc name="mx/core/AdvancedLayoutFeatures" size="13125" frame="1"/>
+      <abc name="mx/graphics/BitmapFill" size="9350" frame="1"/>
+      <abc name="mx/geom/CompoundTransform" size="8161" frame="1"/>
+      <abc name="reflex/binding/Binding" size="8154" frame="1"/>
+      <abc name="reflex/containers/Container" size="7272" frame="1"/>
+      <abc name="reflex/skins/Skin" size="7181" frame="1"/>
+      <abc name="reflex/text/TextFieldDisplay" size="5956" frame="1"/>
+      <abc name="reflex/text/Label" size="5743" frame="1"/>
+      <abc name="mx/graphics/GradientBase" size="4918" frame="1"/>
+      <abc name="reflex/behaviors/SlideBehavior" size="4863" frame="1"/>
+      <abc name="reflex/binding/Bind" size="4612" frame="1"/>
+      <abc name="mx/core/IAssetLayoutFeatures" size="4492" frame="1"/>
+      <abc name="reflex/invalidation/Invalidation" size="4368" frame="1"/>
+      <abc name="reflex/behaviors/CompositeBehavior" size="4359" frame="1"/>
+      <abc name="reflex/components/Component" size="4254" frame="1"/>
+      <abc name="reflex/graphics/GraphicBase" size="4233" frame="1"/>
+      <abc name="reflex/display/Display" size="4146" frame="1"/>
+      <abc name="reflex/graphics/BitmapImage" size="4113" frame="1"/>
+      <abc name="reflex/display/BitmapDisplay" size="4056" frame="1"/>
+      <abc name="mx/graphics/SolidColorStroke" size="4029" frame="1"/>
+      <abc name="reflex/behaviors/TouchScrollBehavior" size="3725" frame="1"/>
+      <abc name="mx/graphics/RadialGradientStroke" size="3513" frame="1"/>
+      <abc name="mx/graphics/LinearGradientStroke" size="3498" frame="1"/>
+      <abc name="mx/geom/TransformOffsets" size="3483" frame="1"/>
+      <abc name="reflex/graphics/Rect" size="3407" frame="1"/>
+      <abc name="reflex/components/Scroller" size="3235" frame="1"/>
+      <abc name="mx/graphics/GradientStroke" size="3175" frame="1"/>
+      <abc name="reflex/metadata/Type" size="3013" frame="1"/>
+      <abc name="reflex/behaviors/ListSelectionBehavior" size="3011" frame="1"/>
+      <abc name="reflex/behaviors/ButtonBehavior" size="2865" frame="1"/>
+      <abc name="mx/graphics/RadialGradient" size="2857" frame="1"/>
+      <abc name="mx/graphics/LinearGradient" size="2849" frame="1"/>
+      <abc name="reflex/graphics/Line" size="2773" frame="1"/>
+      <abc name="reflex/collections/SimpleCollection" size="2625" frame="1"/>
+      <abc name="reflex/skins/MovieClipSkin" size="2620" frame="1"/>
+      <abc name="reflex/layouts/BasicLayout" size="2548" frame="1"/>
+      <abc name="reflex/behaviors/TextAreaBehavior" size="2450" frame="1"/>
+      <abc name="reflex/components/List" size="2444" frame="1"/>
+      <abc name="reflex/components/ListItem" size="2442" frame="1"/>
+      <abc name="reflex/behaviors/StepBehavior" size="2434" frame="1"/>
+      <abc name="mx/states/AddItems" size="2431" frame="1"/>
+      <abc name="reflex/containers/Application" size="2426" frame="1"/>
+      <abc name="reflex/behaviors/ScrollerBehavior" size="2417" frame="1"/>
+      <abc name="reflex/layouts/DockLayout" size="2275" frame="1"/>
+      <abc name="reflex/graphics/Ellipse" size="2255" frame="1"/>
+      <abc name="reflex/layouts/HorizontalLayout" size="2179" frame="1"/>
+      <abc name="reflex/layouts/VerticalLayout" size="2175" frame="1"/>
+      <abc name="reflex/metadata/CommitUtility" size="2109" frame="1"/>
+      <abc name="reflex/measurement/Measurements" size="1912" frame="1"/>
+      <abc name="reflex/skins/ListItemSkin" size="1868" frame="1"/>
+      <abc name="mx/graphics/SolidColor" size="1832" frame="1"/>
+      <abc name="reflex/data/Selection" size="1830" frame="1"/>
+      <abc name="reflex/layouts/Layout" size="1815" frame="1"/>
+      <abc name="mx/graphics/GradientEntry" size="1806" frame="1"/>
+      <abc name="reflex/skins/CheckBoxSkin" size="1774" frame="1"/>
+      <abc name="reflex/components/Button" size="1704" frame="1"/>
+      <abc name="reflex/skins/RadioButtonSkin" size="1690" frame="1"/>
+      <abc name="mx/states/State" size="1644" frame="1"/>
+      <abc name="reflex/skins/ButtonSkin" size="1619" frame="1"/>
+      <abc name="reflex/components/TextArea" size="1593" frame="1"/>
+      <abc name="reflex/behaviors/DragStepBehavior" size="1505" frame="1"/>
+      <abc name="reflex/skins/TextAreaSkin" size="1427" frame="1"/>
+      <abc name="reflex/skins/ScrollerSkin" size="1419" frame="1"/>
+      <abc name="mx/collections/IList" size="1369" frame="1"/>
+      <abc name="reflex/metadata/resolveCommitProperties" size="1324" frame="1"/>
+      <abc name="mx/events/PropertyChangeEvent" size="1311" frame="1"/>
+      <abc name="reflex/metadata/resolveEventListeners" size="1309" frame="1"/>
+      <abc name="reflex/skins/HSliderSkin" size="1299" frame="1"/>
+      <abc name="reflex/skins/VSliderSkin" size="1299" frame="1"/>
+      <abc name="reflex/measurement/IMeasurements" size="1212" frame="1"/>
+      <abc name="reflex/components/RadioButton" size="1204" frame="1"/>
+      <abc name="reflex/metadata/resolveDataListeners" size="1181" frame="1"/>
+      <abc name="reflex/components/CheckBox" size="1180" frame="1"/>
+      <abc name="mx/events/CollectionEvent" size="1167" frame="1"/>
+      <abc name="reflex/components/TextInput" size="1160" frame="1"/>
+      <abc name="reflex/metadata/resolveLayoutProperties" size="1156" frame="1"/>
+      <abc name="reflex/skins/GraphicSkin" size="1153" frame="1"/>
+      <abc name="reflex/skins/TextInputSkin" size="1149" frame="1"/>
+      <abc name="reflex/metadata/resolveBindings" size="1143" frame="1"/>
+      <abc name="_0ad9e1fde27f06f88987312722bcd328d3067a37c5f2dabcfce9c6c60e25ef97_flash_display_Sprite" size="1141" frame="1"/>
+      <abc name="reflex/layouts/XYLayout" size="1118" frame="1"/>
+      <abc name="reflex/components/VSlider" size="1106" frame="1"/>
+      <abc name="reflex/components/HSlider" size="1104" frame="1"/>
+      <abc name="reflex/measurement/IMeasurable" size="1098" frame="1"/>
+      <abc name="mx/mxml/FlexReferences" size="1079" frame="1"/>
+      <abc name="reflex/data/Position" size="1074" frame="1"/>
+      <abc name="mx/states/SetProperty" size="1067" frame="1"/>
+      <abc name="reflex/skins/ListSkin" size="1067" frame="1"/>
+      <abc name="reflex/behaviors/SelectBehavior" size="1066" frame="1"/>
+      <abc name="reflex/components/IStateful" size="1064" frame="1"/>
+      <abc name="mx/graphics/IStroke" size="1041" frame="1"/>
+      <abc name="reflex/components/HScrollBar" size="1026" frame="1"/>
+      <abc name="reflex/components/VScrollBar" size="1024" frame="1"/>
+      <abc name="reflex/binding/DataChange" size="1006" frame="1"/>
+      <abc name="mx/core/DeferredInstanceFromFunction" size="1001" frame="1"/>
+      <abc name="reflex/data/Range" size="989" frame="1"/>
+      <abc name="reflex/components/SliderComponent" size="980" frame="1"/>
+      <abc name="mx/states/SetStyle" size="978" frame="1"/>
+      <abc name="reflex/data/ScrollPosition" size="938" frame="1"/>
+      <abc name="reflex/measurement/resolveHeight" size="931" frame="1"/>
+      <abc name="reflex/components/Stepper" size="927" frame="1"/>
+      <abc name="reflex/measurement/resolveWidth" size="924" frame="1"/>
+      <abc name="reflex/behaviors/Behavior" size="920" frame="1"/>
+      <abc name="reflex/templating/getDataRenderer" size="908" frame="1"/>
+      <abc name="reflex/measurement/IMeasurablePercent" size="905" frame="1"/>
+      <abc name="reflex/styles/IStyleable" size="877" frame="1"/>
+      <abc name="reflex/measurement/calculatePercentageTotals" size="869" frame="1"/>
+      <abc name="mx/states/OverrideBase" size="866" frame="1"/>
+      <abc name="mx/events/CollectionEventKind" size="863" frame="1"/>
+      <abc name="reflex/behaviors/ListBehavior" size="856" frame="1"/>
+      <abc name="reflex/measurement/calculateAvailableSpace" size="831" frame="1"/>
+      <abc name="reflex/skins/StepperSkin" size="822" frame="1"/>
+      <abc name="reflex/containers/IContainer" size="788" frame="1"/>
+      <abc name="reflex/containers/HGroup" size="778" frame="1"/>
+      <abc name="reflex/containers/VGroup" size="763" frame="1"/>
+      <abc name="reflex/layouts/ILayout" size="756" frame="1"/>
+      <abc name="reflex/styles/parseStyles" size="718" frame="1"/>
+      <abc name="reflex/text/Text" size="714" frame="1"/>
+      <abc name="reflex/data/ISelection" size="707" frame="1"/>
+      <abc name="reflex/skins/ISkinnable" size="697" frame="1"/>
+      <abc name="reflex/events/DataChangeEvent" size="690" frame="1"/>
+      <abc name="reflex/templating/addItemsAt" size="672" frame="1"/>
+      <abc name="reflex/data/IRange" size="665" frame="1"/>
+      <abc name="reflex/containers/Group" size="660" frame="1"/>
+      <abc name="reflex/data/ISteppingPosition" size="625" frame="1"/>
+      <abc name="mx/events/PropertyChangeEventKind" size="622" frame="1"/>
+      <abc name="reflex/graphics/resolveTargets" size="609" frame="1"/>
+      <abc name="reflex/data/IPagingPosition" size="605" frame="1"/>
+      <abc name="reflex/graphics/resolveGraphics" size="598" frame="1"/>
+      <abc name="reflex/collections/convertIndexedObjectToArray" size="586" frame="1"/>
+      <abc name="reflex/skins/ISkin" size="583" frame="1"/>
+      <abc name="reflex/templating/addItemAt" size="582" frame="1"/>
+      <abc name="reflex/collections/isVector" size="571" frame="1"/>
+      <abc name="reflex/behaviors/IBehavior" size="561" frame="1"/>
+      <abc name="reflex/states/removeState" size="560" frame="1"/>
+      <abc name="mx/states/IOverride" size="558" frame="1"/>
+      <abc name="reflex/states/applyState" size="555" frame="1"/>
+      <abc name="reflex/collections/convertToIList" size="549" frame="1"/>
+      <abc name="mx/graphics/IFill" size="533" frame="1"/>
+      <abc name="reflex/graphics/resolveTarget" size="529" frame="1"/>
+      <abc name="mx/core/ITransientDeferredInstance" size="526" frame="1"/>
+      <abc name="reflex/graphics/IDrawable" size="525" frame="1"/>
+      <abc name="reflex/data/IPosition" size="524" frame="1"/>
+      <abc name="mx/graphics/BitmapFillMode" size="521" frame="1"/>
+      <abc name="reflex/metadata/getType" size="504" frame="1"/>
+      <abc name="reflex/templating/IDataTemplate" size="504" frame="1"/>
+      <abc name="reflex/templating/addItem" size="501" frame="1"/>
+      <abc name="mx/core/IDataRenderer" size="492" frame="1"/>
+      <abc name="reflex/styles/resolveStyle" size="479" frame="1"/>
+      <abc name="reflex/measurement/setSize" size="474" frame="1"/>
+      <abc name="reflex/behaviors/IBehavioral" size="472" frame="1"/>
+      <abc name="mx/core/IDeferredInstance" size="446" frame="1"/>
+      <abc name="reflex/metadata/getClassName" size="426" frame="1"/>
+      <abc name="reflex/styles/hasStyle" size="417" frame="1"/>
+      <abc name="reflex/styles/Style" size="379" frame="1"/>
+      <abc name="mx/core/IFactory" size="362" frame="1"/>
+    </actionScript>
+
+    <!-- Additional frame tags (symbolClass, exportAssets, showFrame, etc). -->
+    <frameData totalSize="99">
+      <tag type="symbolClass" size="97" frame="1"/>
+      <tag type="showFrame" size="2" frame="1"/>
+    </frameData>
+  </swf>
+</report>

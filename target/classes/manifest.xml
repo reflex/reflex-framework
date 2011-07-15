@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<componentPackage>
+	
+	<!-- components -->
+	<component id="Component" class="reflex.components.Component"/>
+	<component id="SliderComponent" class="reflex.components.SliderComponent"/>
+	<component id="Button" class="reflex.components.Button" />
+	<component id="CheckBox" class="reflex.components.CheckBox" />
+	<component id="RadioButton" class="reflex.components.RadioButton" />
+	<component id="HSlider" class="reflex.components.HSlider" />
+	<component id="VSlider" class="reflex.components.VSlider" />
+	<component id="Stepper" class="reflex.components.Stepper" />
+	<component id="HScrollBar" class="reflex.components.HScrollBar" />
+	<component id="VScrollBar" class="reflex.components.VScrollBar" />
+	<component id="List" class="reflex.components.List" />
+	<component id="ListItem" class="reflex.components.ListItem"/>
+	<component id="Scroller" class="reflex.components.Scroller" />
+	<component id="TextInput" class="reflex.components.TextInput" />
+	<component id="TextArea" class="reflex.components.TextArea" />
+	
+	
+	<!-- containers -->
+	<component id="Container" class="reflex.containers.Container"/>
+	<component id="Application" class="reflex.containers.Application"/>
+	<component id="Group" class="reflex.containers.Group" />
+	<component id="HGroup" class="reflex.containers.HGroup"/>
+	<component id="VGroup" class="reflex.containers.VGroup"/>
+	
+	<!-- skins -->
+	<component id="Skin" class="reflex.skins.Skin"/>
+	<component id="MovieClipSkin" class="reflex.skins.MovieClipSkin"/>
+	<component id="ListSkin" class="reflex.skins.ListSkin"/>
+	
+	
+	<!-- behaviors -->
+	<component id="CompositeBehavior" class="reflex.behaviors.CompositeBehavior"/>
+	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
+	<component id="ListBehavior" class="reflex.behaviors.ListBehavior"/>
+	<component id="ListSelectionBehavior" class="reflex.behaviors.ListSelectionBehavior"/>
+	<component id="SlideBehavior" class="reflex.behaviors.SlideBehavior"/>
+	<component id="SelectBehavior" class="reflex.behaviors.SelectBehavior"/>
+	<component id="StepBehavior" class="reflex.behaviors.StepBehavior"/>
+	<component id="DragStepBehavior" class="reflex.behaviors.DragStepBehavior"/>
+	<component id="TextAreaBehavior" class="reflex.behaviors.TextAreaBehavior"/>
+	<component id="TouchScrollBehavior" class="reflex.behaviors.TouchScrollBehavior" />
+	
+	<!-- layouts -->
+	<component id="ILayout" class="reflex.layouts.ILayout"/>
+	<component id="Layout" class="reflex.layouts.Layout"/>
+	<component id="XYLayout" class="reflex.layouts.XYLayout"/>
+	<component id="BasicLayout" class="reflex.layouts.BasicLayout"/>
+	<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>
+	<component id="HorizontalLayout" class="reflex.layouts.HorizontalLayout"/>
+	<component id="DockLayout" class="reflex.layouts.DockLayout"/>
+	
+	<!-- data -->
+	<component id="Position" class="reflex.data.Position"/>
+	<component id="ScrollPosition" class="reflex.data.ScrollPosition"/>
+	<component id="Selection" class="reflex.data.Selection"/>
+	
+	<!-- collections -->
+	<component id="SimpleCollection" class="reflex.collections.SimpleCollection" />
+	
+	<!-- measurement -->
+	<component id="Measurements" class="reflex.measurement.Measurements"/>
+	
+	<!-- display -->
+	<component id="Display" class="reflex.display.Display" />
+	<component id="BitmapImage" class="reflex.graphics.BitmapImage"/>
+	<component id="TextFieldDisplay" class="reflex.text.TextFieldDisplay"/>
+	<component id="Text" class="reflex.text.Text" />
+	
+	<!-- graphics -->
+	<component id="IFill" class="mx.graphics.IFill" />
+	<component id="IStroke" class="mx.graphics.IStroke" />
+	<component id="IDrawable" class="reflex.graphics.IDrawable"/>
+	<component id="Rect" class="reflex.graphics.Rect" />
+	<component id="Line" class="reflex.graphics.Line" />
+	<component id="Ellipse" class="reflex.graphics.Ellipse" />
+	<component id="SolidColor" class="mx.graphics.SolidColor" />
+	<component id="SolidColorStroke" class="mx.graphics.SolidColorStroke" />
+	<component id="GradientBase" class="mx.graphics.GradientBase" />
+	<component id="GradientStroke" class="mx.graphics.GradientStroke" />
+	<component id="LinearGradient" class="mx.graphics.LinearGradient" />
+	<component id="LinearGradientStroke" class="mx.graphics.LinearGradientStroke" />
+	<component id="RadialGradient" class="mx.graphics.RadialGradient" />
+	<component id="RadialGradientStroke" class="mx.graphics.RadialGradientStroke" />
+	<component id="GradientEntry" class="mx.graphics.GradientEntry" />
+	<component id="BitmapFill" class="mx.graphics.BitmapFill" />
+	<component id="BitmapFillMode" class="mx.graphics.BitmapFillMode" />
+	
+	<!-- states -->
+	<!--<component id="State" class="mx.states.State" />-->
+	<component id="AddItems" class="mx.states.AddItems" />
+	<component id="SetProperty" class="mx.states.SetProperty" />
+	<component id="SetStyle" class="mx.states.SetStyle" />
+	
+	<!-- text -->
+	<component id="Label" class="reflex.text.Label" />
+	<component id="Text" class="reflex.text.Text" />
+	<!--
+	<component id="TextInput" class="reflex.text.TextInput" />
+	-->
+	
+	<!-- Flex references -->
+	<component id="FlexReferences" class="mx.mxml.FlexReferences" />
+	
+	
+</componentPackage>
