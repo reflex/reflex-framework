@@ -84,6 +84,12 @@ package reflex.graphics
 				measured.height = display.height;
 				original = display.bitmapData;
 				draw();
+			} else if (source is BitmapData) {
+				var bitmapdata:BitmapData = source as BitmapData;
+				measured.width = bitmapdata.width;
+				measured.height = bitmapdata.height;
+				original = bitmapdata;
+				draw();
 			}
 		}
 		
