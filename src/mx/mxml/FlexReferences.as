@@ -15,6 +15,7 @@ package mx.mxml
 	import mx.core.IStateClient2;
 	import mx.core.Repeater;
 	import mx.filters.IBitmapFilter;
+	import mx.states.AddItems;
 	import mx.styles.CSSStyleDeclaration;
 	
 	/**
@@ -47,6 +48,8 @@ package mx.mxml
 		
 		static private var bf:IBitmapFilter;
 		static private var difc:DeferredInstanceFromClass;
+		
+		//static private var ai:AddItems;
 		
 	}
 }
