@@ -50,7 +50,6 @@
 				<extensions>true</extensions>
 				<configuration>
 					<coverage>false</coverage>
-					<verboseStacktraces>true</verboseStacktraces>
 					<configurationReport>true</configurationReport>
 					<includeNamespaces>
 						<namespace>http://rx.reflex.io/2010</namespace>
