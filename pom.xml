@@ -51,7 +51,6 @@
 					<coverage>false</coverage>
 					<verboseStacktraces>true</verboseStacktraces>
 					<configurationReport>true</configurationReport>
-					<ignoreVersionIssues>true</ignoreVersionIssues>
 					<includeNamespaces>
 						<namespace>http://rx.reflex.io/2010</namespace>
 					</includeNamespaces>
