@@ -77,7 +77,8 @@ package reflex.containers
 			if (_layout == null) {
 				//_layout = new BasicLayout();
 			}
-			_content = new SimpleCollection();
+			content = new SimpleCollection(); // use setter logic
+			//_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			addEventListener(Event.ADDED, onAdded, false, 0, true);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 			addEventListener(LAYOUT, onLayout, false, 0, true);
