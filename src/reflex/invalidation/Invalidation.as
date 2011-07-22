@@ -103,9 +103,10 @@ import flash.utils.setTimeout;
 		private static function invalidateStage(stage:Stage):void
 		{
             //clear timeout method - only way to GC it.
-            if(invalidateStageTimeoutId != -1)
+            if(invalidateStageTimeoutId != -1) {
                 clearTimeout(invalidateStageTimeoutId);
-            invalidateStageTimeoutId = -1;
+                invalidateStageTimeoutId = -1;
+            }
 
 			invalidStages[stage] = true;
 			stage.invalidate();
