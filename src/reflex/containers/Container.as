@@ -78,6 +78,8 @@ package reflex.containers
 				//_layout = new BasicLayout();
 			}
 			_content = new SimpleCollection();
+            _content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
+
 			addEventListener(Event.ADDED, onAdded, false, 0, true);
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 			addEventListener(LAYOUT, onLayout, false, 0, true);
