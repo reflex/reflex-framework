@@ -258,7 +258,7 @@ package reflex.containers
 					add(event.items, loc);
 					break;
 				case CollectionEventKind.REMOVE :
-					remove(event.items, loc);
+					remove(event.items, event.oldLocation);
 					break;
 				case CollectionEventKind.REPLACE :
 					removeChild(event.items[1]);
