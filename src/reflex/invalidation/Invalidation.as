@@ -5,7 +5,8 @@ package reflex.invalidation
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
-	import flash.utils.setTimeout;
+import flash.utils.clearTimeout;
+import flash.utils.setTimeout;
 	
 	/**
 	 * @alpha
@@ -18,6 +19,7 @@ package reflex.invalidation
 		private static var phaseIndex:Object = {};
 		private static var displayDepths:Dictionary = new Dictionary(true);
 		private static var invalidStages:Dictionary = new Dictionary(true);
+        private static var invalidateStageTimeoutId:int = -1;
 		
 		public static function registerPhase(type:String, priority:int = 0, ascending:Boolean = true):Boolean
 		{
@@ -67,9 +69,10 @@ package reflex.invalidation
 			
 			if (!rendering) {
 				invalidateStage(display.stage);
-			} else /*if ( (phase.ascending && depth <= phase.renderingDepth) ||
-				(!phase.ascending && depth >= phase.renderingDepth) ) */{
-				setTimeout(invalidateStage, 0, display.stage);
+			} else if ( invalidateStageTimeoutId == -1/*(phase.ascending && depth <= phase.renderingDepth) ||
+				(!phase.ascending && depth >= phase.renderingDepth)*/ ) {
+                //setTimeout will be called max once per frame
+				invalidateStageTimeoutId = setTimeout(invalidateStage, 0, display.stage);
 			}
 		}
 		
@@ -99,6 +102,12 @@ package reflex.invalidation
 		
 		private static function invalidateStage(stage:Stage):void
 		{
+            //clear timeout method - only way to GC it.
+            if(invalidateStageTimeoutId != -1) {
+                clearTimeout(invalidateStageTimeoutId);
+                invalidateStageTimeoutId = -1;
+            }
+
 			invalidStages[stage] = true;
 			stage.invalidate();
 			stage.addEventListener(Event.RENDER, onRender, false, -0xF, true);

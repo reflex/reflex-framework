@@ -39,10 +39,12 @@ package reflex.containers
 		{
 			super();
 			layout = new BasicLayout();
-			if (stage == null) {
-				return;
-			}
-			
+			if (stage) init();
+            else addEventListener(Event.ADDED_TO_STAGE, init)
+		}
+
+        private function init(e:Event = null):void {
+
 			var contextMenu:ContextMenu = new ContextMenu();
 			/*if(viewSourceURL != null && viewSourceURL != "") {
 				var viewSourceCMI:ContextMenuItem = new ContextMenuItem("View Source", true);
@@ -51,12 +53,18 @@ package reflex.containers
 			}*/
 			contextMenu.hideBuiltInItems();
 			this.contextMenu = contextMenu;
-			
+
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
 			onStageResize(null);
-		}
+
+            onInit()
+        }
+
+        protected function onInit():void {
+            //OVERRIDE FOR STAGE ENABLED SETUP
+        }
 		
 		private function onStageResize(event:Event):void
 		{

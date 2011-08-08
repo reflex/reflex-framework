@@ -24,7 +24,7 @@ package reflex.layouts
 		
 		public var gap:Number = 5;
 		public var edging:Boolean = false;
-		public var verticalAlign:String = "top"; // bottom, middle, top
+		public var verticalAlign:String = "top"; // bottom, middle, top, justify
 		
 		public function HorizontalLayout(gap:Number = 5, verticalAlign:String = "top", edging:Boolean = false):void {
 			super();
@@ -67,6 +67,8 @@ package reflex.layouts
 					var child:Object = children[i];
 					var width:Number = reflex.measurement.resolveWidth(child, availableSpace.x, percentageTotals.x);  // calculate percentWidths based on available width and normalized percentages
 					var height:Number = reflex.measurement.resolveHeight(child, rectangle.height); // calculate percentHeights based on full height and with no normalization
+                    if(verticalAlign == "justify")
+                        height = rectangle.height;
 					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
 					child.x = Math.round(position);
 					
@@ -76,6 +78,7 @@ package reflex.layouts
 							child.y = Math.round(rectangle.height/2 - height/2);
 							break;
 						case "top":
+						case "justify":
 							child.y = 0;
 							break;
 						case "bottom":
