@@ -134,22 +134,26 @@ package reflex.behaviors
 		
 		private function updateUIPosition():void {
 			var percent:Number = (position.value-position.minimum)/(position.maximum-position.minimum);
-			if(direction == HORIZONTAL) {
-				thumb.x = track.x + (track.width-thumb.width) * percent;
-			} else if(direction == VERTICAL) {
-				thumb.y = track.y + (track.height-thumb.height) * percent;
+			if(target && track && thumb) {
+				if(direction == HORIZONTAL) {
+					thumb.x = track.x + (track.width-thumb.width) * percent;
+				} else if(direction == VERTICAL) {
+					thumb.y = track.y + (track.height-thumb.height) * percent;
+				}
 			}
 		}
 		
 		private function updateUILayout():void {
-			if(direction == HORIZONTAL) {
-				var h2:Number = (target as Object).height/2;
-				track.y = h2 - track.height/2;
-				thumb.y = h2 - thumb.height/2;
-			} else {
-				var w2:Number = (target as Object).width/2;
-				track.x = w2 - track.width/2;
-				thumb.x = w2 - thumb.width/2;
+			if(target && track && thumb) {
+				if(direction == HORIZONTAL) {
+					var h2:Number = (target as Object).height/2;
+					track.y = h2 - track.height/2;
+					thumb.y = h2 - thumb.height/2;
+				} else {
+					var w2:Number = (target as Object).width/2;
+					track.x = w2 - track.width/2;
+					thumb.x = w2 - thumb.width/2;
+				}
 			}
 		}
 	}
