@@ -23,11 +23,11 @@ package mx.states
 		
 		private var item:*; // garbage collection?
 		
-		public function initialize():void {
+		override public function initialize():void {
 			//trace("init");
 		}
 		
-		public function apply(parent:Object):void {
+		override public function apply(parent:Object):void {
 			var object:* = getOverrideContext(destination, parent);
 			item = (itemsFactory as DeferredInstanceFromFunction).getInstance();
 			if(propertyName == null || propertyName == "mxmlContent") {
@@ -39,7 +39,7 @@ package mx.states
 			}*/
 		}
 		
-		public function remove(parent:Object):void {
+		override public function remove(parent:Object):void {
 			var object:* = getOverrideContext(destination, parent);
 			if(propertyName == null || propertyName == "mxmlContent") {
 				parent.removeElement(item);

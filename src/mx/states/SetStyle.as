@@ -11,16 +11,16 @@ package mx.states
 		
 		private var oldValue:*;
 		
-		public function initialize():void {
+		override public function initialize():void {
 			//trace("init");
 		}
 		
-		public function apply(parent:Object):void {
+		override public function apply(parent:Object):void {
 			oldValue = parent[target].getStyle(name);
 			parent[target].setStyle(name, value);
 		}
 		
-		public function remove(parent:Object):void {
+		override public function remove(parent:Object):void {
 			parent[target].setStyle(name, oldValue);
 			oldValue = null;
 		}
