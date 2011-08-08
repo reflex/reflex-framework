@@ -11,9 +11,9 @@ package reflex.components
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.MockBehavior;
 	import reflex.display.StatefulTestBase;
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 	
-	public class ComponentTest extends TestBase
+	public class ComponentTest extends BaseClass
 	{
 		
 		public function ComponentTest() {

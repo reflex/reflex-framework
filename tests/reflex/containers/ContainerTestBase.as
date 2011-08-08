@@ -6,9 +6,9 @@ package reflex.containers {
 	
 	import reflex.collections.SimpleCollection;
 	import reflex.components.MockLayout;
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 	
-	public class ContainerTestBase extends TestBase {
+	public class ContainerTestBase extends BaseClass {
 
 		public var C:Class;
 

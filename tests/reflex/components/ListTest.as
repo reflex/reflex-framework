@@ -5,9 +5,9 @@ package reflex.components
 	import reflex.data.Range;
 	import reflex.data.Selection;
 	import reflex.layouts.XYLayout;
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 	
-	public class ListTest extends TestBase
+	public class ListTest extends BaseClass
 	{
 		
 		[Test(async)]

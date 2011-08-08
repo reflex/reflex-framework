@@ -3,7 +3,7 @@ package reflex.containers {
 	
 	import reflex.components.MockLayout;
 	import reflex.display.StatefulContainerTestBase;
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 	
 	public class ContainerTest extends StatefulContainerTestBase {
 

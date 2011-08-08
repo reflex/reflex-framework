@@ -1,9 +1,10 @@
 package reflex.components
 {
 	
+	import flash.display.Sprite;
+	
 	import reflex.behaviors.SlideBehavior;
 	import reflex.data.Position;
-	import reflex.skins.KnobSkin;
 
 	public class Knob extends SliderComponent
 	{
@@ -12,7 +13,7 @@ package reflex.components
 		{
 			super();
 			position = new Position();
-			skin = new KnobSkin();
+			skin = new Sprite();//new KnobSkin();
 			behaviors.addItem(new SlideBehavior(this));
 		}
 		
