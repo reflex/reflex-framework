@@ -4,6 +4,8 @@ package reflex.layouts
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import reflex.graphics.IDrawable;
+	import reflex.graphics.Line;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
@@ -106,6 +108,13 @@ package reflex.layouts
 				
 				if(width > 0 && height > 0) { // for shapes which haven't been drawn to yet
 					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+				} else if(child is IDrawable) { // sometime width/height is 0 for lines
+					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					/*
+					if(width == 0) { width = (child as Line).stroke.weight; }
+					if(height == 0) { height = (child as Line).stroke.weight; }
+					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					*/
 				}
 			}
 		}

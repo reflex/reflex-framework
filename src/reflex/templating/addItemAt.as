@@ -10,7 +10,10 @@ package reflex.templating
 	{
 		var renderer:Object = getDataRenderer(container, child, template);
 		if (renderer is DisplayObject) {
-			container.addChildAt(renderer as DisplayObject, (index == -1) ? container.numChildren : index);
+			//container.addChildAt(renderer as DisplayObject, (index == -1) ? container.numChildren : index);
+			
+			// why did container have 0 children here when content was 3 and index was 2?
+			container.addChildAt(renderer as DisplayObject, (index == -1) ? container.numChildren : Math.min(index, container.numChildren));
 		}
 		return renderer;
 	}

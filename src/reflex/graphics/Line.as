@@ -71,6 +71,8 @@ package reflex.graphics
 		public function Line()
 		{
 			super();
+			//this.measured.width = 1;
+			//this.measured.height = 1;
 		}
 		
 		/**
@@ -95,7 +97,7 @@ package reflex.graphics
 			var yf:Number = isNaN(yFrom) ? y : yFrom;
 			var xt:Number = isNaN(xTo) ? x+width : xTo;
 			var yt:Number = isNaN(yTo) ? y+height : yTo;
-			var rectangle:Rectangle = new Rectangle(0, 0, xt-xf, yt-yf);
+			var rectangle:Rectangle = new Rectangle(0, 0, Math.max(xt-xf, 1), Math.max(yt-yf, 1));
 			if(stroke != null) {
 				stroke.apply(graphics, rectangle, new Point(xf, yf));
 			} else {
