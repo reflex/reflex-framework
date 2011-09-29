@@ -19,25 +19,31 @@ package mx.states
 		public var position:String;
 		public var relativeTo:Array = [];
 		
+		public var destructionPolicy:String;
+		
 		private var item:*; // garbage collection?
 		
-		public function initialize():void {
+		override public function initialize():void {
 			//trace("init");
 		}
 		
-		public function apply(parent:Object):void {
+		override public function apply(parent:Object):void {
 			var object:* = getOverrideContext(destination, parent);
 			item = (itemsFactory as DeferredInstanceFromFunction).getInstance();
-			if(object[propertyName] is IList) {
+			if(propertyName == null || propertyName == "mxmlContent") {
+				parent.addElement(item);
+			} else if(object[propertyName] is IList) {
 				applyToList(parent, object, item);
 			} /*else if(object is Array) {
 				applyToArray(object as Array, item);
 			}*/
 		}
 		
-		public function remove(parent:Object):void {
+		override public function remove(parent:Object):void {
 			var object:* = getOverrideContext(destination, parent);
-			if(object[propertyName] is IList) {
+			if(propertyName == null || propertyName == "mxmlContent") {
+				parent.removeElement(item);
+			} else if(object[propertyName] is IList) {
 				removeFromList(parent, object, item);
 			}
 			item = null;

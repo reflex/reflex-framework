@@ -6,9 +6,9 @@ package reflex.styles
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
 	
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 
-	public class StyleableTestBase extends TestBase
+	public class StyleableTestBase extends BaseClass
 	{
 		
 		public var C:Class;

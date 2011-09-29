@@ -1,6 +1,8 @@
 package reflex.components
 {
 	
+	import flash.display.Sprite;
+	
 	import reflex.behaviors.SlideBehavior;
 	import reflex.data.Position;
 
@@ -11,7 +13,7 @@ package reflex.components
 		{
 			super();
 			position = new Position();
-			//skin = new ScrollBarGraphic()
+			skin = new Sprite();//new KnobSkin();
 			behaviors.addItem(new SlideBehavior(this));
 		}
 		

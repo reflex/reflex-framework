@@ -1,6 +1,7 @@
 package reflex.components
 {
 	
+	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
 	import mx.core.IDataRenderer;
@@ -10,8 +11,8 @@ package reflex.components
 	import reflex.behaviors.SelectBehavior;
 	import reflex.binding.Bind;
 	import reflex.binding.DataChange;
-	import reflex.skins.ListItemSkin;
 	import reflex.skins.ISkin;
+	import reflex.skins.ListItemSkin;
 	
 	/**
 	 * @alpha
@@ -48,16 +49,37 @@ package reflex.components
 		
 		public function newInstance():* {
 			var n:String = flash.utils.getQualifiedClassName(this);
-			var C:Class = flash.utils.getDefinitionByName(n) as Class;
+			var C:Class = getDefinition( n );
+
 			var instance:ListItem = new C();
 			
 			if (skin == null)
 				throw new Error("Trying to create a new instance of ListItemDefinition using a ListItemDefinition object that does not have a skin defined.  ListItemDefinition.newInstance() requires that a skin is defined.");
 			
 			var sn:String = flash.utils.getQualifiedClassName(skin);
-			var sC:Class = flash.utils.getDefinitionByName(sn) as Class;
+			var sC:Class = getDefinition( sn );
 			instance.skin = new sC() as ISkin;
 			return instance;
+		}
+		
+		private function getDefinition( name:String ):Class
+		{
+			var C:Class;
+			try{ 
+				C = flash.utils.getDefinitionByName( name ) as Class
+			} catch ( error:Error )
+			{
+				if( loaderInfo )
+				{
+					C = loaderInfo.applicationDomain.getDefinition( name ) as Class;
+				}
+				if( !C )
+				{
+					trace( "ListItem: Unable to retrieve definition of Class '" + name + "'." );
+					throw error;
+				}
+			}
+			return C; 
 		}
 		
 	}

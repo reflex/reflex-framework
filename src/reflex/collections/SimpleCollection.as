@@ -28,6 +28,7 @@ package reflex.collections
 			_source = source;
 		}
 		
+		[Bindable(event="collectionChange")]
 		public function get length():int
 		{
 			return _source.length;
@@ -75,7 +76,7 @@ package reflex.collections
 			var item:Object = _source.splice(index, 1);
 			var event:CollectionEvent = new CollectionEvent(CollectionEvent.COLLECTION_CHANGE, false, false, CollectionEventKind.REMOVE, -1, index, item as Array);
 			dispatchEvent(event);
-			return item;
+			return item[0];
 		}
 		
 		public function setItemAt(item:Object, index:int):Object

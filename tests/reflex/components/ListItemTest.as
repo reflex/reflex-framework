@@ -2,9 +2,9 @@ package reflex.components
 {
 	import flexunit.framework.Assert;
 	
-	import reflex.tests.TestBase;
+	import reflex.tests.BaseClass;
 
-	public class ListItemTest extends TestBase
+	public class ListItemTest extends BaseClass
 	{
 		
 		[Test(async)]

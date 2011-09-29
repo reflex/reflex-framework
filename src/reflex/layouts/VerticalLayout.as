@@ -27,7 +27,8 @@ package reflex.layouts
 		//static public const ALIGN_LEFT:String = "left";
 		//static public const ALIGN_RIGHT:String = "right";
 		//static public const ALIGN_CENTER:String = "center";
-		
+		//static public const ALIGN_JUSTIFY:String = "justify";
+
 		public var gap:Number = 5;
 		public var edging:Boolean = false;
 		public var horizontalAlign:String = "left";
@@ -74,6 +75,8 @@ package reflex.layouts
 				for(var i:int = 0; i < length; i++) {
 					var child:Object = children[i];
 					var width:Number = reflex.measurement.resolveWidth(child, rectangle.width); // calculate percentWidths based on full width and with no normalization
+					if(horizontalAlign == "justify")
+                        width = rectangle.width;
 					var height:Number = reflex.measurement.resolveHeight(child, availableSpace.y, percentageTotals.y);  // calculate percentHeights based on available height and normalized percentages
 					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
 					
@@ -82,6 +85,7 @@ package reflex.layouts
 						case "middle":
 							child.x = Math.round(rectangle.width/2 - width/2);
 							break;
+						case "justify":
 						case "left":
 							child.x = 0;
 							break;

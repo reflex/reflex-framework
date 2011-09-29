@@ -7,7 +7,7 @@ package reflex.tests
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
 
-	public class TestBase extends EventDispatcher
+	public class BaseClass extends EventDispatcher
 	{
 		
 		// tests that the appropriate PropertyChange 

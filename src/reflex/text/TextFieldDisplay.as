@@ -68,7 +68,19 @@
 			} else {
 				DataChange.change(this, "text", super.text, super.text = value);
 			}
-			//onMeasure(null);
+			onMeasure(null);
+		}
+		
+		[Bindable(event="htmlTextChange", noEvent)]
+		override public function get htmlText():String { return super.text; }
+		override public function set htmlText(value:String):void {
+			if(value == null) { 
+				DataChange.change(this, "htmlText", super.htmlText, null);
+				super.htmlText = "";
+			} else {
+				DataChange.change(this, "htmlText", super.htmlText, super.htmlText = value);
+			}
+			onMeasure(null);
 		}
 		
 		override public function set defaultTextFormat(value:TextFormat):void {

@@ -6,6 +6,18 @@ package mx.states
 	public class OverrideBase extends EventDispatcher //implements IOverride
 	{
 		
+		public function initialize():void {
+			
+		}
+		
+		public function apply(parent:Object):void {
+			
+		}
+		
+		public function remove(parent:Object):void {
+			
+		}
+		
 		/**
 		 * @private
 		 * @param parent The document level context for this override.
