@@ -278,9 +278,9 @@ package reflex.containers
 		private function add(items:Array, index:int):void {
 			var children:Array = reflex.templating.addItemsAt(this, items, index, _template);
 			
-			var length:int = items.length;
+			var length:int = children.length;
 			for(var i:int = 0; i < length; i++) {
-				renderers.splice(index+i, 0, items[i]);
+				renderers.splice(index+i, 0, children[i]);
 			}
 			
 			Invalidation.invalidate(this, MEASURE);

@@ -10,6 +10,7 @@ package reflex.graphics
 	
 	import reflex.binding.DataChange;
 	import reflex.display.BitmapDisplay;
+	import reflex.invalidation.Invalidation;
 	import reflex.metadata.resolveCommitProperties;
 	
 	[Style(name="left")]
@@ -90,6 +91,8 @@ package reflex.graphics
 				measured.height = bitmapdata.height;
 				original = bitmapdata;
 				draw();
+				Invalidation.invalidate(this, "measure");
+				Invalidation.invalidate(this, "layout");
 			}
 		}
 		
@@ -98,6 +101,8 @@ package reflex.graphics
 			measured.height = loader.content.height;
 			original = (loader.content as Bitmap).bitmapData;
 			draw();
+			Invalidation.invalidate(this, "measure");
+			Invalidation.invalidate(this, "layout");
 		}
 		
 		/**

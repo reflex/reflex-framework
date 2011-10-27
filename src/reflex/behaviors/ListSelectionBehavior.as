@@ -41,7 +41,7 @@ package reflex.behaviors
 		[EventListener(event="added", target="container")]
 		public function onRendererAdded(event:Event):void {
 			var renderer:Object = event.target;
-			if(renderer.parent == container) {
+			if(renderer.parent == container || renderer.parent.parent == container) {
 				addRenderer(renderer as IEventDispatcher)
 			}
 		}
@@ -74,18 +74,19 @@ package reflex.behaviors
 		
 		private function onRendererClick(event:MouseEvent):void {
 			// just assuming IDataRenderer for now. this will need to be smarter later
-			var renderer:IDataRenderer = event.currentTarget as IDataRenderer;
+			var renderer:Object = event.currentTarget;
+			var item:Object = (event.currentTarget is IDataRenderer) ? (event.currentTarget as IDataRenderer).data : event.currentTarget;
 			if(event.ctrlKey) {
-				_selection.selectedItems.addItem(renderer.data);
+				_selection.selectedItems.addItem(item);
 			} else {
-				_selection.selectedItem = renderer.data;
+				_selection.selectedItem = item;
 			}
 			
 			// making wild assumptions about the existence of selected properties here
 			for each(var r:Object in renderers) {
 				r.selected = false;
 			}
-			(renderer as Object).selected = true;
+			(renderer as Object).selected = !(renderer as Object).selected;
 		}
 		
 	}

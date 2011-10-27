@@ -178,7 +178,7 @@ package reflex.text
 		}
 		
 		protected function verticalAlignText(line:TextLine):void {
-			line.y = unscaledHeight/2 + line.textHeight/2;
+			line.y = unscaledHeight/2 + line.textHeight/2 - 5; // fuzzy math here
 		}
 		
 		protected function onTextRender(event:Event):void
