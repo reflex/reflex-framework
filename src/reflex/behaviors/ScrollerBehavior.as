@@ -40,22 +40,24 @@ package reflex.behaviors
 			super(target);
 		}
 		
+		[EventListener(event="widthChange", target="container")]
 		[EventListener(event="valueChange", target="horizontalPosition")]
 		[EventListener(event="minimumChange", target="horizontalPosition")]
 		[EventListener(event="maximumChange", target="horizontalPosition")]
 		public function onHorizontalChange(event:Event):void {
 			var percent:Number = (horizontalPosition.value-horizontalPosition.minimum)/(horizontalPosition.maximum-horizontalPosition.minimum);
-			//_container.x = (_container.width-(target as Object).width)*percent*-1;
-			_container.x = Math.round(((_container  as Object).measured.width-(target as Object).width)*percent*-1);
+			var potential:Number = (_container  as Object).measured.width-(target as Object).width;
+			_container.x = Math.round(potential*percent*-1);
 		}
 		
+		[EventListener(event="heightChange", target="container")]
 		[EventListener(event="valueChange", target="verticalPosition")]
 		[EventListener(event="minimumChange", target="verticalPosition")]
 		[EventListener(event="maximumChange", target="verticalPosition")]
 		public function onVerticalChange(event:Event):void {
 			var percent:Number = (verticalPosition.value-verticalPosition.minimum)/(verticalPosition.maximum-verticalPosition.minimum);
-			//_container.y = (_container.height-(target as Object).height)*percent*-1;
-			_container.y = Math.round(((_container as Object).measured.height-(target as Object).height)*percent*-1);
+			var potential:Number = (_container  as Object).measured.height-(target as Object).height;
+			_container.y = Math.round(potential*percent*-1);
 		}
 		
 	}

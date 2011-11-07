@@ -163,7 +163,9 @@ package reflex.containers
 				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 				var items:Array = [];
 				for (var i:int = 0; i < _content.length; i++) {
-					items.push(_content.getItemAt(i));
+					var child:Object = _content.getItemAt(i);
+					//child.addEventListener("widthChange", item_measureHandler, false, true);
+					items.push(child);
 				}
 			}
 			reset(items);
@@ -280,12 +282,25 @@ package reflex.containers
 			
 			var length:int = children.length;
 			for(var i:int = 0; i < length; i++) {
-				renderers.splice(index+i, 0, children[i]);
+				var child:Object = children[i];
+				//child.addEventListener("widthChange", item_measureHandler, false, true);
+				//child.addEventListener("measure", item_measureHandler, false, true);
+				//child.addEventListener("layout", item_measureHandler, false, true);
+				renderers.splice(index+i, 0, child);
 			}
 			
 			Invalidation.invalidate(this, MEASURE);
 			Invalidation.invalidate(this, LAYOUT);
 		}
+		
+		// temporary?
+		/*
+		private function item_measureHandler(event:Event):void {
+			//var child:IEventDispatcher = event.currentTarget;
+			Invalidation.invalidate(this, MEASURE);
+			Invalidation.invalidate(this, LAYOUT);
+		}
+		*/
 		
 		private function remove(items:Array, index:int):void {
 			// this isn't working with templating yet

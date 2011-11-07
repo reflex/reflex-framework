@@ -111,10 +111,19 @@
 			if (_skin is DisplayObject) {
 				reflex.templating.addItem(this, _skin);
 			}
+			//skin.addEventListener("widthChange", item_measureHandler, false, true);
 			Invalidation.invalidate(this, MEASURE);
 			dispatchEvent(new Event("skinChange"));
 		}
 		
+		// temporary?
+		/*
+		private function item_measureHandler(event:Event):void {
+			//var child:IEventDispatcher = event.currentTarget;
+			Invalidation.invalidate(this, MEASURE);
+			//Invalidation.invalidate(this, LAYOUT);
+		}
+		*/
 		[Bindable(event="enabledChange")]
 		public function get enabled():Boolean { return _enabled; }
 		public function set enabled(value:Boolean):void {

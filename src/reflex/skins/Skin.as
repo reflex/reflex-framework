@@ -348,15 +348,26 @@ package reflex.skins
 		private function add(items:Array, index:int):void {
 			var children:Array = reflex.templating.addItemsAt(_target, items, index, _template);
 			
-			var length:int = items.length;
+			var length:int = children.length;
 			for(var i:int = 0; i < length; i++) {
-				renderers.splice(index+i, 0, items[i]);
+				var child:Object = children[i];
+				//child.addEventListener("measure", item_measureHandler, false, true);
+				//child.addEventListener("layout", item_measureHandler, false, true);
+				renderers.splice(index+i, 0, children[i]);
 			}
 			
+			// where is child measure invalidation?
 			Invalidation.invalidate(_target, MEASURE);
 			Invalidation.invalidate(_target, LAYOUT);
 		}
 		
+		// temporary?
+		/*
+		private function item_measureHandler(event:Event):void {
+			//var child:IEventDispatcher = event.currentTarget;
+			Invalidation.invalidate(_target, MEASURE);
+		}
+		*/
 		private function remove(items:Array, index:int):void {
 			// this isn't working with templating yet
 			var child:Object;
@@ -375,6 +386,11 @@ package reflex.skins
 					_target.removeChildAt(_target.numChildren-1);
 				}
 				renderers = reflex.templating.addItemsAt(_target, items, 0, template); // todo: correct ordering
+				
+				//for each(var renderer:Object in renderers) {
+					//renderer.addEventListener("widthChange", item_measureHandler, false, true);
+				//}
+				
 				Invalidation.invalidate(_target, MEASURE);
 				Invalidation.invalidate(_target, LAYOUT);
 			}
@@ -397,12 +413,12 @@ package reflex.skins
 				var point:Point = layout.measure(items);
 				if (point.x != measured.width || point.y != measured.height) {
 					var pm:IMeasurablePercent = _target as IMeasurablePercent;
-					if(pm == null || isNaN(pm.percentWidth)) {
+					//if(pm == null || isNaN(pm.percentWidth)) { // ??? this causes some trouble, but seems needed because measured settings can resize
 						measured.width = point.x;
-					}
-					if(pm == null || isNaN(pm.percentHeight)) {
+					//}
+					//if(pm == null || isNaN(pm.percentHeight)) {
 						measured.height = point.y;
-					}
+					//}
 				}
 			}
 			

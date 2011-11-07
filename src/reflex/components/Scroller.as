@@ -1,19 +1,22 @@
 package reflex.components
 {
 	
+	import flash.events.Event;
+	
+	import mx.collections.IList;
+	
 	import reflex.behaviors.ScrollerBehavior;
 	import reflex.binding.Bind;
-	import reflex.collections.SimpleCollection;
-	import reflex.data.Position;
-	import reflex.layouts.BasicLayout;
-	import reflex.skins.ScrollerSkin;
-	import mx.collections.IList;
 	import reflex.binding.DataChange;
+	import reflex.collections.SimpleCollection;
+	import reflex.collections.convertToIList;
 	import reflex.containers.IContainer;
 	import reflex.data.IPosition;
 	import reflex.data.IRange;
+	import reflex.data.Position;
+	import reflex.layouts.BasicLayout;
 	import reflex.layouts.ILayout;
-	import reflex.collections.convertToIList;
+	import reflex.skins.ScrollerSkin;
 	
 	[DefaultProperty("content")]
 	public class Scroller extends Component implements IContainer
@@ -53,30 +56,6 @@ package reflex.components
 			DataChange.change(this, "content", oldContent,  _content);
 		}
 		
-		private function isVector(value:*):Boolean {
-			var valueIsVector:Boolean = true;
-			
-			try {
-				var vector:Vector.<Object> = Vector.<Object>(value);
-			} catch (e:Error) {
-				valueIsVector = false;
-			}
-			
-			return valueIsVector;
-		}
-		
-		private function convertVectorToArray(vector:Object):Array {
-			var array:Array = [];
-			
-			var vectorLength:int = vector.length;
-			
-			for (var i:int = 0; i < vectorLength; i++ ) {
-				array[i] = vector[i];
-			}
-			
-			return array;
-		}
-		
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
@@ -95,6 +74,8 @@ package reflex.components
 			verticalPosition = new Position();
 			layout = new BasicLayout();
 			skin = new ScrollerSkin();
+			//this.addEventListener("measure", item_measureHandler, false);
+			
 			Bind.addBinding(this, "skin.container.content", this, "content");
 			Bind.addBinding(this, "skin.container.layout", this, "layout");
 			
@@ -102,5 +83,13 @@ package reflex.components
 			behaviors.addItem(new ScrollerBehavior(this));
 		}
 		
+		// temporary?
+		/*
+		private function item_measureHandler(event:Event):void {
+			//var child:IEventDispatcher = event.currentTarget;
+			//Invalidation.invalidate(this, MEASURE);
+			trace("Scroller measure");
+		}
+		*/
 	}
 }

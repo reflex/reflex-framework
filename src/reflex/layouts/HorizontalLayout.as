@@ -25,6 +25,7 @@ package reflex.layouts
 		public var gap:Number = 5;
 		public var edging:Boolean = false;
 		public var verticalAlign:String = "top"; // bottom, middle, top, justify
+		public var horizontalAlign:String = "left"; // left, center, right
 		
 		public function HorizontalLayout(gap:Number = 5, verticalAlign:String = "top", edging:Boolean = false):void {
 			super();

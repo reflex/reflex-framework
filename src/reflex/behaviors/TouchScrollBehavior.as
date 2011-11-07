@@ -26,6 +26,9 @@ package reflex.behaviors
 		private var drag:Number = 0.95;
 		
 		[Bindable]
+		public var round:Boolean = false;
+		
+		[Bindable]
 		[Binding(target="target.verticalPosition")]
 		public var verticalPosition:IPosition;
 		

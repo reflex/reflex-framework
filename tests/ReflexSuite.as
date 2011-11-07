@@ -18,6 +18,7 @@ package
 	import reflex.components.ListTest;
 	import reflex.components.ScrollerDefinitionTest;
 	import reflex.components.SliderDefinitionTest;
+	import reflex.containers.ContainerLifecycleTest;
 	import reflex.containers.ContainerMeasurementTest;
 	import reflex.containers.ContainerTest;
 	import reflex.data.PositionTest;
@@ -115,6 +116,9 @@ package
 		
 		//text
 		public var label:LabelTest;
+		
+		//lifecycle
+		public var containerLifecycle:ContainerLifecycleTest;
 		
 	}
 }

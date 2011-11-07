@@ -8,7 +8,7 @@ package reflex.behaviors
 	
 	public class CompositeBehaviorTest extends EventDispatcher
 	{
-		
+		/*
 		private var behaviors:CompositeBehavior;
 		
 		[Before]
@@ -76,6 +76,6 @@ package reflex.behaviors
 				index++;
 			}
 		}
-		
+		*/
 	}
 }

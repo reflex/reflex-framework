@@ -10,6 +10,7 @@ package reflex.skins
 	import reflex.containers.Container;
 	import reflex.graphics.Rect;
 	import reflex.layouts.BasicLayout;
+	import reflex.layouts.XYLayout;
 
 	public class ScrollerSkin extends Skin
 	{
@@ -25,6 +26,7 @@ package reflex.skins
 			super();
 			layout = new BasicLayout();
 			container = new Container();
+			//container.layout = new XYLayout();
 			container.percentWidth = 100;
 			container.percentHeight = 100;
 			
