@@ -56,6 +56,8 @@
 			addEventListener(MEASURE, onMeasure, false, 0, true);
 		}
 		
+		[Bindable]
+		public var parents:Object;
 		
 		[ArrayElementType("reflex.behaviors.IBehavior")]
 		[Bindable(event="behaviorsChange")]

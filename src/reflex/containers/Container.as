@@ -14,6 +14,8 @@ package reflex.containers
 	
 	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
+	import reflex.collections.convertToIList;
+	import reflex.components.Component;
 	import reflex.components.IStateful;
 	import reflex.display.Display;
 	import reflex.invalidation.Invalidation;
@@ -22,7 +24,6 @@ package reflex.containers
 	import reflex.states.applyState;
 	import reflex.states.removeState;
 	import reflex.templating.addItemsAt;
-	import reflex.collections.convertToIList;
 	
 	//use namespace mx_internal;
 	
@@ -287,6 +288,9 @@ package reflex.containers
 				//child.addEventListener("measure", item_measureHandler, false, true);
 				//child.addEventListener("layout", item_measureHandler, false, true);
 				renderers.splice(index+i, 0, child);
+				if(child is Component) { // need to make this generic
+					(child as Component).parents = this;
+				}
 			}
 			
 			Invalidation.invalidate(this, MEASURE);
@@ -309,6 +313,9 @@ package reflex.containers
 				removeChild(child as DisplayObject);
 				var index:int = renderers.indexOf(child);
 				renderers.splice(index, 1);
+				if(child is Component) { // need to make this generic
+					(child as Component).parents = null;
+				}
 			}
 			Invalidation.invalidate(this, MEASURE);
 			Invalidation.invalidate(this, LAYOUT);
@@ -316,9 +323,17 @@ package reflex.containers
 		
 		private function reset(items:Array):void {
 			while (numChildren) {
-				removeChildAt(numChildren-1);
+				var child:DisplayObject = removeChildAt(numChildren-1);
+				if(child is Component) { // need to make this generic
+					(child as Component).parents = null;
+				}
 			}
 			renderers = reflex.templating.addItemsAt(this, items, 0, _template); // todo: correct ordering
+			for each (child in renderers) {
+				if(child is Component) { // need to make this generic
+					(child as Component).parents = this;
+				}
+			}
 			Invalidation.invalidate(this, LAYOUT);
 		}
 		
