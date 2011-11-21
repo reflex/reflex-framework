@@ -14,6 +14,7 @@ package reflex.containers
 	
 	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
+	import reflex.collections.convertToIList;
 	import reflex.components.IStateful;
 	import reflex.display.Display;
 	import reflex.invalidation.Invalidation;
@@ -22,7 +23,6 @@ package reflex.containers
 	import reflex.states.applyState;
 	import reflex.states.removeState;
 	import reflex.templating.addItemsAt;
-	import reflex.collections.convertToIList;
 	
 	//use namespace mx_internal;
 	
@@ -155,6 +155,7 @@ package reflex.containers
 			
 			if (_content) {
 				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
+				renderers = [];
 			}
 			
 			_content = reflex.collections.convertToIList(value);
@@ -306,7 +307,9 @@ package reflex.containers
 			// this isn't working with templating yet
 			var child:Object;
 			for each (child in items) {
-				removeChild(child as DisplayObject);
+				if(contains(child as DisplayObject)) {
+					removeChild(child as DisplayObject);
+				}
 				var index:int = renderers.indexOf(child);
 				renderers.splice(index, 1);
 			}
