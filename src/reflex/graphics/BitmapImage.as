@@ -2,6 +2,7 @@ package reflex.graphics
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.IBitmapDrawable;
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.geom.Matrix;
@@ -80,10 +81,19 @@ package reflex.graphics
 				loader.load(request, new LoaderContext(true));
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete, false, 0, true);
 			} else if (source is Class) {
-				var display:Bitmap = new (source as Class)();
-				measured.width = display.width;
-				measured.height = display.height;
-				original = display.bitmapData;
+				var display:Object = new (source as Class)();
+				if(display is Bitmap) {
+					//var display:Bitmap = new (source as Class)();
+					measured.width = display.width;
+					measured.height = display.height;
+					original = display.bitmapData;
+				} else if(display is IBitmapDrawable) {
+					var bitmap:BitmapData = new BitmapData(display.width, display.height, true, 0);
+					bitmap.draw(display as IBitmapDrawable);
+					measured.width = bitmap.width;
+					measured.height = bitmap.height;
+					original = bitmap;
+				}
 				draw();
 			} else if (source is BitmapData) {
 				var bitmapdata:BitmapData = source as BitmapData;
