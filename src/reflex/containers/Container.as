@@ -156,6 +156,7 @@ package reflex.containers
 			
 			if (_content) {
 				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
+				renderers = [];
 			}
 			
 			_content = reflex.collections.convertToIList(value);
@@ -310,7 +311,9 @@ package reflex.containers
 			// this isn't working with templating yet
 			var child:Object;
 			for each (child in items) {
-				removeChild(child as DisplayObject);
+				if(contains(child as DisplayObject)) {
+					removeChild(child as DisplayObject);
+				}
 				var index:int = renderers.indexOf(child);
 				renderers.splice(index, 1);
 				if(child is Component) { // need to make this generic
