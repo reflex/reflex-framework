@@ -57,7 +57,7 @@
 		}
 		
 		[Bindable]
-		public var parents:Object;
+		public var owner:Object; // Reflex Container
 		
 		[ArrayElementType("reflex.behaviors.IBehavior")]
 		[Bindable(event="behaviorsChange")]

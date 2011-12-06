@@ -290,7 +290,7 @@ package reflex.containers
 				//child.addEventListener("layout", item_measureHandler, false, true);
 				renderers.splice(index+i, 0, child);
 				if(child is Component) { // need to make this generic
-					(child as Component).parents = this;
+					(child as Component).owner = this;
 				}
 			}
 			
@@ -311,13 +311,14 @@ package reflex.containers
 			// this isn't working with templating yet
 			var child:Object;
 			for each (child in items) {
-				if(contains(child as DisplayObject)) {
-					removeChild(child as DisplayObject);
-				}
-				var index:int = renderers.indexOf(child);
-				renderers.splice(index, 1);
 				if(child is Component) { // need to make this generic
-					(child as Component).parents = null;
+					(child as Component).owner = null;
+				}
+				//var index:int = content.getItemIndex(child); //renderers.indexOf(child);
+				var renderer:Object = renderers.splice(index, 1)[0];
+				if((renderer is DisplayObject) 
+					&& contains(renderer as DisplayObject)) {
+					removeChild(renderer as DisplayObject);
 				}
 			}
 			Invalidation.invalidate(this, MEASURE);
@@ -328,13 +329,13 @@ package reflex.containers
 			while (numChildren) {
 				var child:DisplayObject = removeChildAt(numChildren-1);
 				if(child is Component) { // need to make this generic
-					(child as Component).parents = null;
+					(child as Component).owner = null;
 				}
 			}
 			renderers = reflex.templating.addItemsAt(this, items, 0, _template); // todo: correct ordering
 			for each (child in renderers) {
 				if(child is Component) { // need to make this generic
-					(child as Component).parents = this;
+					(child as Component).owner = this;
 				}
 			}
 			Invalidation.invalidate(this, LAYOUT);
