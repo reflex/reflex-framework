@@ -74,7 +74,7 @@ package reflex.collections
 		public function removeItemAt(index:int):Object
 		{
 			var item:Object = _source.splice(index, 1);
-			var event:CollectionEvent = new CollectionEvent(CollectionEvent.COLLECTION_CHANGE, false, false, CollectionEventKind.REMOVE, -1, index, item as Array);
+			var event:CollectionEvent = new CollectionEvent(CollectionEvent.COLLECTION_CHANGE, false, false, CollectionEventKind.REMOVE, index, index, item as Array);
 			dispatchEvent(event);
 			return item[0];
 		}
