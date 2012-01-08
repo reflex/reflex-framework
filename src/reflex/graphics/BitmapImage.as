@@ -103,6 +103,9 @@ package reflex.graphics
 				draw();
 				Invalidation.invalidate(this, "measure");
 				Invalidation.invalidate(this, "layout");
+			} else {
+				original = null;
+				draw();
 			}
 		}
 		
@@ -158,7 +161,12 @@ package reflex.graphics
 					matrix = new Matrix(unscaledWidth/original.width, 0, 0, unscaledHeight/original.height, 0, 0);
 				}
 				if(bitmapData) {
+					bitmapData.floodFill(0, 0, 0)
 					bitmapData.draw(original, matrix, null, null, null, true);
+				}
+			} else {
+				if(bitmapData) {
+					bitmapData.floodFill(0, 0, 0)
 				}
 			}
 		}
