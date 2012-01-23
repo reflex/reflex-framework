@@ -18,6 +18,7 @@ package reflex.layouts
 	[LayoutProperty(name="style.bottom", measure="true")]
 	[LayoutProperty(name="style.horizontalCenter", measure="true")]
 	[LayoutProperty(name="style.verticalCenter", measure="true")]
+	[LayoutProperty(name="horizontalCenter", measure="true")]
 	[LayoutProperty(name="width", measure="true")]
 	[LayoutProperty(name="height", measure="true")]
 	/**

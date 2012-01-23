@@ -23,21 +23,22 @@ package reflex.behaviors
 		public var layoutChildren:Boolean = true;
 		public var direction:String = HORIZONTAL;
 		
-		[Bindable]
+		[Bindable(event="trackChange")]
 		[Binding(target="target.skin.track")]
 		public function get track():Object { return _track; }
 		public function set track(value:Object):void {
 			DataChange.change(this, "track", _track, _track = value);
 		}
 		
-		[Bindable]
+		[Bindable(event="thumbChange")]
 		[Binding(target="target.skin.thumb")]
 		public function get thumb():Object { return _thumb; }
 		public function set thumb(value:Object):void {
 			DataChange.change(this, "thumb", _thumb, _thumb = value);
+			(value as IEventDispatcher).addEventListener(MouseEvent.MOUSE_DOWN, onThumbDown, false, 0, true);
 		}
 		
-		[Bindable]
+		[Bindable(event="positionChange")]
 		[Binding(target="target.position")]
 		public function get position():IPosition { return _position; }
 		public function set position(value:IPosition):void {

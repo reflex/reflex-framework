@@ -2,7 +2,10 @@ package reflex.display
 {
 	import flash.display.Sprite;
 	
+	import mx.events.StyleEvent;
+	
 	import reflex.binding.DataChange;
+	import reflex.events.DataChangeEvent;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
@@ -70,7 +73,12 @@ package reflex.display
 		}
 		
 		public function setStyle(property:String, value:*):void {
-			style[property] = value;
+			//style[property] = value;
+			//DataChange.change(this, property, style[property], style[property] = value);
+			// hasEventListener is stopping dispatch for styles ???
+			var eventType:String = property + "Change";
+			var event:DataChangeEvent = new DataChangeEvent(eventType, style[property], style[property] = value);
+			this.dispatchEvent(event);
 		}
 		
 		[Bindable(event="xChange", noEvent)]

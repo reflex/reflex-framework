@@ -13,13 +13,10 @@ package reflex.metadata
 		var desc:XML = Type.describeType(instance);
 		for each (var meth:XML in desc.factory[0]) {
 			var meta:XMLList = meth.metadata.(@name == "LayoutProperty");
-			
-			// to support multiple DataListener metadata tags on a single method
 			for each (var tag:XML in meta) {
 				var sourcePath:String = tag.arg.(@key == "name").@value;
 				Bind.addListener(child, listener, child, sourcePath);
 			}
-			
 		}
 	}
 	

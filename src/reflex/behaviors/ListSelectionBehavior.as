@@ -5,6 +5,7 @@ package reflex.behaviors
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
+	import flash.ui.Mouse;
 	
 	import mx.core.IDataRenderer;
 	
@@ -34,8 +35,14 @@ package reflex.behaviors
 			DataChange.change(this, "selection", _selection, _selection= value);
 		}
 		
-		public function ListSelectionBehavior(target:IEventDispatcher):void {
+		public function ListSelectionBehavior(target:IEventDispatcher=null):void {
 			super(target);
+		}
+		
+		private var _cancel:Boolean;
+		public function cancel():void {
+			_cancel = true;
+			_container.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 		}
 		
 		[EventListener(event="added", target="container")]
@@ -73,20 +80,30 @@ package reflex.behaviors
 		}
 		
 		private function onRendererClick(event:MouseEvent):void {
-			// just assuming IDataRenderer for now. this will need to be smarter later
-			var renderer:Object = event.currentTarget;
-			var item:Object = (event.currentTarget is IDataRenderer) ? (event.currentTarget as IDataRenderer).data : event.currentTarget;
-			if(event.ctrlKey) {
-				_selection.selectedItems.addItem(item);
-			} else {
-				_selection.selectedItem = item;
+			if(!_cancel) {
+				// just assuming IDataRenderer for now. this will need to be smarter later
+				var renderer:Object = event.currentTarget;
+				var item:Object = (event.currentTarget is IDataRenderer) ? (event.currentTarget as IDataRenderer).data : event.currentTarget;
+				if(event.ctrlKey) {
+					_selection.selectedItems.addItem(item);
+				} else {
+					_selection.selectedItem = item;
+				}
+				
+				// making wild assumptions about the existence of selected properties here
+				for each(var r:Object in renderers) {
+					r.selected = false;
+				}
+				(renderer as Object).selected = !(renderer as Object).selected;
 			}
-			
-			// making wild assumptions about the existence of selected properties here
-			for each(var r:Object in renderers) {
-				r.selected = false;
+			_cancel = false;
+		}
+		
+		private function onMouseUp(event:MouseEvent):void {
+			_container.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp, false);
+			if(!_container.hitTestPoint(_container.stage.mouseX, _container.stage.mouseY)) {
+				_cancel = false;
 			}
-			(renderer as Object).selected = !(renderer as Object).selected;
 		}
 		
 	}

@@ -90,7 +90,7 @@
 	<component id="BitmapFillMode" class="mx.graphics.BitmapFillMode" />
 	
 	<!-- states -->
-	<!--
+	<!-- 
 	<component id="State" class="mx.states.State" />
 	<component id="AddItems" class="mx.states.AddItems" />
 	<component id="SetProperty" class="mx.states.SetProperty" />

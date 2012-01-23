@@ -148,7 +148,7 @@ package reflex.graphics
 					graphics.beginFill(0, 0);
 				}
 				if(_radiusX > 0 || _radiusY > 0) {
-					graphics.drawRoundRect(x, y, width, height, _radiusX, _radiusY);
+					graphics.drawRoundRect(x, y, width, height, _radiusX*2, _radiusY*2);
 				} else {
 					graphics.drawRect(x, y, width, height);
 				}
