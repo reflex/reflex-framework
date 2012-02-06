@@ -37,6 +37,7 @@ package reflex.behaviors
 		private var _selected:Boolean = false;
 		private var mouseState:String = UP;
 		private var _skin:ISkin;
+		private var _mouseEnabled:Boolean;
 		
 		[Bindable(event="currentStateChange")]
 		[Binding(target="target.currentState")]
@@ -69,6 +70,12 @@ package reflex.behaviors
 			currentState = resolveState(mouseState);
 		}
 		
+		[Bindable(event="mouseEnabledChange")]
+		public function get mouseEnabled():Boolean { return _mouseEnabled; }
+		public function set mouseEnabled(value:Boolean):void {
+			DataChange.change(this, "mouseEnabled", _mouseEnabled, _mouseEnabled = value);
+		}
+		
 		public function ButtonBehavior(target:IEventDispatcher = null) {
 			super(target);
 		}
@@ -86,13 +93,17 @@ package reflex.behaviors
 		[EventListener(event="mouseUp", target="target")]
 		public function onStateOver(event:MouseEvent):void
 		{
-			currentState = resolveState(mouseState = OVER);
+			if(_mouseEnabled) {
+				currentState = resolveState(mouseState = OVER);
+			}
 		}
 		
 		[EventListener(event="mouseDown", target="target")]
 		public function onStateDown(event:MouseEvent):void
 		{
-			currentState = resolveState(mouseState = DOWN);
+			if(_mouseEnabled) {
+				currentState = resolveState(mouseState = DOWN);
+			}
 		}
 		
 		private function resolveState(mouseState:String):String {

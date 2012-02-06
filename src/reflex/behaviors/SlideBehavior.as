@@ -17,7 +17,9 @@ package reflex.behaviors
 		
 		private var _track:Object;
 		private var _thumb:Object;
+		private var _progress:Object;
 		private var _position:IPosition;
+		private var _mouseEnabled:Boolean;
 		
 		public var page:Boolean = false;
 		public var layoutChildren:Boolean = true;
@@ -35,7 +37,14 @@ package reflex.behaviors
 		public function get thumb():Object { return _thumb; }
 		public function set thumb(value:Object):void {
 			DataChange.change(this, "thumb", _thumb, _thumb = value);
-			(value as IEventDispatcher).addEventListener(MouseEvent.MOUSE_DOWN, onThumbDown, false, 0, true);
+			//(value as IEventDispatcher).addEventListener(MouseEvent.MOUSE_DOWN, onThumbDown, false, 0, true);
+		}
+		
+		[Bindable(event="progressChange")]
+		[Binding(target="target.skin.progress")]
+		public function get progress():Object { return _progress; }
+		public function set progress(value:Object):void {
+			DataChange.change(this, "progress", _progress, _progress = value);
 		}
 		
 		[Bindable(event="positionChange")]
@@ -43,6 +52,12 @@ package reflex.behaviors
 		public function get position():IPosition { return _position; }
 		public function set position(value:IPosition):void {
 			DataChange.change(this, "position", _position, _position = value);
+		}
+		
+		[Bindable(event="mouseEnabledChange")]
+		public function get mouseEnabled():Boolean { return _mouseEnabled; }
+		public function set mouseEnabled(value:Boolean):void {
+			DataChange.change(this, "mouseEnabled", _mouseEnabled, _mouseEnabled = value);
 		}
 		
 		public function SlideBehavior(target:IEventDispatcher = null, direction:String = "horizontal", page:Boolean = false) {
@@ -57,30 +72,34 @@ package reflex.behaviors
 		[EventListener(event="click", target="track")]
 		public function onTrackPress(event:MouseEvent):void
 		{
-			var t:Object = target as Object;
-			if(page) {
-				if(direction == HORIZONTAL) {
-					pagePosition(t.mouseX - track.x, track.width);
-				} else if(direction == VERTICAL) {
-					pagePosition(t.mouseY - track.y, track.height);
+			if(_mouseEnabled) {
+				var t:Object = target as Object;
+				if(page) {
+					if(direction == HORIZONTAL) {
+						pagePosition(t.mouseX - track.x, track.width);
+					} else if(direction == VERTICAL) {
+						pagePosition(t.mouseY - track.y, track.height);
+					}
+				} else {
+					if(direction == HORIZONTAL) {
+						jumpToPosition(t.mouseX - track.x, track.width);
+					} else if(direction == VERTICAL) {
+						jumpToPosition(t.mouseY - track.y, track.height);
+					}
 				}
-			} else {
-				if(direction == HORIZONTAL) {
-					jumpToPosition(t.mouseX - track.x, track.width);
-				} else if(direction == VERTICAL) {
-					jumpToPosition(t.mouseY - track.y, track.height);
-				}
+				updateUIPosition();
 			}
-			updateUIPosition();
 		}
 		
 		
 		[EventListener(event="mouseDown", target="thumb")]
 		public function onThumbDown(event:MouseEvent):void
 		{
-			target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-			(target as Object).stage.addEventListener(MouseEvent.MOUSE_UP, onThumbUp, false, 0, true);
-			(target as Object).stage.addEventListener(Event.MOUSE_LEAVE, onThumbUp, false, 0, true);
+			if(_mouseEnabled) {
+				target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
+				(target as Object).stage.addEventListener(MouseEvent.MOUSE_UP, onThumbUp, false, 0, true);
+				(target as Object).stage.addEventListener(Event.MOUSE_LEAVE, onThumbUp, false, 0, true);
+			}
 		}
 		
 		private function onThumbUp(event:MouseEvent):void {
@@ -138,8 +157,14 @@ package reflex.behaviors
 			if(target && track && thumb) {
 				if(direction == HORIZONTAL) {
 					thumb.x = track.x + (track.width-thumb.width) * percent;
+					if(progress) {
+						progress.width = track.width * percent; //thumb.x-progress.x;
+					}
 				} else if(direction == VERTICAL) {
 					thumb.y = track.y + (track.height-thumb.height) * percent;
+					if(progress) {
+						progress.height = track.height * percent//thumb.y-progress.y;
+					}
 				}
 			}
 		}
