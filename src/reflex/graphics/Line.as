@@ -35,25 +35,25 @@ package reflex.graphics
 		
 		
 		[Bindable(event="xFromChange")]
-		public function get xFrom():Number { return _xFrom; }
+		public function get xFrom():Number { return isNaN(_xFrom) ? x : _xFrom; }
 		public function set xFrom(value:Number):void {
 			DataChange.change(this, "xFrom", _xFrom, _xFrom= value);
 		}
 		
 		[Bindable(event="yFromChange")]
-		public function get yFrom():Number { return _yFrom }
+		public function get yFrom():Number { return isNaN(_yFrom) ? y : _yFrom }
 		public function set yFrom(value:Number):void {
 			DataChange.change(this, "yFrom", _yFrom, _yFrom = value);
 		}
 		
 		[Bindable(event="xToChange")]
-		public function get xTo():Number { return _xTo; }
+		public function get xTo():Number { return isNaN(_xTo) ? x+width : _xTo; }
 		public function set xTo(value:Number):void {
 			DataChange.change(this, "xTo", _xTo, _xTo = value);
 		}
 		
 		[Bindable(event="yToChange")]
-		public function get yTo():Number { return _yTo; }
+		public function get yTo():Number { return isNaN(_yTo) ? y+height : _yTo; }
 		public function set yTo(value:Number):void {
 			DataChange.change(this, "yTo", _yTo, _yTo = value);
 		}
@@ -93,6 +93,7 @@ package reflex.graphics
 		}
 		
 		private function drawTo(graphics:Graphics):void {
+			// these should be precalculated later
 			var xf:Number = isNaN(xFrom) ? x : xFrom;
 			var yf:Number = isNaN(yFrom) ? y : yFrom;
 			var xt:Number = isNaN(xTo) ? x+width : xTo;

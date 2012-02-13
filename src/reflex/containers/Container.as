@@ -70,6 +70,8 @@ package reflex.containers
 		private var _styleDeclaration:* = {};
 		private var _styleManager:* = {};
 		
+		public function getRenderers():Array { return renderers.concat(); }
+		
 		public function Container()
 		{
 			if (_template == null) {

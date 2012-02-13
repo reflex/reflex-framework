@@ -43,7 +43,7 @@ package reflex.components
 			Bind.addBinding(this, "skin.labelDisplay.text", this, "data.name");
 			Bind.addBinding(this, "skin.currentState", this, "currentState", false);
 			measured.width = 210;
-			measured.height = 64;
+			measured.height = 88;
 			percentWidth = 100;
 		}
 		
