@@ -37,7 +37,7 @@ package reflex.behaviors
 		private var _selected:Boolean = false;
 		private var mouseState:String = UP;
 		private var _skin:ISkin;
-		private var _mouseEnabled:Boolean;
+		private var _mouseEnabled:Boolean = true;
 		
 		[Bindable(event="currentStateChange")]
 		[Binding(target="target.currentState")]

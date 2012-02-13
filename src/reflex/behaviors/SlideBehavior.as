@@ -19,7 +19,7 @@ package reflex.behaviors
 		private var _thumb:Object;
 		private var _progress:Object;
 		private var _position:IPosition;
-		private var _mouseEnabled:Boolean;
+		private var _mouseEnabled:Boolean = true;
 		
 		public var page:Boolean = false;
 		public var layoutChildren:Boolean = true;
@@ -154,31 +154,27 @@ package reflex.behaviors
 		
 		private function updateUIPosition():void {
 			var percent:Number = (position.value-position.minimum)/(position.maximum-position.minimum);
-			if(target && track && thumb) {
+			if(target) {
 				if(direction == HORIZONTAL) {
-					thumb.x = track.x + (track.width-thumb.width) * percent;
-					if(progress) {
-						progress.width = track.width * percent; //thumb.x-progress.x;
-					}
+					if(thumb && track) { thumb.x = track.x + (track.width-thumb.width) * percent; }
+					if(progress) { progress.width = track.width * percent; }
 				} else if(direction == VERTICAL) {
-					thumb.y = track.y + (track.height-thumb.height) * percent;
-					if(progress) {
-						progress.height = track.height * percent//thumb.y-progress.y;
-					}
+					if(thumb && track) { thumb.y = track.y + (track.height-thumb.height) * percent; }
+					if(progress) { progress.height = track.height * percent; }
 				}
 			}
 		}
 		
 		private function updateUILayout():void {
-			if(target && track && thumb) {
+			if(target) {
 				if(direction == HORIZONTAL) {
 					var h2:Number = (target as Object).height/2;
-					track.y = h2 - track.height/2;
-					thumb.y = h2 - thumb.height/2;
+					if(track) { track.y = h2 - track.height/2; }
+					if(thumb) { thumb.y = h2 - thumb.height/2; }
 				} else {
 					var w2:Number = (target as Object).width/2;
-					track.x = w2 - track.width/2;
-					thumb.x = w2 - thumb.width/2;
+					if(track) { track.x = w2 - track.width/2; }
+					if(thumb) { thumb.x = w2 - thumb.width/2; }
 				}
 			}
 		}
