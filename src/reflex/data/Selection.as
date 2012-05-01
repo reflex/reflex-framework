@@ -7,13 +7,12 @@ package reflex.data
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
 	
-	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
 	
 	/**
 	 * Holds the selected data for list components.
 	 */
-	public class Selection extends EventDispatcher implements ISelection
+	public class Selection extends NotifyingDispatcher implements ISelection
 	{
 		
 		private var _selectedItem:Object;
@@ -38,7 +37,7 @@ package reflex.data
 			if(value != null) {
 				_selectedItems.addItem(value);
 			}
-			DataChange.change(this, "selectedItem", _selectedItem, _selectedItem = value);
+			notify("selectedItem", _selectedItem, _selectedItem = value);
 			
 			//dispatcheEvent(new Event("selectionChanged"));
 		}
@@ -54,16 +53,16 @@ package reflex.data
 				case CollectionEventKind.ADD:
 				case CollectionEventKind.MOVE:
 				case CollectionEventKind.REPLACE:
-					DataChange.change(this, "selectedItem", _selectedItem, _selectedItem = event.items[0]);
+					notify("selectedItem", _selectedItem, _selectedItem = event.items[0]);
 					break;
 				case CollectionEventKind.REFRESH:
 				case CollectionEventKind.REMOVE:
 				case CollectionEventKind.RESET:
 					var length:int = _selectedItems.length;
 					if(length > 0) {
-						DataChange.change(this, "selectedItem", _selectedItem, _selectedItem = _selectedItems.getItemAt(length-1));
+						notify("selectedItem", _selectedItem, _selectedItem = _selectedItems.getItemAt(length-1));
 					} else {
-						DataChange.change(this, "selectedItem", _selectedItem, _selectedItem = null);
+						notify("selectedItem", _selectedItem, _selectedItem = null);
 					}
 					break;
 			}

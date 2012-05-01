@@ -12,13 +12,15 @@ package reflex.containers
 	import mx.states.IOverride;
 	import mx.states.State;
 	
-	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
 	import reflex.collections.convertToIList;
 	import reflex.components.Component;
 	import reflex.components.IStateful;
 	import reflex.display.Display;
-	import reflex.invalidation.Invalidation;
+	import reflex.injection.IReflexInjector;
+	import reflex.invalidation.IReflexInvalidation;
+	//import reflex.invalidation.Invalidation;
+	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.ILayout;
 	import reflex.states.applyState;
@@ -42,33 +44,28 @@ package reflex.containers
 	[DefaultProperty("content")]
 	
 	/**
-	 * Used to contain and layout children.
-	 * 
+	 * Container is a cornerstone class of Reflex. 
+	 * Anything that holds anything extends this (though it's never referenced concretely in the framework).
+	 * It delegates item renderers, layout and dependency injection among other things.
+	 * As such, it doesn't do too much internally besides provide coordination of the multiple systems.
 	 * @alpha
 	 */
 	public class Container extends Display implements IContainer, IStateful
 	{
 		
-		static public const CREATE:String = "create";
-		static public const INITIALIZE:String = "initialize";
-		static public const MEASURE:String = "measure";
-		static public const LAYOUT:String = "layout";
-		
-		Invalidation.registerPhase(CREATE, 0, true);
-		Invalidation.registerPhase(INITIALIZE, 100, true);
-		Invalidation.registerPhase(MEASURE, 200, false);
-		Invalidation.registerPhase(LAYOUT, 300, true);
-		
 		private var _layout:ILayout;
 		private var _template:Object;
-		private var _content:IList;
-		private var renderers:Array;
+		
+		private var _content:IList; // a mix of data and/or Reflex Components
+		private var renderers:Array; // just reflex components
 		
 		private var _states:Array;
 		private var _transitions:Array;
 		private var _currentState:String;
 		private var _styleDeclaration:* = {};
 		private var _styleManager:* = {};
+		
+		public var injector:IReflexInjector;
 		
 		public function getRenderers():Array { return renderers.concat(); }
 		
@@ -81,12 +78,12 @@ package reflex.containers
 				//_layout = new BasicLayout();
 			}
 			
-			content = new SimpleCollection(); // use setter logic
-			//_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
+			_content = new SimpleCollection(); // use setter logic
+			_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			
 			addEventListener(Event.ADDED, onAdded, false, 0, true);
-			addEventListener(MEASURE, onMeasure, false, 0, true);
-			addEventListener(LAYOUT, onLayout, false, 0, true);
+			addEventListener(LifeCycle.MEASURE, onMeasure, false, 0, true);
+			addEventListener(LifeCycle.LAYOUT, onLayout, false, 0, true);
 			//addEventListener("widthChange", onSizeChange, false, 0, true);
 			//addEventListener("heightChange", onSizeChange, false, 0, true);
 		}
@@ -94,7 +91,7 @@ package reflex.containers
 		// width/height invalidation needs some thought
 		
 		private function onSizeChange(event:Event):void {
-			Invalidation.invalidate(this, LAYOUT);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		// IStateful implementation
@@ -102,13 +99,13 @@ package reflex.containers
 		[Bindable(event="statesChange")]
 		public function get states():Array { return _states; }
 		public function set states(value:Array):void {
-			DataChange.change(this, "states", _states, _states = value);
+			notify("states", _states, _states = value);
 		}
 		
 		[Bindable(event="transitionsChange")]
 		public function get transitions():Array { return _transitions; }
 		public function set transitions(value:Array):void {
-			DataChange.change(this, "transitions", _transitions, _transitions = value);
+			notify("transitions", _transitions, _transitions = value);
 		}
 		
 		[Bindable(event="currentStateChange")]
@@ -119,7 +116,7 @@ package reflex.containers
 			}
 			// might need to add invalidation for this later
 			reflex.states.removeState(this, _currentState, states);
-			DataChange.change(this, "currentState", _currentState, _currentState = value);
+			notify("currentState", _currentState, _currentState = value);
 			reflex.states.applyState(this, _currentState, states);
 		}
 		
@@ -173,10 +170,10 @@ package reflex.containers
 				}
 			}
 			reset(items);
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			//dispatchEvent( new Event("contentChange") );
-			DataChange.change(this, "content", oldContent, _content);
+			notify("content", oldContent, _content);
 		}
 		
 		/**
@@ -192,10 +189,10 @@ package reflex.containers
 			if (_layout) { _layout.target = null; }
 			_layout = value;
 			if (_layout) { _layout.target = this; }
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			//dispatchEvent( new Event("layoutChange") );
-			DataChange.change(this, "layout", oldLayout, _layout);
+			notify("layout", oldLayout, _layout);
 		}
 		
 		[Bindable(event="templateChange")]
@@ -215,21 +212,21 @@ package reflex.containers
 				}
 				reset(items);
 			}
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			//dispatchEvent( new Event("templateChange") );
-			DataChange.change(this, "template", oldTemplate, _template);
+			notify("template", oldTemplate, _template);
 		}
 		
 		override public function setSize(width:Number, height:Number):void {
 			super.setSize(width, height);
-			Invalidation.invalidate(this, LAYOUT);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		private function onAdded(event:Event):void {
 			removeEventListener(Event.ADDED, onAdded, false);
-			Invalidation.invalidate(this, CREATE);
-			Invalidation.invalidate(this, INITIALIZE);
+//			invalidation.invalidate(this, LifeCycle.CREATE);
+//			invalidation.invalidate(this, LifeCycle.INITIALIZE);
 		}
 		
 		protected function onMeasure(event:Event):void {
@@ -253,7 +250,7 @@ package reflex.containers
 		private function onLayout(event:Event):void {
 			if (layout) {
 				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);
-				layout.update(renderers, rectangle);
+				layout.update(renderers, null, rectangle);
 			}
 		}
 		
@@ -278,7 +275,7 @@ package reflex.containers
 					reset(event.items);
 					break;
 			}
-			Invalidation.invalidate(this, LAYOUT);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		private function add(items:Array, index:int):void {
@@ -294,10 +291,11 @@ package reflex.containers
 				if(child is Component) { // need to make this generic
 					(child as Component).owner = this;
 				}
+				if(injector) { injector.injectInto(child); }
 			}
 			
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		// temporary?
@@ -323,8 +321,8 @@ package reflex.containers
 					removeChild(renderer as DisplayObject);
 				}
 			}
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		private function reset(items:Array):void {
@@ -339,8 +337,9 @@ package reflex.containers
 				if(child is Component) { // need to make this generic
 					(child as Component).owner = this;
 				}
+				if(injector) { injector.injectInto(child); }
 			}
-			Invalidation.invalidate(this, LAYOUT);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		

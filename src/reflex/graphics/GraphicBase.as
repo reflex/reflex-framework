@@ -4,7 +4,7 @@ package reflex.graphics
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
-	import reflex.binding.DataChange;
+	import reflex.events.DataChangeEvent;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
@@ -33,6 +33,7 @@ package reflex.graphics
 		
 		private var _target:Object;
 		
+		
 		public function GraphicBase():void {
 			super();
 			_target = this;
@@ -55,13 +56,13 @@ package reflex.graphics
 		[Bindable(event="xChange")]
 		override public function get x():Number { return _x; }
 		override public function set x(value:Number):void {
-			DataChange.change(this, "x", _x, _x = value);
+			notify("x", _x, _x = value);
 		}
 		
 		[Bindable(event="yChange")]
 		override public function get y():Number { return _y; }
 		override public function set y(value:Number):void {
-			DataChange.change(this, "y", _y, _y = value);
+			notify("y", _y, _y = value);
 		}
 		
 		[PercentProxy("percentWidth")]
@@ -86,7 +87,7 @@ package reflex.graphics
 		[Bindable(event="percentWidthChange", noEvent)]
 		public function get percentWidth():Number { return _percentWidth; }
 		public function set percentWidth(value:Number):void {
-			DataChange.change(this, "percentWidth", _percentWidth, _percentWidth = value);
+			notify("percentWidth", _percentWidth, _percentWidth = value);
 		}
 		
 		/**
@@ -95,7 +96,7 @@ package reflex.graphics
 		[Bindable(event="percentHeightChange", noEvent, noEvent)]
 		public function get percentHeight():Number { return _percentHeight; }
 		public function set percentHeight(value:Number):void {
-			DataChange.change(this, "percentHeight", _percentHeight, _percentHeight = value);
+			notify("percentHeight", _percentHeight, _percentHeight = value);
 		}
 		
 		/**
@@ -109,8 +110,8 @@ package reflex.graphics
 		public function get measured():IMeasurements { return _measured; }
 		
 		public function setSize(width:Number, height:Number):void {
-			if (unscaledWidth != width) { DataChange.change(this, "width", unscaledWidth, unscaledWidth = width); }
-			if (unscaledHeight != height) { DataChange.change(this, "height", unscaledHeight, unscaledHeight = height); }
+			if (unscaledWidth != width) { notify("width", unscaledWidth, unscaledWidth = width); }
+			if (unscaledHeight != height) { notify("height", unscaledHeight, unscaledHeight = height); }
 		}
 		
 		// IStyleable implementation
@@ -118,13 +119,13 @@ package reflex.graphics
 		[Bindable(event="idChange")]
 		public function get id():String { return _id; }
 		public function set id(value:String):void {
-			DataChange.change(this, "id", _id, _id = value);
+			notify("id", _id, _id = value);
 		}
 		
 		[Bindable(event="styleNameChange")]
 		public function get styleName():String { return _styleName;}
 		public function set styleName(value:String):void {
-			DataChange.change(this, "styleName", _styleName, _styleName= value);
+			notify("styleName", _styleName, _styleName= value);
 		}
 		
 		[Bindable(event="styleChange")]
@@ -146,6 +147,17 @@ package reflex.graphics
 			style[property] = value;
 		}
 		
+		protected function notify(property:String, oldValue:*, newValue:*):void {
+			var force:Boolean = false;
+			var instance:IEventDispatcher = this;
+			if(oldValue != newValue || force) {
+				var eventType:String = property + "Change";
+				if(instance is IEventDispatcher && (instance as IEventDispatcher).hasEventListener(eventType)) {
+					var event:DataChangeEvent = new DataChangeEvent(eventType, oldValue, newValue);
+					(instance as IEventDispatcher).dispatchEvent(event);
+				}
+			}
+		}
 		
 	}
 }

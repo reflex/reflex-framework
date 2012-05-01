@@ -29,10 +29,10 @@ package reflex.layouts
 	public class BasicLayout extends Layout implements ILayout
 	{
 		
-		override public function measure(children:Array):Point
+		override public function measure(content:Array):Point
 		{
-			var point:Point = super.measure(children);
-			for each(var child:Object in children) {
+			var point:Point = super.measure(content);
+			for each(var child:Object in content) {
 				
 				var width:Number = resolveWidth(child);
 				var height:Number = resolveHeight(child);
@@ -72,10 +72,10 @@ package reflex.layouts
 			return point;
 		}
 		
-		override public function update(children:Array, rectangle:Rectangle):void
+		override public function update(content:Array, tokens:Array, rectangle:Rectangle):void
 		{
-			super.update(children, rectangle);
-			for each(var child:Object in children) {
+			super.update(content, tokens, rectangle);
+			for each(var child:Object in content) {
 				var width:Number = resolveWidth(child, rectangle.width);
 				var height:Number = resolveHeight(child, rectangle.height);
 				var left:Number = resolveStyle(child, "left") as Number;

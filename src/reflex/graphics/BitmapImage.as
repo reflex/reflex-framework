@@ -9,7 +9,6 @@ package reflex.graphics
 	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
 	
-	import reflex.binding.DataChange;
 	import reflex.display.BitmapDisplay;
 	import reflex.invalidation.Invalidation;
 	import reflex.metadata.resolveCommitProperties;
@@ -43,25 +42,25 @@ package reflex.graphics
 		[Bindable(event="sourceChange")]
 		public function get source():Object { return _source; }
 		public function set source(value:Object):void {
-			DataChange.change(this, "source", _source, _source = value);
+			notify("source", _source, _source = value);
 		}
 		
 		[Bindable(event="scalingChanged")]
 		public function get scaling():String { return _scaling; }
 		public function set scaling(value:String):void {
-			DataChange.change(this, "scaling", _scaling, _scaling = value);
+			notify("scaling", _scaling, _scaling = value);
 		}
 		
 		[Bindable(event="backgroundColorChanged")]
 		public function get backgroundColor():uint { return _backgroundColor; }
 		public function set backgroundColor(value:uint):void {
-			DataChange.change(this, "backgroundColor", _backgroundColor, _backgroundColor = value);
+			notify("backgroundColor", _backgroundColor, _backgroundColor = value);
 		}
 		
 		[Bindable(event="backgroundAlphaChanged")]
 		public function get backgroundAlpha():Number { return _backgroundAlpha; }
 		public function set backgroundAlpha(value:Number):void {
-			DataChange.change(this, "backgroundAlpha", _backgroundAlpha, _backgroundAlpha = value);
+			notify("backgroundAlpha", _backgroundAlpha, _backgroundAlpha = value);
 		}
 		
 		public function BitmapImage()

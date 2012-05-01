@@ -1,8 +1,9 @@
 package reflex.display
 {
 	import flash.display.Bitmap;
+	import flash.events.IEventDispatcher;
 	
-	import reflex.binding.DataChange;
+	import reflex.events.DataChangeEvent;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
@@ -31,6 +32,7 @@ package reflex.display
 		protected var unscaledWidth:Number = 160;
 		protected var unscaledHeight:Number = 22;
 		
+		
 		public function BitmapDisplay() {
 			super(null, "auto", true);
 			_style = new Style();
@@ -44,13 +46,13 @@ package reflex.display
 		[Bindable(event="idChange", noEvent)]
 		public function get id():String { return _id; }
 		public function set id(value:String):void {
-			DataChange.change(this, "id", _id, _id = value);
+			notify("id", _id, _id = value);
 		}
 		
 		[Bindable(event="styleNameChange", noEvent)]
 		public function get styleName():String { return _styleName;}
 		public function set styleName(value:String):void {
-			DataChange.change(this, "styleName", _styleName, _styleName= value);
+			notify("styleName", _styleName, _styleName= value);
 		}
 		
 		[Bindable(event="styleChange", noEvent)]
@@ -78,12 +80,12 @@ package reflex.display
 		
 		[Bindable(event="xChange", noEvent)]
 		override public function set x(value:Number):void {
-			DataChange.change(this, "x", super.x, super.x = value);
+			notify("x", super.x, super.x = value);
 		}
 		
 		[Bindable(event="yChange", noEvent)]
 		override public function set y(value:Number):void {
-			DataChange.change(this, "y", super.y, super.y = value);
+			notify("y", super.y, super.y = value);
 		}
 		
 		// IMeasurable implementation
@@ -139,7 +141,7 @@ package reflex.display
 		[Bindable(event="percentWidthChange", noEvent)]
 		public function get percentWidth():Number { return _percentWidth; }
 		public function set percentWidth(value:Number):void {
-			DataChange.change(this, "percentWidth", _percentWidth, _percentWidth = value);
+			notify("percentWidth", _percentWidth, _percentWidth = value);
 		}
 		
 		/**
@@ -148,21 +150,33 @@ package reflex.display
 		[Bindable(event="percentHeightChange", noEvent)]
 		public function get percentHeight():Number { return _percentHeight; }
 		public function set percentHeight(value:Number):void {
-			DataChange.change(this, "percentHeight", _percentHeight, _percentHeight = value);
+			notify("percentHeight", _percentHeight, _percentHeight = value);
 		}
 		
 		[Bindable(event="visibleChange")]
 		override public function get visible():Boolean { return super.visible; }
 		override public function set visible(value:Boolean):void {
-			DataChange.change(this, "visible", super.visible, super.visible = value);
+			notify("visible", super.visible, super.visible = value);
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
 		public function setSize(width:Number, height:Number):void {
-			if (unscaledWidth != width) { DataChange.change(this, "width", unscaledWidth, unscaledWidth = width); }
-			if (unscaledHeight != height) { DataChange.change(this, "height", unscaledHeight, unscaledHeight = height); }
+			if (unscaledWidth != width) { notify("width", unscaledWidth, unscaledWidth = width); }
+			if (unscaledHeight != height) { notify("height", unscaledHeight, unscaledHeight = height); }
+		}
+		
+		protected function notify(property:String, oldValue:*, newValue:*):void {
+			var force:Boolean = false;
+			var instance:IEventDispatcher = this;
+			if(oldValue != newValue || force) {
+				var eventType:String = property + "Change";
+				if(instance is IEventDispatcher && (instance as IEventDispatcher).hasEventListener(eventType)) {
+					var event:DataChangeEvent = new DataChangeEvent(eventType, oldValue, newValue);
+					(instance as IEventDispatcher).dispatchEvent(event);
+				}
+			}
 		}
 		
 	}

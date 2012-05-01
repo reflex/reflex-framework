@@ -11,7 +11,6 @@ package reflex.graphics
 	import mx.events.PropertyChangeEvent;
 	import mx.graphics.IStroke;
 	
-	import reflex.binding.DataChange;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.styles.IStyleable;
@@ -37,25 +36,25 @@ package reflex.graphics
 		[Bindable(event="xFromChange")]
 		public function get xFrom():Number { return isNaN(_xFrom) ? x : _xFrom; }
 		public function set xFrom(value:Number):void {
-			DataChange.change(this, "xFrom", _xFrom, _xFrom= value);
+			notify("xFrom", _xFrom, _xFrom= value);
 		}
 		
 		[Bindable(event="yFromChange")]
 		public function get yFrom():Number { return isNaN(_yFrom) ? y : _yFrom }
 		public function set yFrom(value:Number):void {
-			DataChange.change(this, "yFrom", _yFrom, _yFrom = value);
+			notify("yFrom", _yFrom, _yFrom = value);
 		}
 		
 		[Bindable(event="xToChange")]
 		public function get xTo():Number { return isNaN(_xTo) ? x+width : _xTo; }
 		public function set xTo(value:Number):void {
-			DataChange.change(this, "xTo", _xTo, _xTo = value);
+			notify("xTo", _xTo, _xTo = value);
 		}
 		
 		[Bindable(event="yToChange")]
 		public function get yTo():Number { return isNaN(_yTo) ? y+height : _yTo; }
 		public function set yTo(value:Number):void {
-			DataChange.change(this, "yTo", _yTo, _yTo = value);
+			notify("yTo", _yTo, _yTo = value);
 		}
 		
 		
@@ -64,7 +63,7 @@ package reflex.graphics
 		[Bindable(event="strokeChange")]
 		public function get stroke():IStroke { return _stroke; }
 		public function set stroke(value:IStroke):void {
-			DataChange.change(this, "stroke", _stroke, _stroke = value);
+			notify("stroke", _stroke, _stroke = value);
 		}
 		
 		

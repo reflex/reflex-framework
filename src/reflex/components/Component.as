@@ -9,10 +9,12 @@
 	
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
-	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
 	import reflex.display.Display;
+	import reflex.injection.IReflexInjector;
+	import reflex.invalidation.IReflexInvalidation;
 	import reflex.invalidation.Invalidation;
+	import reflex.invalidation.LifeCycle;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
@@ -36,8 +38,8 @@
 	public class Component extends Display implements IBehavioral, ISkinnable
 	{
 		
-		static public const MEASURE:String = "measure";
-		Invalidation.registerPhase(MEASURE, 200, false);
+		//static public const MEASURE:String = "measure";
+		//Invalidation.registerPhase(MEASURE, 200, false);
 		
 		private var _skin:Object;
 		private var _behaviors:SimpleCollection;
@@ -47,13 +49,14 @@
 		
 		private var _enabled:Boolean = true;
 		
+		
 		public function Component()
 		{
 			super();
 			_behaviors = new SimpleCollection();
 			_behaviors.addEventListener(CollectionEvent.COLLECTION_CHANGE, behaviorsCollectionChangeHandler, false, 0, true);
 			reflex.metadata.resolveCommitProperties(this);
-			addEventListener(MEASURE, onMeasure, false, 0, true);
+			addEventListener(LifeCycle.MEASURE, onMeasure, false, 0, true);
 		}
 		
 		[Bindable]
@@ -113,8 +116,9 @@
 			if (_skin is DisplayObject) {
 				reflex.templating.addItem(this, _skin);
 			}
+			
 			//skin.addEventListener("widthChange", item_measureHandler, false, true);
-			Invalidation.invalidate(this, MEASURE);
+			invalidate(LifeCycle.MEASURE);
 			dispatchEvent(new Event("skinChange"));
 		}
 		
@@ -130,14 +134,14 @@
 		public function get enabled():Boolean { return _enabled; }
 		public function set enabled(value:Boolean):void {
 			mouseEnabled = mouseChildren = value;
-			DataChange.change(this, "enabled", _enabled, _enabled = value);
+			notify("enabled", _enabled, _enabled = value);
 		}
 		
 		[Bindable(event="currentStateChange")]
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void
 		{
-			DataChange.change(this, "currentState", _currentState, _currentState = value);
+			notify("currentState", _currentState, _currentState = value);
 		}
 		
 		private function behaviorsCollectionChangeHandler(event:CollectionEvent):void {

@@ -10,8 +10,9 @@ package reflex.containers
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
-	import reflex.binding.DataChange;
+	import reflex.injection.HardCodedInjector;
 	import reflex.invalidation.Invalidation;
+	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
 	
 	
@@ -30,7 +31,7 @@ package reflex.containers
 		[Bindable(event="backgroundColorChange")]
 		public function get backgroundColor():uint { return _backgroundColor; }
 		public function set backgroundColor(value:uint):void {
-			DataChange.change(this, "backgroundColor", _backgroundColor, _backgroundColor = value);
+			notify("backgroundColor", _backgroundColor, _backgroundColor = value);
 		}
 		
 		//public var viewSourceURL:String;
@@ -38,13 +39,17 @@ package reflex.containers
 		public function Application()
 		{
 			super();
+			injector = new HardCodedInjector(); // only instantiating in Application
+			injector.injectInto(this);
 			layout = new BasicLayout();
 			if (stage) init();
             else addEventListener(Event.ADDED_TO_STAGE, init)
 		}
 
         private function init(e:Event = null):void {
-
+			// Application is the only Reflex thing not in a container
+			
+			
 			var contextMenu:ContextMenu = new ContextMenu();
 			/*if(viewSourceURL != null && viewSourceURL != "") {
 				var viewSourceCMI:ContextMenuItem = new ContextMenuItem("View Source", true);
@@ -58,7 +63,7 @@ package reflex.containers
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
 			onStageResize(null);
-
+			
             onInit()
         }
 
@@ -70,7 +75,7 @@ package reflex.containers
 		{
 			if(isNaN(explicit.width)) { unscaledWidth = stage.stageWidth; }
 			if(isNaN(explicit.height)) { unscaledHeight = stage.stageHeight; }
-			Invalidation.invalidate(this, LAYOUT);
+			invalidation.invalidate(this, LifeCycle.LAYOUT);
 		}
 		
 		override protected function onMeasure(event:Event):void {

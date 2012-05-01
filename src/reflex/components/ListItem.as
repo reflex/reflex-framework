@@ -10,7 +10,6 @@ package reflex.components
 	import reflex.behaviors.ButtonBehavior;
 	import reflex.behaviors.SelectBehavior;
 	import reflex.binding.Bind;
-	import reflex.binding.DataChange;
 	import reflex.skins.ISkin;
 	import reflex.skins.ListItemSkin;
 	
@@ -25,7 +24,7 @@ package reflex.components
 		[Bindable(event="dataChange")]
 		public function get data():Object { return _data; }
 		public function set data(value:Object):void {
-			DataChange.change(this, "data", _data, _data = value);
+			notify("data", _data, _data = value);
 		}
 		
 		

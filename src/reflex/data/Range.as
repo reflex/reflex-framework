@@ -1,9 +1,7 @@
 package reflex.data
 {
-	import flash.events.EventDispatcher;
-	import reflex.binding.DataChange;
 	
-	public class Range extends EventDispatcher implements IRange
+	public class Range extends NotifyingDispatcher implements IRange
 	{
 		
 		private var _minimum:Number = 0;
@@ -12,13 +10,13 @@ package reflex.data
 		[Bindable(event="minimumChange", noEvent)]
 		public function get minimum():Number { return _minimum; }
 		public function set minimum(value:Number):void {
-			DataChange.change(this, "minimum", _minimum, _minimum = value);
+			notify("minimum", _minimum, _minimum = value);
 		}
 		
 		[Bindable(event="maximumChange", noEvent)]
 		public function get maximum():Number { return _maximum;}
 		public function set maximum(value:Number):void {
-			DataChange.change(this, "maximum", _maximum, _maximum = value);
+			notify("maximum", _maximum, _maximum = value);
 		}
 		
 		public function Range(minimum:Number = 0, maximum:Number = 100)

@@ -4,7 +4,6 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
-	import reflex.binding.DataChange;
 	import reflex.skins.ISkin;
 
 	//import reflex.events.ButtonEvent;
@@ -43,14 +42,14 @@ package reflex.behaviors
 		[Binding(target="target.currentState")]
 		public function get currentState():String { return _currentState; }
 		public function set currentState(value:String):void {
-			DataChange.change(this, "currentState", _currentState, _currentState = value);
+			notify("currentState", _currentState, _currentState = value);
 		}
 		
 		[Bindable(event="enabledChange")]
 		[Binding(target="target.enabled")]
 		public function get enabled():Boolean { return _enabled; }
 		public function set enabled(value:Boolean):void {
-			DataChange.change(this, "enabled", _enabled, _enabled = value);
+			notify("enabled", _enabled, _enabled = value);
 			currentState = resolveState(mouseState);
 		}
 		
@@ -58,7 +57,7 @@ package reflex.behaviors
 		[Binding(target="target.selected")]
 		public function get selected():Boolean { return _selected; }
 		public function set selected(value:Boolean):void {
-			DataChange.change(this, "selected", _selected, _selected = value);
+			notify("selected", _selected, _selected = value);
 			currentState = resolveState(mouseState);
 		}
 		
@@ -66,14 +65,14 @@ package reflex.behaviors
 		[Binding(target="target.skin")]
 		public function get skin():ISkin { return _skin; }
 		public function set skin(value:ISkin):void {
-			DataChange.change(this, "skin", _skin, _skin = value);
+			notify("skin", _skin, _skin = value);
 			currentState = resolveState(mouseState);
 		}
 		
 		[Bindable(event="mouseEnabledChange")]
 		public function get mouseEnabled():Boolean { return _mouseEnabled; }
 		public function set mouseEnabled(value:Boolean):void {
-			DataChange.change(this, "mouseEnabled", _mouseEnabled, _mouseEnabled = value);
+			notify("mouseEnabled", _mouseEnabled, _mouseEnabled = value);
 		}
 		
 		public function ButtonBehavior(target:IEventDispatcher = null) {

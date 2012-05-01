@@ -1,13 +1,14 @@
 ﻿package reflex.text
 {
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.events.TextEvent;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
 	
-	import reflex.binding.DataChange;
+	import reflex.events.DataChangeEvent;
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
@@ -37,6 +38,7 @@
 		private var _unscaledWidth:Number = 160;
 		private var _unscaledHeight:Number = 22;
 		
+		
 		protected function get unscaledWidth():Number { return _unscaledWidth; }
 		protected function set unscaledWidth(value:Number):void {
 			_unscaledWidth = value;
@@ -63,10 +65,10 @@
 		override public function get text():String { return super.text; }
 		override public function set text(value:String):void {
 			if(value == null) { 
-				DataChange.change(this, "text", super.text, null);
+				notify("text", super.text, null);
 				super.text = "";
 			} else {
-				DataChange.change(this, "text", super.text, super.text = value);
+				notify("text", super.text, super.text = value);
 			}
 			onMeasure(null);
 		}
@@ -75,16 +77,16 @@
 		override public function get htmlText():String { return super.text; }
 		override public function set htmlText(value:String):void {
 			if(value == null) { 
-				DataChange.change(this, "htmlText", super.htmlText, null);
+				notify("htmlText", super.htmlText, null);
 				super.htmlText = "";
 			} else {
-				DataChange.change(this, "htmlText", super.htmlText, super.htmlText = value);
+				notify("htmlText", super.htmlText, super.htmlText = value);
 			}
 			onMeasure(null);
 		}
 		
 		override public function set defaultTextFormat(value:TextFormat):void {
-			DataChange.change(this, "defaultTextFormat", super.defaultTextFormat, super.defaultTextFormat = value);
+			notify("defaultTextFormat", super.defaultTextFormat, super.defaultTextFormat = value);
 			super.text = text;
 		}
 		
@@ -93,13 +95,13 @@
 		[Bindable(event="idChange", noEvent)]
 		public function get id():String { return _id; }
 		public function set id(value:String):void {
-			DataChange.change(this, "id", _id, _id = value);
+			notify("id", _id, _id = value);
 		}
 		
 		[Bindable(event="styleNameChange", noEvent)]
 		public function get styleName():String { return _styleName;}
 		public function set styleName(value:String):void {
-			DataChange.change(this, "styleName", _styleName, _styleName= value);
+			notify("styleName", _styleName, _styleName= value);
 		}
 		
 		[Bindable(event="styleChange", noEvent)]
@@ -134,13 +136,13 @@
 		[Bindable(event="xChange", noEvent)]
 		override public function get x():Number { return super.x; }
 		override public function set x(value:Number):void {
-			DataChange.change(this, "x", super.x, super.x = value);
+			notify("x", super.x, super.x = value);
 		}
 		
 		[Bindable(event="yChange", noEvent)]
 		override public function get y():Number { return super.y; }
 		override public function set y(value:Number):void {
-			DataChange.change(this, "y", super.y, super.y = value);
+			notify("y", super.y, super.y = value);
 		}
 		
 		// IMeasurable implementation
@@ -198,7 +200,7 @@
 		[Bindable(event="percentWidthChange", noEvent)]
 		public function get percentWidth():Number { return _percentWidth; }
 		public function set percentWidth(value:Number):void {
-			DataChange.change(this, "percentWidth", _percentWidth, _percentWidth = value);
+			notify("percentWidth", _percentWidth, _percentWidth = value);
 		}
 		
 		/**
@@ -207,25 +209,25 @@
 		[Bindable(event="percentHeightChange", noEvent)]
 		public function get percentHeight():Number { return _percentHeight; }
 		public function set percentHeight(value:Number):void {
-			DataChange.change(this, "percentHeight", _percentHeight, _percentHeight = value);
+			notify("percentHeight", _percentHeight, _percentHeight = value);
 		}
 		
 		[Bindable(event="visibleChange")]
 		override public function get visible():Boolean { return super.visible; }
 		override public function set visible(value:Boolean):void {
-			DataChange.change(this, "visible", super.visible, super.visible = value);
+			notify("visible", super.visible, super.visible = value);
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
 		public function setSize(width:Number, height:Number):void {
-			if (unscaledWidth != width) { DataChange.change(this, "width", unscaledWidth, unscaledWidth = width); }
-			if (unscaledHeight != height) { DataChange.change(this, "height", unscaledHeight, unscaledHeight = height); }
+			if (unscaledWidth != width) { notify("width", unscaledWidth, unscaledWidth = width); }
+			if (unscaledHeight != height) { notify("height", unscaledHeight, unscaledHeight = height); }
 		}
 		
 		private function textChange(event:Event):void {
-			DataChange.change(this, "text", null, super.text);
+			notify("text", null, super.text);
 		}
 		
 		private function onMeasure(event:Event):void {
@@ -238,6 +240,18 @@
 			}
 			if(isNaN(_explicit.height)) {
 				measured.height = textHeight + 5;
+			}
+		}
+		
+		protected function notify(property:String, oldValue:*, newValue:*):void {
+			var force:Boolean = false;
+			var instance:IEventDispatcher = this;
+			if(oldValue != newValue || force) {
+				var eventType:String = property + "Change";
+				if(instance is IEventDispatcher && (instance as IEventDispatcher).hasEventListener(eventType)) {
+					var event:DataChangeEvent = new DataChangeEvent(eventType, oldValue, newValue);
+					(instance as IEventDispatcher).dispatchEvent(event);
+				}
 			}
 		}
 		

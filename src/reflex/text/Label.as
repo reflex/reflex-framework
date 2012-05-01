@@ -18,7 +18,6 @@ package reflex.text
 	import flash.text.engine.TextLineValidity;
 	import flash.text.engine.TypographicCase;
 	
-	import reflex.binding.DataChange;
 	import reflex.display.Display;
 	import reflex.invalidation.Invalidation;
 	import reflex.styles.resolveStyle;
@@ -72,8 +71,8 @@ package reflex.text
 			if (value == textElement.text) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "text", textElement.text, textElement.text = value);
+			invalidate(TEXT_RENDER);
+			notify("text", textElement.text, textElement.text = value);
 		}
 		
 		[Bindable(event="allowWrapChange")]
@@ -84,8 +83,8 @@ package reflex.text
 			if(value == _allowWrap) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "allowWrap", _allowWrap, _allowWrap = value);
+			invalidate(TEXT_RENDER);
+			notify("allowWrap", _allowWrap, _allowWrap = value);
 		}
 		
 		[Bindable(event="clipTextChange")]
@@ -96,8 +95,8 @@ package reflex.text
 			if(value == _clipText) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "clipText", _clipText, _clipText = value);
+			invalidate(TEXT_RENDER);
+			notify("clipText", _clipText, _clipText = value);
 		}
 		
 		[Bindable(event="embedChange")]
@@ -105,7 +104,7 @@ package reflex.text
 			return (fontFormat.fontLookup == FontLookup.EMBEDDED_CFF);
 		}
 		public function set embed(value:Boolean):void {
-			DataChange.change(this, "embed", fontFormat.fontLookup == FontLookup.EMBEDDED_CFF, fontFormat.fontLookup = value ? FontLookup.EMBEDDED_CFF : FontLookup.DEVICE);
+			notify("embed", fontFormat.fontLookup == FontLookup.EMBEDDED_CFF, fontFormat.fontLookup = value ? FontLookup.EMBEDDED_CFF : FontLookup.DEVICE);
 		}
 		
 		[Bindable(event="colorChange")]
@@ -114,8 +113,8 @@ package reflex.text
 			if (value == format.color) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "color", format.color, format.color = value);
+			invalidate(TEXT_RENDER);
+			notify("color", format.color, format.color = value);
 		}
 		
 		[Bindable(event="fontFamilyChange")]
@@ -124,8 +123,8 @@ package reflex.text
 			if (value == fontFormat.fontName) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "fontFamily", fontFormat.fontName, fontFormat.fontName = value);
+			invalidate(TEXT_RENDER);
+			notify("fontFamily", fontFormat.fontName, fontFormat.fontName = value);
 		}
 		
 		[Bindable(event="fontSizeChange")]
@@ -134,8 +133,8 @@ package reflex.text
 			if (value == format.fontSize) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "fontSize", format.fontSize, format.fontSize = value);
+			invalidate(TEXT_RENDER);
+			notify("fontSize", format.fontSize, format.fontSize = value);
 		}
 		
 		[Bindable(event="boldChange")]
@@ -146,8 +145,8 @@ package reflex.text
 			if (value == (fontFormat.fontWeight == FontWeight.BOLD)) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "bold", fontFormat.fontWeight == FontWeight.BOLD, fontFormat.fontWeight = value ? FontWeight.BOLD : FontWeight.NORMAL);
+			invalidate(TEXT_RENDER);
+			notify("bold", fontFormat.fontWeight == FontWeight.BOLD, fontFormat.fontWeight = value ? FontWeight.BOLD : FontWeight.NORMAL);
 		}
 		
 		[Bindable(event="italicChange")]
@@ -159,8 +158,8 @@ package reflex.text
 			if (value == (fontFormat.fontPosture == FontPosture.ITALIC)) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "italic", fontFormat.fontPosture == FontPosture.ITALIC, fontFormat.fontPosture = value ? FontPosture.ITALIC : FontPosture.NORMAL);
+			invalidate(TEXT_RENDER);
+			notify("italic", fontFormat.fontPosture == FontPosture.ITALIC, fontFormat.fontPosture = value ? FontPosture.ITALIC : FontPosture.NORMAL);
 		}
 		
 		protected function alignText(align:String, line:TextLine):void {

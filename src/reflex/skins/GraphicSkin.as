@@ -4,7 +4,6 @@ package reflex.skins
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	import reflex.binding.DataChange;
 	import reflex.metadata.resolveCommitProperties;
 	
 	public class GraphicSkin extends Skin

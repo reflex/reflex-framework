@@ -1,7 +1,6 @@
 package reflex.components
 {
 	import reflex.binding.Bind;
-	import reflex.binding.DataChange;
 	import reflex.skins.TextInputSkin;
 
 	public class TextInput extends Component
@@ -13,7 +12,7 @@ package reflex.components
 		[Inspectable(name="Text", type=String, defaultValue="Text")]
 		public function get text():String { return _text; }
 		public function set text(value:String):void {
-			DataChange.change(this, "text", _text, _text = value);
+			notify("text", _text, _text = value);
 		}
 		
 		public function TextInput(text:String = "")

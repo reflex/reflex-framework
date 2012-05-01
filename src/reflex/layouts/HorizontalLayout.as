@@ -34,11 +34,11 @@ package reflex.layouts
 			this.edging = edging;
 		}
 		
-		override public function measure(children:Array):Point
+		override public function measure(content:Array):Point
 		{
-			var point:Point = super.measure(children);
+			var point:Point = super.measure(content);
 			point.x = edging ? gap/2 : 0;
-			for each(var child:Object in children) {
+			for each(var child:Object in content) {
 				var width:Number = reflex.measurement.resolveWidth(child);
 				var height:Number = reflex.measurement.resolveHeight(child);
 				point.x += width + gap;
@@ -48,24 +48,24 @@ package reflex.layouts
 			return point;
 		}
 		
-		override public function update(children:Array, rectangle:Rectangle):void
+		override public function update(content:Array, tokens:Array, rectangle:Rectangle):void
 		{
-			super.update(children, rectangle);
-			if(children) {
+			super.update(content, tokens, rectangle);
+			if(content) {
 				
 				var gap:Number = reflex.styles.resolveStyle(target, "gap", null, this.gap) as Number;
 				var verticalAlign:String = reflex.styles.resolveStyle(target, "verticalAlign", null, this.verticalAlign) as String;
 				
 				// this takes a few passes for percent-based measurement. we can probably speed it up later
-				var availableSpace:Point = reflex.measurement.calculateAvailableSpace(children, rectangle);
-				var percentageTotals:Point = reflex.measurement.calculatePercentageTotals(children);
+				var availableSpace:Point = reflex.measurement.calculateAvailableSpace(content, rectangle);
+				var percentageTotals:Point = reflex.measurement.calculatePercentageTotals(content);
 				
 				var position:Number = edging ? gap/2 : 0;
-				var length:int = children.length;
+				var length:int = content.length;
 				
 				availableSpace.x -= edging ? gap*length : gap*(length-1);
 				for(var i:int = 0; i < length; i++) {
-					var child:Object = children[i];
+					var child:Object = content[i];
 					var width:Number = reflex.measurement.resolveWidth(child, availableSpace.x, percentageTotals.x);  // calculate percentWidths based on available width and normalized percentages
 					var height:Number = reflex.measurement.resolveHeight(child, rectangle.height); // calculate percentHeights based on full height and with no normalization
                     if(verticalAlign == "justify")

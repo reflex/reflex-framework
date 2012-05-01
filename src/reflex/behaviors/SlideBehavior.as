@@ -5,7 +5,6 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
-	import reflex.binding.DataChange;
 	import reflex.data.IPagingPosition;
 	import reflex.data.IPosition;
 	
@@ -29,14 +28,14 @@ package reflex.behaviors
 		[Binding(target="target.skin.track")]
 		public function get track():Object { return _track; }
 		public function set track(value:Object):void {
-			DataChange.change(this, "track", _track, _track = value);
+			notify("track", _track, _track = value);
 		}
 		
 		[Bindable(event="thumbChange")]
 		[Binding(target="target.skin.thumb")]
 		public function get thumb():Object { return _thumb; }
 		public function set thumb(value:Object):void {
-			DataChange.change(this, "thumb", _thumb, _thumb = value);
+			notify("thumb", _thumb, _thumb = value);
 			//(value as IEventDispatcher).addEventListener(MouseEvent.MOUSE_DOWN, onThumbDown, false, 0, true);
 		}
 		
@@ -44,20 +43,20 @@ package reflex.behaviors
 		[Binding(target="target.skin.progress")]
 		public function get progress():Object { return _progress; }
 		public function set progress(value:Object):void {
-			DataChange.change(this, "progress", _progress, _progress = value);
+			notify("progress", _progress, _progress = value);
 		}
 		
 		[Bindable(event="positionChange")]
 		[Binding(target="target.position")]
 		public function get position():IPosition { return _position; }
 		public function set position(value:IPosition):void {
-			DataChange.change(this, "position", _position, _position = value);
+			notify("position", _position, _position = value);
 		}
 		
 		[Bindable(event="mouseEnabledChange")]
 		public function get mouseEnabled():Boolean { return _mouseEnabled; }
 		public function set mouseEnabled(value:Boolean):void {
-			DataChange.change(this, "mouseEnabled", _mouseEnabled, _mouseEnabled = value);
+			notify("mouseEnabled", _mouseEnabled, _mouseEnabled = value);
 		}
 		
 		public function SlideBehavior(target:IEventDispatcher = null, direction:String = "horizontal", page:Boolean = false) {

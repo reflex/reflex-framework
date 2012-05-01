@@ -9,7 +9,6 @@ package reflex.behaviors
 	
 	import mx.core.IDataRenderer;
 	
-	import reflex.binding.DataChange;
 	import reflex.data.ISelection;
 
 	public class ListSelectionBehavior extends Behavior
@@ -25,14 +24,14 @@ package reflex.behaviors
 		public function get container():DisplayObjectContainer { return _container; }
 		public function set container(value:DisplayObjectContainer):void {
 			addContainer(value);
-			DataChange.change(this, "container", _container, _container = value);
+			notify("container", _container, _container = value);
 		}
 		
 		[Bindable(event="selectionChanged")]
 		[Binding(target="target.selection")]
 		public function get selection():ISelection{ return _selection; }
 		public function set selection(value:ISelection):void {
-			DataChange.change(this, "selection", _selection, _selection= value);
+			notify("selection", _selection, _selection= value);
 		}
 		
 		public function ListSelectionBehavior(target:IEventDispatcher=null):void {

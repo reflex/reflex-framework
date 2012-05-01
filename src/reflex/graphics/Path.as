@@ -10,7 +10,6 @@ package reflex.graphics
 	
 	import mx.events.PropertyChangeEvent;
 	
-	import reflex.binding.DataChange;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.styles.IStyleable;
@@ -32,7 +31,7 @@ package reflex.graphics
 		[Bindable(event="dataChange")]
 		public function get data():String { return _data; }
 		public function set data(value:String):void {
-			DataChange.change(this, "data", _data, _data = value);
+			notify("data", _data, _data = value);
 		}
 		
 		
@@ -42,13 +41,13 @@ package reflex.graphics
 		[Bindable(event="fillChange")]
 		public function get fill():* { return _fill; }
 		public function set fill(value:*):void {
-			DataChange.change(this, "fill", _fill, _fill = value);
+			notify("fill", _fill, _fill = value);
 		}
 		
 		[Bindable(event="strokeChange")]
 		public function get stroke():* { return _stroke; }
 		public function set stroke(value:*):void {
-			DataChange.change(this, "stroke", _stroke, _stroke = value);
+			notify("stroke", _stroke, _stroke = value);
 		}
 		
 		

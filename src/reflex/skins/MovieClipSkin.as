@@ -4,9 +4,10 @@ package reflex.skins
 	import flash.display.FrameLabel;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.IEventDispatcher;
 	
 	import reflex.binding.Bind;
-	import reflex.binding.DataChange;
+	import reflex.events.DataChangeEvent;
 	
 	public class MovieClipSkin extends MovieClip implements ISkin
 	{
@@ -17,10 +18,11 @@ package reflex.skins
 		private var _target:Sprite;
 		private var _currentState:String;
 		
+		
 		[Bindable(event="targetChange")]
 		public function get target():Sprite { return _target; }
 		public function set target(value:Sprite):void {
-			DataChange.change(this, "target", _target, _target = value);
+			notify("target", _target, _target = value);
 		}
 		
 		/**
@@ -29,7 +31,7 @@ package reflex.skins
 		[Bindable(event="widthChange")]
 		override public function get width():Number { return unscaledWidth; }
 		override public function set width(value:Number):void {
-			DataChange.change(this, "width", unscaledWidth, unscaledWidth = value);
+			notify("width", unscaledWidth, unscaledWidth = value);
 		}
 		
 		/**
@@ -38,7 +40,7 @@ package reflex.skins
 		[Bindable(event="heightChange")]
 		override public function get height():Number { return unscaledHeight; }
 		override public function set height(value:Number):void {
-			DataChange.change(this, "height", unscaledHeight, unscaledHeight = value);
+			notify("height", unscaledHeight, unscaledHeight = value);
 		}
 		
 		public function MovieClipSkin():void {
@@ -54,7 +56,7 @@ package reflex.skins
 			if(value == _currentState) {
 				return;
 			}
-			DataChange.change(this, "currentState", _currentState, _currentState = value);
+			notify("currentState", _currentState, _currentState = value);
 			gotoState(this, _currentState); // invalidation?
 		}
 		
@@ -93,6 +95,18 @@ package reflex.skins
 				var child:DisplayObject = clip.getChildAt(i);
 				if (child is MovieClip) {
 					gotoState(child as MovieClip, state);
+				}
+			}
+		}
+		
+		protected function notify(property:String, oldValue:*, newValue:*):void {
+			var force:Boolean = false;
+			var instance:IEventDispatcher = this;
+			if(oldValue != newValue || force) {
+				var eventType:String = property + "Change";
+				if(instance is IEventDispatcher && (instance as IEventDispatcher).hasEventListener(eventType)) {
+					var event:DataChangeEvent = new DataChangeEvent(eventType, oldValue, newValue);
+					(instance as IEventDispatcher).dispatchEvent(event);
 				}
 			}
 		}

@@ -4,7 +4,6 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.text.TextField;
 	
-	import reflex.binding.DataChange;
 	import reflex.data.IPosition;
 	
 	public class TextAreaBehavior extends Behavior
@@ -18,21 +17,21 @@ package reflex.behaviors
 		[Binding(target="target.horizontalPosition")]
 		public function get horizontalPosition():IPosition { return _horizontalPosition; }
 		public function set horizontalPosition(value:IPosition):void {
-			DataChange.change(this, "horizontalPosition", _horizontalPosition, _horizontalPosition = value);
+			notify("horizontalPosition", _horizontalPosition, _horizontalPosition = value);
 		}
 		
 		[Bindable(event="verticalPositionChange")]
 		[Binding(target="target.verticalPosition")]
 		public function get verticalPosition():IPosition { return _verticalPosition; }
 		public function set verticalPosition(value:IPosition):void {
-			DataChange.change(this, "verticalPosition", _verticalPosition, _verticalPosition = value);
+			notify("verticalPosition", _verticalPosition, _verticalPosition = value);
 		}
 		
 		[Bindable(event="textFieldChange")]
 		[Binding(target="target.skin.textField")]
 		public function get textField():TextField { return _textField; }
 		public function set textField(value:TextField):void {
-			DataChange.change(this, "textField", _textField, _textField = value);
+			notify("textField", _textField, _textField = value);
 		}
 		
 		public function TextAreaBehavior(target:IEventDispatcher=null)

@@ -1,7 +1,6 @@
 package reflex.components
 {
 	
-	import reflex.binding.DataChange;
 	import reflex.data.IPosition;
 	import reflex.data.Position;
 	import reflex.behaviors.SlideBehavior;

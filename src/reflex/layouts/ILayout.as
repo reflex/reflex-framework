@@ -16,7 +16,8 @@ package reflex.layouts
 		function get target():IEventDispatcher;
 		function set target(value:IEventDispatcher):void;
 		
-		function measure(children:Array):Point;
-		function update(children:Array, rectangle:Rectangle):void;
+		function measure(content:Array):Point;
+		function update(content:Array, tokens:Array, rectangle:Rectangle):void;
+		
 	}
 }

@@ -13,7 +13,6 @@ package reflex.graphics
 	import mx.graphics.IFill;
 	import mx.graphics.IStroke;
 	
-	import reflex.binding.DataChange;
 	import reflex.invalidation.Invalidation;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.metadata.resolveCommitProperties;
@@ -43,7 +42,7 @@ package reflex.graphics
 			if(fillDispatcher) {
 				fillDispatcher.removeEventListener(PropertyChangeEvent.PROPERTY_CHANGE, fillChangeHandler, false);
 			}
-			DataChange.change(this, "fill", _fill, _fill = value);
+			notify("fill", _fill, _fill = value);
 			fillDispatcher = _fill as IEventDispatcher;
 			if(fillDispatcher) {
 				fillDispatcher.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, fillChangeHandler, false, 0, true);
@@ -58,7 +57,7 @@ package reflex.graphics
 			if(strokeDispatcher) {
 				strokeDispatcher.removeEventListener(PropertyChangeEvent.PROPERTY_CHANGE, strokeChangeHandler, false);
 			}
-			DataChange.change(this, "stroke", _stroke, _stroke = value);
+			notify("stroke", _stroke, _stroke = value);
 			strokeDispatcher = _stroke as IEventDispatcher;
 			if(strokeDispatcher) {
 				strokeDispatcher.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, strokeChangeHandler, false, 0, true);
