@@ -21,8 +21,8 @@ package reflex.skins
 		// but will have to dig into better use cases later
 		
 		// I need to change invalidation to be comfortable off the display list and I can fix this
-		function get target():Sprite;				// but I prefer ISkinnable targets, they're my favorite
-		function set target(value:Sprite):void;		// cause then I'll use data, children, layout, state, etc
+		function get target():IEventDispatcher;				// but I prefer ISkinnable targets, they're my favorite
+		function set target(value:IEventDispatcher):void;		// cause then I'll use data, children, layout, state, etc
 		/*
 		function get layout():ILayoutAlgorithm;
 		function set layout(value:ILayoutAlgorithm):void;

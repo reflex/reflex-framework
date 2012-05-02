@@ -21,7 +21,6 @@
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.skins.ISkin;
 	import reflex.skins.ISkinnable;
-	import reflex.templating.addItem;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -112,7 +111,7 @@
 				return;
 			}
 			
-			graphics.clear();
+			//graphics.clear();
 			
 			if (_skin is ISkin) {
 				(_skin as ISkin).target = null;
@@ -148,7 +147,7 @@
 		[Bindable(event="enabledChange")]
 		public function get enabled():Boolean { return _enabled; }
 		public function set enabled(value:Boolean):void {
-			mouseEnabled = mouseChildren = value;
+			//mouseEnabled = mouseChildren = value;
 			notify("enabled", _enabled, _enabled = value);
 		}
 		

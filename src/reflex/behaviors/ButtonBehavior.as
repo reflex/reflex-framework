@@ -81,15 +81,15 @@ package reflex.behaviors
 		
 		// ====== Event Listeners ====== //
 		
-		[EventListener(event="rollOut", target="target")]
-		[EventListener(event="releaseOutside", target="target.stage")]
+		[EventListener(event="rollOut", target="target.display")]
+		[EventListener(event="releaseOutside", target="target.display.stage")]
 		public function onStateUp(event:MouseEvent):void
 		{
 			currentState = resolveState(mouseState = UP);
 		}
 		
-		[EventListener(event="rollOver", target="target")]
-		[EventListener(event="mouseUp", target="target")]
+		[EventListener(event="rollOver", target="target.display")]
+		[EventListener(event="mouseUp", target="target.display")]
 		public function onStateOver(event:MouseEvent):void
 		{
 			if(_mouseEnabled) {
@@ -97,7 +97,7 @@ package reflex.behaviors
 			}
 		}
 		
-		[EventListener(event="mouseDown", target="target")]
+		[EventListener(event="mouseDown", target="target.display")]
 		public function onStateDown(event:MouseEvent):void
 		{
 			if(_mouseEnabled) {

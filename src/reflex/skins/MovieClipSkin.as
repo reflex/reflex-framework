@@ -15,13 +15,13 @@ package reflex.skins
 		protected var unscaledWidth:Number = 160;
 		protected var unscaledHeight:Number = 22;
 		
-		private var _target:Sprite;
+		private var _target:IEventDispatcher;
 		private var _currentState:String;
 		
 		
 		[Bindable(event="targetChange")]
-		public function get target():Sprite { return _target; }
-		public function set target(value:Sprite):void {
+		public function get target():IEventDispatcher { return _target; }
+		public function set target(value:IEventDispatcher):void {
 			notify("target", _target, _target = value);
 		}
 		

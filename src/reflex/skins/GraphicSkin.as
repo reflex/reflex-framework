@@ -3,6 +3,7 @@ package reflex.skins
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	
 	import reflex.metadata.resolveCommitProperties;
 	
@@ -18,11 +19,11 @@ package reflex.skins
 			
 		}
 		
-		override public function set target(value:Sprite):void {
+		override public function set target(value:IEventDispatcher):void {
 			super.target = value;
 			graphics = null;
 			if(value) {
-				graphics = value.graphics;
+				graphics = helper.getGraphics(display);
 				value.addEventListener("layout", onRender, false, 0, true);
 			}
 		}

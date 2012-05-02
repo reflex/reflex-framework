@@ -60,7 +60,7 @@ package reflex.text
 			format = new ElementFormat(null, 24);
 			textElement = new TextElement("");
 			textBlock = new TextBlock(textElement);
-			mouseChildren = false;
+			//mouseChildren = false;
 			addEventListener(TEXT_RENDER, onTextRender);
 			this.text = text;
 		}
@@ -183,7 +183,7 @@ package reflex.text
 		protected function onTextRender(event:Event):void
 		{
 			
-			while (numChildren) removeChildAt(0);
+			while (helper.getNumChildren(display)) helper.removeChildAt(display, 0);
 			
 			format.fontDescription = fontFormat;
 			textElement.elementFormat = format;
@@ -203,7 +203,7 @@ package reflex.text
 					startY += l.height;
 					l.y = startY;
 					alignText(align, l);
-					addChild(l);
+					helper.addChild(display, l);
 					l = textBlock.createTextLine(l, unscaledWidth);
 				}
 				measured.height = startY;
@@ -215,7 +215,7 @@ package reflex.text
 					line.y = line.height; //height/2 + line.height/2-3;
 					alignText(align, line);
 					verticalAlignText(line);
-					addChild(line);
+					helper.addChild(display, line);
 				} else {
 					measured.width = 0;
 					measured.height = 0;

@@ -9,8 +9,8 @@ package reflex.animation
 		/**
 		 * attaches this animator to a given container
 		 */
-		function attach(container:Object):void;
-		function detach(container:Object):void;
+		//function attach(container:Object):void;
+		//function detach(container:Object):void;
 		
 		
 		/**
@@ -19,10 +19,10 @@ package reflex.animation
 		function begin():void;
 		
 		// we might break these up into seperate interfaces later
-		function addItem(item:DisplayObject):void;
-		function moveItem(item:DisplayObject, token:AnimationToken):void;
-		function adjustItem(item:DisplayObject, token:AnimationToken):void; // for scrolling, drag reactions etc.
-		function removeItem(item:DisplayObject, callback:Function):void;
+		function addItem(item:Object):void;
+		function moveItem(item:Object, token:AnimationToken):void;
+		function adjustItem(item:Object, token:AnimationToken):void; // for scrolling, drag reactions etc.
+		function removeItem(item:Object, callback:Function):void;
 		
 		/**
 		 * Called after a series of addItem, moveItem, or removeItem calls.

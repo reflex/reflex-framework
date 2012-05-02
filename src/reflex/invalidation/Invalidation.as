@@ -205,7 +205,7 @@ package reflex.invalidation
 				depths[pos] = pre;
 				
 				for (var i:* in current) {
-					var display:DisplayObject = i;
+					var display:Object = i;
 					delete current[i];
 					delete invalidated[display];
 					display.dispatchEvent( new Event(type) );

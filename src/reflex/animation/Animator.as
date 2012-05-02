@@ -10,37 +10,36 @@ package reflex.animation
 		{
 		}
 		
-		public function attach(container:Object):void {}
-		
-		public function detach(container:Object):void {}
+		//public function attach(container:Object):void {}
+		//public function detach(container:Object):void {}
 		
 		public function begin():void
 		{
 		}
 		
-		public function addItem(item:DisplayObject):void
+		public function addItem(item:Object):void
 		{
 			
 		}
 		
-		public function moveItem(item:DisplayObject, token:AnimationToken):void
+		public function moveItem(item:Object, token:AnimationToken):void
 		{
 			move(item, token);
 		}
 		
-		public function adjustItem(item:DisplayObject, token:AnimationToken):void
+		public function adjustItem(item:Object, token:AnimationToken):void
 		{
 			move(item, token);
 		}
 		
-		public function removeItem(item:DisplayObject, callback:Function):void
+		public function removeItem(item:Object, callback:Function):void
 		{
 			if(callback != null) { callback(item); }
 		}
 		
 		public function end():void {}
 		
-		private function move(item:DisplayObject, token:AnimationToken):void {
+		private function move(item:Object, token:AnimationToken):void {
 			item.x = token.x;
 			item.y = token.y;
 			

@@ -5,6 +5,7 @@ package reflex.display
 	
 	import mx.events.StyleEvent;
 	
+	import reflex.data.NotifyingDispatcher;
 	import reflex.events.DataChangeEvent;
 	import reflex.injection.IReflexInjector;
 	import reflex.invalidation.IReflexInvalidation;
@@ -24,7 +25,7 @@ package reflex.display
 	 * 
 	 * @alpha
 	 */
-	public class Display extends Sprite implements IStyleable, IMeasurable, IMeasurablePercent
+	public class Display extends NotifyingDispatcher implements IStyleable, IMeasurable, IMeasurablePercent
 	{
 		
 		private var _id:String;
@@ -36,11 +37,17 @@ package reflex.display
 		private var _percentWidth:Number;
 		private var _percentHeight:Number;
 		
+		private var _x:Number = 0;
+		private var _y:Number = 0;
 		protected var unscaledWidth:Number = 160;
 		protected var unscaledHeight:Number = 22;
 		
+		private var _visible:Boolean = true;
 		
 		private var _invalidation:IReflexInvalidation;
+		
+		protected var helper:IDisplayHelper = new FlashDisplayHelper();
+		public var display:Object = new Sprite();
 		
 		public function Display() {
 			_style = new Style(); // need to make object props bindable - something like ObjectProxy but lighter?
@@ -100,15 +107,17 @@ package reflex.display
 		}
 		
 		[Bindable(event="xChange", noEvent)]
-		override public function get x():Number { return super.x; }
-		override public function set x(value:Number):void {
-			notify("x", super.x, super.x = value);
+		public function get x():Number { return _x; }
+		public function set x(value:Number):void {
+			display.x = value;
+			notify("x", _x, _x = value);
 		}
 		
 		[Bindable(event="yChange", noEvent)]
-		override public function get y():Number { return super.y; }
-		override public function set y(value:Number):void {
-			notify("y", super.y, super.y = value);
+		public function get y():Number { return _y; }
+		public function set y(value:Number):void {
+			display.y = value;
+			notify("y", _y, _y = value);
 		}
 		
 		// IMeasurable implementation
@@ -121,8 +130,8 @@ package reflex.display
 		 */
 		[PercentProxy("percentWidth")]
 		[Bindable(event="widthChange", noEvent)]
-		override public function get width():Number { return unscaledWidth; }
-		override public function set width(value:Number):void {
+		public function get width():Number { return unscaledWidth; }
+		public function set width(value:Number):void {
 			unscaledWidth = _explicit.width = value; // this will dispatch for us if needed
 		}
 		
@@ -131,8 +140,8 @@ package reflex.display
 		 */
 		[PercentProxy("percentHeight")]
 		[Bindable(event="heightChange", noEvent)]
-		override public function get height():Number { return unscaledHeight; }
-		override public function set height(value:Number):void {
+		public function get height():Number { return unscaledHeight; }
+		public function set height(value:Number):void {
 			unscaledHeight  = _explicit.height = value; // this will dispatch for us if needed (order is important)
 		}
 		
@@ -177,9 +186,9 @@ package reflex.display
 		}
 		
 		[Bindable(event="visibleChange")]
-		override public function get visible():Boolean { return super.visible; }
-		override public function set visible(value:Boolean):void {
-			notify("visible", super.visible, super.visible = value);
+		public function get visible():Boolean { return _visible; }
+		public function set visible(value:Boolean):void {
+			notify("visible", _visible, _visible = value);
 		}
 		
 		/**
@@ -193,7 +202,7 @@ package reflex.display
 		protected function invalidate(phase:String):void {
 			if(invalidation) { invalidation.invalidate(this, phase); }
 		}
-		
+		/*
 		protected function notify(property:String, oldValue:*, newValue:*):void {
 			var force:Boolean = false;
 			var instance:IEventDispatcher = this;
@@ -205,6 +214,6 @@ package reflex.display
 				}
 			}
 		}
-		
+		*/
 	}
 }

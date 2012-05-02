@@ -20,6 +20,8 @@ package reflex.containers
 	import reflex.components.Component;
 	import reflex.components.IStateful;
 	import reflex.display.Display;
+	import reflex.display.FlashDisplayHelper;
+	import reflex.display.IDisplayHelper;
 	import reflex.injection.IReflexInjector;
 	import reflex.invalidation.IReflexInvalidation;
 	import reflex.invalidation.LifeCycle;
@@ -27,7 +29,7 @@ package reflex.containers
 	import reflex.layouts.ILayout;
 	import reflex.states.applyState;
 	import reflex.states.removeState;
-	import reflex.templating.addItemsAt;
+	import reflex.templating.getDataRenderer;
 	
 	//use namespace mx_internal;
 	
@@ -68,6 +70,8 @@ package reflex.containers
 		private var _styleManager:* = {};
 		
 		private var animator:IAnimator = new Animator();
+		
+		
 		
 		private var _injector:IReflexInjector;// = new HardCodedInjector();
 		
@@ -288,7 +292,7 @@ package reflex.containers
 			for( var i:int = 0; i < length; i++) {
 				var renderer:Object = renderers[i];
 				var token:AnimationToken = tokens[i];
-				animator.moveItem(renderer as DisplayObject, token);
+				animator.moveItem(renderer, token);
 			}
 			animator.end();
 		}
@@ -306,7 +310,7 @@ package reflex.containers
 					remove(event.items, event.oldLocation);
 					break;
 				case CollectionEventKind.REPLACE :
-					removeChild(event.items[1]);
+					helper.removeChild(display, event.items[1]);
 					//addChildAt(event.items[0], loc);
 					break;
 				case CollectionEventKind.RESET :
@@ -318,19 +322,19 @@ package reflex.containers
 		}
 		
 		private function add(items:Array, index:int):void {
-			var children:Array = reflex.templating.addItemsAt(this, items, index, _template);
+			// move this to helper
+			//var children:Array = reflex.templating.addItemsAt(display, items, index, _template);
 			
-			var length:int = children.length;
+			var length:int = items ? items.length : 0;
 			for(var i:int = 0; i < length; i++) {
-				var child:Object = children[i];
-				//child.addEventListener("widthChange", item_measureHandler, false, true);
-				//child.addEventListener("measure", item_measureHandler, false, true);
-				//child.addEventListener("layout", item_measureHandler, false, true);
-				renderers.splice(index+i, 0, child);
-				if(child is Component) { // need to make this generic
-					(child as Component).owner = this;
+				var item:Object = items[i];
+				var renderer:Object = reflex.templating.getDataRenderer(display, item, _template);//children[i];
+				helper.addChild(display, renderer.display);
+				renderers.splice(index+i, 0, renderer);
+				if(renderer is Component) { // need to make this generic
+					(renderer as Component).owner = this;
 				}
-				if(injector) { injector.injectInto(child); }
+				if(injector) { injector.injectInto(renderer); }
 			}
 			
 			invalidate(LifeCycle.MEASURE);
@@ -356,8 +360,8 @@ package reflex.containers
 				//var index:int = content.getItemIndex(child); //renderers.indexOf(child);
 				var renderer:Object = renderers.splice(index, 1)[0];
 				if((renderer is DisplayObject) 
-					&& contains(renderer as DisplayObject)) {
-					removeChild(renderer as DisplayObject);
+					&& helper.contains(display, renderer as DisplayObject)) {
+					helper.removeChild(display, renderer as DisplayObject);
 				}
 			}
 			invalidate(LifeCycle.MEASURE);
@@ -365,13 +369,25 @@ package reflex.containers
 		}
 		
 		private function reset(items:Array):void {
-			while (numChildren) {
-				var child:DisplayObject = removeChildAt(numChildren-1);
+			while (helper.getNumChildren(display)) {
+				var child:Object = helper.removeChildAt(display, helper.getNumChildren(display)-1);
 				if(child is Component) { // need to make this generic
 					(child as Component).owner = null;
 				}
 			}
-			renderers = reflex.templating.addItemsAt(this, items, 0, _template); // todo: correct ordering
+			//renderers = reflex.templating.addItemsAt(this.helper, items, 0, _template); // todo: correct ordering
+			
+			renderers = [];
+			var length:int = items ? items.length : 0;
+			for(var i:int = 0; i < length; i++) {
+				var item:Object = items[i];
+				var renderer:Object = reflex.templating.getDataRenderer(display, item, template);
+				// renderer is actually not a DisplayObject now
+				helper.addChild(display, renderer.display);
+				renderers.push(renderer);
+			}
+			
+			
 			for each (child in renderers) {
 				if(child is Component) { // need to make this generic
 					(child as Component).owner = this;

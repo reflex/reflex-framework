@@ -23,6 +23,8 @@ package reflex.skins
 	import reflex.components.IStateful;
 	import reflex.containers.IContainer;
 	import reflex.data.NotifyingDispatcher;
+	import reflex.display.FlashDisplayHelper;
+	import reflex.display.IDisplayHelper;
 	import reflex.injection.HardCodedInjector;
 	import reflex.injection.IReflexInjector;
 	import reflex.invalidation.IReflexInvalidation;
@@ -37,7 +39,7 @@ package reflex.skins
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.states.applyState;
 	import reflex.states.removeState;
-	import reflex.templating.addItemsAt;
+	import reflex.templating.getDataRenderer;
 	
 	/**
 	 * Skin is a convenient base class for many skins, a swappable graphical
@@ -72,6 +74,8 @@ package reflex.skins
 		private var _injector:IReflexInjector;// = new HardCodedInjector();
 		
 		private var animator:IAnimator = new Animator();
+		protected var helper:IDisplayHelper = new FlashDisplayHelper();
+		protected var display:Object;// = new Sprite();
 		
 		public function get injector():IReflexInjector { return _injector; }
 		public function set injector(value:IReflexInjector):void {
@@ -221,7 +225,7 @@ package reflex.skins
 		}
 		
 		
-		private var _target:Sprite;
+		private var _target:IEventDispatcher;
 		private var _content:IList;
 		
 		public function Skin()
@@ -246,8 +250,8 @@ package reflex.skins
 		
 		
 		[Bindable(event="targetChange")]
-		public function get target():Sprite { return _target; }
-		public function set target(value:Sprite):void
+		public function get target():IEventDispatcher { return _target; }
+		public function set target(value:IEventDispatcher):void
 		{
 			if (_target == value) {
 				return;
@@ -292,6 +296,7 @@ package reflex.skins
 					}
 				}
 				*/
+				display = (target as Object).display;
 				// skin measurement occurs before component measurement
 				target.addEventListener(LifeCycle.MEASURE, onMeasure, false, 1, true);
 				target.addEventListener(LifeCycle.LAYOUT, onLayout, false, 1, true);
@@ -358,8 +363,8 @@ package reflex.skins
 					remove(event.items, loc);
 					break;
 				case CollectionEventKind.REPLACE :
-					_target.removeChild(event.items[1]);
-					_target.addChildAt(event.items[0], loc);
+					helper.removeChild(display, event.items[1]);
+					helper.addChildAt(display, event.items[0], loc);
 					break;
 				case CollectionEventKind.RESET :
 				default:
@@ -370,17 +375,20 @@ package reflex.skins
 		
 		
 		private function add(items:Array, index:int):void {
-			var children:Array = reflex.templating.addItemsAt(_target, items, index, _template);
+			//var children:Array = reflex.templating.addItemsAt(_target, items, index, _template);
 			
-			var length:int = children.length;
+			var length:int = items ? items.length : 0;
 			for(var i:int = 0; i < length; i++) {
-				var child:Object = children[i];
-				//child.addEventListener("measure", item_measureHandler, false, true);
-				//child.addEventListener("layout", item_measureHandler, false, true);
-				renderers.splice(index+i, 0, children[i]);
+				var item:Object = items[i];
+				var renderer:Object = reflex.templating.getDataRenderer(display, item, _template);//children[i];
+				helper.addChild(display, renderer.display);
+				renderers.splice(index+i, 0, renderer);
+				//if(renderer is Component) { // need to make this generic
+				//	(renderer as Component).owner = this;
+				//}
+				if(injector) { injector.injectInto(renderer); }
 			}
-			if(injector) { injector.injectInto(child); }
-			// where is child measure invalidation?
+			
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
 		}
@@ -396,7 +404,7 @@ package reflex.skins
 			// this isn't working with templating yet
 			var child:Object;
 			for each (child in items) {
-				_target.removeChild(child as DisplayObject);
+				helper.removeChild(display, child);
 				var index:int = renderers.indexOf(child);
 				renderers.splice(index, 1);
 			}
@@ -406,10 +414,20 @@ package reflex.skins
 		
 		private function reset(items:Array):void {
 			if (_target) {
-				while (_target.numChildren) {
-					_target.removeChildAt(_target.numChildren-1);
+				while (helper.getNumChildren(display)) {
+					helper.removeChildAt(display, helper.getNumChildren(display)-1);
 				}
-				renderers = reflex.templating.addItemsAt(_target, items, 0, template); // todo: correct ordering
+				
+				//renderers = reflex.templating.addItemsAt(this.helper, items, 0, template); // todo: correct ordering
+				renderers = [];
+				var length:int = items ? items.length : 0;
+				for(var i:int = 0; i < length; i++) {
+					var item:Object = items[i];
+					var renderer:Object = reflex.templating.getDataRenderer(display, item, template);
+					// renderer is actually not a DisplayObject now
+					helper.addChild(display, renderer.display);
+					renderers.push(renderer);
+				}
 				
 				for each(var renderer:Object in renderers) {
 					//renderer.addEventListener("widthChange", item_measureHandler, false, true);
@@ -475,7 +493,7 @@ package reflex.skins
 			for( var i:int = 0; i < length; i++) {
 				var renderer:Object = renderers[i];
 				var token:AnimationToken = tokens[i];
-				animator.moveItem(renderer as DisplayObject, token);
+				animator.moveItem(renderer, token);
 			}
 			animator.end();
 		}

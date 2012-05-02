@@ -68,10 +68,10 @@ package reflex.components
 				C = flash.utils.getDefinitionByName( name ) as Class
 			} catch ( error:Error )
 			{
-				if( loaderInfo )
+				/*if( loaderInfo )
 				{
 					C = loaderInfo.applicationDomain.getDefinition( name ) as Class;
-				}
+				}*/
 				if( !C )
 				{
 					trace( "ListItem: Unable to retrieve definition of Class '" + name + "'." );

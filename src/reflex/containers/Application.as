@@ -1,6 +1,8 @@
 package reflex.containers
 {
 	
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.ContextMenuEvent;
@@ -11,6 +13,7 @@ package reflex.containers
 	import flash.ui.ContextMenuItem;
 	
 	import reflex.injection.HardCodedInjector;
+	import reflex.injection.IReflexInjector;
 	import reflex.invalidation.Invalidation;
 	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
@@ -18,12 +21,22 @@ package reflex.containers
 	
 	//[Frame(factoryClass="reflex.tools.flashbuilder.ReflexApplicationLoader")]
 	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
-	
+	[DefaultProperty("content")]
 	/**
 	 * @alpha
 	 */
-	public class Application extends Container
+	public class Application extends Sprite
 	{
+		
+		private var container:Container;
+		
+		private var _content:Object;
+		
+		public function get content():Object { return _content; }
+		public function set content(value:Object):void {
+			_content = value;
+			container.content = value;
+		}
 		
 		private var _backgroundColor:uint;
 		
@@ -31,7 +44,8 @@ package reflex.containers
 		[Bindable(event="backgroundColorChange")]
 		public function get backgroundColor():uint { return _backgroundColor; }
 		public function set backgroundColor(value:uint):void {
-			notify("backgroundColor", _backgroundColor, _backgroundColor = value);
+			_backgroundColor = value;
+			//notify("backgroundColor", _backgroundColor, _backgroundColor = value);
 		}
 		
 		//public var viewSourceURL:String;
@@ -41,8 +55,10 @@ package reflex.containers
 		public function Application()
 		{
 			super();
+			container = new Container();
+			this.addChild(container.display as DisplayObject);
 			if (stage) init();
-            else addEventListener(Event.ADDED_TO_STAGE, init)
+            else addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 
         private function init(e:Event = null):void {
@@ -69,32 +85,35 @@ package reflex.containers
         protected function onInit():void {
             //OVERRIDE FOR STAGE ENABLED SETUP
 			Invalidation.stage = this.stage;
-			injector = new HardCodedInjector(); // only instantiating in Application
-			injector.injectInto(this);
-			layout = new BasicLayout();
+			var injector:IReflexInjector = new HardCodedInjector(); // only instantiating in Application
+			injector.injectInto(container);
+			container.layout = new BasicLayout();
         }
 		
 		private function onStageResize(event:Event):void
 		{
-			if(isNaN(explicit.width)) { unscaledWidth = stage.stageWidth; }
-			if(isNaN(explicit.height)) { unscaledHeight = stage.stageHeight; }
-			invalidation.invalidate(this, LifeCycle.LAYOUT);
+			container.width = stage.stageWidth;
+			container.height = stage.stageHeight;
+			//if(isNaN(explicit.width)) { unscaledWidth = stage.stageWidth; }
+			//if(isNaN(explicit.height)) { unscaledHeight = stage.stageHeight; }
+			//invalidation.invalidate(this, LifeCycle.LAYOUT);
 		}
 		
-		override protected function onMeasure(event:Event):void {
+		public function onMeasure(event:Event):void {
 			// no measurement in Application
 			// the compiler gives us root styles like this. yay?
-			if(styleDeclaration.defaultFactory != null) {
-				var f:Function = styleDeclaration.defaultFactory;
+			/*
+			if(container.styleDeclaration.defaultFactory != null) {
+				var f:Function = container.styleDeclaration.defaultFactory;
 				var t:* = f.apply(style);
-				styleDeclaration.defaultFactory = null
-			}
+				container.styleDeclaration.defaultFactory = null
+			}*/
 		}
-		
+		/*
 		override public function setSize(width:Number, height:Number):void {
 			// no measurement in application
 		}
-		
+		*/
 		/*
 		private function menuItemSelectHandler(event:ContextMenuEvent):void {
 			var request:URLRequest = new URLRequest(viewSourceURL);
