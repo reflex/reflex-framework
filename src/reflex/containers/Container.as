@@ -12,6 +12,9 @@ package reflex.containers
 	import mx.states.IOverride;
 	import mx.states.State;
 	
+	import reflex.animation.AnimationToken;
+	import reflex.animation.Animator;
+	import reflex.animation.IAnimator;
 	import reflex.collections.SimpleCollection;
 	import reflex.collections.convertToIList;
 	import reflex.components.Component;
@@ -19,7 +22,6 @@ package reflex.containers
 	import reflex.display.Display;
 	import reflex.injection.IReflexInjector;
 	import reflex.invalidation.IReflexInvalidation;
-	//import reflex.invalidation.Invalidation;
 	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.ILayout;
@@ -65,29 +67,42 @@ package reflex.containers
 		private var _styleDeclaration:* = {};
 		private var _styleManager:* = {};
 		
-		public var injector:IReflexInjector;
+		private var animator:IAnimator = new Animator();
+		
+		private var _injector:IReflexInjector;// = new HardCodedInjector();
+		
+		public function get injector():IReflexInjector { return _injector; }
+		public function set injector(value:IReflexInjector):void {
+			_injector = value;
+			if(_injector) {
+				var length:int = _content ? _content.length : 0;
+				for(var i:int = 0; i < length; i++) {
+					var item:Object = _content.getItemAt(i);
+					_injector.injectInto(item);
+				}
+			}
+		}
 		
 		public function getRenderers():Array { return renderers.concat(); }
 		
 		public function Container()
 		{
-			if (_template == null) {
-				//_template = new ReflexDataTemplate();
-			}
-			if (_layout == null) {
-				//_layout = new BasicLayout();
-			}
 			
-			_content = new SimpleCollection(); // use setter logic
-			_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
+			//_content = new SimpleCollection(); // use setter logic
+			//_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			
-			addEventListener(Event.ADDED, onAdded, false, 0, true);
+			//addEventListener(Event.ADDED, onAdded, false, 0, true);
 			addEventListener(LifeCycle.MEASURE, onMeasure, false, 0, true);
 			addEventListener(LifeCycle.LAYOUT, onLayout, false, 0, true);
 			//addEventListener("widthChange", onSizeChange, false, 0, true);
 			//addEventListener("heightChange", onSizeChange, false, 0, true);
 		}
 		
+		/*
+		private function onInitialize(event:Event):void {
+			
+		}
+		*/
 		// width/height invalidation needs some thought
 		
 		private function onSizeChange(event:Event):void {
@@ -222,13 +237,13 @@ package reflex.containers
 			super.setSize(width, height);
 			invalidate(LifeCycle.LAYOUT);
 		}
-		
+		/*
 		private function onAdded(event:Event):void {
 			removeEventListener(Event.ADDED, onAdded, false);
 //			invalidation.invalidate(this, LifeCycle.CREATE);
 //			invalidation.invalidate(this, LifeCycle.INITIALIZE);
 		}
-		
+		*/
 		protected function onMeasure(event:Event):void {
 			// the compiler gives us root styles like this. yay?
 			if(styleDeclaration.defaultFactory != null) {
@@ -250,8 +265,32 @@ package reflex.containers
 		private function onLayout(event:Event):void {
 			if (layout) {
 				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);
-				layout.update(renderers, null, rectangle);
+				var tokens:Array = layout.update(_content.toArray(), generateTokens(), rectangle);
+				animateToTokens(renderers, tokens);
 			}
+		}
+		
+		private function generateTokens():Array {
+			// we'll want to pool these tokens later
+			var tokens:Array = [];
+			var length:int = renderers ? renderers.length : 0;
+			for( var i:int = 0; i < length; i++) {
+				var renderer:Object = renderers[i];
+				var token:AnimationToken = new AnimationToken(renderer.x, renderer.y, renderer.width, renderer.height);
+				tokens.push(token);
+			}
+			return tokens;
+		}
+		
+		private function animateToTokens(renderers:Array, tokens:Array):void {
+			animator.begin();
+			var length:int = renderers ? renderers.length : 0;
+			for( var i:int = 0; i < length; i++) {
+				var renderer:Object = renderers[i];
+				var token:AnimationToken = tokens[i];
+				animator.moveItem(renderer as DisplayObject, token);
+			}
+			animator.end();
 		}
 		
 		private function onChildrenChange(event:CollectionEvent):void

@@ -9,7 +9,6 @@ package reflex.skins
 	import reflex.containers.Container;
 	import reflex.containers.Group;
 	import reflex.containers.HGroup;
-	import reflex.invalidation.Invalidation;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.VerticalLayout;
 	import reflex.layouts.XYLayout;

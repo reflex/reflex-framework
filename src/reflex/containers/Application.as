@@ -36,12 +36,11 @@ package reflex.containers
 		
 		//public var viewSourceURL:String;
 		
+		public var owner:Object = null;
+		
 		public function Application()
 		{
 			super();
-			injector = new HardCodedInjector(); // only instantiating in Application
-			injector.injectInto(this);
-			layout = new BasicLayout();
 			if (stage) init();
             else addEventListener(Event.ADDED_TO_STAGE, init)
 		}
@@ -62,13 +61,17 @@ package reflex.containers
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
-			onStageResize(null);
 			
             onInit()
+			onStageResize(null);
         }
 
         protected function onInit():void {
             //OVERRIDE FOR STAGE ENABLED SETUP
+			Invalidation.stage = this.stage;
+			injector = new HardCodedInjector(); // only instantiating in Application
+			injector.injectInto(this);
+			layout = new BasicLayout();
         }
 		
 		private function onStageResize(event:Event):void

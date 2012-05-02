@@ -6,11 +6,6 @@ package reflex.containers
 	public class Group extends Container
 	{
 		
-		public function Group()
-		{
-			super();
-			//layout = new BasicLayout();
-		}
-		
 	}
+	
 }

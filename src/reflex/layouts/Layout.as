@@ -56,14 +56,15 @@ package reflex.layouts
 			return new Point(0, 0);
 		}
 		
-		public function update(content:Array, tokens:Array, rectangle:Rectangle):void {
+		public function update(content:Array, tokens:Array, rectangle:Rectangle):Array {
 			// this method of listening for layout invalidating changes is very much experimental
-			for each(var child:IEventDispatcher in content) {
-				if (attached[child] != true) {
-					reflex.metadata.resolveLayoutProperties(this, child, onInvalidateLayout);
+			for each(var child:Object in content) {
+				if (child is IEventDispatcher && attached[child] != true) {
+					reflex.metadata.resolveLayoutProperties(this, child as IEventDispatcher, onInvalidateLayout);
 					attached[child] = true;
 				}
 			}
+			return null;
 		}
 		
 		private function onInvalidateLayout(object:*):void {

@@ -9,6 +9,7 @@ package reflex.skins
 	import reflex.collections.SimpleCollection;
 	import reflex.containers.Container;
 	import reflex.graphics.Rect;
+	import reflex.injection.HardCodedInjector;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.XYLayout;
 
@@ -26,6 +27,7 @@ package reflex.skins
 			super();
 			layout = new BasicLayout();
 			container = new Container();
+			container.injector = new HardCodedInjector();
 			//container.layout = new XYLayout();
 			container.percentWidth = 100;
 			container.percentHeight = 100;
@@ -36,6 +38,11 @@ package reflex.skins
 			mask.percentHeight = 100;
 			container.mask = mask;
 			content = new SimpleCollection([container, mask]);
+		}
+		
+		
+		public function initialize():void {
+			
 		}
 		
 	}

@@ -4,6 +4,7 @@ package reflex.layouts
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import reflex.animation.AnimationToken;
 	import reflex.graphics.IDrawable;
 	import reflex.graphics.Line;
 	import reflex.measurement.resolveHeight;
@@ -72,10 +73,14 @@ package reflex.layouts
 			return point;
 		}
 		
-		override public function update(content:Array, tokens:Array, rectangle:Rectangle):void
+		override public function update(content:Array, tokens:Array, rectangle:Rectangle):Array
 		{
 			super.update(content, tokens, rectangle);
-			for each(var child:Object in content) {
+			
+			var length:int = content ? content.length : 0;
+			for(var i:int = 0; i < length; i++) {
+				var child:Object = content[i];
+				var token:AnimationToken = tokens[i];
 				var width:Number = resolveWidth(child, rectangle.width);
 				var height:Number = resolveHeight(child, rectangle.height);
 				var left:Number = resolveStyle(child, "left") as Number;
@@ -86,31 +91,35 @@ package reflex.layouts
 				var verticalCenter:Number = resolveStyle(child, "verticalCenter") as Number;
 				
 				if(hasStyle(child, "left") && hasStyle(child, "right")) {
-					child.x = Math.round(left);
-					width = rectangle.width - child.x - right;
+					token.x = Math.round(left);
+					width = rectangle.width - token.x - right;
 				} else if(hasStyle(child, "left")) {
-					child.x = Math.round(left);
+					token.x = Math.round(left);
 				} else if(hasStyle(child, "right")) {
-					child.x = Math.round(rectangle.width - width - right);
+					token.x = Math.round(rectangle.width - width - right);
 				} else if(hasStyle(child, "horizontalCenter")) {
-					child.x = Math.round(rectangle.width/2 - width/2 + horizontalCenter);
+					token.x = Math.round(rectangle.width/2 - width/2 + horizontalCenter);
 				}
 				
 				if(hasStyle(child, "top") && hasStyle(child, "bottom")) {
-					child.y = Math.round(top);
-					height = rectangle.height - child.y - bottom;
+					token.y = Math.round(top);
+					height = rectangle.height - token.y - bottom;
 				} else if(hasStyle(child, "top")) {
-					child.y = Math.round(top);
+					token.y = Math.round(top);
 				} else if(hasStyle(child, "bottom")) {
-					child.y = Math.round(rectangle.height - height - bottom);
+					token.y = Math.round(rectangle.height - height - bottom);
 				} else if(hasStyle(child, "verticalCenter")) {
-					child.y = Math.round(rectangle.height/2 - height/2 + verticalCenter);
+					token.y = Math.round(rectangle.height/2 - height/2 + verticalCenter);
 				}
 				
 				if(width > 0 && height > 0) { // for shapes which haven't been drawn to yet
-					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					//reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					token.width = Math.round(width);
+					token.height = Math.round(height);
 				} else if(child is IDrawable) { // sometime width/height is 0 for lines
-					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					//reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					token.width = Math.round(width);
+					token.height = Math.round(height);
 					/*
 					if(width == 0) { width = (child as Line).stroke.weight; }
 					if(height == 0) { height = (child as Line).stroke.weight; }
@@ -118,6 +127,7 @@ package reflex.layouts
 					*/
 				}
 			}
+			return tokens;
 		}
 		
 	}

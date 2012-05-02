@@ -3,16 +3,18 @@ package reflex.components
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
+	import mx.collections.IList;
+	
 	import reflex.behaviors.ListSelectionBehavior;
 	import reflex.binding.Bind;
-	import reflex.data.Selection;
-	import reflex.layouts.VerticalLayout;
-	import reflex.skins.ListSkin;
 	import reflex.data.IPosition;
 	import reflex.data.IRange;
 	import reflex.data.ISelection;
+	import reflex.data.Selection;
+	import reflex.layouts.HorizontalLayout;
 	import reflex.layouts.ILayout;
-	import mx.collections.IList;
+	import reflex.layouts.VerticalLayout;
+	import reflex.skins.ListSkin;
 
 	public class List extends Component
 	{

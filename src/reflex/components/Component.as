@@ -11,9 +11,9 @@
 	import reflex.behaviors.IBehavioral;
 	import reflex.collections.SimpleCollection;
 	import reflex.display.Display;
+	import reflex.injection.HardCodedInjector;
 	import reflex.injection.IReflexInjector;
 	import reflex.invalidation.IReflexInvalidation;
-	import reflex.invalidation.Invalidation;
 	import reflex.invalidation.LifeCycle;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
@@ -49,6 +49,15 @@
 		
 		private var _enabled:Boolean = true;
 		
+		private var _injector:IReflexInjector;// = new HardCodedInjector();
+		
+		public function get injector():IReflexInjector { return _injector; }
+		public function set injector(value:IReflexInjector):void {
+			_injector = value;
+			if(_injector && _skin) {
+				_injector.injectInto(_skin);
+			}
+		}
 		
 		public function Component()
 		{
@@ -110,15 +119,21 @@
 			}
 			var oldSkin:Object = _skin;
 			_skin = value;
+			
 			if (_skin is ISkin) {
 				(_skin as ISkin).target = this;
 			}
+			if(injector) {
+				injector.injectInto(_skin);
+			}
+			/*
 			if (_skin is DisplayObject) {
 				reflex.templating.addItem(this, _skin);
 			}
-			
+			*/
 			//skin.addEventListener("widthChange", item_measureHandler, false, true);
 			invalidate(LifeCycle.MEASURE);
+			//invalidate(LifeCycle.LAYOUT);
 			dispatchEvent(new Event("skinChange"));
 		}
 		

@@ -91,7 +91,7 @@ package reflex.behaviors
 				
 				// making wild assumptions about the existence of selected properties here
 				for each(var r:Object in renderers) {
-					r.selected = false;
+					//r.selected = false;
 				}
 				(renderer as Object).selected = !(renderer as Object).selected;
 			}

@@ -5,8 +5,8 @@ package reflex.invalidation
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
-import flash.utils.clearTimeout;
-import flash.utils.setTimeout;
+	import flash.utils.clearTimeout;
+	import flash.utils.setTimeout;
 	
 	/**
 	 * @alpha
@@ -20,6 +20,8 @@ import flash.utils.setTimeout;
 		private static var displayDepths:Dictionary = new Dictionary(true);
 		private static var invalidStages:Dictionary = new Dictionary(true);
         private static var invalidateStageTimeoutId:int = -1;
+		
+		public static var stage:Stage;
 		
 		public static function registerPhase(type:String, priority:int = 0, ascending:Boolean = true):Boolean
 		{
@@ -38,7 +40,7 @@ import flash.utils.setTimeout;
 			return true;
 		}
 		
-		public static function invalidate(display:DisplayObject, type:String):void
+		public static function invalidate(display:IEventDispatcher, type:String):void
 		{
 			if (display == null) {
 				return;
@@ -55,12 +57,12 @@ import flash.utils.setTimeout;
 			
 			display.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0xF, true);
 			display.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0xF, true);
-			
+			/*
 			if (display.stage == null) {
 				phase.addDisplay(display, -1);
 				return;
 			}
-			
+			*/
 			var depth:int = displayDepths[display] != null ?
 				displayDepths[display] :
 				displayDepths[display] = getDepth(display);
@@ -68,11 +70,11 @@ import flash.utils.setTimeout;
 			phase.addDisplay(display, depth);
 			
 			if (!rendering) {
-				invalidateStage(display.stage);
+				invalidateStage(stage);
 			} else if ( invalidateStageTimeoutId == -1/*(phase.ascending && depth <= phase.renderingDepth) ||
 				(!phase.ascending && depth >= phase.renderingDepth)*/ ) {
                 //setTimeout will be called max once per frame
-				invalidateStageTimeoutId = setTimeout(invalidateStage, 0, display.stage);
+				invalidateStageTimeoutId = setTimeout(invalidateStage, 0, stage);
 			}
 		}
 		
@@ -86,17 +88,17 @@ import flash.utils.setTimeout;
 			rendering = false;
 		}
 		
-		private static function getDepth(display:DisplayObject):int
+		private static function getDepth(display:Object):int
 		{
 			var depth:int = 0;
-			while ( (display = display.parent) != null) {
+			/*while ( (display = display.owner) != null) {
 				depth++;
 				// if a parent already has depth defined, take the shortcut
 				if (displayDepths[display] != null) {
 					depth += displayDepths[display];
 					break;
 				}
-			}
+			}*/
 			return depth;
 		}
 		
@@ -212,7 +214,7 @@ import flash.utils.setTimeout;
 			pos = -1;
 		}
 		
-		public function addDisplay(display:DisplayObject, depth:int):void
+		public function addDisplay(display:IEventDispatcher, depth:int):void
 		{
 			if (depths[depth] == null) {
 				depths[depth] = new Dictionary(true);

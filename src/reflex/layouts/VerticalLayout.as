@@ -4,6 +4,7 @@ package reflex.layouts
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import reflex.animation.AnimationToken;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.calculateAvailableSpace;
 	import reflex.measurement.calculatePercentageTotals;
@@ -54,7 +55,7 @@ package reflex.layouts
 			return point;
 		}
 		
-		override public function update(content:Array, tokens:Array, rectangle:Rectangle):void
+		override public function update(content:Array, tokens:Array, rectangle:Rectangle):Array
 		{
 			super.update(content, tokens, rectangle);
 			if(content) {
@@ -74,30 +75,35 @@ package reflex.layouts
 				availableSpace.y -= edging ? gap*length : gap*(length-1);
 				for(var i:int = 0; i < length; i++) {
 					var child:Object = content[i];
-					var width:Number = reflex.measurement.resolveWidth(child, rectangle.width); // calculate percentWidths based on full width and with no normalization
+					var token:AnimationToken = tokens[i];
+					var width:Number = reflex.measurement.resolveWidth(token, rectangle.width); // calculate percentWidths based on full width and with no normalization
 					if(horizontalAlign == "justify")
                         width = rectangle.width;
-					var height:Number = reflex.measurement.resolveHeight(child, availableSpace.y, percentageTotals.y);  // calculate percentHeights based on available height and normalized percentages
-					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					var height:Number = reflex.measurement.resolveHeight(token, availableSpace.y, percentageTotals.y);  // calculate percentHeights based on available height and normalized percentages
+					
 					
 					switch(horizontalAlign) {
 						case "center":
 						case "middle":
-							child.x = Math.round(rectangle.width/2 - width/2);
+							token.x = Math.round(rectangle.width/2 - width/2);
 							break;
 						case "justify":
 						case "left":
-							child.x = 0;
+							token.x = 0;
 							break;
 						case "right":
-							child.x = Math.round(rectangle.width - width);
+							token.x = Math.round(rectangle.width - width);
 							break;
 					}
 					//child.x = Math.round(rectangle.width/2 - width/2);
-					child.y = Math.round(position);
+					token.y = Math.round(position);
+					//reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					token.width = Math.round(width);
+					token.height = Math.round(height);
 					position += height + gap;
 				}
 			}
+			return tokens;
 		}
 		
 	}

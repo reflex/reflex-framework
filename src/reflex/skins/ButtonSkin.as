@@ -13,7 +13,13 @@ package reflex.skins
 	public class ButtonSkin extends GraphicSkin
 	{
 		
-		public var labelDisplay:Label;
+		private var _labelDisplay:Label;
+		
+		[Bindable(event="labelDisplayChange")]
+		public function get labelDisplay():Label { return _labelDisplay; }
+		public function set labelDisplay(value:Label):void {
+			notify("labelDisplay", _labelDisplay, _labelDisplay = value);
+		}
 		
 		public function ButtonSkin()
 		{

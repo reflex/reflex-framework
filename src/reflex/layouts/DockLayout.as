@@ -41,7 +41,7 @@ package reflex.layouts
 			return point;
 		}
 		
-		override public function update(content:Array, tokens:Array, rectangle:Rectangle):void
+		override public function update(content:Array, tokens:Array, rectangle:Rectangle):Array
 		{
 			super.update(content, tokens, rectangle);
 			var length:int = content.length;
@@ -100,6 +100,7 @@ package reflex.layouts
 						break;
 				}
 			}
+			return tokens;
 		}
 		
 	}

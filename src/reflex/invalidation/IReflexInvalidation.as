@@ -1,13 +1,14 @@
 package reflex.invalidation
 {
 	import flash.display.DisplayObject;
+	import flash.events.IEventDispatcher;
 
 	public interface IReflexInvalidation
 	{
 		
 		
 		// DisplayObject?
-		function invalidate(instance:DisplayObject, phase:String):void;
+		function invalidate(instance:IEventDispatcher, phase:String):void;
 		
 	}
 }

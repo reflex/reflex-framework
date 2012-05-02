@@ -43,8 +43,13 @@ package reflex.animation
 		private function move(item:DisplayObject, token:AnimationToken):void {
 			item.x = token.x;
 			item.y = token.y;
-			item.width = token.width;
-			item.height = token.height;
+			
+			if(item is Display) {
+				(item as Display).setSize(token.width, token.height);
+			} else {
+				item.width = token.width;
+				item.height = token.height;
+			}
 		}
 		
 	}

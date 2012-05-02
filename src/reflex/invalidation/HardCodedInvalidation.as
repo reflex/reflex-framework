@@ -1,6 +1,7 @@
 package reflex.invalidation
 {
 	import flash.display.DisplayObject;
+	import flash.events.IEventDispatcher;
 
 	public class HardCodedInvalidation implements IReflexInvalidation
 	{
@@ -16,7 +17,7 @@ package reflex.invalidation
 			
 		}
 		
-		public function invalidate(instance:DisplayObject, phase:String):void
+		public function invalidate(instance:IEventDispatcher, phase:String):void
 		{
 			Invalidation.invalidate(instance, phase);
 		}

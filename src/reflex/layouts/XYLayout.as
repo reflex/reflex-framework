@@ -32,9 +32,10 @@ package reflex.layouts
 			return point;
 		}
 		
-		override public function update(content:Array, tokens:Array, rectangle:Rectangle):void
+		override public function update(content:Array, tokens:Array, rectangle:Rectangle):Array
 		{
 			super.update(content, tokens, rectangle);
+			return tokens;
 		}
 		
 	}

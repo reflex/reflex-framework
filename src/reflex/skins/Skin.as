@@ -14,6 +14,9 @@ package reflex.skins
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
 	
+	import reflex.animation.AnimationToken;
+	import reflex.animation.Animator;
+	import reflex.animation.IAnimator;
 	import reflex.binding.Bind;
 	import reflex.collections.SimpleCollection;
 	import reflex.collections.convertToIList;
@@ -22,7 +25,8 @@ package reflex.skins
 	import reflex.data.NotifyingDispatcher;
 	import reflex.injection.HardCodedInjector;
 	import reflex.injection.IReflexInjector;
-	import reflex.invalidation.Invalidation;
+	import reflex.invalidation.IReflexInvalidation;
+	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.ILayout;
 	import reflex.measurement.IMeasurable;
@@ -45,11 +49,12 @@ package reflex.skins
 	public class Skin extends NotifyingDispatcher implements ISkin, IContainer, IStateful, IMeasurable
 	{
 		
-		static public const MEASURE:String = "measure";
-		static public const LAYOUT:String = "layout";
+		//static public const MEASURE:String = "measure";
+		//static public const LAYOUT:String = "layout";
 		
-		Invalidation.registerPhase(MEASURE, 201, false);
-		Invalidation.registerPhase(LAYOUT, 299, true);
+		//Invalidation.registerPhase("initialize", 0, false);
+		//Invalidation.registerPhase(MEASURE, 201, false);
+		//Invalidation.registerPhase(LAYOUT, 299, true);
 		
 		private var renderers:Array = [];
 		private var _layout:ILayout;
@@ -64,7 +69,23 @@ package reflex.skins
 		private var _explicit:IMeasurements;
 		private var _measured:IMeasurements;
 		
-		private var injector:IReflexInjector = new HardCodedInjector();
+		private var _injector:IReflexInjector;// = new HardCodedInjector();
+		
+		private var animator:IAnimator = new Animator();
+		
+		public function get injector():IReflexInjector { return _injector; }
+		public function set injector(value:IReflexInjector):void {
+			_injector = value;
+			if(_injector) {
+				var length:int = _content ? _content.length : 0;
+				for(var i:int = 0; i < length; i++) {
+					var item:Object = _content.getItemAt(i);
+					_injector.injectInto(item);
+				}
+			}
+		}
+		
+		public var invalidation:IReflexInvalidation;
 		
 		/**
 		 * @inheritDoc
@@ -76,7 +97,7 @@ package reflex.skins
 			//	return;
 			//}
 			_explicit.width = value;
-			Invalidation.invalidate(target, LAYOUT);
+			invalidate(LifeCycle.LAYOUT);
 			notify("width", unscaledWidth, unscaledWidth = value);
 		}
 		
@@ -90,7 +111,7 @@ package reflex.skins
 				//return;
 			//}
 			_explicit.height = value;
-			Invalidation.invalidate(target, LAYOUT);
+			invalidate(LifeCycle.LAYOUT);
 			notify("height", unscaledHeight, unscaledHeight = value);
 		}
 		
@@ -130,7 +151,7 @@ package reflex.skins
 		public function setSize(width:Number, height:Number):void {
 			if (unscaledWidth != width) { notify("width", unscaledWidth, unscaledWidth = width); }
 			if (unscaledHeight != height) { notify("height", unscaledHeight, unscaledHeight = height); }
-			Invalidation.invalidate(target, LAYOUT);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		/**
@@ -147,8 +168,8 @@ package reflex.skins
 			_layout = value;
 			_layout.target = target;
 			if (target) {
-				Invalidation.invalidate(target, MEASURE);
-				Invalidation.invalidate(target, LAYOUT);
+				invalidate(LifeCycle.MEASURE);
+				invalidate(LifeCycle.LAYOUT);
 			}
 			notify("layout", oldLayout, _layout);
 		}
@@ -206,13 +227,13 @@ package reflex.skins
 		public function Skin()
 		{
 			super();
-			_content = new SimpleCollection();
+			//_content = new SimpleCollection();
 			_explicit = new Measurements(this);
 			_measured = new Measurements(this, 160, 22);
 			//if (_layout == null) {
 				//_layout = new BasicLayout();
 			//}
-			_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
+			//_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 			//Bind.addListener(this, onLayoutChange, this, "target.layout");
 			//Bind.addListener(this, onLayoutChange, this, "layout");
 			//Bind.addBinding(this, "data", this, "target.data");
@@ -220,6 +241,7 @@ package reflex.skins
 			//addEventListener(MEASURE, onMeasure, false, 0, true);
 			//addEventListener(LAYOUT, onLayout, false, 0, true);
 			reflex.metadata.resolveBindings(this);
+			//injector.injectInto(this);
 		}
 		
 		
@@ -271,10 +293,10 @@ package reflex.skins
 				}
 				*/
 				// skin measurement occurs before component measurement
-				target.addEventListener(MEASURE, onMeasure, false, 1, true);
-				target.addEventListener(LAYOUT, onLayout, false, 1, true);
-				Invalidation.invalidate(_target, MEASURE);
-				Invalidation.invalidate(_target, LAYOUT);
+				target.addEventListener(LifeCycle.MEASURE, onMeasure, false, 1, true);
+				target.addEventListener(LifeCycle.LAYOUT, onLayout, false, 1, true);
+				invalidate(LifeCycle.MEASURE);
+				invalidate(LifeCycle.LAYOUT);
 				reflex.metadata.resolveCommitProperties(this);
 			}
 			
@@ -359,8 +381,8 @@ package reflex.skins
 			}
 			if(injector) { injector.injectInto(child); }
 			// where is child measure invalidation?
-			Invalidation.invalidate(_target, MEASURE);
-			Invalidation.invalidate(_target, LAYOUT);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		// temporary?
@@ -378,8 +400,8 @@ package reflex.skins
 				var index:int = renderers.indexOf(child);
 				renderers.splice(index, 1);
 			}
-			Invalidation.invalidate(_target, MEASURE);
-			Invalidation.invalidate(_target, LAYOUT);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		private function reset(items:Array):void {
@@ -394,8 +416,8 @@ package reflex.skins
 					if(injector) { injector.injectInto(renderer); }
 				}
 				
-				Invalidation.invalidate(_target, MEASURE);
-				Invalidation.invalidate(_target, LAYOUT);
+				invalidate(LifeCycle.MEASURE);
+				invalidate(LifeCycle.LAYOUT);
 			}
 		}
 		
@@ -429,11 +451,37 @@ package reflex.skins
 		
 		private function onLayout(event:Event):void {
 			if (layout) {
-				var items:Array = _content.toArray();
 				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);
-				//var rectangle:Rectangle = new Rectangle(0, 0, target.width, target.height);
-				layout.update(items, null, rectangle);
+				var tokens:Array = layout.update(_content.toArray(), generateTokens(), rectangle);
+				animateToTokens(renderers, tokens);
 			}
+		}
+		
+		private function generateTokens():Array {
+			// we'll want to pool these tokens later
+			var tokens:Array = [];
+			var length:int = renderers ? renderers.length : 0;
+			for( var i:int = 0; i < length; i++) {
+				var renderer:Object = renderers[i];
+				var token:AnimationToken = new AnimationToken(renderer.x, renderer.y, renderer.width, renderer.height);
+				tokens.push(token);
+			}
+			return tokens;
+		}
+		
+		private function animateToTokens(renderers:Array, tokens:Array):void {
+			animator.begin();
+			var length:int = renderers ? renderers.length : 0;
+			for( var i:int = 0; i < length; i++) {
+				var renderer:Object = renderers[i];
+				var token:AnimationToken = tokens[i];
+				animator.moveItem(renderer as DisplayObject, token);
+			}
+			animator.end();
+		}
+		
+		protected function invalidate(phase:String):void {
+			if(invalidation) { invalidation.invalidate(_target, phase); }
 		}
 		
 	}

@@ -17,7 +17,7 @@ package reflex.layouts
 		function set target(value:IEventDispatcher):void;
 		
 		function measure(content:Array):Point;
-		function update(content:Array, tokens:Array, rectangle:Rectangle):void;
+		function update(content:Array, tokens:Array, rectangle:Rectangle):Array;
 		
 	}
 }
