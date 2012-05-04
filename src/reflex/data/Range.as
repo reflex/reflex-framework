@@ -1,7 +1,11 @@
 package reflex.data
 {
+	import flash.events.IEventDispatcher;
 	
-	public class Range extends NotifyingDispatcher implements IRange
+	import reflex.events.DataChangeEvent;
+	import reflex.display.PropertyDispatcher;
+	
+	public class Range extends PropertyDispatcher implements IRange
 	{
 		
 		private var _minimum:Number = 0;

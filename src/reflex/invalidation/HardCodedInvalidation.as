@@ -6,7 +6,7 @@ package reflex.invalidation
 	public class HardCodedInvalidation implements IReflexInvalidation
 	{
 		
-		Invalidation.registerPhase(LifeCycle.CREATE, 0, true);
+		//Invalidation.registerPhase(LifeCycle.CREATE, 0, true);
 		Invalidation.registerPhase(LifeCycle.INITIALIZE, 100, true);
 		Invalidation.registerPhase(LifeCycle.INVALIDATE, 200, true);
 		Invalidation.registerPhase(LifeCycle.MEASURE, 300, false);

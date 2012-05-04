@@ -1,6 +1,8 @@
 package reflex.components
 {
 	
+	import flash.events.Event;
+	
 	import reflex.behaviors.SlideBehavior;
 	import reflex.data.Position;
 	import reflex.skins.HSliderSkin;
@@ -11,16 +13,16 @@ package reflex.components
 		public function HSlider()
 		{
 			super();
-			initialize();
 		}
 		
-		private function initialize():void {
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
 			unscaledHeight = 14;
 			position = new Position();
 			skin = new HSliderSkin();
 			behaviors.addItem(new SlideBehavior(this, SlideBehavior.HORIZONTAL));
-			measured.width = 170;
-			measured.height = 14;
+			_measuredWidth = 170;
+			_measuredHeight = 14;
 		}
 		
 	}

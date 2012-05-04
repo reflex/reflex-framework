@@ -56,7 +56,6 @@ package reflex.containers
 		{
 			super();
 			container = new Container();
-			this.addChild(container.display as DisplayObject);
 			if (stage) init();
             else addEventListener(Event.ADDED_TO_STAGE, init);
 		}
@@ -88,6 +87,7 @@ package reflex.containers
 			var injector:IReflexInjector = new HardCodedInjector(); // only instantiating in Application
 			injector.injectInto(container);
 			container.layout = new BasicLayout();
+			this.addChild(container.display as DisplayObject);
         }
 		
 		private function onStageResize(event:Event):void

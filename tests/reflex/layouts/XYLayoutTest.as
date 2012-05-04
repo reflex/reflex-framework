@@ -6,15 +6,15 @@ package reflex.layouts
 	
 	import org.flexunit.Assert;
 	
-	import reflex.display.Display;
+	import reflex.display.MeasurableItem;
 	
 	public class XYLayoutTest extends EventDispatcher
 	{
 		
 		[Test]
 		public function testMeasurement():void {
-			var child1:Display = new Display();
-			var child2:Display = new Display();
+			var child1:MeasurableItem = new MeasurableItem();
+			var child2:MeasurableItem = new MeasurableItem();
 			
 			child1.x = 5;
 			child1.y = 5;

@@ -1,5 +1,7 @@
 package reflex.components
 {
+	import flash.events.Event;
+	
 	import reflex.behaviors.ButtonBehavior;
 	import reflex.behaviors.SelectBehavior;
 	import reflex.binding.Bind;
@@ -12,17 +14,17 @@ package reflex.components
 		{
 			super();
 			this.label = label;
-			initialize();
 		}
 		
-		private function initialize():void {
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
 			skin = new CheckBoxSkin();
 			behaviors.addItem(new ButtonBehavior(this));
 			behaviors.addItem(new SelectBehavior(this));
 			Bind.addBinding(this, "skin.labelDisplay.text", this, "label", false);
 			Bind.addBinding(this, "skin.currentState", this, "currentState", false);
-			measured.width = 210;
-			measured.height = 45;
+			_measuredWidth = 210;
+			_measuredHeight = 45;
 		}
 		
 	}

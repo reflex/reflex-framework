@@ -1,6 +1,7 @@
 package reflex.components
 {
 	
+	import flash.events.Event;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
@@ -31,18 +32,18 @@ package reflex.components
 		public function ListItem()
 		{
 			super();
-			initialize();
 		}
 		
-		private function initialize():void {
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
 			//skin = new ListItemSkin();
 			//behaviors.addItem(new ButtonBehavior(this));
 			//behaviors.addItem(new SelectBehavior(this));
 			Bind.addBinding(this, "skin.labelDisplay.text", this, "data.label");
 			//Bind.addBinding(this, "skin.labelDisplay.text", this, "data.name"); // weird - only one targetPath
 			Bind.addBinding(this, "skin.currentState", this, "currentState", false);
-			measured.width = 210;
-			measured.height = 88;
+			_measuredWidth = 210;
+			_measuredHeight = 88;
 			percentWidth = 100;
 		}
 		

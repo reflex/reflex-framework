@@ -9,7 +9,8 @@ package reflex.graphics
 	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
 	
-	import reflex.display.BitmapDisplay;
+	//import reflex.display.BitmapDisplay;
+	import reflex.display.MeasurableItem;
 	import reflex.invalidation.Invalidation;
 	import reflex.metadata.resolveCommitProperties;
 	
@@ -22,7 +23,7 @@ package reflex.graphics
 	[Style(name="dock")]
 	[Style(name="align")]
 	
-	public class BitmapImage extends BitmapDisplay
+	public class BitmapImage extends MeasurableItem
 	{
 		
 		static public const BEST_FIT:String = "bestFit";
@@ -83,21 +84,21 @@ package reflex.graphics
 				var display:Object = new (source as Class)();
 				if(display is Bitmap) {
 					//var display:Bitmap = new (source as Class)();
-					measured.width = display.width;
-					measured.height = display.height;
+					_measuredWidth = display.width;
+					_measuredHeight = display.height;
 					original = display.bitmapData;
 				} else if(display is IBitmapDrawable) {
 					var bitmap:BitmapData = new BitmapData(display.width, display.height, true, 0);
 					bitmap.draw(display as IBitmapDrawable);
-					measured.width = bitmap.width;
-					measured.height = bitmap.height;
+					_measuredWidth = bitmap.width;
+					_measuredHeight = bitmap.height;
 					original = bitmap;
 				}
 				draw();
 			} else if (source is BitmapData) {
 				var bitmapdata:BitmapData = source as BitmapData;
-				measured.width = bitmapdata.width;
-				measured.height = bitmapdata.height;
+				_measuredWidth = bitmapdata.width;
+				_measuredHeight = bitmapdata.height;
 				original = bitmapdata;
 				draw();
 				Invalidation.invalidate(this, "measure");
@@ -109,8 +110,8 @@ package reflex.graphics
 		}
 		
 		private function onComplete(event:Event):void {
-			measured.width = loader.content.width;
-			measured.height = loader.content.height;
+			_measuredWidth = loader.content.width;
+			_measuredHeight = loader.content.height;
 			original = (loader.content as Bitmap).bitmapData;
 			draw();
 			Invalidation.invalidate(this, "measure");
@@ -123,8 +124,8 @@ package reflex.graphics
 		[Commit(properties="width, height, scaling, backgroundColor, backgroundAlpha")]
 		public function onSizeChange(event:Event):void {
 			var color:uint = (_backgroundAlpha*255) << 24 | _backgroundColor
-			this.bitmapData = new BitmapData(unscaledWidth, unscaledHeight, true, color);
-			this.smoothing = true;
+			//this.bitmapData = new BitmapData(unscaledWidth, unscaledHeight, true, color);
+			//this.smoothing = true;
 			draw();
 		}
 		
@@ -159,14 +160,14 @@ package reflex.graphics
 				} else if (mode == SKEW) {
 					matrix = new Matrix(unscaledWidth/original.width, 0, 0, unscaledHeight/original.height, 0, 0);
 				}
-				if(bitmapData) {
-					bitmapData.floodFill(0, 0, 0)
-					bitmapData.draw(original, matrix, null, null, null, true);
-				}
+				//if(bitmapData) {
+				//	bitmapData.floodFill(0, 0, 0)
+				//	bitmapData.draw(original, matrix, null, null, null, true);
+				//}
 			} else {
-				if(bitmapData) {
-					bitmapData.floodFill(0, 0, 0)
-				}
+				//if(bitmapData) {
+				//	bitmapData.floodFill(0, 0, 0)
+				//}
 			}
 		}
 		

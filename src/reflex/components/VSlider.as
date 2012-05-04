@@ -1,9 +1,11 @@
 package reflex.components
 {
 	
+	import flash.events.Event;
+	
+	import reflex.behaviors.SlideBehavior;
 	import reflex.data.IPosition;
 	import reflex.data.Position;
-	import reflex.behaviors.SlideBehavior;
 	import reflex.skins.VSliderSkin;
 
 	public class VSlider extends SliderComponent
@@ -12,16 +14,16 @@ package reflex.components
 		public function VSlider()
 		{
 			super();
-			initialize();
 		}
 		
-		private function initialize():void {
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
 			unscaledWidth = 14;
 			position = new Position();
 			skin = new VSliderSkin();
 			behaviors.addItem(new SlideBehavior(this, SlideBehavior.VERTICAL));
-			measured.width = 20;
-			measured.height = 170;
+			_measuredWidth = 20;
+			_measuredHeight = 170;
 		}
 		
 	}

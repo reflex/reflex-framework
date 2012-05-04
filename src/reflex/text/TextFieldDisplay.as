@@ -12,7 +12,6 @@
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
-	import reflex.measurement.Measurements;
 	import reflex.styles.IStyleable;
 	import reflex.styles.Style;
 	
@@ -29,8 +28,13 @@
 		private var _styleName:String;
 		private var _style:Style;
 		
-		private var _explicit:IMeasurements;
-		private var _measured:IMeasurements;
+		//private var _explicit:IMeasurements;
+		//private var _measured:IMeasurements;
+		
+		private var _explicitWidth:Number;
+		private var _explicitHeight:Number;
+		protected var _measuredWidth:Number;
+		protected var _measuredHeight:Number;
 		
 		private var _percentWidth:Number;
 		private var _percentHeight:Number;
@@ -54,8 +58,10 @@
 		public function TextFieldDisplay() {
 			super();
 			_style = new Style(); // need to make object props bindable - something like ObjectProxy but lighter?
-			_explicit = new Measurements(this);
-			_measured = new Measurements(this, 160, 22);
+			//_explicit = new Measurements(this);
+			//_measured = new Measurements(this, 160, 22);
+			_measuredWidth = 160;
+			_measuredHeight = 22;
 			addEventListener(Event.CHANGE, textChange, false, 0, true);
 			addEventListener(Event.CHANGE, onMeasure, false, 0, true);
 			//onMeasure(null);
@@ -157,7 +163,7 @@
 		[Bindable(event="widthChange", noEvent)]
 		override public function get width():Number { return unscaledWidth; }
 		override public function set width(value:Number):void {
-			unscaledWidth = _explicit.width = value; // this will dispatch for us if needed
+			unscaledWidth = _explicitWidth = value; // this will dispatch for us if needed
 			// excluding super to avoid double event dispatch
 		}
 		
@@ -168,7 +174,7 @@
 		[Bindable(event="heightChange", noEvent)]
 		override public function get height():Number { return unscaledHeight; }
 		override public function set height(value:Number):void {
-			unscaledHeight  = _explicit.height = value; // this will dispatch for us if needed (order is important)
+			unscaledHeight  = _explicitHeight = value; // this will dispatch for us if needed (order is important)
 			// excluding super to avoid double event dispatch
 		}
 		
@@ -176,23 +182,15 @@
 		 * @inheritDoc
 		 */
 		//[Bindable(event="explicitChange", noEvent)]
-		public function get explicit():IMeasurements { return _explicit; }
-		/*public function set explicit(value:IMeasurements):void {
-		if (value != null) { // must not be null
-		DataChange.change(this, "explicit", _explicit, _explicit = value);
-		}
-		}*/
+		public function get explicitWidth():Number { return _explicitWidth; }
+		public function get explicitHeight():Number { return _explicitHeight; }
 		
 		/**
 		 * @inheritDoc
 		 */
 		//[Bindable(event="measuredChange", noEvent)]
-		public function get measured():IMeasurements { return _measured; }
-		/*public function set measured(value:IMeasurements):void {
-		if (value != null) { // must not be null
-		DataChange.change(this, "measured", _measured, _measured = value);
-		}
-		}*/
+		public function get measuredWidth():Number { return _measuredWidth; }
+		public function get measuredHeight():Number { return _measuredHeight; }
 		
 		/**
 		 * @inheritDoc
@@ -231,15 +229,15 @@
 		}
 		
 		private function onMeasure(event:Event):void {
-			if(isNaN(_explicit.width)) {
+			if(isNaN(_explicitWidth)) {
 				if(type == TextFieldType.INPUT) {
-					measured.width = textWidth + 30;
+					_measuredWidth = textWidth + 30;
 				} else {
-					measured.width = textWidth;
+					_measuredWidth = textWidth;
 				}
 			}
-			if(isNaN(_explicit.height)) {
-				measured.height = textHeight + 5;
+			if(isNaN(_explicitHeight)) {
+				_measuredHeight = textHeight + 5;
 			}
 		}
 		

@@ -20,9 +20,8 @@ package reflex.skins
 		[Bindable]
 		public var container:Container;
 		
-		public function ListSkin()
-		{
-			super();
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
 			layout = new BasicLayout();
 			container = new Container();
 			container.layout = new XYLayout();
@@ -31,7 +30,6 @@ package reflex.skins
 			container.setStyle("top", 0);
 			container.setStyle("bottom", 0);
 			content = new SimpleCollection([container]);
-			
 		}
 		
 	}

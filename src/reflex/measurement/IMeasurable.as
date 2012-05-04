@@ -31,12 +31,17 @@ package reflex.measurement
 		/**
 		 * Holds explicit width/height values which have been assigned directly in AS3 or MXML.
 		 */
-		function get explicit():IMeasurements;
+		//function get explicit():IMeasurements;
+		
+		function get explicitWidth():Number;
+		function get explicitHeight():Number;
 		
 		/**
 		 * Holds implicit width/height values which have been calculated internally.
 		 */
-		function get measured():IMeasurements;
+		//function get measured():IMeasurements;
+		function get measuredWidth():Number;
+		function get measuredHeight():Number;
 		
 		/**
 		 * Sets width and height properties without effecting measurement.

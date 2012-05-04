@@ -10,7 +10,7 @@
 	import reflex.behaviors.IBehavior;
 	import reflex.behaviors.IBehavioral;
 	import reflex.collections.SimpleCollection;
-	import reflex.display.Display;
+	import reflex.display.MeasurableItem;
 	import reflex.injection.HardCodedInjector;
 	import reflex.injection.IReflexInjector;
 	import reflex.invalidation.IReflexInvalidation;
@@ -34,7 +34,7 @@
 	/**
 	 * @alpha
 	 */
-	public class Component extends Display implements IBehavioral, ISkinnable
+	public class Component extends MeasurableItem implements IBehavioral, ISkinnable
 	{
 		
 		//static public const MEASURE:String = "measure";
@@ -53,17 +53,28 @@
 		public function get injector():IReflexInjector { return _injector; }
 		public function set injector(value:IReflexInjector):void {
 			_injector = value;
-			if(_injector && _skin) {
+			/*if(_injector && _skin) {
 				_injector.injectInto(_skin);
-			}
+			}*/
+		}
+		
+		override public function set display(value:Object):void {
+			super.display = value;
+			/*if(skin) {
+				skin.display = value; // invalidate later
+			}*/
 		}
 		
 		public function Component()
 		{
 			super();
-			_behaviors = new SimpleCollection();
+		}
+		
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
+			//_behaviors = new SimpleCollection();
 			_behaviors.addEventListener(CollectionEvent.COLLECTION_CHANGE, behaviorsCollectionChangeHandler, false, 0, true);
-			reflex.metadata.resolveCommitProperties(this);
+			//reflex.metadata.resolveCommitProperties(this);
 			addEventListener(LifeCycle.MEASURE, onMeasure, false, 0, true);
 		}
 		
@@ -98,6 +109,8 @@
 			} else if (value is IBehavior) {
 				_behaviors.addItem(value);
 				//_behaviors.source = [value];
+			} else if(value is IList) {
+				_behaviors = value;
 			}
 			dispatchEvent(new Event("behaviorsChange"));
 		}
@@ -111,8 +124,6 @@
 				return;
 			}
 			
-			//graphics.clear();
-			
 			if (_skin is ISkin) {
 				(_skin as ISkin).target = null;
 			}
@@ -125,25 +136,12 @@
 			if(injector) {
 				injector.injectInto(_skin);
 			}
-			/*
-			if (_skin is DisplayObject) {
-				reflex.templating.addItem(this, _skin);
-			}
-			*/
-			//skin.addEventListener("widthChange", item_measureHandler, false, true);
+			
 			invalidate(LifeCycle.MEASURE);
-			//invalidate(LifeCycle.LAYOUT);
+			invalidate(LifeCycle.LAYOUT);
 			dispatchEvent(new Event("skinChange"));
 		}
 		
-		// temporary?
-		/*
-		private function item_measureHandler(event:Event):void {
-			//var child:IEventDispatcher = event.currentTarget;
-			Invalidation.invalidate(this, MEASURE);
-			//Invalidation.invalidate(this, LAYOUT);
-		}
-		*/
 		[Bindable(event="enabledChange")]
 		public function get enabled():Boolean { return _enabled; }
 		public function set enabled(value:Boolean):void {
@@ -188,15 +186,15 @@
 			reflex.measurement.setSize(skin, width, height);
 		}
 		
-		private function onMeasure(event:Event):void {
+		override protected function onMeasure(event:Event):void {
 			if(skin) {
-				if (isNaN(explicit.width)) {
+				if (isNaN(explicitWidth)) {
 					var w:Number = reflex.measurement.resolveWidth(skin);
-					measured.width = w; // explicit width of skin becomes measured width of component
+					_measuredWidth = w; // explicit width of skin becomes measured width of component
 				}
-				if(isNaN(explicit.height)) {
+				if(isNaN(explicitHeight)) {
 					var h:Number = reflex.measurement.resolveHeight(skin);
-					measured.height = h; // explicit height of skin becomes measured height of component
+					_measuredHeight = h; // explicit height of skin becomes measured height of component
 				}
 			}
 		}

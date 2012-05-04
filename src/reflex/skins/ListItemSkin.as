@@ -31,8 +31,8 @@ package reflex.skins
 			labelDisplay.style = "left: 10; right: 10; top: 5; bottom: 5;";
 			layout = new BasicLayout();
 			content = [labelDisplay];
-			measured.width = 250;
-			measured.height = 64;
+			_measuredWidth = 250;
+			_measuredHeight = 64;
 		}
 		
 		override protected function render(currentState:String):void {

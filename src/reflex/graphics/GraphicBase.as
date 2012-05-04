@@ -8,7 +8,6 @@ package reflex.graphics
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
-	import reflex.measurement.Measurements;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.styles.IStyleable;
 	import reflex.styles.Style;
@@ -24,8 +23,13 @@ package reflex.graphics
 		private var _y:Number = 0;
 		private var _percentWidth:Number;
 		private var _percentHeight:Number;
-		private var _explicit:IMeasurements;
-		private var _measured:IMeasurements;
+		//private var _explicit:IMeasurements;
+		//private var _measured:IMeasurements;
+		
+		private var _explicitWidth:Number;
+		private var _explicitHeight:Number;
+		protected var _measuredWidth:Number;
+		protected var _measuredHeight:Number;
 		
 		private var _id:String;
 		private var _styleName:String;
@@ -38,8 +42,8 @@ package reflex.graphics
 			super();
 			_target = this;
 			_style = new Style(); // need to make object props bindable - something like ObjectProxy but lighter?
-			_explicit = new Measurements(this, NaN, NaN);
-			_measured = new Measurements(this, 0, 0);
+			//_explicit = new Measurements(this, NaN, NaN);
+			//_measured = new Measurements(this, 0, 0);
 			reflex.metadata.resolveCommitProperties(this);
 		}
 		
@@ -69,14 +73,16 @@ package reflex.graphics
 		[Bindable(event="widthChange")]
 		override public function get width():Number { return unscaledWidth; }
 		override public function set width(value:Number):void {
-			unscaledWidth = _explicit.width = value; // this will dispatch for us if needed
+			unscaledWidth = _explicitWidth = value;
+			setSize(unscaledWidth, height);
 		}
 		
 		[PercentProxy("percentWidth")]
 		[Bindable(event="heightChange")]
 		override public function get height():Number { return unscaledHeight; }
 		override public function set height(value:Number):void {
-			unscaledHeight  = _explicit.height = value; // this will dispatch for us if needed (order is important)
+			unscaledHeight  = _explicitHeight = value;
+			setSize(width, unscaledHeight);
 		}
 		
 		
@@ -102,12 +108,16 @@ package reflex.graphics
 		/**
 		 * @inheritDoc
 		 */
-		public function get explicit():IMeasurements { return _explicit; }
+		//[Bindable(event="explicitChange", noEvent)]
+		public function get explicitWidth():Number { return _explicitWidth; }
+		public function get explicitHeight():Number { return _explicitHeight; }
 		
 		/**
 		 * @inheritDoc
 		 */
-		public function get measured():IMeasurements { return _measured; }
+		//[Bindable(event="measuredChange", noEvent)]
+		public function get measuredWidth():Number { return _measuredWidth; }
+		public function get measuredHeight():Number { return _measuredHeight; }
 		
 		public function setSize(width:Number, height:Number):void {
 			if (unscaledWidth != width) { notify("width", unscaledWidth, unscaledWidth = width); }

@@ -18,7 +18,7 @@ package reflex.text
 	import flash.text.engine.TextLineValidity;
 	import flash.text.engine.TypographicCase;
 	
-	import reflex.display.Display;
+	import reflex.display.MeasurableItem;
 	import reflex.invalidation.Invalidation;
 	import reflex.styles.resolveStyle;
 	
@@ -33,7 +33,7 @@ package reflex.text
 	[Style(name="align")]
 	[Style(name="txtAlign", format="String", enumeration="left,right,center,justify")]
 	//[Style(name="verticalAlign")]
-	public class Label extends Display
+	public class Label extends MeasurableItem
 	{
 		
 		public static const LEFT:String = "left";
@@ -54,6 +54,11 @@ package reflex.text
 		protected var _allowWrap:Boolean = false;
 		protected var _clipText:Boolean = false;
 		
+		override public function set display(value:Object):void {
+			super.display = value;
+			invalidate(TEXT_RENDER);
+		}
+		
 		public function Label(text:String = "")
 		{
 			fontFormat = new FontDescription();
@@ -61,8 +66,12 @@ package reflex.text
 			textElement = new TextElement("");
 			textBlock = new TextBlock(textElement);
 			//mouseChildren = false;
-			addEventListener(TEXT_RENDER, onTextRender);
 			this.text = text;
+		}
+		
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
+			addEventListener(TEXT_RENDER, onTextRender);
 		}
 		
 		[Bindable(event="textChange")]
@@ -206,19 +215,19 @@ package reflex.text
 					helper.addChild(display, l);
 					l = textBlock.createTextLine(l, unscaledWidth);
 				}
-				measured.height = startY;
+				_measuredHeight = startY;
 			} else {
 				line = textBlock.createTextLine(null, clipText ? unscaledWidth : 100000);
 				if(line) {
-					measured.width = line.textWidth;
-					measured.height = line.textHeight;
+					_measuredWidth = line.textWidth;
+					_measuredHeight = line.textHeight;
 					line.y = line.height; //height/2 + line.height/2-3;
 					alignText(align, line);
 					verticalAlignText(line);
 					helper.addChild(display, line);
 				} else {
-					measured.width = 0;
-					measured.height = 0;
+					_measuredWidth = 0;
+					_measuredHeight = 0;
 				}
 			}
 			

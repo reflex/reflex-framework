@@ -19,9 +19,9 @@ package reflex.containers
 	import reflex.collections.convertToIList;
 	import reflex.components.Component;
 	import reflex.components.IStateful;
-	import reflex.display.Display;
 	import reflex.display.FlashDisplayHelper;
 	import reflex.display.IDisplayHelper;
+	import reflex.display.MeasurableItem;
 	import reflex.injection.IReflexInjector;
 	import reflex.invalidation.IReflexInvalidation;
 	import reflex.invalidation.LifeCycle;
@@ -54,13 +54,16 @@ package reflex.containers
 	 * As such, it doesn't do too much internally besides provide coordination of the multiple systems.
 	 * @alpha
 	 */
-	public class Container extends Display implements IContainer, IStateful
+	public class Container extends MeasurableItem implements IContainer, IStateful
 	{
 		
 		private var _layout:ILayout;
 		private var _template:Object;
+		private var templateChanged:Boolean;
 		
 		private var _content:IList; // a mix of data and/or Reflex Components
+		private var contentChanged:Boolean;
+		
 		private var renderers:Array; // just reflex components
 		
 		private var _states:Array;
@@ -74,44 +77,14 @@ package reflex.containers
 		
 		
 		private var _injector:IReflexInjector;// = new HardCodedInjector();
-		
 		public function get injector():IReflexInjector { return _injector; }
 		public function set injector(value:IReflexInjector):void {
 			_injector = value;
-			if(_injector) {
-				var length:int = _content ? _content.length : 0;
-				for(var i:int = 0; i < length; i++) {
-					var item:Object = _content.getItemAt(i);
-					_injector.injectInto(item);
-				}
-			}
 		}
 		
 		public function getRenderers():Array { return renderers.concat(); }
 		
-		public function Container()
-		{
-			
-			//_content = new SimpleCollection(); // use setter logic
-			//_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
-			
-			//addEventListener(Event.ADDED, onAdded, false, 0, true);
-			addEventListener(LifeCycle.MEASURE, onMeasure, false, 0, true);
-			addEventListener(LifeCycle.LAYOUT, onLayout, false, 0, true);
-			//addEventListener("widthChange", onSizeChange, false, 0, true);
-			//addEventListener("heightChange", onSizeChange, false, 0, true);
-		}
 		
-		/*
-		private function onInitialize(event:Event):void {
-			
-		}
-		*/
-		// width/height invalidation needs some thought
-		
-		private function onSizeChange(event:Event):void {
-			invalidate(LifeCycle.LAYOUT);
-		}
 		
 		// IStateful implementation
 		
@@ -176,22 +149,14 @@ package reflex.containers
 				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 				renderers = [];
 			}
-			
 			_content = reflex.collections.convertToIList(value);
-			
 			if (_content) {
 				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
-				var items:Array = [];
-				for (var i:int = 0; i < _content.length; i++) {
-					var child:Object = _content.getItemAt(i);
-					//child.addEventListener("widthChange", item_measureHandler, false, true);
-					items.push(child);
-				}
 			}
-			reset(items);
+			contentChanged = true;
+			invalidate(LifeCycle.INVALIDATE);
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
-			//dispatchEvent( new Event("contentChange") );
 			notify("content", oldContent, _content);
 		}
 		
@@ -210,7 +175,6 @@ package reflex.containers
 			if (_layout) { _layout.target = this; }
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
-			//dispatchEvent( new Event("layoutChange") );
 			notify("layout", oldLayout, _layout);
 		}
 		
@@ -222,18 +186,9 @@ package reflex.containers
 			}
 			var oldTemplate:Object = _template;
 			_template = value;
-			if (_content != null) {
-				var items:Array = [];
-				var length:int = _content.length;
-				for (var i:int = 0; i < length; i++) {
-					var child:Object = _content.getItemAt(i);
-					items.push(child);
-				}
-				reset(items);
-			}
+			templateChanged = true;
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
-			//dispatchEvent( new Event("templateChange") );
 			notify("template", oldTemplate, _template);
 		}
 		
@@ -241,32 +196,37 @@ package reflex.containers
 			super.setSize(width, height);
 			invalidate(LifeCycle.LAYOUT);
 		}
-		/*
-		private function onAdded(event:Event):void {
-			removeEventListener(Event.ADDED, onAdded, false);
-//			invalidation.invalidate(this, LifeCycle.CREATE);
-//			invalidation.invalidate(this, LifeCycle.INITIALIZE);
+		
+		override protected function commit(event:Event):void {
+			super.commit(event);
+			if(contentChanged || templateChanged) {
+				reset(_content ? _content.toArray() : []);
+				contentChanged = false;
+				templateChanged = false;
+			}
 		}
-		*/
-		protected function onMeasure(event:Event):void {
+		
+		override protected function onMeasure(event:Event):void {
+			super.onMeasure(event);
 			// the compiler gives us root styles like this. yay?
 			if(styleDeclaration.defaultFactory != null) {
 				var f:Function = styleDeclaration.defaultFactory;
 				var t:* = f.apply(style);
 				styleDeclaration.defaultFactory = null
 			}
-			if ((isNaN(explicit.width) || isNaN(explicit.height)) 
+			if ((isNaN(explicitWidth) || isNaN(explicitHeight)) 
 				//|| (isNaN(percentWidth) || isNaN(percentHeight))
 				&& layout) {
 				var point:Point = layout.measure(renderers);
-				if (point.x != measured.width || point.y != measured.height) {
-					measured.width = point.x;
-					measured.height = point.y;
+				if (point.x != measuredWidth || point.y != measuredHeight) {
+					_measuredWidth = point.x;
+					_measuredHeight = point.y;
 				}
 			}
 		}
 		
-		private function onLayout(event:Event):void {
+		override protected function onLayout(event:Event):void {
+			super.onLayout(event);
 			if (layout) {
 				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);
 				var tokens:Array = layout.update(_content.toArray(), generateTokens(), rectangle);
@@ -329,26 +289,18 @@ package reflex.containers
 			for(var i:int = 0; i < length; i++) {
 				var item:Object = items[i];
 				var renderer:Object = reflex.templating.getDataRenderer(display, item, _template);//children[i];
-				helper.addChild(display, renderer.display);
-				renderers.splice(index+i, 0, renderer);
 				if(renderer is Component) { // need to make this generic
 					(renderer as Component).owner = this;
 				}
 				if(injector) { injector.injectInto(renderer); }
+				helper.addChild(display, renderer.display);
+				renderers.splice(index+i, 0, renderer);
+				
 			}
 			
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
 		}
-		
-		// temporary?
-		/*
-		private function item_measureHandler(event:Event):void {
-			//var child:IEventDispatcher = event.currentTarget;
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
-		}
-		*/
 		
 		private function remove(items:Array, index:int):void {
 			// this isn't working with templating yet
@@ -369,31 +321,30 @@ package reflex.containers
 		}
 		
 		private function reset(items:Array):void {
+			
 			while (helper.getNumChildren(display)) {
 				var child:Object = helper.removeChildAt(display, helper.getNumChildren(display)-1);
 				if(child is Component) { // need to make this generic
 					(child as Component).owner = null;
 				}
 			}
-			//renderers = reflex.templating.addItemsAt(this.helper, items, 0, _template); // todo: correct ordering
+			
 			
 			renderers = [];
 			var length:int = items ? items.length : 0;
 			for(var i:int = 0; i < length; i++) {
 				var item:Object = items[i];
 				var renderer:Object = reflex.templating.getDataRenderer(display, item, template);
+				if(renderer is Component) { // need to make this generic
+					(renderer as Component).owner = this;
+				}
+				if(injector) { injector.injectInto(renderer); }
+				
 				// renderer is actually not a DisplayObject now
 				helper.addChild(display, renderer.display);
 				renderers.push(renderer);
 			}
 			
-			
-			for each (child in renderers) {
-				if(child is Component) { // need to make this generic
-					(child as Component).owner = this;
-				}
-				if(injector) { injector.injectInto(child); }
-			}
 			invalidate(LifeCycle.LAYOUT);
 		}
 		

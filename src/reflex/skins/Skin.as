@@ -11,6 +11,7 @@ package reflex.skins
 	import flash.geom.Rectangle;
 	
 	import mx.collections.IList;
+	
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
 	
@@ -22,7 +23,7 @@ package reflex.skins
 	import reflex.collections.convertToIList;
 	import reflex.components.IStateful;
 	import reflex.containers.IContainer;
-	import reflex.data.NotifyingDispatcher;
+	import reflex.display.PropertyDispatcher;
 	import reflex.display.FlashDisplayHelper;
 	import reflex.display.IDisplayHelper;
 	import reflex.injection.HardCodedInjector;
@@ -34,12 +35,12 @@ package reflex.skins
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
-	import reflex.measurement.Measurements;
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.states.applyState;
 	import reflex.states.removeState;
 	import reflex.templating.getDataRenderer;
+	import reflex.containers.Container;
 	
 	/**
 	 * Skin is a convenient base class for many skins, a swappable graphical
@@ -48,7 +49,7 @@ package reflex.skins
 	 * @alpha
 	 */
 	[DefaultProperty("content")]
-	public class Skin extends NotifyingDispatcher implements ISkin, IContainer, IStateful, IMeasurable
+	public class Skin extends Container implements ISkin
 	{
 		
 		//static public const MEASURE:String = "measure";
@@ -57,7 +58,7 @@ package reflex.skins
 		//Invalidation.registerPhase("initialize", 0, false);
 		//Invalidation.registerPhase(MEASURE, 201, false);
 		//Invalidation.registerPhase(LAYOUT, 299, true);
-		
+		/*
 		private var renderers:Array = [];
 		private var _layout:ILayout;
 		private var _states:Array;
@@ -91,9 +92,7 @@ package reflex.skins
 		
 		public var invalidation:IReflexInvalidation;
 		
-		/**
-		 * @inheritDoc
-		 */
+		
 		[Bindable(event="widthChange")]
 		public function get width():Number { return unscaledWidth; }
 		public function set width(value:Number):void {
@@ -105,9 +104,7 @@ package reflex.skins
 			notify("width", unscaledWidth, unscaledWidth = value);
 		}
 		
-		/**
-		 * @inheritDoc
-		 */
+		
 		[Bindable(event="heightChange")]
 		public function get height():Number { return unscaledHeight; }
 		public function set height(value:Number):void {
@@ -119,48 +116,21 @@ package reflex.skins
 			notify("height", unscaledHeight, unscaledHeight = value);
 		}
 		
-		/**
-		 * @inheritDoc
-		 */
+		
 		[Bindable(event="explicitChange")]
 		public function get explicit():IMeasurements { return _explicit; }
-		/*public function set explicit(value:IMeasurements):void {
-			if (value == _explicit) {
-				return;
-			}
-			if (value != null) { // must not be null
-				PropertyEvent.dispatchChange(this, "explicit", _explicit, _explicit = value);
-				InvalidationEvent.invalidate(target, LAYOUT);
-			}
-		}*/
 		
-		/**
-		 * @inheritDoc
-		 */
+		
 		[Bindable(event="measuredChange")]
 		public function get measured():IMeasurements { return _measured; }
-		/*public function set measured(value:IMeasurements):void {
-			if (value == _measured) {
-				return;
-			}
-			if (value != null) { // must not be null
-				PropertyEvent.dispatchChange(this, "measured", _measured, _measured = value);
-				InvalidationEvent.invalidate(target, LAYOUT);
-			}
-		}*/
 		
-		/**
-		 * @inheritDoc
-		 */
 		public function setSize(width:Number, height:Number):void {
 			if (unscaledWidth != width) { notify("width", unscaledWidth, unscaledWidth = width); }
 			if (unscaledHeight != height) { notify("height", unscaledHeight, unscaledHeight = height); }
 			invalidate(LifeCycle.LAYOUT);
 		}
 		
-		/**
-		 * @inheritDoc
-		 */
+		
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
@@ -223,17 +193,17 @@ package reflex.skins
 			}
 			return false;
 		}
-		
+		*/
 		
 		private var _target:IEventDispatcher;
-		private var _content:IList;
+		//private var _content:IList;
 		
 		public function Skin()
 		{
 			super();
 			//_content = new SimpleCollection();
-			_explicit = new Measurements(this);
-			_measured = new Measurements(this, 160, 22);
+			//_explicit = new Measurements(this);
+			//_measured = new Measurements(this, 160, 22);
 			//if (_layout == null) {
 				//_layout = new BasicLayout();
 			//}
@@ -298,25 +268,19 @@ package reflex.skins
 				*/
 				display = (target as Object).display;
 				// skin measurement occurs before component measurement
-				target.addEventListener(LifeCycle.MEASURE, onMeasure, false, 1, true);
-				target.addEventListener(LifeCycle.LAYOUT, onLayout, false, 1, true);
+				//target.addEventListener(LifeCycle.MEASURE, onMeasure, false, 1, true);
+				//target.addEventListener(LifeCycle.LAYOUT, onLayout, false, 1, true);
 				invalidate(LifeCycle.MEASURE);
 				invalidate(LifeCycle.LAYOUT);
 				reflex.metadata.resolveCommitProperties(this);
 			}
 			
-			var items:Array = _content.toArray();
-			reset(items);
+			//var items:Array = content.toArray();
+			//reset(items);
 			notify("target", oldValue, _target);
 		}
+		
 		/*
-		protected function init():void
-		{
-		}
-		*/
-		/**
-		 * @inheritDoc
-		 */
 		[ArrayElementType("Object")]
 		[Bindable(event="contentChange")]
 		public function get content():IList { return _content; }
@@ -342,12 +306,7 @@ package reflex.skins
 			
 			notify("content", oldContent, _content);
 		}
-		/*
-		public function getSkinPart(part:String):InteractiveObject
-		{
-			return (part in this) ? this[part] : null;
-		}
-		*/
+		
 		private function onChildrenChange(event:CollectionEvent):void
 		{
 			if (_target == null) {
@@ -393,13 +352,6 @@ package reflex.skins
 			invalidate(LifeCycle.LAYOUT);
 		}
 		
-		// temporary?
-		/*
-		private function item_measureHandler(event:Event):void {
-			//var child:IEventDispatcher = event.currentTarget;
-			Invalidation.invalidate(_target, MEASURE);
-		}
-		*/
 		private function remove(items:Array, index:int):void {
 			// this isn't working with templating yet
 			var child:Object;
@@ -439,15 +391,7 @@ package reflex.skins
 			}
 		}
 		
-		/*
-		private function onLayoutChange(value:ILayout):void
-		{
-			if (_target == null) {
-				return;
-			}
-			// nada
-		}
-		*/
+		
 		private function onMeasure(event:Event):void {
 			var t:Object= _target as Object;
 			if (layout && (isNaN(explicit.width) || isNaN(explicit.height)) 
@@ -501,6 +445,6 @@ package reflex.skins
 		protected function invalidate(phase:String):void {
 			if(invalidation) { invalidation.invalidate(_target, phase); }
 		}
-		
+		*/
 	}
 }

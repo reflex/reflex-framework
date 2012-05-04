@@ -40,18 +40,13 @@ package reflex.components
 		}
 		
 		[Bindable(event="contentChange")]
-		public function get content():IList{
-			return _content;
-		}
+		public function get content():IList{ return _content; }
 		public function set content(value:*):void {
 			if(_content == value) {
 				return;
 			}
-			
 			var oldContent:IList = _content;
-			
 			_content = reflex.collections.convertToIList(value);
-			
 			notify("content", oldContent,  _content);
 		}
 		
@@ -61,19 +56,13 @@ package reflex.components
 			notify("layout", _layout, _layout = value);
 		}
 		
-		public function Scroller()
-		{
-			super();
-			initialize();
-		}
-		
-		private function initialize():void {
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
 			_content = new SimpleCollection();
 			horizontalPosition = new Position();
 			verticalPosition = new Position();
 			layout = new BasicLayout();
 			skin = new ScrollerSkin();
-			//this.addEventListener("measure", item_measureHandler, false);
 			
 			Bind.addBinding(this, "skin.container.content", this, "content");
 			Bind.addBinding(this, "skin.container.layout", this, "layout");
@@ -82,13 +71,5 @@ package reflex.components
 			behaviors.addItem(new ScrollerBehavior(this));
 		}
 		
-		// temporary?
-		/*
-		private function item_measureHandler(event:Event):void {
-			//var child:IEventDispatcher = event.currentTarget;
-			//Invalidation.invalidate(this, MEASURE);
-			trace("Scroller measure");
-		}
-		*/
 	}
 }

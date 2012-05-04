@@ -2,17 +2,20 @@ package reflex.data
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 	
 	import mx.collections.IList;
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
 	
 	import reflex.collections.SimpleCollection;
+	import reflex.events.DataChangeEvent;
+	import reflex.display.PropertyDispatcher;
 	
 	/**
 	 * Holds the selected data for list components.
 	 */
-	public class Selection extends NotifyingDispatcher implements ISelection
+	public class Selection extends PropertyDispatcher implements ISelection
 	{
 		
 		private var _selectedItem:Object;

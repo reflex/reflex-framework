@@ -1,14 +1,14 @@
-package reflex.data
+package reflex.display
 {
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
 	import reflex.events.DataChangeEvent;
 	
-	public class NotifyingDispatcher extends EventDispatcher
+	public class PropertyDispatcher extends EventDispatcher
 	{
 		
-		public function NotifyingDispatcher(target:IEventDispatcher=null)
+		public function PropertyDispatcher(target:IEventDispatcher=null)
 		{
 			super(target);
 		}

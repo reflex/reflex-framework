@@ -58,10 +58,10 @@ package reflex.components
 		public function List()
 		{
 			super();
-			initialize();
 		}
 		
-		private function initialize():void {
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
 			selection = new Selection();
 			layout = new VerticalLayout();
 			(layout as VerticalLayout).gap = 10;

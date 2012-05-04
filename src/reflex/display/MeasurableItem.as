@@ -1,11 +1,11 @@
 package reflex.display
 {
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
 	import mx.events.StyleEvent;
 	
-	import reflex.data.NotifyingDispatcher;
 	import reflex.events.DataChangeEvent;
 	import reflex.injection.IReflexInjector;
 	import reflex.invalidation.IReflexInvalidation;
@@ -13,7 +13,6 @@ package reflex.display
 	import reflex.measurement.IMeasurable;
 	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.IMeasurements;
-	import reflex.measurement.Measurements;
 	import reflex.styles.IStyleable;
 	import reflex.styles.Style;
 	
@@ -25,14 +24,17 @@ package reflex.display
 	 * 
 	 * @alpha
 	 */
-	public class Display extends NotifyingDispatcher implements IStyleable, IMeasurable, IMeasurablePercent
+	public class MeasurableItem extends PropertyDispatcher implements IStyleable, IMeasurable, IMeasurablePercent
 	{
 		
 		private var _id:String;
 		private var _styleName:String;
 		private var _style:Style;
-		private var _explicit:IMeasurements;
-		private var _measured:IMeasurements;
+		
+		private var _explicitWidth:Number;
+		private var _explicitHeight:Number;
+		protected var _measuredWidth:Number;
+		protected var _measuredHeight:Number;
 		
 		private var _percentWidth:Number;
 		private var _percentHeight:Number;
@@ -47,25 +49,24 @@ package reflex.display
 		private var _invalidation:IReflexInvalidation;
 		
 		protected var helper:IDisplayHelper = new FlashDisplayHelper();
-		public var display:Object = new Sprite();
 		
-		public function Display() {
+		private var _display:Object;// = new Sprite();
+		
+		
+		public function get display():Object { return _display; }
+		public function set display(value:Object):void {
+			_display = value;
+		}
+		
+		public function MeasurableItem() {
 			_style = new Style(); // need to make object props bindable - something like ObjectProxy but lighter?
-			_explicit = new Measurements(this, NaN, NaN);
-			_measured = new Measurements(this, 160, 22);
+			addEventListener(LifeCycle.INITIALIZE, initialize);
 		}
 		
 		[Bindable(event="invalidationChange")]
 		public function get invalidation():IReflexInvalidation { return _invalidation; }
 		public function set invalidation(value:IReflexInvalidation):void {
 			_invalidation = value;
-			if(_invalidation) {
-				_invalidation.invalidate(this, LifeCycle.CREATE);
-				_invalidation.invalidate(this, LifeCycle.INITIALIZE);
-				_invalidation.invalidate(this, LifeCycle.INVALIDATE);
-				_invalidation.invalidate(this, LifeCycle.MEASURE);
-				_invalidation.invalidate(this, LifeCycle.LAYOUT);
-			}
 		}
 		
 		// IStyleable implementation
@@ -109,14 +110,14 @@ package reflex.display
 		[Bindable(event="xChange", noEvent)]
 		public function get x():Number { return _x; }
 		public function set x(value:Number):void {
-			display.x = value;
+			if(display) { display.x = value; }
 			notify("x", _x, _x = value);
 		}
 		
 		[Bindable(event="yChange", noEvent)]
 		public function get y():Number { return _y; }
 		public function set y(value:Number):void {
-			display.y = value;
+			if(display) { display.y = value; }
 			notify("y", _y, _y = value);
 		}
 		
@@ -132,7 +133,8 @@ package reflex.display
 		[Bindable(event="widthChange", noEvent)]
 		public function get width():Number { return unscaledWidth; }
 		public function set width(value:Number):void {
-			unscaledWidth = _explicit.width = value; // this will dispatch for us if needed
+			unscaledWidth = _explicitWidth = value;
+			setSize(unscaledWidth, height);
 		}
 		
 		/**
@@ -142,30 +144,23 @@ package reflex.display
 		[Bindable(event="heightChange", noEvent)]
 		public function get height():Number { return unscaledHeight; }
 		public function set height(value:Number):void {
-			unscaledHeight  = _explicit.height = value; // this will dispatch for us if needed (order is important)
+			unscaledHeight  = _explicitHeight = value;
+			setSize(width, unscaledHeight);
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
 		//[Bindable(event="explicitChange", noEvent)]
-		public function get explicit():IMeasurements { return _explicit; }
-		/*public function set explicit(value:IMeasurements):void {
-		if (value != null) { // must not be null
-		DataChange.change(this, "explicit", _explicit, _explicit = value);
-		}
-		}*/
+		public function get explicitWidth():Number { return _explicitWidth; }
+		public function get explicitHeight():Number { return _explicitHeight; }
 		
 		/**
 		 * @inheritDoc
 		 */
 		//[Bindable(event="measuredChange", noEvent)]
-		public function get measured():IMeasurements { return _measured; }
-		/*public function set measured(value:IMeasurements):void {
-		if (value != null) { // must not be null
-		DataChange.change(this, "measured", _measured, _measured = value);
-		}
-		}*/
+		public function get measuredWidth():Number { return _measuredWidth; }
+		public function get measuredHeight():Number { return _measuredHeight; }
 		
 		/**
 		 * @inheritDoc
@@ -202,18 +197,29 @@ package reflex.display
 		protected function invalidate(phase:String):void {
 			if(invalidation) { invalidation.invalidate(this, phase); }
 		}
-		/*
-		protected function notify(property:String, oldValue:*, newValue:*):void {
-			var force:Boolean = false;
-			var instance:IEventDispatcher = this;
-			if(oldValue != newValue || force) {
-				var eventType:String = property + "Change";
-				if(instance is IEventDispatcher && (instance as IEventDispatcher).hasEventListener(eventType)) {
-					var event:DataChangeEvent = new DataChangeEvent(eventType, oldValue, newValue);
-					(instance as IEventDispatcher).dispatchEvent(event);
-				}
-			}
+		
+		protected function initialize(event:Event):void {
+			addEventListener(LifeCycle.INVALIDATE, commit, false, 0, true);
+			addEventListener(LifeCycle.MEASURE, onMeasure, false, 0, true);
+			addEventListener(LifeCycle.LAYOUT, onLayout, false, 0, true);
+			
+			_invalidation.invalidate(this, LifeCycle.INVALIDATE);
+			_invalidation.invalidate(this, LifeCycle.MEASURE);
+			_invalidation.invalidate(this, LifeCycle.LAYOUT);
+			commit(null);
 		}
-		*/
+		
+		protected function commit(event:Event):void {
+			
+		}
+		
+		protected function onMeasure(event:Event):void {
+			
+		}
+		
+		protected function onLayout(event:Event):void {
+			
+		}
+		
 	}
 }

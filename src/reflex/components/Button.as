@@ -1,6 +1,8 @@
 package reflex.components
 {
 	
+	import flash.events.Event;
+	
 	import reflex.binding.Bind;
 
 	public class Button extends Component
@@ -27,17 +29,14 @@ package reflex.components
 		{
 			super();
 			this.label = label;
-			initialize();
 		}
 		
-		private function initialize():void {
-			//skin = new ButtonSkin();
-			//behaviors.addItem(new ButtonBehavior(this));
-			//behaviors.addItem(new SelectBehavior(this));
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
 			Bind.addBinding(this, "skin.labelDisplay.text", this, "label", false);
 			Bind.addBinding(this, "skin.currentState", this, "currentState", false);
-			measured.width = 210;
-			measured.height = 64;
+			//_measuredWidth = 210;
+			//_measuredHeight = 64;
 			
 		}
 		

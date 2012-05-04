@@ -4,7 +4,7 @@ package reflex.display {
 	import reflex.styles.StyleableMeasurableMeasurablePercentTestBase;
 
 	public class DisplayTest extends StyleableMeasurableMeasurablePercentTestBase {
-		public var bitmapDisplay:BitmapDisplay;
+		public var item:MeasurableItem;
 		
 		public function DisplayTest() {
 			super();
@@ -12,34 +12,34 @@ package reflex.display {
 		
 		[Before]
 		public function setup():void {
-			bitmapDisplay = new BitmapDisplay();
+			item = new MeasurableItem();
 		}
 		
 		[After]
 		public function destroy():void {
-			bitmapDisplay = null;
+			item = null;
 		}
 
 		[Test]
 		public function testSetStyleWithSingleAssignment():void {
-			bitmapDisplay.style = "testProperty:testValue";
+			item.style = "testProperty:testValue";
 			
-			Assert.assertTrue(bitmapDisplay.style.hasOwnProperty("testProperty"));
+			Assert.assertTrue(item.style.hasOwnProperty("testProperty"));
 			
-			var testValue:String = bitmapDisplay.style["testProperty"];
+			var testValue:String = item.style["testProperty"];
 			
 			Assert.assertEquals("testValue", testValue);
 		}
 		
 		[Test]
 		public function testSetStyleWithMultipleAssignments():void {
-			bitmapDisplay.style = "testProperty1:testValue1;testProperty2:testValue2";
+			item.style = "testProperty1:testValue1;testProperty2:testValue2";
 			
-			Assert.assertTrue(bitmapDisplay.style.hasOwnProperty("testProperty1"));
-			Assert.assertTrue(bitmapDisplay.style.hasOwnProperty("testProperty2"));
+			Assert.assertTrue(item.style.hasOwnProperty("testProperty1"));
+			Assert.assertTrue(item.style.hasOwnProperty("testProperty2"));
 			
-			var testValue1:String = bitmapDisplay.style["testProperty1"];
-			var testValue2:String = bitmapDisplay.style["testProperty2"];
+			var testValue1:String = item.style["testProperty1"];
+			var testValue2:String = item.style["testProperty2"];
 			
 			Assert.assertEquals("testValue1", testValue1);
 			Assert.assertEquals("testValue2", testValue2);
@@ -65,7 +65,7 @@ package reflex.display {
 			var testPassed:Boolean = false;
 			
 			try {
-				bitmapDisplay.style = new Object();
+				item.style = new Object();
 			} catch (e:Error) {
 				testPassed = true;
 			}
@@ -75,32 +75,32 @@ package reflex.display {
 		
 		[Test(async)]
 		public function testXChange():void {
-			testPropertyChange(Display, "x", 100);
+			testPropertyChange(MeasurableItem, "x", 100);
 		}
 		
 		[Test(async)]
 		public function testXNotChanged():void {
-			testPropertyNotChanged(Display, "x", 100);
+			testPropertyNotChanged(MeasurableItem, "x", 100);
 		}
 		
 		[Test(async)]
 		public function testyChange():void {
-			testPropertyChange(Display, "y", 100);
+			testPropertyChange(MeasurableItem, "y", 100);
 		}
 		
 		[Test(async)]
 		public function testyNotChanged():void {
-			testPropertyNotChanged(Display, "y", 100);
+			testPropertyNotChanged(MeasurableItem, "y", 100);
 		}
 		
 		[Test(async)]
 		public function testVisibleChange():void {
-			testPropertyChange(Display, "visible", false);
+			testPropertyChange(MeasurableItem, "visible", false);
 		}
 		
 		[Test(async)]
 		public function testVisibleNotChanged():void {
-			testPropertyNotChanged(Display, "visible", false);
+			testPropertyNotChanged(MeasurableItem, "visible", false);
 		}
 	}
 }

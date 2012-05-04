@@ -2,7 +2,7 @@ package reflex.animation
 {
 	import flash.display.DisplayObject;
 	
-	import reflex.display.Display;
+	import reflex.display.MeasurableItem;
 	
 	public class Animator implements IAnimator
 	{
@@ -43,8 +43,8 @@ package reflex.animation
 			item.x = token.x;
 			item.y = token.y;
 			
-			if(item is Display) {
-				(item as Display).setSize(token.width, token.height);
+			if(item is MeasurableItem) {
+				(item as MeasurableItem).setSize(token.width, token.height);
 			} else {
 				item.width = token.width;
 				item.height = token.height;

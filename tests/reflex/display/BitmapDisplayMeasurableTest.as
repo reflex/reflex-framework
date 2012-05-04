@@ -6,6 +6,7 @@ package reflex.display
 	
 	public class BitmapDisplayMeasurableTest extends MeasurableTestBase
 	{
+		/*
 		public var bitmapDisplay:BitmapDisplay;
 
 		public function BitmapDisplayMeasurableTest()
@@ -68,7 +69,7 @@ package reflex.display
 			Assert.assertEquals("testValue1", testValue1);
 			Assert.assertEquals("testValue2", testValue2);
 		}
-		
+		*/
 		/*
 		[Test] [Ignore]
 		public function testSetStyleWithIncorrectDelimiterUsage():void {
@@ -83,7 +84,7 @@ package reflex.display
 			Assert.assertTrue("Trying to set the style when using delimiters other than \":\" and \";\" should have caused an error.", testPassed);
 		}
 		*/
-		
+		/*
 		[Test]
 		public function testSetStyleWithNonStringAssignment():void {
 			var testPassed:Boolean = false;
@@ -155,5 +156,6 @@ package reflex.display
 		public function testVisibleNotChanged():void {
 			testPropertyNotChanged(C, "visible", false);
 		}
+		*/
 	}
 }

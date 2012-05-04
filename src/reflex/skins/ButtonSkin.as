@@ -21,9 +21,9 @@ package reflex.skins
 			notify("labelDisplay", _labelDisplay, _labelDisplay = value);
 		}
 		
-		public function ButtonSkin()
-		{
-			super();
+		
+		override protected function initialize(event:Event):void {
+			super.initialize(event);
 			labelDisplay = new Label();
 			labelDisplay.color = 0xFFFFFF;
 			labelDisplay.fontFamily = "sans-serif";

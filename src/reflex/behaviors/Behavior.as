@@ -4,7 +4,8 @@
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
-	import reflex.data.NotifyingDispatcher;
+	import reflex.display.PropertyDispatcher;
+	import reflex.events.DataChangeEvent;
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveDataListeners;
 	import reflex.metadata.resolveEventListeners;
@@ -17,7 +18,7 @@
 	 * 
 	 * @alpha
 	 */
-	public class Behavior extends NotifyingDispatcher implements IBehavior
+	public class Behavior extends PropertyDispatcher implements IBehavior
 	{
 		
 		private var _target:IEventDispatcher;

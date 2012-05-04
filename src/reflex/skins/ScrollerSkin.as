@@ -2,6 +2,7 @@ package reflex.skins
 {
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
+	import flash.events.Event;
 	
 	import mx.graphics.SolidColor;
 	
@@ -25,6 +26,10 @@ package reflex.skins
 		public function ScrollerSkin()
 		{
 			super();
+		}
+		
+		
+		override protected function initialize(event:Event):void {
 			layout = new BasicLayout();
 			container = new Container();
 			container.injector = new HardCodedInjector();
@@ -38,11 +43,6 @@ package reflex.skins
 			mask.percentHeight = 100;
 			//container.mask = mask;
 			content = new SimpleCollection([container, mask]);
-		}
-		
-		
-		public function initialize():void {
-			
 		}
 		
 	}

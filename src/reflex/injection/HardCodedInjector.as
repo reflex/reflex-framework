@@ -1,6 +1,8 @@
 package reflex.injection
 {
 	
+	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
 	import reflex.behaviors.ButtonBehavior;
@@ -17,9 +19,10 @@ package reflex.injection
 	import reflex.containers.Group;
 	import reflex.containers.HGroup;
 	import reflex.containers.VGroup;
-	import reflex.display.Display;
+	import reflex.display.MeasurableItem;
 	import reflex.invalidation.HardCodedInvalidation;
 	import reflex.invalidation.IReflexInvalidation;
+	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.HorizontalLayout;
 	import reflex.layouts.VerticalLayout;
@@ -45,22 +48,24 @@ package reflex.injection
 			// 3rd party injection? - later
 			
 			if(instance is Container ||
-				instance is Component ||
-				instance is Skin) {
+				instance is Component) {
 				if(instance.injector == null) { instance.injector = this; }
 			}
 			
-			if(instance is Display /*|| instance is Skin*/) {
+			if(instance is MeasurableItem) {
 				if(instance.invalidation == null) { instance.invalidation = invalidation; }
 			}
 			
+			if(instance is MeasurableItem && !(instance is Skin)) { // skins are assigned the target display
+				if(instance.display == null) { instance.display = new Sprite(); }
+			}
 			
 			if(instance is Container) {
 				if(instance.content == null) { instance.content = new SimpleCollection(); }
 			}
 			
-			if(instance is Skin) {
-				if(instance.content == null) { instance.content = new SimpleCollection(); }
+			if(instance is Component) {
+				if(instance.behaviors == null) { instance.behaviors = new SimpleCollection(); }
 			}
 			
 			// constructor replacement
@@ -89,8 +94,6 @@ package reflex.injection
 			}
 			
 			
-			
-			
 			if(Object(instance).constructor == Group) {
 				instance.layout = new BasicLayout();
 			}
@@ -100,6 +103,9 @@ package reflex.injection
 			if(Object(instance).constructor == VGroup) {
 				instance.layout = new VerticalLayout();
 			}
+			
+			instance.dispatchEvent(new Event(LifeCycle.INITIALIZE));
+			
 		}
 		
 	}

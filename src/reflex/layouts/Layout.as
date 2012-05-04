@@ -8,7 +8,8 @@ package reflex.layouts
 	import flash.utils.Dictionary;
 	
 	import reflex.binding.Bind;
-	import reflex.data.NotifyingDispatcher;
+	import reflex.display.PropertyDispatcher;
+	import reflex.events.DataChangeEvent;
 	import reflex.invalidation.Invalidation;
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveDataListeners;
@@ -23,7 +24,7 @@ package reflex.layouts
 	 * 
 	 * @alpha
 	 **/
-	public class Layout extends NotifyingDispatcher
+	public class Layout extends PropertyDispatcher
 	{
 		
 		private var attached:Dictionary = new Dictionary(true);

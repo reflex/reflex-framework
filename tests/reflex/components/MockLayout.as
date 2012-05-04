@@ -20,7 +20,8 @@ package reflex.components {
 			return null;
 		}
 
-		public function update(children:Array, rectangle:Rectangle):void {
+		public function update(children:Array, tokens:Array, rectangle:Rectangle):Array {
+			return null;
 		}
 	}
 }
