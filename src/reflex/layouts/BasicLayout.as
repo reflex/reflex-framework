@@ -81,6 +81,7 @@ package reflex.layouts
 			for(var i:int = 0; i < length; i++) {
 				var child:Object = content[i];
 				var token:AnimationToken = tokens[i];
+				if(token == null) { return []; }
 				var width:Number = resolveWidth(child, rectangle.width);
 				var height:Number = resolveHeight(child, rectangle.height);
 				var left:Number = resolveStyle(child, "left") as Number;

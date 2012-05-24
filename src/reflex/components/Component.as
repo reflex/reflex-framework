@@ -8,19 +8,22 @@
 	import mx.events.CollectionEventKind;
 	
 	import reflex.behaviors.IBehavior;
-	import reflex.behaviors.IBehavioral;
 	import reflex.collections.SimpleCollection;
+	import reflex.containers.Container;
 	import reflex.display.MeasurableItem;
+	import reflex.display.PropertyDispatcher;
+	import reflex.display.StyleableItem;
 	import reflex.injection.HardCodedInjector;
 	import reflex.injection.IReflexInjector;
 	import reflex.invalidation.IReflexInvalidation;
 	import reflex.invalidation.LifeCycle;
+	import reflex.measurement.IMeasurable;
+	import reflex.measurement.IMeasurablePercent;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
 	import reflex.measurement.setSize;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.skins.ISkin;
-	import reflex.skins.ISkinnable;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -34,11 +37,14 @@
 	/**
 	 * @alpha
 	 */
-	public class Component extends MeasurableItem implements IBehavioral, ISkinnable
+	public class Component extends StyleableItem implements IMeasurable, IMeasurablePercent
 	{
 		
-		//static public const MEASURE:String = "measure";
-		//Invalidation.registerPhase(MEASURE, 200, false);
+		private var _explicitWidth:Number;
+		private var _explicitHeight:Number;
+		
+		private var _percentWidth:Number;
+		private var _percentHeight:Number;
 		
 		private var _skin:Object;
 		private var _behaviors:SimpleCollection;
@@ -53,29 +59,20 @@
 		public function get injector():IReflexInjector { return _injector; }
 		public function set injector(value:IReflexInjector):void {
 			_injector = value;
-			/*if(_injector && _skin) {
-				_injector.injectInto(_skin);
-			}*/
 		}
 		
-		override public function set display(value:Object):void {
-			super.display = value;
-			/*if(skin) {
-				skin.display = value; // invalidate later
-			}*/
-		}
+		
 		
 		public function Component()
 		{
 			super();
+			this.addEventListener(LifeCycle.INITIALIZE, initialize);
 		}
 		
-		override protected function initialize(event:Event):void {
-			super.initialize(event);
-			//_behaviors = new SimpleCollection();
+		protected function initialize(event:Event):void {
 			_behaviors.addEventListener(CollectionEvent.COLLECTION_CHANGE, behaviorsCollectionChangeHandler, false, 0, true);
 			//reflex.metadata.resolveCommitProperties(this);
-			addEventListener(LifeCycle.MEASURE, onMeasure, false, 0, true);
+			//addEventListener(LifeCycle.MEASURE, onMeasure, false, 0, true);
 		}
 		
 		[Bindable]
@@ -136,9 +133,9 @@
 			if(injector) {
 				injector.injectInto(_skin);
 			}
-			
-			invalidate(LifeCycle.MEASURE);
-			invalidate(LifeCycle.LAYOUT);
+			// invalidation in skin
+			//invalidate(LifeCycle.MEASURE);
+			//invalidate(LifeCycle.LAYOUT);
 			dispatchEvent(new Event("skinChange"));
 		}
 		
@@ -169,23 +166,54 @@
 		
 		// needs more thought
 		
-		override public function set width(value:Number):void {
-			super.width = value;
-			//reflex.measurement.setSize(skin, value, height);
-			skin.width = value;
+		public var x:Number = 0;
+		public var y:Number = 0;
+		
+		[PercentProxy("percentWidth")]
+		public function get width():Number {
+			if(!isNaN(_explicitWidth)) { return _explicitWidth; }
+			if(_skin) { return _skin.width; }
+			return 0;
+		}
+		public function set width(value:Number):void {
+			_explicitWidth = value;
+			reflex.measurement.setSize(skin, value, height);
+			//skin.width = value;
 		}
 		
-		override public function set height(value:Number):void {
-			super.height = value;
-			//reflex.measurement.setSize(skin, width, value);
-			skin.height = value;
+		[PercentProxy("percentHeight")]
+		public function get height():Number {
+			if(!isNaN(_explicitHeight)) { return _explicitHeight; }
+			if(_skin) { return _skin.height; }
+			return 0;
+		}
+		public function set height(value:Number):void {
+			_explicitHeight = value;
+			reflex.measurement.setSize(skin, width, value);
+			//skin.height = value;
 		}
 		
-		override public function setSize(width:Number, height:Number):void {
-			super.setSize(width, height);
+		public function get percentWidth():Number { return _percentWidth; }
+		public function set percentWidth(value:Number):void {
+			_percentWidth = value;
+		}
+		
+		public function get percentHeight():Number { return _percentHeight; }
+		public function set percentHeight(value:Number):void {
+			_percentHeight = value;
+		}
+		
+		public function get explicitWidth():Number { return _explicitWidth; }
+		public function get explicitHeight():Number { return _explicitHeight; }
+		
+		public function get measuredWidth():Number { return skin.width; }
+		public function get measuredHeight():Number { return skin.height; }
+		
+		public function setSize(width:Number, height:Number):void {
+			//super.setSize(width, height);
 			reflex.measurement.setSize(skin, width, height);
 		}
-		
+		/*
 		override protected function onMeasure(event:Event):void {
 			if(skin) {
 				if (isNaN(explicitWidth)) {
@@ -198,6 +226,6 @@
 				}
 			}
 		}
-		
+		*/
 	}
 }

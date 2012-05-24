@@ -32,7 +32,6 @@
 	
 	
 	<!-- behaviors -->
-	<component id="CompositeBehavior" class="reflex.behaviors.CompositeBehavior"/>
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
 	<component id="ListBehavior" class="reflex.behaviors.ListBehavior"/>
 	<component id="ListSelectionBehavior" class="reflex.behaviors.ListSelectionBehavior"/>

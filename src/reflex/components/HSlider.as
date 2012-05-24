@@ -17,12 +17,12 @@ package reflex.components
 		
 		override protected function initialize(event:Event):void {
 			super.initialize(event);
-			unscaledHeight = 14;
+			//unscaledHeight = 14;
 			position = new Position();
 			skin = new HSliderSkin();
 			behaviors.addItem(new SlideBehavior(this, SlideBehavior.HORIZONTAL));
-			_measuredWidth = 170;
-			_measuredHeight = 14;
+			//_measuredWidth = 170;
+			//_measuredHeight = 14;
 		}
 		
 	}

@@ -42,8 +42,8 @@ package reflex.components
 			Bind.addBinding(this, "skin.labelDisplay.text", this, "data.label");
 			//Bind.addBinding(this, "skin.labelDisplay.text", this, "data.name"); // weird - only one targetPath
 			Bind.addBinding(this, "skin.currentState", this, "currentState", false);
-			_measuredWidth = 210;
-			_measuredHeight = 88;
+			//_measuredWidth = 210;
+			//_measuredHeight = 88;
 			percentWidth = 100;
 		}
 		

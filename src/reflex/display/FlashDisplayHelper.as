@@ -9,7 +9,9 @@ package reflex.display
 		
 		//public function getDisplayItem():Object { return sprite; }
 		
-		public function getGraphics(instance:Object):Graphics { return instance.graphics as Graphics; }
+		public function getGraphics(instance:Object):Graphics {
+			return instance.graphics as Graphics;
+		}
 		
 		public function getNumChildren(instance:Object):int {
 			if(instance) {

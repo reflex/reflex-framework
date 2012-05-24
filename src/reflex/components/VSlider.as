@@ -18,12 +18,12 @@ package reflex.components
 		
 		override protected function initialize(event:Event):void {
 			super.initialize(event);
-			unscaledWidth = 14;
+			//unscaledWidth = 14;
 			position = new Position();
 			skin = new VSliderSkin();
 			behaviors.addItem(new SlideBehavior(this, SlideBehavior.VERTICAL));
-			_measuredWidth = 20;
-			_measuredHeight = 170;
+			//_measuredWidth = 20;
+			//_measuredHeight = 170;
 		}
 		
 	}

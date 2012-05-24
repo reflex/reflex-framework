@@ -24,12 +24,10 @@ package reflex.display
 	 * 
 	 * @alpha
 	 */
-	public class MeasurableItem extends PropertyDispatcher implements IStyleable, IMeasurable, IMeasurablePercent
+	public class MeasurableItem extends StyleableItem implements IMeasurable, IMeasurablePercent
 	{
 		
-		private var _id:String;
-		private var _styleName:String;
-		private var _style:Style;
+		
 		
 		private var _explicitWidth:Number;
 		private var _explicitHeight:Number;
@@ -48,18 +46,10 @@ package reflex.display
 		
 		private var _invalidation:IReflexInvalidation;
 		
-		protected var helper:IDisplayHelper = new FlashDisplayHelper();
 		
-		private var _display:Object;// = new Sprite();
-		
-		
-		public function get display():Object { return _display; }
-		public function set display(value:Object):void {
-			_display = value;
-		}
 		
 		public function MeasurableItem() {
-			_style = new Style(); // need to make object props bindable - something like ObjectProxy but lighter?
+			super();
 			addEventListener(LifeCycle.INITIALIZE, initialize);
 		}
 		
@@ -69,43 +59,7 @@ package reflex.display
 			_invalidation = value;
 		}
 		
-		// IStyleable implementation
 		
-		[Bindable(event="idChange", noEvent)]
-		public function get id():String { return _id; }
-		public function set id(value:String):void {
-			notify("id", _id, _id = value);
-		}
-		
-		[Bindable(event="styleNameChange", noEvent)]
-		public function get styleName():String { return _styleName;}
-		public function set styleName(value:String):void {
-			notify("styleName", _styleName, _styleName= value);
-		}
-		
-		[Bindable(event="styleChange", noEvent)]
-		public function get style():Style { return _style; }
-		public function set style(value:*):void { // this needs expanding in the future
-			if (value is String) {
-				var token:String = value as String;
-				reflex.styles.parseStyles(_style, token);
-			} else {
-				throw new Error("BitmapDisplay.set style() does not currently accept a parameter of type: " + value);
-			}
-		}
-		
-		public function getStyle(property:String):* {
-			return style[property];
-		}
-		
-		public function setStyle(property:String, value:*):void {
-			//style[property] = value;
-			//DataChange.change(this, property, style[property], style[property] = value);
-			// hasEventListener is stopping dispatch for styles ???
-			var eventType:String = property + "Change";
-			var event:DataChangeEvent = new DataChangeEvent(eventType, style[property], style[property] = value);
-			this.dispatchEvent(event);
-		}
 		
 		[Bindable(event="xChange", noEvent)]
 		public function get x():Number { return _x; }

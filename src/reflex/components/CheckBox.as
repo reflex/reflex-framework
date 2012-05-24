@@ -23,8 +23,8 @@ package reflex.components
 			behaviors.addItem(new SelectBehavior(this));
 			Bind.addBinding(this, "skin.labelDisplay.text", this, "label", false);
 			Bind.addBinding(this, "skin.currentState", this, "currentState", false);
-			_measuredWidth = 210;
-			_measuredHeight = 45;
+			//_measuredWidth = 210;
+			//_measuredHeight = 45;
 		}
 		
 	}

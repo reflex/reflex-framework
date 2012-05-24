@@ -69,8 +69,7 @@ package reflex.containers
 		private var _states:Array;
 		private var _transitions:Array;
 		private var _currentState:String;
-		private var _styleDeclaration:* = {};
-		private var _styleManager:* = {};
+		
 		
 		private var animator:IAnimator = new Animator();
 		
@@ -121,15 +120,7 @@ package reflex.containers
 			return false;
 		}
 		
-		// the compiler goes looking for styleDeclaration and styleManager properties when setting styles on root elements
-		// ... but they don't really have to be anything specific :)
 		
-		public function get styleDeclaration():* { return _styleDeclaration; }
-		public function set styleDeclaration(value:*):void {
-			_styleDeclaration = value;
-		}
-		
-		public function get styleManager():* { return _styleManager; }
 		
 		/**
 		 * @inheritDoc
@@ -328,7 +319,6 @@ package reflex.containers
 					(child as Component).owner = null;
 				}
 			}
-			
 			
 			renderers = [];
 			var length:int = items ? items.length : 0;

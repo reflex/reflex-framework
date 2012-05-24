@@ -56,7 +56,7 @@ package reflex.injection
 				if(instance.invalidation == null) { instance.invalidation = invalidation; }
 			}
 			
-			if(instance is MeasurableItem && !(instance is Skin)) { // skins are assigned the target display
+			if((instance is MeasurableItem && !(instance is Skin)) || instance is Component) { // skins are assigned the target display
 				if(instance.display == null) { instance.display = new Sprite(); }
 			}
 			
