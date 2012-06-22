@@ -20,8 +20,8 @@ package reflex.skins
 		[Bindable]
 		public var container:Container;
 		
-		[Bindable]
-		public var mask:DisplayObject;
+		//[Bindable]
+		//public var mask:DisplayObject;
 		
 		public function ScrollerSkin()
 		{

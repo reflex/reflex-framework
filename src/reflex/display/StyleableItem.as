@@ -13,14 +13,19 @@ package reflex.display
 		private var _styleDeclaration:* = {};
 		private var _styleManager:* = {};
 		
-		protected var helper:IDisplayHelper = new FlashDisplayHelper();
+		public var filters:Object; // todo: ?
+		public var mask:Object; // todo: ?
 		
 		private var _display:Object;// = new Sprite();
-		
-		
 		public function get display():Object { return _display; }
 		public function set display(value:Object):void {
 			_display = value;
+		}
+		
+		private var _helper:IDisplayHelper;// = new FlashDisplayHelper();
+		public function get helper():IDisplayHelper { return _helper; }
+		public function set helper(value:IDisplayHelper):void {
+			_helper = value;
 		}
 		
 		public function StyleableItem():void {

@@ -166,8 +166,22 @@
 		
 		// needs more thought
 		
-		public var x:Number = 0;
-		public var y:Number = 0;
+		private var _x:Number = 0;
+		private var _y:Number = 0;
+		
+		[Bindable(event="xChange", noEvent)]
+		public function get x():Number { return _x; }
+		public function set x(value:Number):void {
+			if(display) { display.x = value; }
+			notify("x", _x, _x = value);
+		}
+		
+		[Bindable(event="yChange", noEvent)]
+		public function get y():Number { return _y; }
+		public function set y(value:Number):void {
+			if(display) { display.y = value; }
+			notify("y", _y, _y = value);
+		}
 		
 		[PercentProxy("percentWidth")]
 		public function get width():Number {

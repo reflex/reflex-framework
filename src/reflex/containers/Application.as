@@ -28,7 +28,7 @@ package reflex.containers
 	public class Application extends Sprite
 	{
 		
-		private var container:Container;
+		private var container:Group;
 		
 		private var _content:Object;
 		
@@ -55,7 +55,7 @@ package reflex.containers
 		public function Application()
 		{
 			super();
-			container = new Container();
+			container = new Group();
 			if (stage) init();
             else addEventListener(Event.ADDED_TO_STAGE, init);
 		}
@@ -92,6 +92,7 @@ package reflex.containers
 		
 		private function onStageResize(event:Event):void
 		{
+			//trace(stage.stageWidth);
 			container.width = stage.stageWidth;
 			container.height = stage.stageHeight;
 			//if(isNaN(explicit.width)) { unscaledWidth = stage.stageWidth; }

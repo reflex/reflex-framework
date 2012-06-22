@@ -5,6 +5,8 @@ package reflex.injection
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
+	import reflex.animation.Animator;
+	import reflex.animation.IAnimator;
 	import reflex.behaviors.ButtonBehavior;
 	import reflex.behaviors.SelectBehavior;
 	import reflex.binding.Bind;
@@ -19,7 +21,11 @@ package reflex.injection
 	import reflex.containers.Group;
 	import reflex.containers.HGroup;
 	import reflex.containers.VGroup;
+	import reflex.data.Position;
+	import reflex.display.FlashDisplayHelper;
+	import reflex.display.IDisplayHelper;
 	import reflex.display.MeasurableItem;
+	import reflex.display.StyleableItem;
 	import reflex.invalidation.HardCodedInvalidation;
 	import reflex.invalidation.IReflexInvalidation;
 	import reflex.invalidation.LifeCycle;
@@ -41,6 +47,8 @@ package reflex.injection
 	{
 		
 		private var invalidation:IReflexInvalidation = new HardCodedInvalidation();
+		private var animator:IAnimator = new Animator();
+		private var helper:IDisplayHelper = new FlashDisplayHelper();
 		
 		public function injectInto(instance:Object):void {
 			// move concrete references out? - later
@@ -50,6 +58,15 @@ package reflex.injection
 			if(instance is Container ||
 				instance is Component) {
 				if(instance.injector == null) { instance.injector = this; }
+				
+			}
+			
+			if(instance is Container) {
+				if(instance.animator == null) { instance.animator = animator; }
+			}
+			
+			if(instance is StyleableItem) {
+				if(instance.helper == null) { instance.helper = helper; }
 			}
 			
 			if(instance is MeasurableItem) {
@@ -62,6 +79,8 @@ package reflex.injection
 			
 			if(instance is Container) {
 				if(instance.content == null) { instance.content = new SimpleCollection(); }
+				if(instance.horizontal == null) { instance.horizontal = new Position(); }
+				if(instance.vertical == null) { instance.vertical = new Position(); }
 			}
 			
 			if(instance is Component) {

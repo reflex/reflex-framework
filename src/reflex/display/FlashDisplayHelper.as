@@ -22,12 +22,14 @@ package reflex.display
 		}
 		
 		public function contains(instance:Object, child:Object):Boolean {
-			return instance.contains(child as DisplayObject);
+			return instance.contains(child);
 		}
 		
 		public function addChild(instance:Object, child:Object):Object {
-			if(instance && child) {
-				return instance.addChild(child as DisplayObject);
+			if(instance == null || child == null) { return null; }
+			if(child is StyleableItem) { child = child.display; }
+			if(child != null) {
+				return instance.addChild(child);
 			} else {
 				return null;
 			}
@@ -35,14 +37,14 @@ package reflex.display
 		
 		public function addChildAt(instance:Object, child:Object, index:int):Object {
 			if(instance) {
-				return instance.addChildAt(child as DisplayObject, index);
+				return instance.addChildAt(child, index);
 			} else {
 				return null;
 			}
 		}
 		
 		public function removeChild(instance:Object, child:Object):Object {
-			return instance.removeChild(child as DisplayObject);
+			return instance.removeChild(child);
 		}
 		
 		public function removeChildAt(instance:Object, index:int):Object {

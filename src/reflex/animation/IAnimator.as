@@ -6,6 +6,9 @@ package reflex.animation
 
 	public interface IAnimator
 	{
+		
+		function createAnimationToken(renderer:Object):AnimationToken;
+		
 		/**
 		 * attaches this animator to a given container
 		 */

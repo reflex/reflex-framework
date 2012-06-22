@@ -10,6 +10,10 @@ package reflex.animation
 		{
 		}
 		
+		public function createAnimationToken(renderer:Object):AnimationToken {
+			return new AnimationToken(renderer.x, renderer.y, renderer.width, renderer.height)
+		}
+		
 		//public function attach(container:Object):void {}
 		//public function detach(container:Object):void {}
 		

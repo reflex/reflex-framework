@@ -2,6 +2,7 @@ package reflex.containers
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
@@ -19,6 +20,7 @@ package reflex.containers
 	import reflex.collections.convertToIList;
 	import reflex.components.Component;
 	import reflex.components.IStateful;
+	import reflex.data.IPosition;
 	import reflex.display.FlashDisplayHelper;
 	import reflex.display.IDisplayHelper;
 	import reflex.display.MeasurableItem;
@@ -71,8 +73,11 @@ package reflex.containers
 		private var _currentState:String;
 		
 		
-		private var animator:IAnimator = new Animator();
-		
+		private var _animator:IAnimator;//= new Animator();
+		public function get animator():IAnimator { return _animator; }
+		public function set animator(value:IAnimator):void {
+			_animator = value;
+		}
 		
 		
 		private var _injector:IReflexInjector;// = new HardCodedInjector();
@@ -83,7 +88,38 @@ package reflex.containers
 		
 		public function getRenderers():Array { return renderers.concat(); }
 		
+		private var _horizontal:IPosition; [Bindable]
+		public function get horizontal():IPosition { return _horizontal; }
+		public function set horizontal(value:IPosition):void {
+			if(_horizontal is IEventDispatcher) {
+				(_horizontal as IEventDispatcher).removeEventListener("valueChange", horizontalPositionChangeHandler);
+			}
+			notify("horizontal", _horizontal, _horizontal = value);
+			if(_horizontal is IEventDispatcher) {
+				(_horizontal as IEventDispatcher).addEventListener("valueChange", horizontalPositionChangeHandler);
+			}
+		}
 		
+		private var _vertical:IPosition; [Bindable]
+		public function get vertical():IPosition { return _vertical; }
+		public function set vertical(value:IPosition):void {
+			if(_vertical is IEventDispatcher) {
+				(_vertical as IEventDispatcher).removeEventListener("valueChange", verticalPositionChangeHandler);
+			}
+			notify("vertical", _vertical, _vertical = value);
+			if(_vertical is IEventDispatcher) {
+				(_vertical as IEventDispatcher).addEventListener("valueChange", verticalPositionChangeHandler);
+			}
+		}
+		
+		private function horizontalPositionChangeHandler(event:Event):void {
+			
+		}
+		
+		private function verticalPositionChangeHandler(event:Event):void {
+			trace(vertical.value);
+			this.display.y = vertical.value;
+		}
 		
 		// IStateful implementation
 		
@@ -231,7 +267,7 @@ package reflex.containers
 			var length:int = renderers ? renderers.length : 0;
 			for( var i:int = 0; i < length; i++) {
 				var renderer:Object = renderers[i];
-				var token:AnimationToken = new AnimationToken(renderer.x, renderer.y, renderer.width, renderer.height);
+				var token:AnimationToken = animator.createAnimationToken(renderer);
 				tokens.push(token);
 			}
 			return tokens;
@@ -331,7 +367,7 @@ package reflex.containers
 				if(injector) { injector.injectInto(renderer); }
 				
 				// renderer is actually not a DisplayObject now
-				helper.addChild(display, renderer.display);
+				helper.addChild(display, renderer);
 				renderers.push(renderer);
 			}
 			

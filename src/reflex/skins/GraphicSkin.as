@@ -23,6 +23,7 @@ package reflex.skins
 			super.target = value;
 			graphics = null;
 			if(value) {
+				helper = Object(value).helper;
 				graphics = helper.getGraphics(display);
 				value.addEventListener("layout", onRender, false, 0, true);
 			}
