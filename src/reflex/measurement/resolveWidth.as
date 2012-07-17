@@ -1,5 +1,7 @@
 package reflex.measurement
 {
+	import reflex.framework.IMeasurable;
+	import reflex.framework.IMeasurablePercent;
 	
 	/**
 	 * @alpha

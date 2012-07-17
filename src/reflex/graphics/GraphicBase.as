@@ -5,11 +5,11 @@ package reflex.graphics
 	import flash.events.IEventDispatcher;
 	
 	import reflex.events.DataChangeEvent;
-	import reflex.measurement.IMeasurable;
-	import reflex.measurement.IMeasurablePercent;
-	import reflex.measurement.IMeasurements;
+	import reflex.framework.IMeasurable;
+	import reflex.framework.IMeasurablePercent;
+	//import reflex.measurement.IMeasurements;
 	import reflex.metadata.resolveCommitProperties;
-	import reflex.styles.IStyleable;
+	import reflex.framework.IStyleable;
 	import reflex.styles.Style;
 	import reflex.styles.parseStyles;
 	

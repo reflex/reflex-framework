@@ -5,7 +5,7 @@ package reflex.layouts
 	import flash.geom.Rectangle;
 	
 	import reflex.animation.AnimationToken;
-	import reflex.measurement.IMeasurablePercent;
+	import reflex.framework.IMeasurablePercent;
 	import reflex.measurement.calculateAvailableSpace;
 	import reflex.measurement.calculatePercentageTotals;
 	import reflex.measurement.resolveHeight;

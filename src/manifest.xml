@@ -41,6 +41,7 @@
 	<component id="DragStepBehavior" class="reflex.behaviors.DragStepBehavior"/>
 	<component id="TextAreaBehavior" class="reflex.behaviors.TextAreaBehavior"/>
 	<component id="TouchScrollBehavior" class="reflex.behaviors.TouchScrollBehavior" />
+	<component id="DragListBehavior" class="reflex.behaviors.DragListBehavior" />
 	
 	<!-- layouts -->
 	<component id="ILayout" class="reflex.layouts.ILayout"/>
@@ -50,6 +51,7 @@
 	<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>
 	<component id="HorizontalLayout" class="reflex.layouts.HorizontalLayout"/>
 	<component id="DockLayout" class="reflex.layouts.DockLayout"/>
+	<component id="TileLayout" class="reflex.layouts.TileLayout"/>
 	
 	<!-- data -->
 	<component id="Position" class="reflex.data.Position"/>
@@ -105,6 +107,7 @@
 	
 	<!-- Flex references -->
 	<component id="FlexReferences" class="mx.mxml.FlexReferences" />
-	
+	<component id="BindingManager" class="mx.binding.BindingManager" />
+	<component id="PropertyChangeEvent" class="mx.events.PropertyChangeEvent" />
 	
 </componentPackage>

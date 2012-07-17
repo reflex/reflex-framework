@@ -12,7 +12,7 @@ package mx.states
 		private var oldValue:*;
 		
 		override public function initialize():void {
-			//trace("init");
+			trace("init");
 		}
 		
 		override public function apply(parent:Object):void {

@@ -1,6 +1,7 @@
 package reflex.measurement
 {
 	import flash.geom.Point;
+	import reflex.framework.IMeasurablePercent;
 	
 	public function calculatePercentageTotals(children:Array):Point
 	{

@@ -10,9 +10,11 @@ package reflex.animation
 		public var width:Number;
 		public var height:Number;
 		
-		public var rotationX:Number;
-		public var rotationY:Number;
-		public var rotationZ:Number;
+		public var rotationX:Number = 0;
+		public var rotationY:Number = 0;
+		public var rotationZ:Number = 0;
+		
+		public var alpha:Number = 1;
 		
 		public function AnimationToken(x:Number, y:Number, width:Number, height:Number)
 		{

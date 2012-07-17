@@ -3,6 +3,7 @@ package reflex.display
 	import flash.display.DisplayObject;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	
 	public class FlashDisplayHelper implements IDisplayHelper
 	{
@@ -22,7 +23,13 @@ package reflex.display
 		}
 		
 		public function contains(instance:Object, child:Object):Boolean {
-			return instance.contains(child);
+			if(instance == null || child == null) { return false; }
+			if(child is StyleableItem) { child = child.display; }
+			if(child != null) {
+				return instance.contains(child);
+			} else {
+				return false;
+			}
 		}
 		
 		public function addChild(instance:Object, child:Object):Object {
@@ -44,7 +51,13 @@ package reflex.display
 		}
 		
 		public function removeChild(instance:Object, child:Object):Object {
-			return instance.removeChild(child);
+			if(instance == null || child == null) { return null; }
+			if(child is StyleableItem) { child = child.display; }
+			if(child != null) {
+				return instance.removeChild(child);
+			} else {
+				return null;
+			}
 		}
 		
 		public function removeChildAt(instance:Object, index:int):Object {

@@ -55,22 +55,19 @@ package reflex.components
 			notify("position", _position, _position = value);
 		}
 		
-		public function List()
-		{
-			super();
-		}
-		
 		override protected function initialize(event:Event):void {
 			super.initialize(event);
 			selection = new Selection();
-			layout = new VerticalLayout();
-			(layout as VerticalLayout).gap = 10;
-			template = ListItem;
+			if(layout == null) {
+				layout = new VerticalLayout();
+				(layout as VerticalLayout).gap = 10;
+			}
+			if(template == null) { template = ListItem; }
 			skin = new ListSkin();
 			Bind.addBinding(this, "skin.container.content", this, "dataProvider");
 			Bind.addBinding(this, "skin.container.template", this, "template");
 			Bind.addBinding(this, "skin.container.layout", this, "layout");
-			behaviors.addItem(new ListSelectionBehavior(this));
+			//behaviors.addItem(new ListSelectionBehavior(this));
 		}
 		
 	}

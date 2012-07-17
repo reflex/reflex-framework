@@ -22,10 +22,10 @@ package reflex.animation
 		function begin():void;
 		
 		// we might break these up into seperate interfaces later
-		function addItem(item:Object):void;
-		function moveItem(item:Object, token:AnimationToken):void;
-		function adjustItem(item:Object, token:AnimationToken):void; // for scrolling, drag reactions etc.
-		function removeItem(item:Object, callback:Function):void;
+		//function addItem(item:Object):void;
+		function moveItem(item:Object, token:AnimationToken, type:String):void;
+		//function adjustItem(item:Object, token:AnimationToken):void; // for scrolling, drag reactions etc.
+		//function removeItem(item:Object, callback:Function):void;
 		
 		/**
 		 * Called after a series of addItem, moveItem, or removeItem calls.

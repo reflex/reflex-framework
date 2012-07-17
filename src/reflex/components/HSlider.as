@@ -18,7 +18,7 @@ package reflex.components
 		override protected function initialize(event:Event):void {
 			super.initialize(event);
 			//unscaledHeight = 14;
-			position = new Position();
+			//position = new Position();
 			skin = new HSliderSkin();
 			behaviors.addItem(new SlideBehavior(this, SlideBehavior.HORIZONTAL));
 			//_measuredWidth = 170;

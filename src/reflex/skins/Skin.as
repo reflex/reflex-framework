@@ -20,7 +20,7 @@ package reflex.skins
 	import reflex.binding.Bind;
 	import reflex.collections.SimpleCollection;
 	import reflex.collections.convertToIList;
-	import reflex.components.IStateful;
+	import reflex.framework.IStateful;
 	import reflex.containers.Container;
 	import reflex.containers.IContainer;
 	import reflex.display.FlashDisplayHelper;
@@ -32,9 +32,9 @@ package reflex.skins
 	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.ILayout;
-	import reflex.measurement.IMeasurable;
-	import reflex.measurement.IMeasurablePercent;
-	import reflex.measurement.IMeasurements;
+	import reflex.framework.IMeasurable;
+	import reflex.framework.IMeasurablePercent;
+	//import reflex.measurement.IMeasurements;
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveCommitProperties;
 	import reflex.states.applyState;
@@ -88,9 +88,9 @@ package reflex.skins
 				// skin measurement occurs before component measurement
 				//target.addEventListener(LifeCycle.MEASURE, onMeasure, false, 1, true);
 				//target.addEventListener(LifeCycle.LAYOUT, onLayout, false, 1, true);
-				//invalidate(LifeCycle.MEASURE);
-				//invalidate(LifeCycle.LAYOUT);
-				reflex.metadata.resolveCommitProperties(this);
+				invalidate(LifeCycle.MEASURE);
+				invalidate(LifeCycle.LAYOUT);
+				//reflex.metadata.resolveCommitProperties(this);
 			}
 			
 			//var items:Array = content.toArray();

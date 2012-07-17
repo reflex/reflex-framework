@@ -9,10 +9,10 @@
 	import flash.text.TextLineMetrics;
 	
 	import reflex.events.DataChangeEvent;
-	import reflex.measurement.IMeasurable;
-	import reflex.measurement.IMeasurablePercent;
-	import reflex.measurement.IMeasurements;
-	import reflex.styles.IStyleable;
+	import reflex.framework.IMeasurable;
+	import reflex.framework.IMeasurablePercent;
+	//import reflex.measurement.IMeasurements;
+	import reflex.framework.IStyleable;
 	import reflex.styles.Style;
 	
 	[Style(name="left")]

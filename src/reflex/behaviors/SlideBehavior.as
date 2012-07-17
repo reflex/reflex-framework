@@ -75,15 +75,15 @@ package reflex.behaviors
 				var t:Object = target as Object;
 				if(page) {
 					if(direction == HORIZONTAL) {
-						pagePosition(t.mouseX - track.x, track.width);
+						pagePosition(event.localX - track.x, track.width);
 					} else if(direction == VERTICAL) {
-						pagePosition(t.mouseY - track.y, track.height);
+						pagePosition(event.localY - track.y, track.height);
 					}
 				} else {
 					if(direction == HORIZONTAL) {
-						jumpToPosition(t.mouseX - track.x, track.width);
+						jumpToPosition(event.localX - track.x, track.width);
 					} else if(direction == VERTICAL) {
-						jumpToPosition(t.mouseY - track.y, track.height);
+						jumpToPosition(event.localY - track.y, track.height);
 					}
 				}
 				updateUIPosition();
@@ -95,21 +95,25 @@ package reflex.behaviors
 		public function onThumbDown(event:MouseEvent):void
 		{
 			if(_mouseEnabled) {
-				target.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-				(target as Object).stage.addEventListener(MouseEvent.MOUSE_UP, onThumbUp, false, 0, true);
-				(target as Object).stage.addEventListener(Event.MOUSE_LEAVE, onThumbUp, false, 0, true);
+				(target as Object).display.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
+				(target as Object).display.stage.addEventListener(MouseEvent.MOUSE_UP, onThumbUp, false, 0, true);
+				(target as Object).display.stage.addEventListener(Event.MOUSE_LEAVE, onThumbUp, false, 0, true);
+				//(target as Object).stage.addEventListener(MouseEvent.MOUSE_UP, onThumbUp, false, 0, true);
+				//(target as Object).stage.addEventListener(Event.MOUSE_LEAVE, onThumbUp, false, 0, true);
 			}
 		}
 		
 		private function onThumbUp(event:MouseEvent):void {
-			target.removeEventListener(Event.ENTER_FRAME, onEnterFrame, false);
-			(target as Object).stage.removeEventListener(MouseEvent.MOUSE_UP, onThumbUp, false);
-			(target as Object).stage.removeEventListener(Event.MOUSE_LEAVE, onThumbUp, false);
+			(target as Object).display.stage.removeEventListener(Event.ENTER_FRAME, onEnterFrame, false);
+			(target as Object).display.stage.removeEventListener(MouseEvent.MOUSE_UP, onThumbUp, false);
+			(target as Object).display.stage.removeEventListener(Event.MOUSE_LEAVE, onThumbUp, false);
+			//(target as Object).stage.removeEventListener(MouseEvent.MOUSE_UP, onThumbUp, false);
+			//(target as Object).stage.removeEventListener(Event.MOUSE_LEAVE, onThumbUp, false);
 		}
 		
 		private function onEnterFrame(event:Event):void {
 			var percent:Number = 0;
-			var t:Object = target as Object;
+			var t:Object = (target as Object).display;
 			if(direction == HORIZONTAL) {
 				percent = (t.mouseX - track.x)/track.width;
 			} else if(direction == VERTICAL) {

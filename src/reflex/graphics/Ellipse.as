@@ -14,9 +14,9 @@ package reflex.graphics
 	import mx.graphics.IStroke;
 	
 	import reflex.invalidation.Invalidation;
-	import reflex.measurement.IMeasurablePercent;
+	import reflex.framework.IMeasurablePercent;
 	import reflex.metadata.resolveCommitProperties;
-	import reflex.styles.IStyleable;
+	import reflex.framework.IStyleable;
 	
 	[Style(name="left")]
 	[Style(name="right")]

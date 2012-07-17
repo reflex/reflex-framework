@@ -56,6 +56,7 @@ package reflex.layouts
 				
 				var gap:Number = reflex.styles.resolveStyle(target, "gap", null, this.gap) as Number;
 				var verticalAlign:String = reflex.styles.resolveStyle(target, "verticalAlign", null, this.verticalAlign) as String;
+				//var horizontalAlign:String = reflex.styles.resolveStyle(target, "horizontalAlign", null, this.horizontalAlign) as String;
 				
 				// this takes a few passes for percent-based measurement. we can probably speed it up later
 				var availableSpace:Point = reflex.measurement.calculateAvailableSpace(content, rectangle);

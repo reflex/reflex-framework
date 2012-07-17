@@ -1,6 +1,7 @@
 package reflex.injection
 {
 	
+	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -26,6 +27,7 @@ package reflex.injection
 	import reflex.display.IDisplayHelper;
 	import reflex.display.MeasurableItem;
 	import reflex.display.StyleableItem;
+	import reflex.graphics.BitmapImage;
 	import reflex.invalidation.HardCodedInvalidation;
 	import reflex.invalidation.IReflexInvalidation;
 	import reflex.invalidation.LifeCycle;
@@ -72,7 +74,11 @@ package reflex.injection
 			if(instance is MeasurableItem) {
 				if(instance.invalidation == null) { instance.invalidation = invalidation; }
 			}
-			
+			/*
+			if(instance is BitmapImage) {
+				if(instance.display == null) { instance.display = new Bitmap(); }
+			}
+			*/
 			if((instance is MeasurableItem && !(instance is Skin)) || instance is Component) { // skins are assigned the target display
 				if(instance.display == null) { instance.display = new Sprite(); }
 			}
@@ -113,14 +119,17 @@ package reflex.injection
 			}
 			
 			
-			if(Object(instance).constructor == Group) {
-				instance.layout = new BasicLayout();
+			//if(Object(instance).constructor == Group) {
+			if(instance is Group) {
+				if(instance.layout == null) { instance.layout = new BasicLayout(); }
 			}
-			if(Object(instance).constructor == HGroup) {
-				instance.layout = new HorizontalLayout();
+			//if(Object(instance).constructor == HGroup) {
+			if(instance is HGroup) {
+				if(instance.layout == null) { instance.layout = new HorizontalLayout(); }
 			}
-			if(Object(instance).constructor == VGroup) {
-				instance.layout = new VerticalLayout();
+			//if(Object(instance).constructor == VGroup) {
+			if(instance is VGroup) {
+				if(instance.layout == null) { instance.layout = new VerticalLayout(); }
 			}
 			
 			instance.dispatchEvent(new Event(LifeCycle.INITIALIZE));

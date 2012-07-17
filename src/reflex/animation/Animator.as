@@ -20,17 +20,17 @@ package reflex.animation
 		public function begin():void
 		{
 		}
-		
+		/*
 		public function addItem(item:Object):void
 		{
 			
 		}
-		
-		public function moveItem(item:Object, token:AnimationToken):void
+		*/
+		public function moveItem(item:Object, token:AnimationToken, type:String):void
 		{
 			move(item, token);
 		}
-		
+		/*
 		public function adjustItem(item:Object, token:AnimationToken):void
 		{
 			move(item, token);
@@ -40,7 +40,7 @@ package reflex.animation
 		{
 			if(callback != null) { callback(item); }
 		}
-		
+		*/
 		public function end():void {}
 		
 		private function move(item:Object, token:AnimationToken):void {

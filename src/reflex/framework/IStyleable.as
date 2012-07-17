@@ -1,4 +1,4 @@
-package reflex.styles
+package reflex.framework
 {
 	
 	public interface IStyleable

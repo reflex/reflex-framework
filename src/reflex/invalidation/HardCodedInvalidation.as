@@ -22,5 +22,9 @@ package reflex.invalidation
 			Invalidation.invalidate(instance, phase);
 		}
 		
+		public function validate(instance:IEventDispatcher):void {
+			Invalidation.render();
+		}
+		
 	}
 }

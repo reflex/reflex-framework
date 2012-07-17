@@ -8,6 +8,8 @@ package reflex.invalidation
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 	
+	import reflex.display.MeasurableItem;
+	
 	/**
 	 * @alpha
 	 **/
@@ -40,11 +42,10 @@ package reflex.invalidation
 			return true;
 		}
 		
-		public static function invalidate(display:IEventDispatcher, type:String):void
+		public static function invalidate(dispatcher:IEventDispatcher, type:String):void
 		{
-			if (display == null) {
-				return;
-			}
+			if (dispatcher == null) { return; }
+			var display:IEventDispatcher = (dispatcher is DisplayObject) ? dispatcher : (dispatcher as Object).display as IEventDispatcher;
 			
 			if (phaseIndex[type] == null) {
 				throw new Error("DisplayObject cannot be invalidated in unknown phase '" + type + "'.");
@@ -59,10 +60,10 @@ package reflex.invalidation
 			display.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0xF, true);
 			/*
 			if (display.stage == null) {
-				phase.addDisplay(display, -1);
+				phase.addDisplay(dispatcher, -1);
 				return;
-			}
-			*/
+			}*/
+			
 			var depth:int = displayDepths[display] != null ?
 				displayDepths[display] :
 				displayDepths[display] = getDepth(display);
@@ -91,14 +92,16 @@ package reflex.invalidation
 		private static function getDepth(display:Object):int
 		{
 			var depth:int = 0;
-			/*while ( (display = display.owner) != null) {
+			
+			while ((display = display.parent) != null) {
 				depth++;
 				// if a parent already has depth defined, take the shortcut
-				if (displayDepths[display] != null) {
+				/*if (displayDepths[display] != null) {
 					depth += displayDepths[display];
 					break;
-				}
-			}*/
+				}*/
+			}
+			
 			return depth;
 		}
 		

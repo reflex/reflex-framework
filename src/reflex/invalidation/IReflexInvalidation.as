@@ -9,6 +9,7 @@ package reflex.invalidation
 		
 		// DisplayObject?
 		function invalidate(instance:IEventDispatcher, phase:String):void;
+		function validate(instance:IEventDispatcher):void;
 		
 	}
 }

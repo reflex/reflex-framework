@@ -20,6 +20,7 @@ package reflex.text
 	
 	import reflex.display.MeasurableItem;
 	import reflex.invalidation.Invalidation;
+	import reflex.invalidation.LifeCycle;
 	import reflex.styles.resolveStyle;
 	
 	
@@ -42,7 +43,7 @@ package reflex.text
 		public static const JUSTIFY:String = "justify";
 		
 		public static const TEXT_RENDER:String = "textRender";
-		private static var textPhase:Boolean = Invalidation.registerPhase(TEXT_RENDER, 0, true);
+		//private static var textPhase:Boolean = Invalidation.registerPhase(TEXT_RENDER, 0, true);
 		
 		protected var fontFormat:FontDescription;
 		protected var format:ElementFormat;
@@ -56,7 +57,8 @@ package reflex.text
 		
 		override public function set display(value:Object):void {
 			super.display = value;
-			invalidate(TEXT_RENDER);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		public function Label(text:String = "")
@@ -71,7 +73,7 @@ package reflex.text
 		
 		override protected function initialize(event:Event):void {
 			super.initialize(event);
-			addEventListener(TEXT_RENDER, onTextRender);
+			//addEventListener(TEXT_RENDER, onTextRender);
 		}
 		
 		[Bindable(event="textChange")]
@@ -80,7 +82,8 @@ package reflex.text
 			if (value == textElement.text) {
 				return;
 			}
-			invalidate(TEXT_RENDER);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			notify("text", textElement.text, textElement.text = value);
 		}
 		
@@ -92,7 +95,8 @@ package reflex.text
 			if(value == _allowWrap) {
 				return;
 			}
-			invalidate(TEXT_RENDER);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			notify("allowWrap", _allowWrap, _allowWrap = value);
 		}
 		
@@ -104,7 +108,8 @@ package reflex.text
 			if(value == _clipText) {
 				return;
 			}
-			invalidate(TEXT_RENDER);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			notify("clipText", _clipText, _clipText = value);
 		}
 		
@@ -122,7 +127,8 @@ package reflex.text
 			if (value == format.color) {
 				return;
 			}
-			invalidate(TEXT_RENDER);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			notify("color", format.color, format.color = value);
 		}
 		
@@ -132,7 +138,8 @@ package reflex.text
 			if (value == fontFormat.fontName) {
 				return;
 			}
-			invalidate(TEXT_RENDER);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			notify("fontFamily", fontFormat.fontName, fontFormat.fontName = value);
 		}
 		
@@ -142,7 +149,8 @@ package reflex.text
 			if (value == format.fontSize) {
 				return;
 			}
-			invalidate(TEXT_RENDER);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			notify("fontSize", format.fontSize, format.fontSize = value);
 		}
 		
@@ -154,7 +162,8 @@ package reflex.text
 			if (value == (fontFormat.fontWeight == FontWeight.BOLD)) {
 				return;
 			}
-			invalidate(TEXT_RENDER);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			notify("bold", fontFormat.fontWeight == FontWeight.BOLD, fontFormat.fontWeight = value ? FontWeight.BOLD : FontWeight.NORMAL);
 		}
 		
@@ -167,7 +176,8 @@ package reflex.text
 			if (value == (fontFormat.fontPosture == FontPosture.ITALIC)) {
 				return;
 			}
-			invalidate(TEXT_RENDER);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			notify("italic", fontFormat.fontPosture == FontPosture.ITALIC, fontFormat.fontPosture = value ? FontPosture.ITALIC : FontPosture.NORMAL);
 		}
 		
@@ -189,7 +199,7 @@ package reflex.text
 			line.y = unscaledHeight/2 + line.textHeight/2 - 5; // fuzzy math here
 		}
 		
-		protected function onTextRender(event:Event):void
+		override protected function onLayout(event:Event):void
 		{
 			
 			while (helper.getNumChildren(display)) helper.removeChildAt(display, 0);
@@ -249,6 +259,8 @@ package reflex.text
 				}
 				
 			}
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		
