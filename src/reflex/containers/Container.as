@@ -351,7 +351,7 @@ package reflex.containers
 				if(injector) { injector.injectInto(renderer); }
 				
 				// renderer is actually not a DisplayObject now
-				helper.addChild(display, renderer);
+				if(helper) { helper.addChild(display, renderer); }
 				//renderers.push(renderer);
 				renderers.splice(index+i, 0, renderer);
 				

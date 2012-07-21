@@ -19,23 +19,27 @@ protected var unscaledHeight:Number = 22;
 /**
  * @inheritDoc
  */
+
 [PercentProxy("percentWidth")]
 [Bindable(event="widthChange")]
 public function get width():Number { return unscaledWidth; }
 public function set width(value:Number):void {
-	unscaledWidth = _explicitWidth = value;
-	setSize(unscaledWidth, height);
+	//unscaledWidth = _explicitWidth = value;
+	_explicitWidth = value;
+	setSize(_explicitWidth, height);
 }
 
 /**
  * @inheritDoc
  */
+
 [PercentProxy("percentHeight")]
 [Bindable(event="heightChange")]
 public function get height():Number { return unscaledHeight; }
 public function set height(value:Number):void {
-	unscaledHeight  = _explicitHeight = value;
-	setSize(width, unscaledHeight);
+	//unscaledHeight  = _explicitHeight = value;
+	_explicitHeight = value;
+	setSize(width, _explicitHeight);
 }
 
 /**

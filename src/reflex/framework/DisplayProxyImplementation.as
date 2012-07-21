@@ -21,28 +21,28 @@ public function set enabled(value:Boolean):void {
 	notify("enabled", _enabled, _enabled = value);
 }
 
-[Bindable(event="xChange", noEvent)]
-public function get x():Number { return _x; }
+[Bindable(event="xChange")]
+public function get x():Number { return _x; } // needed for display == null, but doesn't respect transform/matrix changes ???
 public function set x(value:Number):void {
 	if(display) { display.x = value; }
 	notify("x", _x, _x = value);
 }
 
-[Bindable(event="yChange", noEvent)]
+[Bindable(event="yChange")]
 public function get y():Number { return _y; }
 public function set y(value:Number):void {
 	if(display) { display.y = value; }
 	notify("y", _y, _y = value);
 }
 
-[Bindable(event="scaleXChange", noEvent)]
+[Bindable(event="scaleXChange")]
 public function get scaleX():Number { return _scaleX; }
 public function set scaleX(value:Number):void {
 	if(display) { display.scaleX = value; }
 	notify("scaleX", _scaleX, _scaleX = value);
 }
 
-[Bindable(event="scaleYChange", noEvent)]
+[Bindable(event="scaleYChange")]
 public function get scaleY():Number { return _scaleY; }
 public function set scaleY(value:Number):void {
 	if(display) { display.scaleY = value; }
