@@ -47,6 +47,12 @@ package reflex.display
 		
 		private var _invalidation:IReflexInvalidation;
 		
+		//[Bindable]
+		public var owner:Object; // Reflex Container
+		
+		private var _initialized:Boolean;
+		public function get initialized():Boolean { return _initialized; }
+		
 		[Bindable(event="invalidationChange")]
 		public function get invalidation():IReflexInvalidation { return _invalidation; }
 		public function set invalidation(value:IReflexInvalidation):void {
@@ -66,12 +72,13 @@ package reflex.display
 		}
 		
 		protected function initialize(event:Event):void {
-			
+			if(_initialized) { return; }
+			_initialized = true;
 			
 			_invalidation.invalidate(this, LifeCycle.INVALIDATE);
 			_invalidation.invalidate(this, LifeCycle.MEASURE);
 			_invalidation.invalidate(this, LifeCycle.LAYOUT);
-			commit(null);
+			//commit(null);
 		}
 		
 		protected function commit(event:Event):void {

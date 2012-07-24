@@ -75,9 +75,6 @@ package reflex.skins
 			
 			var oldValue:Object = _target;
 			_target = value;
-			if (layout) {
-				layout.target = _target;
-			}
 			
 			if (this.hasOwnProperty('hostComponent')) {
 				this['hostComponent'] = _target;
@@ -91,10 +88,10 @@ package reflex.skins
 				invalidate(LifeCycle.MEASURE);
 				invalidate(LifeCycle.LAYOUT);
 				//reflex.metadata.resolveCommitProperties(this);
+				
 			}
+			this.owner = _target;
 			
-			//var items:Array = content.toArray();
-			//reset(items);
 			notify("target", oldValue, _target);
 		}
 		

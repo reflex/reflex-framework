@@ -6,6 +6,8 @@ package reflex.skins
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
+	import reflex.collections.SimpleCollection;
+	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
 	import reflex.text.Label;
 	import reflex.text.TextFieldDisplay;
@@ -30,7 +32,9 @@ package reflex.skins
 			labelDisplay.fontSize = 33;
 			labelDisplay.style = "left: 10; right: 10; top: 5; bottom: 5;";
 			layout = new BasicLayout();
-			content = [labelDisplay];
+			content = new SimpleCollection();//[labelDisplay];
+			content.addItem(labelDisplay);
+			//labelDisplay.invalidate(LifeCycle.INITIALIZE);
 		}
 		
 		override protected function render(currentState:String):void {

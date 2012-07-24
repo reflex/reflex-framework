@@ -18,6 +18,7 @@ package reflex.containers
 	
 	import reflex.framework.IStateful;
 	import reflex.injection.IReflexInjector;
+	import reflex.invalidation.Interval;
 	import reflex.invalidation.Invalidation;
 	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
@@ -37,12 +38,13 @@ package reflex.containers
 		
 		public var injector:IReflexInjector;
 		
-		private var container:Group;
-		public function get content():IList { return container ? container.content : null; }
+		private var _container:Group;
+		public function get container():Group { return _container; }
+		
+		public function get content():IList { return _container ? _container.content : null; }
 		public function set content(value:*):void {
-			if(container) {
-				container.content = value;
-				
+			if(_container) {
+				_container.content = value;
 			}
 		}
 		
@@ -63,12 +65,14 @@ package reflex.containers
 		}
 		
 		protected function preinitialize():void {
-			container = new Group();
+			_container = new Group();
+			_container.display = this;
 			if (stage) initialize();
 			else addEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 		}
 		
+		//private var interval:Interval;
         protected function initialize(e:Event = null):void {
 			// Application is the only Reflex thing not in a container
 			
@@ -79,19 +83,23 @@ package reflex.containers
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
+			removeEventListener(Event.ADDED_TO_STAGE, initialize);
 			
+			_container.owner = owner = this.stage;
 			Invalidation.stage = this.stage;
+			Invalidation.app = _container;
+			//interval = new Interval(true);
 			//var injector:IReflexInjector = new C(); // only instantiating in Application
-			injector.injectInto(container);
-			container.layout = new BasicLayout();
+			injector.injectInto(_container);
+			//_container.layout = new BasicLayout();
 			stage.addChild(this);
-			this.addChild(container.display as DisplayObject);
+			//this.addChild(container.display as DisplayObject);
 			onStageResize(null);
         }
 		
 		private function onStageResize(event:Event):void {
-			container.width = stage.stageWidth;
-			container.height = stage.stageHeight;
+			_container.width = stage.stageWidth;
+			_container.height = stage.stageHeight;
 		}
 		
 		

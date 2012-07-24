@@ -11,6 +11,7 @@ package reflex.components
 	import reflex.data.IRange;
 	import reflex.data.ISelection;
 	import reflex.data.Selection;
+	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.HorizontalLayout;
 	import reflex.layouts.ILayout;
 	import reflex.layouts.VerticalLayout;
@@ -63,11 +64,13 @@ package reflex.components
 				(layout as VerticalLayout).gap = 10;
 			}
 			if(template == null) { template = ListItem; }
-			skin = new ListSkin();
+			if(skin == null) { skin = new ListSkin(); }
 			Bind.addBinding(this, "skin.container.content", this, "dataProvider");
 			Bind.addBinding(this, "skin.container.template", this, "template");
 			Bind.addBinding(this, "skin.container.layout", this, "layout");
 			//behaviors.addItem(new ListSelectionBehavior(this));
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 	}

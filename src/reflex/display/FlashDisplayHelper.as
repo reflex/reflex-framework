@@ -35,7 +35,7 @@ package reflex.display
 		public function addChild(instance:Object, child:Object):Object {
 			if(instance == null || child == null) { return null; }
 			if(child is StyleableItem) { child = child.display; }
-			if(child != null) {
+			if(child is DisplayObject) {
 				return instance.addChild(child);
 			} else {
 				return null;

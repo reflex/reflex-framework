@@ -42,7 +42,7 @@ package reflex.text
 		public static const CENTER:String = "center";
 		public static const JUSTIFY:String = "justify";
 		
-		public static const TEXT_RENDER:String = "textRender";
+		//public static const TEXT_RENDER:String = "textRender";
 		//private static var textPhase:Boolean = Invalidation.registerPhase(TEXT_RENDER, 0, true);
 		
 		protected var fontFormat:FontDescription;

@@ -40,8 +40,6 @@ package reflex.containers
 	import reflex.states.removeState;
 	import reflex.templating.getDataRenderer;
 	
-	//use namespace mx_internal;
-	
 	[Style(name="left")]
 	[Style(name="right")]
 	[Style(name="top")]
@@ -130,11 +128,8 @@ package reflex.containers
 		}
 		
 		private function positionChangeHandler(event:Event):void {
-			//trace(vertical.value);
-			//this.display.y = vertical.value;
 			animationType = AnimationType.SCROLL;
 			onLayout(null); // skip render event
-			//this.invalidate(LifeCycle.LAYOUT);
 		}
 		
 		[Bindable(event="fillChange")]
@@ -166,9 +161,7 @@ package reflex.containers
 				removeItems(_content.toArray(), 0);
 			}
 			_content = reflex.collections.convertToIList(value);
-			if (_content) {
-				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
-			}
+			
 			contentChanged = true;
 			animationType = AnimationType.RESET;
 			invalidate(LifeCycle.INVALIDATE);
@@ -221,6 +214,9 @@ package reflex.containers
 		override protected function commit(event:Event):void {
 			super.commit(event);
 			if(contentChanged || templateChanged) {
+				if (_content) {
+					_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
+				}
 				reset(_content ? _content.toArray() : []);
 				contentChanged = false;
 				templateChanged = false;
@@ -288,11 +284,7 @@ package reflex.containers
 			for( var i:int = 0; i < length; i++) {
 				var renderer:Object = renderers[i];
 				var token:AnimationToken = tokens[i];
-				//if(layoutChanged) {
-					//animator.addItem(renderer, token);
-				//} else {
-					animator.moveItem(renderer, token, animationType);
-				//}
+				animator.moveItem(renderer, token, animationType);
 			}
 			animator.end();
 			layoutChanged = false;
@@ -301,33 +293,24 @@ package reflex.containers
 		
 		private function onChildrenChange(event:CollectionEvent):void
 		{
-			//var child:DisplayObject;
 			switch (event.kind) {
 				case CollectionEventKind.ADD :
 					animationType = AnimationType.ADD;
 					addItems(event.items, event.location);
-					//invalidate(LifeCycle.MEASURE);
-					//invalidate(LifeCycle.LAYOUT);
 					break;
 				case CollectionEventKind.REMOVE :
 					animationType = AnimationType.REMOVE;
 					removeItems(event.items, event.oldLocation);
-					//invalidate(LifeCycle.MEASURE);
-					//invalidate(LifeCycle.LAYOUT);
 					break;
 				case CollectionEventKind.REPLACE :
 					animationType = AnimationType.REPLACE;
 					helper.removeChild(display, event.items[1]);
 					//addChildAt(event.items[0], loc);
-					//invalidate(LifeCycle.MEASURE);
-					//invalidate(LifeCycle.LAYOUT);
 					break;
 				case CollectionEventKind.RESET :
 				default:
 					animationType = AnimationType.RESET;
 					reset(event.items);
-					//invalidate(LifeCycle.MEASURE);
-					//invalidate(LifeCycle.LAYOUT);
 					break;
 			}
 			invalidate(LifeCycle.MEASURE);
@@ -336,7 +319,6 @@ package reflex.containers
 		
 		private function reset(items:Array):void {
 			removeItems(items, 0);
-			//renderers = [];
 			addItems(items, 0);
 		}
 		
@@ -345,15 +327,19 @@ package reflex.containers
 			for(var i:int = 0; i < length; i++) {
 				var item:Object = items[i];
 				var renderer:Object = reflex.templating.getDataRenderer(display, item, _template);
-				if(renderer is Component) { // need to make this generic
-					(renderer as Component).owner = this;
+				
+				if(renderer is MeasurableItem) { // need to make this generic
+					(renderer as MeasurableItem).owner = this;
 				}
-				if(injector) { injector.injectInto(renderer); }
+				if(injector) {
+					injector.injectInto(renderer);
+				}
 				
 				// renderer is actually not a DisplayObject now
 				if(helper) { helper.addChild(display, renderer); }
 				//renderers.push(renderer);
 				renderers.splice(index+i, 0, renderer);
+				
 				
 				itemRenderers[item] = renderer;
 				rendererItems[renderer] = item;
@@ -363,24 +349,11 @@ package reflex.containers
 		}
 		
 		private function removeItems(items:Array, index:int):void {
-			/*
-			while (helper.getNumChildren(display)) {
-			var child:Object = helper.removeChildAt(display, helper.getNumChildren(display)-1);
-			if(child is Component) { // need to make this generic
-			(child as Component).owner = null;
-			}
-			}
-			*/
-			
-			// this isn't working with templating yet
-			//var child:Object;
 			for each (var item:Object in items) {
-				
 				var renderer:Object = itemRenderers[item];
-				if(renderer is Component) { // need to make this generic
-					(renderer as Component).owner = null;
+				if(renderer is MeasurableItem) { // need to make this generic
+					(renderer as MeasurableItem).owner = null;
 				}
-				//var renderer:Object = renderers.splice(index, 1)[0];
 				if(helper.contains(display, renderer)) {
 					helper.removeChild(display, renderer);
 				}

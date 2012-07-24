@@ -73,14 +73,6 @@
 			//this.addEventListener(LifeCycle.INITIALIZE, initialize);
 		}
 		
-		override protected function initialize(event:Event):void {
-			
-			//reflex.metadata.resolveCommitProperties(this);
-			//addEventListener(LifeCycle.MEASURE, onMeasure, false, 0, true);
-		}
-		
-		[Bindable]
-		public var owner:Object; // Reflex Container
 		
 		[ArrayElementType("reflex.behaviors.IBehavior")]
 		[Bindable(event="behaviorsChange")]
@@ -129,29 +121,25 @@
 			if (_skin is ISkin) {
 				(_skin as ISkin).target = null;
 			}
+			
 			var oldSkin:Object = _skin;
 			_skin = value;
 			
 			if (_skin is ISkin) {
 				(_skin as ISkin).target = this;
 			}
-			if(injector) {
+			if(injector && _skin) {
 				injector.injectInto(_skin);
 			}
+			
 			// invalidation in skin
+			//_skin.invalidate(LifeCycle.INVALIDATE);
+			//_skin.invalidate(LifeCycle.MEASURE);
+			//_skin.invalidate(LifeCycle.LAYOUT);
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
 			dispatchEvent(new Event("skinChange"));
 		}
-		/*
-		[Bindable(event="enabledChange")]
-		public function get enabled():Boolean { return _enabled; }
-		public function set enabled(value:Boolean):void {
-			//mouseEnabled = mouseChildren = value;
-			notify("enabled", _enabled, _enabled = value);
-		}
-		*/
-		
 		
 		private function behaviorsCollectionChangeHandler(event:CollectionEvent):void {
 			switch(event.kind) {
@@ -165,25 +153,7 @@
 			}
 		}
 		
-		// needs more thought
-		/*
-		private var _x:Number = 0;
-		private var _y:Number = 0;
 		
-		[Bindable(event="xChange", noEvent)]
-		public function get x():Number { return _x; }
-		public function set x(value:Number):void {
-			if(display) { display.x = value; }
-			notify("x", _x, _x = value);
-		}
-		
-		[Bindable(event="yChange", noEvent)]
-		public function get y():Number { return _y; }
-		public function set y(value:Number):void {
-			if(display) { display.y = value; }
-			notify("y", _y, _y = value);
-		}
-		*/
 		[PercentProxy("percentWidth")]
 		[Bindable(event="widthChange")]
 		override public function get width():Number {

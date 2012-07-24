@@ -22,6 +22,8 @@ package reflex.skins
 		
 		override protected function initialize(event:Event):void {
 			super.initialize(event);
+			container = this;
+			/*
 			layout = new BasicLayout();
 			container = new Container();
 			container.layout = new XYLayout();
@@ -30,6 +32,7 @@ package reflex.skins
 			container.setStyle("top", 0);
 			container.setStyle("bottom", 0);
 			content = new SimpleCollection([container]);
+			*/
 		}
 		
 	}

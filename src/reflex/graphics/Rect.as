@@ -13,10 +13,10 @@ package reflex.graphics
 	import mx.graphics.IFill;
 	import mx.graphics.IStroke;
 	
-	import reflex.invalidation.Invalidation;
 	import reflex.framework.IMeasurablePercent;
-	import reflex.metadata.resolveCommitProperties;
 	import reflex.framework.IStyleable;
+	import reflex.invalidation.Invalidation;
+	import reflex.metadata.resolveCommitProperties;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -29,8 +29,10 @@ package reflex.graphics
 	public class Rect extends GraphicBase implements IDrawable
 	{
 		
+		public var owner:Object;
+		
 		static public const RENDER:String = "render";
-		Invalidation.registerPhase(RENDER, 0);
+		Invalidation.registerPhase(RENDER, Event, 0);
 		
 		private var _radiusX:Number = 0;
 		private var _radiusY:Number = 0;

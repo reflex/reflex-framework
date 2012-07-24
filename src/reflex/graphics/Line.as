@@ -26,6 +26,8 @@ package reflex.graphics
 	public class Line extends GraphicBase implements IDrawable
 	{
 		
+		public var owner:Object;
+		
 		private var _xFrom:Number;
 		private var _yFrom:Number;
 		
