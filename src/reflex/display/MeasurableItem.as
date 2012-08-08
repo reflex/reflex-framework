@@ -61,35 +61,50 @@ package reflex.display
 		
 		public function MeasurableItem() {
 			super();
-			addEventListener(LifeCycle.INITIALIZE, initialize);
-			addEventListener(LifeCycle.INVALIDATE, commit, false, 0, true);
-			addEventListener(LifeCycle.MEASURE, onMeasure, false, 0, true);
-			addEventListener(LifeCycle.LAYOUT, onLayout, false, 0, true);
+			addEventListener(LifeCycle.INITIALIZE, initializeHandler);
+			addEventListener(LifeCycle.COMMIT, commitHandler, false, 0, true);
+			addEventListener(LifeCycle.MEASURE, measureHandler, false, 0, true);
+			addEventListener(LifeCycle.LAYOUT, layoutHandler, false, 0, true);
 		}
+		
 		
 		public function invalidate(phase:String):void {
 			if(_invalidation) { _invalidation.invalidate(this, phase); }
 		}
 		
-		protected function initialize(event:Event):void {
+		private function initializeHandler(event:Event):void {
 			if(_initialized) { return; }
 			_initialized = true;
-			
-			_invalidation.invalidate(this, LifeCycle.INVALIDATE);
+			initialize();
+		}
+		
+		private function commitHandler(event:Event):void {
+			onCommit();
+		}
+		
+		private function measureHandler(event:Event):void {
+			onMeasure();
+		}
+		
+		private function layoutHandler(event:Event):void {
+			onLayout();
+		}
+		
+		protected function initialize():void {
+			_invalidation.invalidate(this, LifeCycle.COMMIT);
 			_invalidation.invalidate(this, LifeCycle.MEASURE);
 			_invalidation.invalidate(this, LifeCycle.LAYOUT);
-			//commit(null);
 		}
 		
-		protected function commit(event:Event):void {
+		protected function onCommit():void {
 			
 		}
 		
-		protected function onMeasure(event:Event):void {
+		protected function onMeasure():void {
 			
 		}
 		
-		protected function onLayout(event:Event):void {
+		protected function onLayout():void {
 			
 		}
 		

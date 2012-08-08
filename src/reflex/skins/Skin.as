@@ -81,7 +81,7 @@ package reflex.skins
 			}
 			
 			if (_target != null) {
-				display = (target as Object).display;
+				display = (_target as Object).display;
 				// skin measurement occurs before component measurement
 				//target.addEventListener(LifeCycle.MEASURE, onMeasure, false, 1, true);
 				//target.addEventListener(LifeCycle.LAYOUT, onLayout, false, 1, true);

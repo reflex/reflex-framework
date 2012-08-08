@@ -20,8 +20,8 @@ package reflex.skins
 		[Bindable]
 		public var container:Container;
 		
-		override protected function initialize(event:Event):void {
-			super.initialize(event);
+		override protected function initialize():void {
+			super.initialize();
 			container = this;
 			/*
 			layout = new BasicLayout();

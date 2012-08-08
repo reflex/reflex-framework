@@ -56,8 +56,8 @@ package reflex.components
 			notify("layout", _layout, _layout = value);
 		}
 		
-		override protected function initialize(event:Event):void {
-			super.initialize(event);
+		override protected function initialize():void {
+			super.initialize();
 			_content = new SimpleCollection();
 			horizontalPosition = new Position();
 			verticalPosition = new Position();

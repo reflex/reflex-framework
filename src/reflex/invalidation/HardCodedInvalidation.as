@@ -9,7 +9,7 @@ package reflex.invalidation
 		
 		//Invalidation.registerPhase(LifeCycle.CREATE, 0, true);
 		Invalidation.registerPhase(LifeCycle.INITIALIZE, Event, 400, false);
-		Invalidation.registerPhase(LifeCycle.INVALIDATE, Event, 300, false);
+		Invalidation.registerPhase(LifeCycle.COMMIT, Event, 300, false);
 		Invalidation.registerPhase(LifeCycle.MEASURE, Event, 200, true);
 		Invalidation.registerPhase(LifeCycle.LAYOUT, Event, 100, false);
 		

@@ -64,7 +64,12 @@
 			}
 		}
 		
-		
+		override public function set display(value:Object):void {
+			super.display = value;
+			if(_skin) {
+				_skin.display = value;
+			}
+		}
 		
 		public function Component()
 		{
@@ -73,6 +78,13 @@
 			//this.addEventListener(LifeCycle.INITIALIZE, initialize);
 		}
 		
+		override protected function initialize():void {
+			super.initialize();
+			if(_skin) {
+				injector.injectInto(_skin);
+				_skin.display = display;
+			}
+		}
 		
 		[ArrayElementType("reflex.behaviors.IBehavior")]
 		[Bindable(event="behaviorsChange")]
@@ -175,7 +187,7 @@
 			return 0;
 		}
 		override public function set height(value:Number):void {
-			_explicitHeight = value;
+			notify("height", _explicitHeight, _explicitHeight = value);
 			reflex.measurement.setSize(skin, width, value);
 			//skin.height = value;
 		}

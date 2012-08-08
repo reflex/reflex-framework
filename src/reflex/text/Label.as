@@ -71,8 +71,8 @@ package reflex.text
 			this.text = text;
 		}
 		
-		override protected function initialize(event:Event):void {
-			super.initialize(event);
+		override protected function initialize():void {
+			super.initialize();
 			//addEventListener(TEXT_RENDER, onTextRender);
 		}
 		
@@ -199,7 +199,7 @@ package reflex.text
 			line.y = unscaledHeight/2 + line.textHeight/2 - 5; // fuzzy math here
 		}
 		
-		override protected function onLayout(event:Event):void
+		override protected function onLayout():void
 		{
 			
 			while (helper.getNumChildren(display)) helper.removeChildAt(display, 0);

@@ -129,7 +129,7 @@ package reflex.containers
 		
 		private function positionChangeHandler(event:Event):void {
 			animationType = AnimationType.SCROLL;
-			onLayout(null); // skip render event
+			onLayout(); // skip render event
 		}
 		
 		[Bindable(event="fillChange")]
@@ -137,10 +137,8 @@ package reflex.containers
 		public function set fill(value:IFill):void {
 			fillChanged = true;
 			notify("fill", _fill, _fill = value);
-			invalidate(LifeCycle.INVALIDATE);
+			invalidate(LifeCycle.COMMIT);
 		}
-		
-		
 		
 		/**
 		 * @inheritDoc
@@ -164,7 +162,7 @@ package reflex.containers
 			
 			contentChanged = true;
 			animationType = AnimationType.RESET;
-			invalidate(LifeCycle.INVALIDATE);
+			invalidate(LifeCycle.COMMIT);
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
 			notify("content", oldContent, _content);
@@ -211,8 +209,8 @@ package reflex.containers
 			invalidate(LifeCycle.LAYOUT);
 		}
 		
-		override protected function commit(event:Event):void {
-			super.commit(event);
+		override protected function onCommit():void {
+			super.onCommit();
 			if(contentChanged || templateChanged) {
 				if (_content) {
 					_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
@@ -227,8 +225,8 @@ package reflex.containers
 			}
 		}
 		
-		override protected function onMeasure(event:Event):void {
-			super.onMeasure(event);
+		override protected function onMeasure():void {
+			super.onMeasure();
 			// the compiler gives us root styles like this. yay?
 			if(styleDeclaration.defaultFactory != null) {
 				var f:Function = styleDeclaration.defaultFactory;
@@ -246,9 +244,9 @@ package reflex.containers
 			}
 		}
 		
-		override protected function onLayout(event:Event):void {
-			super.onLayout(event);
-			if (layout) {
+		override protected function onLayout():void {
+			super.onLayout();
+			if (layout && renderers.length > 0) {
 				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);
 				var tokens:Array = layout.update(_content ? _content.toArray() : [], generateTokens(), rectangle);
 				animateToTokens(renderers, tokens);
@@ -338,7 +336,7 @@ package reflex.containers
 				// renderer is actually not a DisplayObject now
 				if(helper) { helper.addChild(display, renderer); }
 				//renderers.push(renderer);
-				renderers.splice(index+i, 0, renderer);
+				renderers.splice(index+i, 1, renderer);
 				
 				
 				itemRenderers[item] = renderer;

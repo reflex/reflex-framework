@@ -24,8 +24,8 @@ package reflex.skins
 		}
 		
 		
-		override protected function initialize(event:Event):void {
-			super.initialize(event);
+		override protected function initialize():void {
+			super.initialize();
 			labelDisplay = new Label();
 			labelDisplay.color = 0xFFFFFF;
 			labelDisplay.fontFamily = "sans-serif";

@@ -16,8 +16,8 @@ package reflex.components
 			super();
 		}
 		
-		override protected function initialize(event:Event):void {
-			super.initialize(event);
+		override protected function initialize():void {
+			super.initialize();
 			position = new ScrollPosition();
 			skin = new HSliderSkin();
 			behaviors.addItem(new StepBehavior(this));

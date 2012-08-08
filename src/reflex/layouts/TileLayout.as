@@ -9,7 +9,7 @@ package reflex.layouts
 	{
 		
 		private var columns:int = 3;
-		private var gap:int = 10;
+		public var gap:int = 10;
 		
 		override public function measure(content:Array):Point
 		{

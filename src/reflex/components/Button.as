@@ -31,13 +31,10 @@ package reflex.components
 			this.label = label;
 		}
 		
-		override protected function initialize(event:Event):void {
-			super.initialize(event);
+		override protected function initialize():void {
+			super.initialize();
 			Bind.addBinding(this, "skin.labelDisplay.text", this, "label", false);
 			Bind.addBinding(this, "skin.currentState", this, "currentState", false);
-			//_measuredWidth = 210;
-			//_measuredHeight = 64;
-			
 		}
 		
 	}

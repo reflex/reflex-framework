@@ -56,21 +56,21 @@ package reflex.components
 			notify("position", _position, _position = value);
 		}
 		
-		override protected function initialize(event:Event):void {
-			super.initialize(event);
-			selection = new Selection();
-			if(layout == null) {
-				layout = new VerticalLayout();
-				(layout as VerticalLayout).gap = 10;
-			}
-			if(template == null) { template = ListItem; }
-			if(skin == null) { skin = new ListSkin(); }
+		override protected function initialize():void {
+			super.initialize();
+			//selection = new Selection();
+			//if(layout == null) {
+			//	layout = new VerticalLayout();
+			//	(layout as VerticalLayout).gap = 10;
+			//}
+			//if(template == null) { template = ListItem; }
+			//if(skin == null) { skin = new ListSkin(); }
 			Bind.addBinding(this, "skin.container.content", this, "dataProvider");
 			Bind.addBinding(this, "skin.container.template", this, "template");
 			Bind.addBinding(this, "skin.container.layout", this, "layout");
 			//behaviors.addItem(new ListSelectionBehavior(this));
-			invalidate(LifeCycle.MEASURE);
-			invalidate(LifeCycle.LAYOUT);
+			//invalidate(LifeCycle.MEASURE);
+			//invalidate(LifeCycle.LAYOUT);
 		}
 		
 	}

@@ -16,8 +16,8 @@ package reflex.components
 			this.label = label;
 		}
 		
-		override protected function initialize(event:Event):void {
-			super.initialize(event);
+		override protected function initialize():void {
+			super.initialize();
 			skin = new CheckBoxSkin();
 			behaviors.addItem(new ButtonBehavior(this));
 			behaviors.addItem(new SelectBehavior(this));
