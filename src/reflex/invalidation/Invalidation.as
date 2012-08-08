@@ -261,14 +261,14 @@ package reflex.invalidation
 				}
 			}
 		}
-		
+		/*
 		private static function onAddedToStage(event:Event):void
 		{
 			var target:IEventDispatcher = event.target as IEventDispatcher; // DisplayObject(event.target);
 			target.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			initialize(stage); // target.stage
 		}
-		
+		*/
 		/**
 		 * The priority of this phase relating to other invalidation phases.
 		 */

@@ -41,11 +41,19 @@ package reflex.graphics
 		private var _backgroundColor:uint = 0xFFFFFF;
 		private var _backgroundAlpha:Number = 0;
 		
+		private var sourceChanged:Boolean;
+		
+		override public function set enabled(value:Boolean):void {
+			super.enabled = value;
+			if(display) { display.alpha = value ? 1 : 0.5; }
+		}
+		
 		[Bindable(event="sourceChange")]
 		public function get source():Object { return _source; }
 		public function set source(value:Object):void {
+			sourceChanged = true;
 			notify("source", _source, _source = value);
-			invalidate(LifeCycle.INVALIDATE);
+			invalidate(LifeCycle.COMMIT);
 		}
 		
 		[Bindable(event="scalingChanged")]
@@ -70,18 +78,27 @@ package reflex.graphics
 		{
 			super();
 			//reflex.metadata.resolveCommitProperties(this, resolve);
-			this.addEventListener(LifeCycle.INVALIDATE, onInvalidate);
+			//this.addEventListener(LifeCycle.COMMIT, onInvalidate);
 		}
 		
-		private function onInvalidate(event:Event):void {
-			onSourceChanged(event);
+		override protected function initialize():void {
+			super.initialize();
+			display.alpha = enabled ? 1 : 0.5;
+		}
+		
+		override protected function onCommit():void {
+			super.onCommit();
+			if(sourceChanged) {
+				updateSource();
+				sourceChanged = false;
+			}
 		}
 		
 		/**
 		 * @private
 		 */
 		//[Commit(properties="source")]
-		public function onSourceChanged(event:Event):void {
+		public function updateSource():void {
 			if (source is String) {
 				var request:URLRequest = new URLRequest(source as String);
 				loader = new Loader();

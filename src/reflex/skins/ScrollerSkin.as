@@ -29,7 +29,8 @@ package reflex.skins
 		}
 		
 		
-		override protected function initialize(event:Event):void {
+		override protected function initialize():void {
+			super.initialize();
 			layout = new BasicLayout();
 			container = new Container();
 			container.injector = new HardCodedInjector();

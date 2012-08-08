@@ -34,8 +34,8 @@ package reflex.components
 			super();
 		}
 		
-		override protected function initialize(event:Event):void {
-			super.initialize(event);
+		override protected function initialize():void {
+			super.initialize();
 			//skin = new ListItemSkin();
 			//behaviors.addItem(new ButtonBehavior(this));
 			//behaviors.addItem(new SelectBehavior(this));

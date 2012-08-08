@@ -3,6 +3,7 @@ package reflex.containers
 	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.ContextMenuEvent;
@@ -67,15 +68,14 @@ package reflex.containers
 		protected function preinitialize():void {
 			_container = new Group();
 			_container.display = this;
-			if (stage) initialize();
+			if (stage) initialize(null);
 			else addEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 		}
 		
-		//private var interval:Interval;
-        protected function initialize(e:Event = null):void {
+        protected function initialize(event:Event):void {
 			// Application is the only Reflex thing not in a container
-			
+			//super.initialize(event);
 			var contextMenu:ContextMenu = new ContextMenu();
 			contextMenu.hideBuiltInItems();
 			this.contextMenu = contextMenu;
@@ -88,12 +88,9 @@ package reflex.containers
 			_container.owner = owner = this.stage;
 			Invalidation.stage = this.stage;
 			Invalidation.app = _container;
-			//interval = new Interval(true);
-			//var injector:IReflexInjector = new C(); // only instantiating in Application
 			injector.injectInto(_container);
-			//_container.layout = new BasicLayout();
 			stage.addChild(this);
-			//this.addChild(container.display as DisplayObject);
+			//this.addChild(_container.display as DisplayObject);
 			onStageResize(null);
         }
 		

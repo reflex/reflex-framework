@@ -1,3 +1,5 @@
+import flash.display.DisplayObject;
+import flash.events.IEventDispatcher;
 import flash.events.MouseEvent;
 
 import reflex.display.IDisplayHelper;
@@ -7,8 +9,15 @@ private var _y:Number = 0;
 private var _scaleX:Number = 1;
 private var _scaleY:Number = 1;
 
-public var filters:Object; // todo: ?
 public var mask:Object; // todo: ?
+public var filters:Object; // todo: ?
+
+private var _blendMode:String = "normal";
+public function get blendMode():String { return _blendMode; }
+public function set blendMode(value:String):void {
+	_blendMode = value;
+	if(display) { display.blendMode = value; }
+}
 
 private var _visible:Boolean = true;
 private var _enabled:Boolean = true;
@@ -18,6 +27,7 @@ private var _enabled:Boolean = true;
 public function get enabled():Boolean { return _enabled; }
 public function set enabled(value:Boolean):void {
 	if(display) { display.mouseEnabled = value; }
+	//if(display) { display.alpha = value ? 1 : 0.5; }
 	notify("enabled", _enabled, _enabled = value);
 }
 
@@ -65,10 +75,10 @@ public function set display(value:Object):void {
 		(_display as IEventDispatcher).removeEventListener(MouseEvent.MOUSE_UP, eventRepeater, false);
 		(_display as IEventDispatcher).removeEventListener(MouseEvent.MOUSE_DOWN, eventRepeater, false);
 		(_display as IEventDispatcher).removeEventListener(MouseEvent.CLICK, eventRepeater, false);
-		(_display as IEventDispatcher).removeEventListener(LifeCycle.INITIALIZE, eventRepeater, false);
-		(_display as IEventDispatcher).removeEventListener(LifeCycle.INVALIDATE, eventRepeater, false);
-		(_display as IEventDispatcher).removeEventListener(LifeCycle.MEASURE, eventRepeater, false);
-		(_display as IEventDispatcher).removeEventListener(LifeCycle.LAYOUT, eventRepeater, false);
+		//(_display as IEventDispatcher).removeEventListener(LifeCycle.INITIALIZE, eventRepeater, false);
+		//(_display as IEventDispatcher).removeEventListener(LifeCycle.INVALIDATE, eventRepeater, false);
+		//(_display as IEventDispatcher).removeEventListener(LifeCycle.MEASURE, eventRepeater, false);
+		//(_display as IEventDispatcher).removeEventListener(LifeCycle.LAYOUT, eventRepeater, false);
 	}
 	_display = value;
 	if(_display is IEventDispatcher) {
@@ -77,10 +87,10 @@ public function set display(value:Object):void {
 		(_display as IEventDispatcher).addEventListener(MouseEvent.MOUSE_UP, eventRepeater, false, 0, true);
 		(_display as IEventDispatcher).addEventListener(MouseEvent.MOUSE_DOWN, eventRepeater, false, 0, true);
 		(_display as IEventDispatcher).addEventListener(MouseEvent.CLICK, eventRepeater, false, 0, true);
-		(_display as IEventDispatcher).addEventListener(LifeCycle.INITIALIZE, eventRepeater, false, 0, true);
-		(_display as IEventDispatcher).addEventListener(LifeCycle.INVALIDATE, eventRepeater, false, 0, true);
-		(_display as IEventDispatcher).addEventListener(LifeCycle.MEASURE, eventRepeater, false, 0, true);
-		(_display as IEventDispatcher).addEventListener(LifeCycle.LAYOUT, eventRepeater, false, 0, true);
+		//(_display as IEventDispatcher).addEventListener(LifeCycle.INITIALIZE, eventRepeater, false, 0, true);
+		//(_display as IEventDispatcher).addEventListener(LifeCycle.INVALIDATE, eventRepeater, false, 0, true);
+		//(_display as IEventDispatcher).addEventListener(LifeCycle.MEASURE, eventRepeater, false, 0, true);
+		//(_display as IEventDispatcher).addEventListener(LifeCycle.LAYOUT, eventRepeater, false, 0, true);
 	}
 	if(_display) {
 		_display.x = _x;
@@ -88,6 +98,10 @@ public function set display(value:Object):void {
 		_display.scaleX = _scaleX;
 		_display.scaleY = _scaleY;
 		_display.visible = _visible;
+		//_display.alpha = _enabled ? 1 : 0.5;
+	}
+	if(_display is DisplayObject) { // need a better workaround
+		_display.blendMode = _blendMode;
 	}
 }
 

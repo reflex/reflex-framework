@@ -9,6 +9,8 @@ package mx.states
 		public var target:String;
 		public var value:*;
 		
+		public var isBaseValueDataBound:Boolean;
+		
 		private var oldValue:*;
 		
 		override public function initialize():void {
