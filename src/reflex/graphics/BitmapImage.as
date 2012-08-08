@@ -45,6 +45,8 @@ package reflex.graphics
 		public function get source():Object { return _source; }
 		public function set source(value:Object):void {
 			notify("source", _source, _source = value);
+			//_measuredWidth = unscaledWidth = 30;
+			//_measuredHeight = unscaledHeight = 30;
 			invalidate(LifeCycle.INVALIDATE);
 		}
 		
@@ -182,7 +184,7 @@ package reflex.graphics
 					matrix = new Matrix(unscaledWidth/original.width, 0, 0, unscaledHeight/original.height, 0, 0);
 				}
 				
-				bitmapData.floodFill(0, 0, 0)
+				bitmapData.floodFill(0, 0, 0x00000000)
 				bitmapData.draw(original, matrix, null, null, null, true);
 			} else {
 				bitmapData.floodFill(0, 0, 0)
