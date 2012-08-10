@@ -11,7 +11,10 @@ package reflex.animation
 		}
 		
 		public function createAnimationToken(renderer:Object):AnimationToken {
-			return new AnimationToken(renderer.x, renderer.y, renderer.width, renderer.height)
+			var token:AnimationToken = new AnimationToken(renderer.x, renderer.y, renderer.width, renderer.height);
+			//token.alpha = renderer.alpha;
+			//if(renderer is DisplayObject) { token.matrix = renderer.transform.matrix; }
+			return token;
 		}
 		
 		//public function attach(container:Object):void {}
@@ -53,6 +56,10 @@ package reflex.animation
 				item.width = token.width;
 				item.height = token.height;
 			}
+			//item.rotationZ = token.rotation;
+			//if(item is DisplayObject) {
+			//item.transform.matrix = token.matrix;
+			//}
 		}
 		
 	}

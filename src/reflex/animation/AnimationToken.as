@@ -14,7 +14,7 @@ package reflex.animation
 		public var rotationY:Number = 0;
 		public var rotationZ:Number = 0;
 		
-		public var alpha:Number = 1;
+		//public var alpha:Number = 1.0;
 		
 		public function AnimationToken(x:Number, y:Number, width:Number, height:Number)
 		{

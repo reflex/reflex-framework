@@ -8,8 +8,15 @@ package reflex.components
 	public class Button extends Component
 	{
 		
+		private var _icon:Object;
 		private var _label:String;
 		private var _selected:Boolean;
+		
+		[Bindable(event="iconChange")]
+		public function get icon():Object { return _icon; }
+		public function set icon(value:Object):void {
+			notify("icon", _icon, _icon = value);
+		}
 		
 		[Bindable(event="labelChange")]
 		[Inspectable(name="Label", type=String, defaultValue="Label")]
@@ -33,6 +40,7 @@ package reflex.components
 		
 		override protected function initialize():void {
 			super.initialize();
+			Bind.addBinding(this, "skin.iconDisplay.source", this, "icon", false);
 			Bind.addBinding(this, "skin.labelDisplay.text", this, "label", false);
 			Bind.addBinding(this, "skin.currentState", this, "currentState", false);
 		}
