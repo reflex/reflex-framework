@@ -24,13 +24,6 @@ package reflex.text
 	import reflex.styles.resolveStyle;
 	
 	
-	[Style(name="left")]
-	[Style(name="right")]
-	[Style(name="top")]
-	[Style(name="bottom")]
-	[Style(name="horizontalCenter")]
-	[Style(name="verticalCenter")]
-	[Style(name="dock")]
 	[Style(name="align")]
 	[Style(name="txtAlign", format="String", enumeration="left,right,center,justify")]
 	//[Style(name="verticalAlign")]
@@ -54,28 +47,27 @@ package reflex.text
 		
 		protected var _allowWrap:Boolean = false;
 		protected var _clipText:Boolean = false;
-		
+		/*
 		override public function set display(value:Object):void {
 			super.display = value;
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
 		}
-		
+		*/
 		public function Label(text:String = "")
 		{
 			fontFormat = new FontDescription();
 			format = new ElementFormat(null, 24);
 			textElement = new TextElement("");
 			textBlock = new TextBlock(textElement);
-			//mouseChildren = false;
 			this.text = text;
 		}
-		
+		/*
 		override protected function initialize():void {
 			super.initialize();
-			//addEventListener(TEXT_RENDER, onTextRender);
+			
 		}
-		
+		*/
 		[Bindable(event="textChange")]
 		public function get text():String { return textElement.text; }
 		public function set text(value:String):void {
@@ -199,9 +191,14 @@ package reflex.text
 			line.y = unscaledHeight/2 + line.textHeight/2 - 5; // fuzzy math here
 		}
 		
+		override protected function onMeasure():void {
+			super.onMeasure();
+			onLayout(); // todo: need proper measurement
+		}
+		
 		override protected function onLayout():void
 		{
-			
+			super.onLayout();
 			while (helper.getNumChildren(display)) helper.removeChildAt(display, 0);
 			
 			format.fontDescription = fontFormat;
@@ -212,7 +209,7 @@ package reflex.text
 			
 			var startY:int = 0;
 			var align:String = resolveStyle(this, "txtAlign", String, CENTER) as String;
-		
+			
 			lineJustifier.lineJustification = (align == JUSTIFY) ? LineJustification.ALL_BUT_LAST : LineJustification.UNJUSTIFIED;
 			textBlock.textJustifier = lineJustifier;
 			

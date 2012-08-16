@@ -5,6 +5,7 @@ package reflex.layouts
 	import flash.geom.Rectangle;
 	
 	import reflex.animation.AnimationToken;
+	import reflex.data.IPosition;
 	import reflex.measurement.calculateAvailableSpace;
 	import reflex.measurement.calculatePercentageTotals;
 	import reflex.measurement.resolveHeight;
@@ -27,6 +28,21 @@ package reflex.layouts
 		public var edging:Boolean = false;
 		public var verticalAlign:String = "top"; // bottom, middle, top, justify
 		public var horizontalAlign:String = "left"; // left, center, right
+		
+		private var _position:IPosition;
+		
+		[Binding(target="target.horizontal")]
+		
+		public function get position():IPosition { return _position; }
+		public function set position(value:IPosition):void {
+			/*if(_position is IEventDispatcher) {
+				(_position as IEventDispatcher).removeEventListener("valueChange", onPositionChange, false);
+			}*/
+			_position = value;
+			/*if(_position is IEventDispatcher) {
+				(_position as IEventDispatcher).addEventListener("valueChange", onPositionChange, false, 0, true);
+			}*/
+		}
 		
 		public function HorizontalLayout(gap:Number = 5, verticalAlign:String = "top", edging:Boolean = false):void {
 			super();
@@ -64,6 +80,10 @@ package reflex.layouts
 				
 				var position:Number = edging ? gap/2 : 0;
 				var length:int = content.length;
+				
+				if(_position) {
+					position -= _position.value*100;
+				}
 				
 				availableSpace.x -= edging ? gap*length : gap*(length-1);
 				for(var i:int = 0; i < length; i++) {

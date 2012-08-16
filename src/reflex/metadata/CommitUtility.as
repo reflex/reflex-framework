@@ -9,7 +9,7 @@ package reflex.metadata
 	
 	import reflex.behaviors.IBehavior;
 	import reflex.binding.Bind;
-	import reflex.graphics.IDrawable;
+	import reflex.graphics.IGraphicItem;
 	import reflex.invalidation.Invalidation;
 	import reflex.skins.ISkin;
 	
@@ -22,7 +22,7 @@ package reflex.metadata
 	 */
 	public class CommitUtility extends EventDispatcher
 	{
-		
+		/*
 		static public var instance:CommitUtility = new CommitUtility();
 		
 		private var dictionary:Dictionary = new Dictionary(true);
@@ -74,6 +74,6 @@ package reflex.metadata
 				}
 			}
 		}
-		
+		*/
 	}
 }

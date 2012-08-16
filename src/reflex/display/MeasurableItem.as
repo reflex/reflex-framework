@@ -26,7 +26,7 @@ package reflex.display
 	[Style(name="bottom")]
 	[Style(name="horizontalCenter")]
 	[Style(name="verticalCenter")]
-	[Style(name="dock")]
+	//[Style(name="dock")]
 	[Style(name="align")]
 	
 	/**
@@ -69,7 +69,7 @@ package reflex.display
 		
 		
 		public function invalidate(phase:String):void {
-			if(_invalidation) { _invalidation.invalidate(this, phase); }
+			if(_invalidation && owner != null) { _invalidation.invalidate(this, phase); }
 		}
 		
 		private function initializeHandler(event:Event):void {

@@ -166,6 +166,7 @@ package reflex.containers
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
 			notify("content", oldContent, _content);
+			this.validate();
 		}
 		
 		/**
@@ -215,7 +216,7 @@ package reflex.containers
 				if (_content) {
 					_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
 				}
-				reset(_content ? _content.toArray() : []);
+				addItems(_content ? _content.toArray() : [], 0);//reset(_content ? _content.toArray() : []);
 				contentChanged = false;
 				templateChanged = false;
 			}
@@ -308,18 +309,20 @@ package reflex.containers
 				case CollectionEventKind.RESET :
 				default:
 					animationType = AnimationType.RESET;
-					reset(event.items);
+					//reset(event.items);
+					removeItems(event.items, 0);
+					addItems(_content ? _content.toArray() : [], 0);
 					break;
 			}
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
 		}
-		
+		/*
 		private function reset(items:Array):void {
 			removeItems(items, 0);
 			addItems(items, 0);
 		}
-		
+		*/
 		private function addItems(items:Array, index:int):void {
 			var length:int = items ? items.length : 0;
 			for(var i:int = 0; i < length; i++) {
@@ -338,10 +341,10 @@ package reflex.containers
 				//renderers.push(renderer);
 				renderers.splice(index+i, 1, renderer);
 				
-				
 				itemRenderers[item] = renderer;
 				rendererItems[renderer] = item;
 				
+				//if(invalidation) { invalidation.add(renderer as IEventDispatcher); }
 				dispatchEvent(new ContainerEvent(ContainerEvent.ITEM_ADDED, item, renderer));
 			}
 		}
@@ -349,12 +352,18 @@ package reflex.containers
 		private function removeItems(items:Array, index:int):void {
 			for each (var item:Object in items) {
 				var renderer:Object = itemRenderers[item];
+				//if(renderer == null) { renderer = item; }
 				if(renderer is MeasurableItem) { // need to make this generic
 					(renderer as MeasurableItem).owner = null;
 				}
 				if(helper.contains(display, renderer)) {
 					helper.removeChild(display, renderer);
 				}
+				if(invalidation) {
+					invalidation.validate(renderer as IEventDispatcher);
+				}
+				delete rendererItems[renderer];
+				delete itemRenderers[item];
 			}
 		}
 		

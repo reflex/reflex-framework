@@ -66,8 +66,9 @@ package reflex.collections
 		
 		public function removeAll():void
 		{
+			var items:Array = _source;
 			_source = [];
-			var event:CollectionEvent = new CollectionEvent(CollectionEvent.COLLECTION_CHANGE, false, false, CollectionEventKind.RESET, -1, -1, null);
+			var event:CollectionEvent = new CollectionEvent(CollectionEvent.COLLECTION_CHANGE, false, false, CollectionEventKind.RESET, -1, -1, items);
 			dispatchEvent(event);
 		}
 		

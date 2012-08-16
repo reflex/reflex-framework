@@ -27,6 +27,7 @@ package reflex.containers
 	
 	//[Frame(factoryClass="reflex.tools.flashbuilder.ReflexApplicationLoader")]
 	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
+	//[Frame(factoryClass="reflex.framework.Preloader")]
 	[DefaultProperty("content")]
 	/**
 	 * @alpha
@@ -86,8 +87,9 @@ package reflex.containers
 			removeEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 			_container.owner = owner = this.stage;
-			Invalidation.stage = this.stage;
-			Invalidation.app = _container;
+			//Invalidation.stage = this.stage;
+			//Invalidation.app = _container;
+			injector.initialize(stage, _container);
 			injector.injectInto(_container);
 			stage.addChild(this);
 			//this.addChild(_container.display as DisplayObject);

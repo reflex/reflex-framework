@@ -3,6 +3,7 @@ package reflex.injection
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
@@ -21,6 +22,7 @@ package reflex.injection
 	import reflex.containers.Container;
 	import reflex.containers.Group;
 	import reflex.containers.HGroup;
+	import reflex.containers.IContainer;
 	import reflex.containers.VGroup;
 	import reflex.data.Position;
 	import reflex.display.FlashDisplayHelper;
@@ -28,8 +30,8 @@ package reflex.injection
 	import reflex.display.MeasurableItem;
 	import reflex.display.StyleableItem;
 	import reflex.graphics.BitmapImage;
-	import reflex.invalidation.HardCodedInvalidation;
 	import reflex.invalidation.IReflexInvalidation;
+	import reflex.invalidation.Invalidation;
 	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.HorizontalLayout;
@@ -48,9 +50,18 @@ package reflex.injection
 	public class HardCodedInjector implements IReflexInjector
 	{
 		
-		private var invalidation:IReflexInvalidation = new HardCodedInvalidation();
+		private var invalidation:Invalidation = new Invalidation();
 		private var animator:IAnimator = new Animator();
 		private var helper:IDisplayHelper = new FlashDisplayHelper();
+		
+		public function initialize(stage:Stage, app:IEventDispatcher):void {
+			invalidation.stage = stage;
+			invalidation.app = app;
+			invalidation.registerPhase(LifeCycle.INITIALIZE, Event, 400, false);
+			invalidation.registerPhase(LifeCycle.COMMIT, Event, 300, false);
+			invalidation.registerPhase(LifeCycle.MEASURE, Event, 200, true);
+			invalidation.registerPhase(LifeCycle.LAYOUT, Event, 100, false);
+		}
 		
 		public function injectInto(instance:Object):void {
 			// move concrete references out? - later

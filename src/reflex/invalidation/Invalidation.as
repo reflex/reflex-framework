@@ -54,35 +54,40 @@ package reflex.invalidation
 	 * 
 	 * @see flight.utils#callLater()
 	 */
-	public class Invalidation
+	public class Invalidation implements IReflexInvalidation
 	{
 		
-		static public var stage:Stage;
-		static public var app:IEventDispatcher;
+		public var stage:Stage;
+		public var app:IEventDispatcher;
 		
 		/**
 		 * Internal weak-reference registry of all display objects initialized
 		 * by Invalidation, including stages.
 		 */
-		private static var initialized:Dictionary = new Dictionary(true);
-		initialized[null] = true;
+		private var initialized:Dictionary = new Dictionary(true);
+		
 		
 		/**
 		 * Internal weak-referenced registry of invalidated stages.
 		 */
-		private static var invalidStages:Dictionary = new Dictionary(true);
-		invalidStages[null] = true;
+		private var invalidStages:Dictionary = new Dictionary(true);
+		
 		
 		/**
 		 * An Array of registered phases ordered by priority from highest to
 		 * lowest.
 		 */
-		private static var phases:Array = [];
+		private var phases:Array = [];
 		
 		/**
 		 * Phase lookup by phase name, for convenience.
 		 */
-		private static var lookup:Object = {};
+		private var lookup:Object = {};
+		
+		public function Invalidation():void {
+			initialized[null] = true;
+			invalidStages[null] = true;
+		}
 		
 		/**
 		 * Phases of invalidation such as "measure", "layout" and "draw" allow
@@ -121,13 +126,13 @@ package reflex.invalidation
 		 * 						for the first time, or re-registered with new
 		 * 						priority/ascending settings.
 		 */
-		public static function registerPhase(phaseName:String, eventType:Class = null, priority:int = 0, ascending:Boolean = false):Boolean
+		public function registerPhase(phaseName:String, eventType:Class = null, priority:int = 0, ascending:Boolean = false):Boolean
 		{
-			var phase:Invalidation = lookup[phaseName];
+			var phase:InvalidationPhase = lookup[phaseName];
 			if (!phase) {
-				phase = new Invalidation(phaseName, eventType, ascending);
+				phase = new InvalidationPhase(phaseName, eventType, ascending);
 				phases.push(phase);													// keep track of phases in both ordered phases and the lookup
-				lookup[phase._name] = phase;
+				lookup[phase.name] = phase;
 			} else if (phase.priority == priority) {
 				return false;
 			}
@@ -151,9 +156,9 @@ package reflex.invalidation
 		 * @return				Returns true if the target was invalidated for
 		 * 						the first time this render cycle.
 		 */
-		public static function invalidate(target:IEventDispatcher, phaseName:String):Boolean
+		public function invalidate(target:IEventDispatcher, phaseName:String):Boolean
 		{
-			var phase:Invalidation = lookup[phaseName];
+			var phase:InvalidationPhase = lookup[phaseName];
 			if (!phase) {
 				throw new Error(/*getClassName(target) +*/ "- cannot be invalidated by unknown phase '" + phaseName + "'.");
 			}
@@ -179,10 +184,10 @@ package reflex.invalidation
 		 * @param phaseName		Optional invalidation phase to run. If null, all
 		 * 						phases will be run in order of priority.
 		 */
-		public static function validateNow(target:IEventDispatcher = null, phaseName:String = null):void
+		public function validate(target:IEventDispatcher = null, phaseName:String = null):void
 		{
 			if (phaseName) {
-				var phase:Invalidation = lookup[phaseName];
+				var phase:InvalidationPhase = lookup[phaseName];
 				if (!phase) {
 					throw new Error(/*getClassName(target) +*/ "- cannot be validated by unknown phase '" + phaseName + "'.");
 				}
@@ -194,7 +199,7 @@ package reflex.invalidation
 			}
 		}
 		
-		private static function initialize(target:IEventDispatcher):void
+		private function initialize(target:IEventDispatcher):void
 		{
 			if (!initialized[target]) {
 				initialized[target] = true;
@@ -219,12 +224,12 @@ package reflex.invalidation
 		/**
 		 * Listener responding to both render and stage resize events.
 		 */
-		private static function onRender(event:Event):void
+		private function onRender(event:Event):void
 		{
 			var stage:Stage = Stage(event.currentTarget);
 			if (invalidStages[stage]) {
 				invalidStages[stage] = false;
-				validateNow(app);
+				validate(app);
 				delete invalidStages[stage];
 			}
 		}
@@ -234,11 +239,11 @@ package reflex.invalidation
 		 * being added to the display-list, calculating their level (depth
 		 * in display-list hierarchy).
 		 */
-		private static function onAdded(event:Event):void
+		public function add(target:IEventDispatcher):void
 		{
-			var target:IEventDispatcher = event.target as IEventDispatcher;//DisplayObject(event.target);
+			//var target:IEventDispatcher = event.target as IEventDispatcher;//DisplayObject(event.target);
 			// correctly invalidate newly added display object on all phases
-			for each (var phase:Invalidation in phases) {							// where it was invalidated while off of the display-list (and set at level -1)
+			for each (var phase:InvalidationPhase in phases) {							// where it was invalidated while off of the display-list (and set at level -1)
 				if (phase.invalid[target]) {
 					var parent:IEventDispatcher = (target as Object).owner; //var parent:DisplayObjectContainer = target.parent;
 					while (parent) {
@@ -250,7 +255,7 @@ package reflex.invalidation
 			invalidateStage(stage); // target.stage
 		}
 		
-		private static function invalidateStage(stage:Stage):void
+		private function invalidateStage(stage:Stage):void
 		{
 			if (!invalidStages[stage]) {
 				if (invalidStages[stage] == null) {
@@ -269,182 +274,5 @@ package reflex.invalidation
 			initialize(stage); // target.stage
 		}
 		*/
-		/**
-		 * The priority of this phase relating to other invalidation phases.
-		 */
-		public var priority:int = 0;
-		
-		/**
-		 * The event class instantiated for dispatch from invalidation targets.
-		 */
-		public var eventType:Class;
-		
-		public var ascending:Boolean;
-		
-		/**
-		 * Quick reference with invalidated targets as key and value as level.
-		 */
-		private var invalid:Dictionary = new Dictionary(true);
-		
-		/**
-		 */
-		private var invalidContent:Dictionary = new Dictionary(true);
-		
-		private var indices:Dictionary = new Dictionary(true);
-		
-		/**
-		 * Constructor requiring phase name also used as event type, and
-		 * optionally the class used for event instantiation.
-		 * 
-		 * @param name			Phase name, also the event type.
-		 * @param eventType		Event class used when dispatching from
-		 * 						invalidation targets.
-		 */
-		public function Invalidation(name:String, eventType:Class = null, ascending:Boolean = false)
-		{
-			_name = name;
-			this.eventType = eventType || Event;
-			this.ascending = ascending;
-		}
-		
-		/**
-		 * Phase name, also used as the event type.
-		 */
-		public function get name():String { return _name; }
-		private var _name:String;
-		
-		
-		/**
-		 * Effectively invalidates target with this phase.
-		 * 
-		 * @param target		Target to be invalidated.
-		 * @return				Returns true the first time target is
-		 * 						invalidated.
-		 */
-		public function invalidate(target:IEventDispatcher):Boolean
-		{
-			
-			if (!target || invalid[target]) {
-				return false;
-			}
-			
-			invalid[target] = true;
-			
-			var parent:IEventDispatcher = (target as Object).owner; //var parent:DisplayObjectContainer = target.parent;
-			while (parent && !invalidContent[parent]) {
-				invalidContent[parent] = true;
-				parent = !(parent is Stage) ? (parent as Object).owner : null; // parent.parent;
-			}
-			
-			return true;
-		}
-		
-		/**
-		 * Execution of the phase by dispatching an event from each target, in order
-		 * ascending or descending by level. Event type and class correlate with
-		 * phase name and eventType respectively.
-		 * 
-		 * @param target		Optional target may be specified for isolated
-		 * 						validation. If null, full validation is run on
-		 * 						all targets in proper level order.
-		 */
-		public function validateNow(target:IEventDispatcher):void
-		{
-			var current:IEventDispatcher; //DisplayObjectContainer;
-			var next:IEventDispatcher;
-			var i:int;
-			
-			// flattened recursive process to maintain a shallow stack
-			if (ascending) {
-				
-				if (invalidContent[target]) {
-					delete invalidContent[target];
-					current = target;//DisplayObjectContainer(target);
-					indices[current] = 0;
-					
-					while (current) {
-						
-						i = indices[current]++;
-						var content:IList = null;
-						if(current is Component) {
-							next = i == 0 ? (current as Component).skin as IEventDispatcher : null;
-							//indices[current] = 0;
-						} else if(current is IContainer) {
-							content = (current as IContainer).content;
-							next = (content && i < content.length) ? (current as Container).getRendererForItem(content.getItemAt(i)) as IEventDispatcher : null;
-						}
-						//next = i < (current as Stage).numChildren ? (current as Stage).getChildAt(i) : null; // trouble here
-						if (next) {
-							if (invalidContent[next]) {
-								delete invalidContent[next];
-								
-								current = next;
-								indices[current] = 0;
-							} else if (invalid[next]) {
-								delete invalid[next];
-								next.dispatchEvent(new eventType(_name));
-							}
-						} else {
-							if (invalid[current]) {
-								delete invalid[current];
-								current.dispatchEvent(new eventType(_name));
-							}
-							delete indices[current];
-							current = current != target ? (current as Object).owner : null;//current = current != target ? current.parent : null;
-						}
-					}
-					
-				} else if (invalid[target]) {
-					delete invalid[target];
-					target.dispatchEvent(new eventType(_name));
-				}
-				
-			} else {
-				
-				if (invalid[target]) {
-					delete invalid[target];
-					target.dispatchEvent(new eventType(_name));
-				}
-				
-				if (invalidContent[target]) {
-					delete invalidContent[target];
-					current = target; //DisplayObjectContainer(target);
-					indices[current] = 0;
-					
-					while (current) {
-						
-						i = indices[current]++;
-						content = null;
-						if(current is Component) {
-							next = i==0 ? (current as Component).skin as IEventDispatcher : null;
-							//indices[current] = 0;
-						} else if(current is IContainer) {
-							content = (current as IContainer).content;
-							next = (content && i < content.length) ? (current as Container).getRendererForItem(content.getItemAt(i)) as IEventDispatcher : null;
-						}
-						//next = i < (current as Stage).numChildren ? (current as Stage).getChildAt(i) : null; // trouble here
-						if (next) {
-							if (invalid[next]) {
-								delete invalid[next];
-								next.dispatchEvent(new eventType(_name));
-							}
-							
-							if (invalidContent[next]) {
-								delete invalidContent[next];
-								
-								current = next; // DisplayObjectContainer(next);
-								indices[current] = 0;
-							}
-						} else {
-							delete indices[current];
-							current = current != target ? (current as Object).owner : null; // current = current != target ? current.parent : null;
-						}
-					}
-				}
-				
-			}
-			
-			
-		}
 	}
 }

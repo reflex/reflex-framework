@@ -85,12 +85,15 @@ package reflex.skins
 				// skin measurement occurs before component measurement
 				//target.addEventListener(LifeCycle.MEASURE, onMeasure, false, 1, true);
 				//target.addEventListener(LifeCycle.LAYOUT, onLayout, false, 1, true);
-				invalidate(LifeCycle.MEASURE);
-				invalidate(LifeCycle.LAYOUT);
+				
+				
 				//reflex.metadata.resolveCommitProperties(this);
 				
 			}
 			this.owner = _target;
+			//if(invalidation) { invalidation.add(this); }
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 			
 			notify("target", oldValue, _target);
 		}

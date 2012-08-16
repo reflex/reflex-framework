@@ -5,7 +5,7 @@ package reflex.layouts
 	import flash.geom.Rectangle;
 	
 	import reflex.animation.AnimationToken;
-	import reflex.graphics.IDrawable;
+	import reflex.graphics.IGraphicItem;
 	import reflex.graphics.Line;
 	import reflex.measurement.resolveHeight;
 	import reflex.measurement.resolveWidth;
@@ -117,7 +117,7 @@ package reflex.layouts
 					//reflex.measurement.setSize(child, Math.round(width), Math.round(height));
 					token.width = Math.round(width);
 					token.height = Math.round(height);
-				} else if(child is IDrawable) { // sometime width/height is 0 for lines
+				} else if(child is IGraphicItem) { // sometime width/height is 0 for lines
 					//reflex.measurement.setSize(child, Math.round(width), Math.round(height));
 					token.width = Math.round(width);
 					token.height = Math.round(height);

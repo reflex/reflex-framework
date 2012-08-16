@@ -5,7 +5,7 @@ package reflex.templating
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
 	
-	import reflex.graphics.IDrawable;
+	import reflex.graphics.IGraphicItem;
 	
 	/**
 	 * Returns a renderer to be used for the given data according to the given template.
@@ -28,9 +28,9 @@ package reflex.templating
 		if (instance is IDataRenderer) {
 			(instance as IDataRenderer).data = data;
 		}
-		if (data is IDrawable) {
-			(data as IDrawable).target = container;
-		}
+		//if (data is IGraphicItem) {
+		//	(data as IGraphicItem).target = container;
+		//}
 		return instance != null ? instance : data;
 	}
 	

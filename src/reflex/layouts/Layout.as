@@ -70,8 +70,8 @@ package reflex.layouts
 		
 		private function onInvalidateLayout(object:*):void {
 			if (target is DisplayObject) {
-				Invalidation.invalidate(target as DisplayObject, "measure");
-				Invalidation.invalidate(target as DisplayObject, "layout");
+				//Invalidation.invalidate(target as DisplayObject, "measure");
+				//Invalidation.invalidate(target as DisplayObject, "layout");
 			}
 		}
 		

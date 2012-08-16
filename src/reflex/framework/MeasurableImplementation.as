@@ -8,8 +8,8 @@ protected var _measuredHeight:Number;
 private var _percentWidth:Number;
 private var _percentHeight:Number;
 
-protected var unscaledWidth:Number = 160;
-protected var unscaledHeight:Number = 22;
+protected var unscaledWidth:Number = 0; // 160
+protected var unscaledHeight:Number = 0; // 22
 
 // IMeasurable implementation
 

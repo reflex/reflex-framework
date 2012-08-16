@@ -14,14 +14,6 @@ package reflex.graphics
 	import reflex.invalidation.LifeCycle;
 	import reflex.metadata.resolveCommitProperties;
 	
-	[Style(name="left")]
-	[Style(name="right")]
-	[Style(name="top")]
-	[Style(name="bottom")]
-	[Style(name="horizontalCenter")]
-	[Style(name="verticalCenter")]
-	[Style(name="dock")]
-	[Style(name="align")]
 	
 	public class BitmapImage extends MeasurableItem
 	{
@@ -128,8 +120,8 @@ package reflex.graphics
 				this.setSize(_measuredWidth, _measuredHeight);
 				original = bitmapdata;
 				draw();
-				Invalidation.invalidate(this, "measure");
-				Invalidation.invalidate(this, "layout");
+				invalidate(LifeCycle.MEASURE);
+				invalidate(LifeCycle.LAYOUT);
 			} else {
 				original = null;
 				draw();
@@ -141,8 +133,8 @@ package reflex.graphics
 			_measuredHeight = loader.content.height;
 			original = (loader.content as Bitmap).bitmapData;
 			draw();
-			Invalidation.invalidate(this, "measure");
-			Invalidation.invalidate(this, "layout");
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		/**

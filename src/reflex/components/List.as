@@ -68,6 +68,8 @@ package reflex.components
 			Bind.addBinding(this, "skin.container.content", this, "dataProvider");
 			Bind.addBinding(this, "skin.container.template", this, "template");
 			Bind.addBinding(this, "skin.container.layout", this, "layout");
+			Bind.addBinding(this, "skin.container.horizontal", this, "position");
+			Bind.addBinding(this, "skin.container.vertical", this, "position");
 			//behaviors.addItem(new ListSelectionBehavior(this));
 			//invalidate(LifeCycle.MEASURE);
 			//invalidate(LifeCycle.LAYOUT);
