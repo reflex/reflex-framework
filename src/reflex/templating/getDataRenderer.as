@@ -5,6 +5,7 @@ package reflex.templating
 	import mx.core.IDataRenderer;
 	import mx.core.IFactory;
 	
+	import reflex.display.MeasurableItem;
 	import reflex.graphics.IGraphicItem;
 	
 	/**
@@ -24,6 +25,11 @@ package reflex.templating
 			instance = (template as Function)(data);
 		} else if (data is DisplayObject) {
 			instance = data as DisplayObject;
+		} /*(else if (template is DisplayObject) {
+			// clone
+			
+		}*/ else {
+			//instance = new MeasurableItem();
 		}
 		if (instance is IDataRenderer) {
 			(instance as IDataRenderer).data = data;

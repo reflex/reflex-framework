@@ -12,6 +12,8 @@ package reflex.data
 	import reflex.events.DataChangeEvent;
 	import reflex.display.PropertyDispatcher;
 	
+	[Event(name="selectedItemChange", type="reflex.events.DataChangeEvent")]
+	
 	/**
 	 * Holds the selected data for list components.
 	 */

@@ -75,7 +75,9 @@ package reflex.containers
 		private var _fill:IFill;
 		private var fillChanged:Boolean;
 		
-		private var renderers:Array = []; // just reflex components
+		[Bindable]
+		public var renderers:IList = new SimpleCollection(); //:Array = []; // just reflex components
+		
 		private var itemRenderers:Dictionary = new Dictionary(true);
 		private var rendererItems:Dictionary = new Dictionary(true);
 		private var animationType:String = AnimationType.GENERIC; // generic, add, remove, reset, layout, resize, drag, scroll ... ?
@@ -88,7 +90,7 @@ package reflex.containers
 			return itemRenderers[item];
 		}
 		
-		public function getRenderers():Array { return renderers.concat(); }
+		public function getRenderers():Array { return renderers.toArray()/*concat()*/; }
 		
 		private var _animator:IAnimator;//= new Animator();
 		public function get animator():IAnimator { return _animator; }
@@ -166,7 +168,7 @@ package reflex.containers
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
 			notify("content", oldContent, _content);
-			this.validate();
+			this.validate(); // todo: ???
 		}
 		
 		/**
@@ -199,6 +201,7 @@ package reflex.containers
 			_template = value;
 			templateChanged = true;
 			animationType = AnimationType.RESET;
+			invalidate(LifeCycle.COMMIT);
 			invalidate(LifeCycle.MEASURE);
 			invalidate(LifeCycle.LAYOUT);
 			notify("template", oldTemplate, _template);
@@ -237,7 +240,7 @@ package reflex.containers
 			if ((isNaN(explicitWidth) || isNaN(explicitHeight)) 
 				//|| (isNaN(percentWidth) || isNaN(percentHeight))
 				&& layout) {
-				var point:Point = layout.measure(renderers);
+				var point:Point = layout.measure(renderers.toArray());
 				if (point.x != measuredWidth || point.y != measuredHeight) {
 					_measuredWidth = point.x;
 					_measuredHeight = point.y;
@@ -250,7 +253,7 @@ package reflex.containers
 			if (layout && renderers.length > 0) {
 				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);
 				var tokens:Array = layout.update(_content ? _content.toArray() : [], generateTokens(), rectangle);
-				animateToTokens(renderers, tokens);
+				animateToTokens(renderers.toArray(), tokens);
 			}
 			drawBackground();
 		}
@@ -268,9 +271,10 @@ package reflex.containers
 		private function generateTokens():Array {
 			// we'll want to pool these tokens later
 			var tokens:Array = [];
+			//if(templateChanged==true) { return tokens; }
 			var length:int = renderers ? renderers.length : 0;
 			for( var i:int = 0; i < length; i++) {
-				var renderer:Object = renderers[i];
+				var renderer:Object = renderers.getItemAt(i); //renderers[i];
 				var token:AnimationToken = animator.createAnimationToken(renderer);
 				tokens.push(token);
 			}
@@ -278,6 +282,7 @@ package reflex.containers
 		}
 		
 		private function animateToTokens(renderers:Array, tokens:Array):void {
+			//if(templateChanged==true) { return; }
 			animator.begin();
 			var length:int = renderers ? renderers.length : 0;
 			for( var i:int = 0; i < length; i++) {
@@ -339,7 +344,8 @@ package reflex.containers
 				// renderer is actually not a DisplayObject now
 				if(helper) { helper.addChild(display, renderer); }
 				//renderers.push(renderer);
-				renderers.splice(index+i, 1, renderer);
+				//renderers.splice(index+i, 1, renderer);
+				renderers.addItem(renderer);
 				
 				itemRenderers[item] = renderer;
 				rendererItems[renderer] = item;

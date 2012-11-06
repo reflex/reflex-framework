@@ -10,7 +10,11 @@ package reflex.animation
 		}
 		
 		public function createAnimationToken(renderer:Object):AnimationToken {
-			var token:AnimationToken = new AnimationToken(renderer.x, renderer.y, renderer.width, renderer.height);
+			try { // todo: sometimes renderer is still data - but it shouldn't be - check container content validate() call
+				var token:AnimationToken = new AnimationToken(renderer.x, renderer.y, renderer.width, renderer.height);
+			} catch(error:Error) {
+				return new AnimationToken(0, 0, 0, 0);
+			}
 			//token.alpha = renderer.alpha;
 			//if(renderer is DisplayObject) { token.matrix = renderer.transform.matrix; }
 			return token;
@@ -27,6 +31,7 @@ package reflex.animation
 		public function end():void {}
 		
 		private function move(item:Object, token:AnimationToken):void {
+			try { // todo: sometimes renderer is still data - but it shouldn't be - check container content validate() call
 			item.x = token.x;
 			item.y = token.y;
 			
@@ -40,6 +45,9 @@ package reflex.animation
 			//if(item is DisplayObject) {
 			//item.transform.matrix = token.matrix;
 			//}
+			} catch (e:Error) {
+				
+			}
 		}
 		
 	}

@@ -36,7 +36,7 @@
 		public function Behavior(target:IEventDispatcher = null)
 		{
 			super(this);
-			_target = target;
+			_target = target; // binding
 			reflex.metadata.resolveBindings(this);
 			reflex.metadata.resolveDataListeners(this);
 			reflex.metadata.resolveEventListeners(this);

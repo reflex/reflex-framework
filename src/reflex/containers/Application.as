@@ -27,7 +27,7 @@ package reflex.containers
 	
 	//[Frame(factoryClass="reflex.tools.flashbuilder.ReflexApplicationLoader")]
 	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
-	//[Frame(factoryClass="reflex.framework.Preloader")]
+	
 	[DefaultProperty("content")]
 	/**
 	 * @alpha
@@ -63,18 +63,17 @@ package reflex.containers
 		public function Application()
 		{
 			super();
+			_container = new Group();
+			_container.display = this;
 			preinitialize();
 		}
 		
 		protected function preinitialize():void {
-			_container = new Group();
-			_container.display = this;
-			if (stage) initialize(null);
-			else addEventListener(Event.ADDED_TO_STAGE, initialize);
-			
+			if(stage) { initialize(null); }
+			else { addEventListener(Event.ADDED_TO_STAGE, initialize); }
 		}
 		
-        protected function initialize(event:Event):void {
+        public function initialize(event:Event):void {
 			// Application is the only Reflex thing not in a container
 			//super.initialize(event);
 			var contextMenu:ContextMenu = new ContextMenu();

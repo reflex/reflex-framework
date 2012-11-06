@@ -16,26 +16,27 @@ package reflex.framework
 	{
 		
 		//[Embed(source="Default.png")]
-		private var splashScreenImage:Class;
-		private var splashScreen:Bitmap;
+		//private var splashScreenImage:Class;
+		//private var splashScreen:Bitmap;
 		
 		public function Preloader()
 		{
-			if (stage) {
-				stage.scaleMode = StageScaleMode.NO_SCALE;
-				stage.align = StageAlign.TOP_LEFT;
-			}
-			addEventListener(Event.ENTER_FRAME, checkFrame);
-			loaderInfo.addEventListener(ProgressEvent.PROGRESS, progress);
-			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
+			stop();
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
+			
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			//loaderInfo.addEventListener(ProgressEvent.PROGRESS, onProgress, false, 0, true);
+			//loaderInfo.addEventListener(Event.COMPLETE, onComplete, false, 0, true);
+			//loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
 			// Show Splash Screen
-			stage.addEventListener(Event.DEACTIVATE, deactivate);
-			splashScreen = new splashScreenImage() as Bitmap;
-			addChild( splashScreen );
+			//stage.addEventListener(Event.DEACTIVATE, deactivate);
+			//splashScreen = new splashScreenImage() as Bitmap;
+			//addChild( splashScreen );
 			
 			//Resize Splash screen to fit the screen (comment this out if you don't want the graphic resized)
-			var wScale:Number = stage.stageWidth / splashScreen.width;
+			/*var wScale:Number = stage.stageWidth / splashScreen.width;
 			var hScale:Number = stage.stageHeight / splashScreen.height;
 			if (wScale < hScale) {
 				splashScreen.scaleX = wScale;
@@ -48,55 +49,62 @@ package reflex.framework
 			//Position splash screen
 			splashScreen.x = (stage.stageWidth - splashScreen.width) / 2;
 			splashScreen.y = (stage.stageHeight - splashScreen.height) / 2;
+			*/
 		}
-		
+		/*
 		private function ioError(e:IOErrorEvent):void
 		{
 			trace(e.text);
 		}
+		*/
 		
-		private function progress(e:ProgressEvent):void
+		
+		
+		private function onEnterFrame(event:Event):void
 		{
 			// TODO update loader
-		}
-		
-		private function checkFrame(e:Event):void
-		{
-			if (currentFrame == totalFrames)
-			{
-				stop();
-				loadingFinished();
+			graphics.clear();
+			if(framesLoaded == totalFrames) {
+				this.removeEventListener(Event.ENTER_FRAME, onEnterFrame, false);
+				try{
+					this.nextFrame(); // flex throws some weird mojo in here
+				} catch(e:Error) {}
+				
+				var name:String = this.currentLabels[1].name;
+				var APP:Class = getDefinitionByName(name) as Class;
+				var instance:Object = new APP();
+				stage.addChild(instance as DisplayObject);
+				instance.initialize(null);
+			} else {
+				var percent:Number = Math.round(this.loaderInfo.bytesLoaded / this.loaderInfo.bytesTotal);
+				graphics.beginFill(0, 1.0);
+				graphics.drawRect(0, stage.stageHeight/2-10, stage.stageWidth*percent, 20);
+				graphics.endFill();
 			}
 		}
-		
-		private function loadingFinished():void
+		/*
+		private function onComplete(event:Event):void
 		{
-			removeEventListener(Event.ENTER_FRAME, checkFrame);
-			loaderInfo.removeEventListener(ProgressEvent.PROGRESS, progress);
-			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
+			//removeEventListener(Event.ENTER_FRAME, enterFrame);
+			//loaderInfo.removeEventListener(ProgressEvent.PROGRESS, onProgress);
+			//loaderInfo.removeEventListener(Event.COMPLETE, onComplete, false);
+			//loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
 			// Hide SplashScreen
-			removeChild( splashScreen );
-			splashScreen.bitmapData.dispose();
-			splashScreen = null;
-			splashScreenImage = null;
+			//removeChild( splashScreen );
+			//splashScreen.bitmapData.dispose();
+			//splashScreen = null;
+			//splashScreenImage = null;
 			
 			startup();
 		}
-		
-		private function startup():void
-		{
-			stage.removeEventListener(Event.DEACTIVATE, deactivate);
-			var mainClass:Class = getDefinitionByName("Main") as Class;
-			var instance:Object = new mainClass();
-			addChild(instance as DisplayObject);
-		}
-		
+		*/
+		/*
 		private function deactivate(e:Event):void
 		{
 			// auto-close
 			NativeApplication.nativeApplication.exit();
 		}
-		
+		*/
 	}
 }

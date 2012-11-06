@@ -86,6 +86,11 @@ package reflex.graphics
 			}
 		}
 		
+		override protected function onLayout():void {
+			super.onLayout();
+			draw();
+		}
+		
 		/**
 		 * @private
 		 */
@@ -159,6 +164,7 @@ package reflex.graphics
 			}
 			
 			var bitmapData:BitmapData = bitmap.bitmapData;
+			bitmapData.fillRect(bitmapData.rect, 0x00000000);
 			if (original) {
 				
 				var mode:String = _scaling;
@@ -191,10 +197,12 @@ package reflex.graphics
 					matrix = new Matrix(unscaledWidth/original.width, 0, 0, unscaledHeight/original.height, 0, 0);
 				}
 				
-				bitmapData.floodFill(0, 0, 0x00000000)
+				//bitmapData.floodFill(1000, 1000, 0x00000000);
+				//bitmapData.fillRect(bitmapData.rect, 0x00000000);
 				bitmapData.draw(original, matrix, null, null, null, true);
 			} else {
-				bitmapData.floodFill(0, 0, 0)
+				//bitmapData.floodFill(0, 0, 0);
+				//bitmapData.fillRect(bitmapData.rect, 0x00000000);
 			}
 		}
 		
