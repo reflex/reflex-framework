@@ -28,12 +28,10 @@
 	
 	<!-- skins -->
 	<component id="Skin" class="reflex.skins.Skin"/>
-	<component id="MovieClipSkin" class="reflex.skins.MovieClipSkin"/>
 	<component id="ListSkin" class="reflex.skins.ListSkin"/>
 	
 	
 	<!-- behaviors -->
-	<component id="CompositeBehavior" class="reflex.behaviors.CompositeBehavior"/>
 	<component id="ButtonBehavior" class="reflex.behaviors.ButtonBehavior"/>
 	<component id="ListBehavior" class="reflex.behaviors.ListBehavior"/>
 	<component id="ListSelectionBehavior" class="reflex.behaviors.ListSelectionBehavior"/>
@@ -43,6 +41,7 @@
 	<component id="DragStepBehavior" class="reflex.behaviors.DragStepBehavior"/>
 	<component id="TextAreaBehavior" class="reflex.behaviors.TextAreaBehavior"/>
 	<component id="TouchScrollBehavior" class="reflex.behaviors.TouchScrollBehavior" />
+	<component id="DragListBehavior" class="reflex.behaviors.DragListBehavior" />
 	
 	<!-- layouts -->
 	<component id="ILayout" class="reflex.layouts.ILayout"/>
@@ -52,6 +51,7 @@
 	<component id="VerticalLayout" class="reflex.layouts.VerticalLayout"/>
 	<component id="HorizontalLayout" class="reflex.layouts.HorizontalLayout"/>
 	<component id="DockLayout" class="reflex.layouts.DockLayout"/>
+	<component id="TileLayout" class="reflex.layouts.TileLayout"/>
 	
 	<!-- data -->
 	<component id="Position" class="reflex.data.Position"/>
@@ -62,10 +62,10 @@
 	<component id="SimpleCollection" class="reflex.collections.SimpleCollection" />
 	
 	<!-- measurement -->
-	<component id="Measurements" class="reflex.measurement.Measurements"/>
+	<!-- <component id="Measurements" class="reflex.measurement.Measurements"/> -->
 	
 	<!-- display -->
-	<component id="Display" class="reflex.display.Display" />
+	<component id="MeasurableItem" class="reflex.display.MeasurableItem" />
 	<component id="BitmapImage" class="reflex.graphics.BitmapImage"/>
 	<component id="TextFieldDisplay" class="reflex.text.TextFieldDisplay"/>
 	<component id="Text" class="reflex.text.Text" />
@@ -73,7 +73,6 @@
 	<!-- graphics -->
 	<component id="IFill" class="mx.graphics.IFill" />
 	<component id="IStroke" class="mx.graphics.IStroke" />
-	<component id="IDrawable" class="reflex.graphics.IDrawable"/>
 	<component id="Rect" class="reflex.graphics.Rect" />
 	<component id="Line" class="reflex.graphics.Line" />
 	<component id="Ellipse" class="reflex.graphics.Ellipse" />
@@ -90,13 +89,13 @@
 	<component id="BitmapFillMode" class="mx.graphics.BitmapFillMode" />
 	
 	<!-- states -->
-	<!-- 
+	
 	<component id="State" class="mx.states.State" />
 	<component id="AddItems" class="mx.states.AddItems" />
 	<component id="SetProperty" class="mx.states.SetProperty" />
 	<component id="SetStyle" class="mx.states.SetStyle" />
 	<component id="IOverride" class="mx.states.IOverride" />
-	-->
+	
 	
 	<!-- text -->
 	<component id="Label" class="reflex.text.Label" />
@@ -107,6 +106,7 @@
 	
 	<!-- Flex references -->
 	<component id="FlexReferences" class="mx.mxml.FlexReferences" />
-	
+	<component id="BindingManager" class="mx.binding.BindingManager" />
+	<component id="PropertyChangeEvent" class="mx.events.PropertyChangeEvent" />
 	
 </componentPackage>

@@ -9,7 +9,6 @@ package reflex.skins
 	import reflex.containers.Container;
 	import reflex.containers.Group;
 	import reflex.containers.HGroup;
-	import reflex.invalidation.Invalidation;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.VerticalLayout;
 	import reflex.layouts.XYLayout;
@@ -21,9 +20,10 @@ package reflex.skins
 		[Bindable]
 		public var container:Container;
 		
-		public function ListSkin()
-		{
-			super();
+		override protected function initialize():void {
+			super.initialize();
+			container = this;
+			/*
 			layout = new BasicLayout();
 			container = new Container();
 			container.layout = new XYLayout();
@@ -32,7 +32,7 @@ package reflex.skins
 			container.setStyle("top", 0);
 			container.setStyle("bottom", 0);
 			content = new SimpleCollection([container]);
-			
+			*/
 		}
 		
 	}

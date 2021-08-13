@@ -17,24 +17,8 @@ package reflex.skins
 	public interface ISkin
 	{
 		
-		// I don't like referencing concrete classes in interfaces
-		// but will have to dig into better use cases later
-		
-		// I need to change invalidation to be comfortable off the display list and I can fix this
-		function get target():Sprite;				// but I prefer ISkinnable targets, they're my favorite
-		function set target(value:Sprite):void;		// cause then I'll use data, children, layout, state, etc
-		/*
-		function get layout():ILayoutAlgorithm;
-		function set layout(value:ILayoutAlgorithm):void;
-		*/
-		/*
-		function get data():Object;
-		function set data(value:Object):void;
-		*/
-		/*
-		function get state():String;
-		function set state(value:String):void;
-		*/
+		function get target():IEventDispatcher;
+		function set target(value:IEventDispatcher):void;
 		
 		// not sure if getSkinPart should be required
 		// maybe we could make it part of an extended interfaces?

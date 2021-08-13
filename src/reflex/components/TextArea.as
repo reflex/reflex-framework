@@ -2,7 +2,6 @@ package reflex.components
 {
 	import reflex.behaviors.TextAreaBehavior;
 	import reflex.binding.Bind;
-	import reflex.binding.DataChange;
 	import reflex.data.IPosition;
 	import reflex.skins.TextAreaSkin;
 	
@@ -17,13 +16,13 @@ package reflex.components
 		[Inspectable(name="Text", type=String, defaultValue="Text")]
 		public function get text():String { return _text; }
 		public function set text(value:String):void {
-			DataChange.change(this, "text", _text, _text = value);
+			notify("text", _text, _text = value);
 		}
 		
 		[Bindable(event="verticalPositionChange")]
 		public function get verticalPosition():IPosition { return _verticalPosition; }
 		public function set verticalPosition(value:IPosition):void {
-			DataChange.change(this, "verticalPosition", _verticalPosition, _verticalPosition = value);
+			notify("verticalPosition", _verticalPosition, _verticalPosition = value);
 		}
 		
 		public function TextArea(text:String = "")

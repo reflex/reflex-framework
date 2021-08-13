@@ -7,7 +7,6 @@ package reflex.components
 	
 	import reflex.behaviors.ScrollerBehavior;
 	import reflex.binding.Bind;
-	import reflex.binding.DataChange;
 	import reflex.collections.SimpleCollection;
 	import reflex.collections.convertToIList;
 	import reflex.containers.IContainer;
@@ -31,50 +30,39 @@ package reflex.components
 		[Bindable(event="horizontalPositionChange")]
 		public function get horizontalPosition():IPosition { return _horizontal; }
 		public function set horizontalPosition(value:IPosition):void {
-			DataChange.change(this, "horizontalPosition", _horizontal, _horizontal = value);
+			notify("horizontalPosition", _horizontal, _horizontal = value);
 		}
 		
 		[Bindable(event="verticalPositionChange")]
 		public function get verticalPosition():IPosition { return _vertical; }
 		public function set verticalPosition(value:IPosition):void {
-			DataChange.change(this, "verticalPosition", _vertical, _vertical = value);
+			notify("verticalPosition", _vertical, _vertical = value);
 		}
 		
 		[Bindable(event="contentChange")]
-		public function get content():IList{
-			return _content;
-		}
+		public function get content():IList{ return _content; }
 		public function set content(value:*):void {
 			if(_content == value) {
 				return;
 			}
-			
 			var oldContent:IList = _content;
-			
 			_content = reflex.collections.convertToIList(value);
-			
-			DataChange.change(this, "content", oldContent,  _content);
+			notify("content", oldContent,  _content);
 		}
 		
 		[Bindable(event="layoutChange")]
 		public function get layout():ILayout { return _layout; }
 		public function set layout(value:ILayout):void {
-			DataChange.change(this, "layout", _layout, _layout = value);
+			notify("layout", _layout, _layout = value);
 		}
 		
-		public function Scroller()
-		{
-			super();
-			initialize();
-		}
-		
-		private function initialize():void {
+		override protected function initialize():void {
+			super.initialize();
 			_content = new SimpleCollection();
 			horizontalPosition = new Position();
 			verticalPosition = new Position();
 			layout = new BasicLayout();
 			skin = new ScrollerSkin();
-			//this.addEventListener("measure", item_measureHandler, false);
 			
 			Bind.addBinding(this, "skin.container.content", this, "content");
 			Bind.addBinding(this, "skin.container.layout", this, "layout");
@@ -83,13 +71,5 @@ package reflex.components
 			behaviors.addItem(new ScrollerBehavior(this));
 		}
 		
-		// temporary?
-		/*
-		private function item_measureHandler(event:Event):void {
-			//var child:IEventDispatcher = event.currentTarget;
-			//Invalidation.invalidate(this, MEASURE);
-			trace("Scroller measure");
-		}
-		*/
 	}
 }

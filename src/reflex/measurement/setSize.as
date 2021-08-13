@@ -1,5 +1,6 @@
 package reflex.measurement
 {
+	import reflex.framework.IMeasurable;
 	
 	public function setSize(child:Object, width:Number, height:Number):void
 	{

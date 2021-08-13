@@ -20,10 +20,10 @@ package reflex.layouts
 	{
 		
 		
-		override public function measure(children:Array):Point
+		override public function measure(content:Array):Point
 		{
-			var point:Point = super.measure(children);
-			for each(var item:Object in children) {
+			var point:Point = super.measure(content);
+			for each(var item:Object in content) {
 				var xp:Number = item.x + resolveWidth(item);
 				var yp:Number = item.y + resolveHeight(item);
 				point.x = Math.max(point.x, xp);
@@ -32,9 +32,10 @@ package reflex.layouts
 			return point;
 		}
 		
-		override public function update(children:Array, rectangle:Rectangle):void
+		override public function update(content:Array, tokens:Array, rectangle:Rectangle):Array
 		{
-			super.update(children, rectangle);
+			super.update(content, tokens, rectangle);
+			return tokens;
 		}
 		
 	}

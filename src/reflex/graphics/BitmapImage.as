@@ -9,21 +9,13 @@ package reflex.graphics
 	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
 	
-	import reflex.binding.DataChange;
-	import reflex.display.BitmapDisplay;
+	import reflex.display.MeasurableItem;
 	import reflex.invalidation.Invalidation;
+	import reflex.invalidation.LifeCycle;
 	import reflex.metadata.resolveCommitProperties;
 	
-	[Style(name="left")]
-	[Style(name="right")]
-	[Style(name="top")]
-	[Style(name="bottom")]
-	[Style(name="horizontalCenter")]
-	[Style(name="verticalCenter")]
-	[Style(name="dock")]
-	[Style(name="align")]
 	
-	public class BitmapImage extends BitmapDisplay
+	public class BitmapImage extends MeasurableItem
 	{
 		
 		static public const BEST_FIT:String = "bestFit";
@@ -34,47 +26,76 @@ package reflex.graphics
 		
 		private var loader:Loader;
 		private var original:BitmapData;
+		private var bitmap:Bitmap;
 		
 		private var _source:Object;
 		private var _scaling:String = BEST_FILL;
 		private var _backgroundColor:uint = 0xFFFFFF;
 		private var _backgroundAlpha:Number = 0;
 		
+		private var sourceChanged:Boolean;
+		
+		override public function set enabled(value:Boolean):void {
+			super.enabled = value;
+			if(display) { display.alpha = value ? 1 : 0.5; }
+		}
+		
 		[Bindable(event="sourceChange")]
 		public function get source():Object { return _source; }
 		public function set source(value:Object):void {
-			DataChange.change(this, "source", _source, _source = value);
+			sourceChanged = true;
+			notify("source", _source, _source = value);
+			invalidate(LifeCycle.COMMIT);
 		}
 		
 		[Bindable(event="scalingChanged")]
 		public function get scaling():String { return _scaling; }
 		public function set scaling(value:String):void {
-			DataChange.change(this, "scaling", _scaling, _scaling = value);
+			notify("scaling", _scaling, _scaling = value);
 		}
 		
 		[Bindable(event="backgroundColorChanged")]
 		public function get backgroundColor():uint { return _backgroundColor; }
 		public function set backgroundColor(value:uint):void {
-			DataChange.change(this, "backgroundColor", _backgroundColor, _backgroundColor = value);
+			notify("backgroundColor", _backgroundColor, _backgroundColor = value);
 		}
 		
 		[Bindable(event="backgroundAlphaChanged")]
 		public function get backgroundAlpha():Number { return _backgroundAlpha; }
 		public function set backgroundAlpha(value:Number):void {
-			DataChange.change(this, "backgroundAlpha", _backgroundAlpha, _backgroundAlpha = value);
+			notify("backgroundAlpha", _backgroundAlpha, _backgroundAlpha = value);
 		}
 		
 		public function BitmapImage()
 		{
 			super();
-			reflex.metadata.resolveCommitProperties(this, resolve);
+			//reflex.metadata.resolveCommitProperties(this, resolve);
+			//this.addEventListener(LifeCycle.COMMIT, onInvalidate);
+		}
+		
+		override protected function initialize():void {
+			super.initialize();
+			display.alpha = enabled ? 1 : 0.5;
+		}
+		
+		override protected function onCommit():void {
+			super.onCommit();
+			if(sourceChanged) {
+				updateSource();
+				sourceChanged = false;
+			}
+		}
+		
+		override protected function onLayout():void {
+			super.onLayout();
+			draw();
 		}
 		
 		/**
 		 * @private
 		 */
-		[Commit(properties="source")]
-		public function onSourceChanged(event:Event):void {
+		//[Commit(properties="source")]
+		public function updateSource():void {
 			if (source is String) {
 				var request:URLRequest = new URLRequest(source as String);
 				loader = new Loader();
@@ -84,25 +105,28 @@ package reflex.graphics
 				var display:Object = new (source as Class)();
 				if(display is Bitmap) {
 					//var display:Bitmap = new (source as Class)();
-					measured.width = display.width;
-					measured.height = display.height;
+					_measuredWidth = display.width;
+					_measuredHeight = display.height;
+					this.setSize(_measuredWidth, _measuredHeight);
 					original = display.bitmapData;
 				} else if(display is IBitmapDrawable) {
 					var bitmap:BitmapData = new BitmapData(display.width, display.height, true, 0);
 					bitmap.draw(display as IBitmapDrawable);
-					measured.width = bitmap.width;
-					measured.height = bitmap.height;
+					_measuredWidth = bitmap.width;
+					_measuredHeight = bitmap.height;
+					this.setSize(_measuredWidth, _measuredHeight);
 					original = bitmap;
 				}
 				draw();
 			} else if (source is BitmapData) {
 				var bitmapdata:BitmapData = source as BitmapData;
-				measured.width = bitmapdata.width;
-				measured.height = bitmapdata.height;
+				_measuredWidth = bitmapdata.width;
+				_measuredHeight = bitmapdata.height;
+				this.setSize(_measuredWidth, _measuredHeight);
 				original = bitmapdata;
 				draw();
-				Invalidation.invalidate(this, "measure");
-				Invalidation.invalidate(this, "layout");
+				invalidate(LifeCycle.MEASURE);
+				invalidate(LifeCycle.LAYOUT);
 			} else {
 				original = null;
 				draw();
@@ -110,27 +134,39 @@ package reflex.graphics
 		}
 		
 		private function onComplete(event:Event):void {
-			measured.width = loader.content.width;
-			measured.height = loader.content.height;
+			_measuredWidth = loader.content.width;
+			_measuredHeight = loader.content.height;
 			original = (loader.content as Bitmap).bitmapData;
 			draw();
-			Invalidation.invalidate(this, "measure");
-			Invalidation.invalidate(this, "layout");
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		/**
 		 * @private
 		 */
-		[Commit(properties="width, height, scaling, backgroundColor, backgroundAlpha")]
+		//[Commit(properties="width, height, scaling, backgroundColor, backgroundAlpha")]
 		public function onSizeChange(event:Event):void {
 			var color:uint = (_backgroundAlpha*255) << 24 | _backgroundColor
-			this.bitmapData = new BitmapData(unscaledWidth, unscaledHeight, true, color);
-			this.smoothing = true;
+			//this.bitmapData = new BitmapData(unscaledWidth, unscaledHeight, true, color);
+			//this.smoothing = true;
 			draw();
 		}
 		
 		private function draw():void {
+			if(display == null) { return; }
+			if(bitmap == null) {
+				bitmap = new Bitmap();
+				display.addChild(bitmap);
+			}
+			if(bitmap.bitmapData == null) {
+				bitmap.bitmapData = new BitmapData(width, height, true, 0);
+			}
+			
+			var bitmapData:BitmapData = bitmap.bitmapData;
+			bitmapData.fillRect(bitmapData.rect, 0x00000000);
 			if (original) {
+				
 				var mode:String = _scaling;
 				var matrix:Matrix;
 				
@@ -160,14 +196,13 @@ package reflex.graphics
 				} else if (mode == SKEW) {
 					matrix = new Matrix(unscaledWidth/original.width, 0, 0, unscaledHeight/original.height, 0, 0);
 				}
-				if(bitmapData) {
-					bitmapData.floodFill(0, 0, 0)
-					bitmapData.draw(original, matrix, null, null, null, true);
-				}
+				
+				//bitmapData.floodFill(1000, 1000, 0x00000000);
+				//bitmapData.fillRect(bitmapData.rect, 0x00000000);
+				bitmapData.draw(original, matrix, null, null, null, true);
 			} else {
-				if(bitmapData) {
-					bitmapData.floodFill(0, 0, 0)
-				}
+				//bitmapData.floodFill(0, 0, 0);
+				//bitmapData.fillRect(bitmapData.rect, 0x00000000);
 			}
 		}
 		

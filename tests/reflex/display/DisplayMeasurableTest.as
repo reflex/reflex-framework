@@ -8,7 +8,7 @@ package reflex.display
 		public function DisplayMeasurableTest()
 		{
 			super();
-			C = Display;
+			C = MeasurableItem;
 		}
 		
 		[Test(async)]

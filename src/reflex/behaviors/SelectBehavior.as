@@ -3,7 +3,6 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
-	import reflex.binding.DataChange;
 	
 	/**
 	 * @description Adds selection toggling functionality to the target. When clicked, the target's selected property will be flipped.
@@ -18,7 +17,7 @@ package reflex.behaviors
 		[Binding(target="target.selected")]
 		public function get selected():Boolean { return _selected; }
 		public function set selected(value:Boolean):void {
-			DataChange.change(this, "selected", _selected, _selected = value);
+			notify("selected", _selected, _selected = value);
 		}
 		
 		public function SelectBehavior(target:IEventDispatcher= null)

@@ -1,6 +1,7 @@
 package reflex.metadata
 {
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
@@ -8,7 +9,7 @@ package reflex.metadata
 	
 	import reflex.behaviors.IBehavior;
 	import reflex.binding.Bind;
-	import reflex.graphics.IDrawable;
+	import reflex.graphics.IGraphicItem;
 	import reflex.invalidation.Invalidation;
 	import reflex.skins.ISkin;
 	
@@ -21,7 +22,7 @@ package reflex.metadata
 	 */
 	public class CommitUtility extends EventDispatcher
 	{
-		
+		/*
 		static public var instance:CommitUtility = new CommitUtility();
 		
 		private var dictionary:Dictionary = new Dictionary(true);
@@ -29,7 +30,7 @@ package reflex.metadata
 		
 		public function register(instance:IEventDispatcher, method:String, properties:Array, resolver:Function):void {
 			var token:String = flash.utils.getQualifiedClassName(instance) + "_" + method + "Commit";
-			Invalidation.registerPhase(token, 0, true);
+			Invalidation.registerPhase(token, Event, 0, true);
 			for each(var sourcePath:String in properties) {
 				var sourceToken:String = flash.utils.getQualifiedClassName(instance) + "_" + sourcePath;
 				var array:Array = dictionary[sourceToken];
@@ -73,6 +74,6 @@ package reflex.metadata
 				}
 			}
 		}
-		
+		*/
 	}
 }

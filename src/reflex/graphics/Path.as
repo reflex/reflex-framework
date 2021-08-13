@@ -10,20 +10,11 @@ package reflex.graphics
 	
 	import mx.events.PropertyChangeEvent;
 	
-	import reflex.binding.DataChange;
-	import reflex.measurement.IMeasurablePercent;
+	import reflex.framework.IMeasurablePercent;
+	import reflex.framework.IStyleable;
 	import reflex.metadata.resolveCommitProperties;
-	import reflex.styles.IStyleable;
 	
-	[Style(name="left")]
-	[Style(name="right")]
-	[Style(name="top")]
-	[Style(name="bottom")]
-	[Style(name="horizontalCenter")]
-	[Style(name="verticalCenter")]
-	[Style(name="dock")]
-	[Style(name="align")]
-	public class Path extends GraphicBase implements IDrawable
+	public class Path extends GraphicItem implements IGraphicItem
 	{
 		
 		private var _data:String;
@@ -32,46 +23,18 @@ package reflex.graphics
 		[Bindable(event="dataChange")]
 		public function get data():String { return _data; }
 		public function set data(value:String):void {
-			DataChange.change(this, "data", _data, _data = value);
+			notify("data", _data, _data = value);
 		}
 		
 		
-		private var _fill:*;
-		private var _stroke:*;
-		
-		[Bindable(event="fillChange")]
-		public function get fill():* { return _fill; }
-		public function set fill(value:*):void {
-			DataChange.change(this, "fill", _fill, _fill = value);
-		}
-		
-		[Bindable(event="strokeChange")]
-		public function get stroke():* { return _stroke; }
-		public function set stroke(value:*):void {
-			DataChange.change(this, "stroke", _stroke, _stroke = value);
-		}
-		
-		
-		public function Path()
-		{
-			super();
-		}
-		
-		/**
-		 * @private
-		 */
-		// we need to handle custom fill/stroke properties somehow
-		[Commit(properties="x, y, width, height, data, fill, fill.color, fill.alpha, stroke, stroke.color, stroke.alpha, stroke.weight, target")]
-		public function updateRender(event:Event):void {
-			render();
-		}
-		
-		public function render():void {
-			var graphics:Vector.<Graphics> = reflex.graphics.resolveGraphics(target);
-			for each(var g:Graphics in graphics) {
+		override protected function onLayout():void {
+			super.onLayout();
+			var g:Graphics = display.graphics;
+			//var graphics:Vector.<Graphics> = reflex.graphics.resolveGraphics(target);
+			//for each(var g:Graphics in graphics) {
 				g.clear();
 				drawTo(g);
-			}
+			//}
 		}
 		
 		private function drawTo(graphics:Graphics):void {

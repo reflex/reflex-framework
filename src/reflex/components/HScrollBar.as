@@ -1,6 +1,8 @@
 package reflex.components
 {
 	
+	import flash.events.Event;
+	
 	import reflex.behaviors.SlideBehavior;
 	import reflex.behaviors.StepBehavior;
 	import reflex.data.ScrollPosition;
@@ -12,10 +14,10 @@ package reflex.components
 		public function HScrollBar()
 		{
 			super();
-			initialize();
 		}
 		
-		private function initialize():void {
+		override protected function initialize():void {
+			super.initialize();
 			position = new ScrollPosition();
 			skin = new HSliderSkin();
 			behaviors.addItem(new StepBehavior(this));

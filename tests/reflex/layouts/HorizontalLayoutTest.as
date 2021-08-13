@@ -6,7 +6,7 @@ package reflex.layouts
 	
 	import org.flexunit.Assert;
 	
-	import reflex.display.Display;
+	import reflex.display.MeasurableItem;
 
 	
 	public class HorizontalLayoutTest extends EventDispatcher
@@ -15,8 +15,8 @@ package reflex.layouts
 		[Test]
 		// strait-forward measurement test
 		public function testMeasurement():void {
-			var child1:Display = new Display();
-			var child2:Display = new Display();
+			var child1:MeasurableItem = new MeasurableItem();
+			var child2:MeasurableItem = new MeasurableItem();
 			
 			child1.width = 20;
 			child1.height = 20;
@@ -36,8 +36,8 @@ package reflex.layouts
 		[Test]
 		// strait-forward layout test
 		public function testLayout():void {
-			var child1:Display = new Display();
-			var child2:Display = new Display();
+			var child1:MeasurableItem = new MeasurableItem();
+			var child2:MeasurableItem = new MeasurableItem();
 			
 			child1.width = 20;
 			child1.height = 20;
@@ -48,7 +48,7 @@ package reflex.layouts
 			var rectangle:Rectangle = new Rectangle(0, 0, 100, 100);
 			var layout:HorizontalLayout = new HorizontalLayout();
 			layout.gap = 10;
-			layout.update([child1, child2], rectangle);
+			layout.update([child1, child2], null, rectangle);
 			Assert.assertEquals(0, child1.x);
 			Assert.assertEquals(30, child2.x);
 		}
@@ -57,17 +57,17 @@ package reflex.layouts
 		// percent-based layout test
 		// width percentages are normalized but height percentages are not
 		public function testPercentLayout():void {
-			var child1:Display = new Display();
+			var child1:MeasurableItem = new MeasurableItem();
 			child1.percentWidth = 100;
 			child1.percentHeight = 100;
 			
-			var child2:Display = new Display();
+			var child2:MeasurableItem = new MeasurableItem();
 			child2.percentWidth = 100;
 			child2.percentHeight = 100;
 			
 			var layout:HorizontalLayout = new HorizontalLayout();
 			layout.gap = 5; // gap spacing is removed from available width
-			layout.update([child1, child2], new Rectangle(0, 0, 100, 100));
+			layout.update([child1, child2], null, new Rectangle(0, 0, 100, 100));
 			
 			Assert.assertEquals(48, child1.width);
 			Assert.assertEquals(100, child1.height);
@@ -80,17 +80,17 @@ package reflex.layouts
 		// width percentages are based on available space but height percentages are not
 		public function testAdjustedPercentLayout():void {
 			//  adjust relative to 100% space
-			var child1:Display = new Display();
+			var child1:MeasurableItem = new MeasurableItem();
 			child1.width = 20;
 			child1.height = 20;
 			
-			var child2:Display =  new Display();
+			var child2:MeasurableItem =  new MeasurableItem();
 			child2.percentWidth = 100;
 			child2.percentHeight = 100;
 			
 			var layout:HorizontalLayout = new HorizontalLayout();
 			layout.gap = 5; // gap spacing is removed from available width
-			layout.update([child1, child2], new Rectangle(0, 0, 100, 100));
+			layout.update([child1, child2], null, new Rectangle(0, 0, 100, 100));
 			
 			Assert.assertEquals(20, child1.width);
 			Assert.assertEquals(20, child1.height);

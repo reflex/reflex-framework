@@ -27,12 +27,12 @@ package reflex.layouts
 		static public const FILL:String = "fill";
 		static public const CENTER:String = "center";
 		
-		override public function measure(children:Array):Point
+		override public function measure(content:Array):Point
 		{
-			var point:Point = super.measure(children);
+			var point:Point = super.measure(content);
 			var gap:Number = 5;
 			point.x = gap;
-			for each(var child:Object in children) {
+			for each(var child:Object in content) {
 				var width:Number = reflex.measurement.resolveWidth(child);
 				var height:Number = reflex.measurement.resolveHeight(child);
 				point.x += width + gap;
@@ -41,12 +41,12 @@ package reflex.layouts
 			return point;
 		}
 		
-		override public function update(children:Array, rectangle:Rectangle):void
+		override public function update(content:Array, tokens:Array, rectangle:Rectangle):Array
 		{
-			super.update(children, rectangle);
-			var length:int = children.length;
+			super.update(content, tokens, rectangle);
+			var length:int = content.length;
 			for(var i:int = 0; i < length; i++) {
-				var child:Object = children[i];
+				var child:Object = content[i];
 				var width:Number = reflex.measurement.resolveWidth(child);
 				var height:Number = reflex.measurement.resolveHeight(child);
 				var dock:String = reflex.styles.resolveStyle(child, "dock", null, NONE) as String;
@@ -100,6 +100,7 @@ package reflex.layouts
 						break;
 				}
 			}
+			return tokens;
 		}
 		
 	}

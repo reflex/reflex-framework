@@ -1,5 +1,7 @@
 package reflex.styles
 {
+	import reflex.framework.IStyleable;
+
 	public function hasStyle(child:Object, property:String):Boolean
 	{
 		//if(child.hasOwnProperty("style") && child["style"] != null) {

@@ -1,31 +1,44 @@
 package reflex.containers
 {
 	import flash.display.DisplayObject;
+	import flash.display.Graphics;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
 	
 	import mx.collections.IList;
 	import mx.core.mx_internal;
 	import mx.events.CollectionEvent;
 	import mx.events.CollectionEventKind;
+	import mx.graphics.IFill;
 	import mx.states.IOverride;
 	import mx.states.State;
 	
-	import reflex.binding.DataChange;
+	import reflex.animation.AnimationToken;
+	import reflex.animation.AnimationType;
+	import reflex.animation.Animator;
+	import reflex.animation.IAnimator;
 	import reflex.collections.SimpleCollection;
 	import reflex.collections.convertToIList;
 	import reflex.components.Component;
-	import reflex.components.IStateful;
-	import reflex.display.Display;
-	import reflex.invalidation.Invalidation;
+	import reflex.data.IPosition;
+	import reflex.display.FlashDisplayHelper;
+	import reflex.display.IDisplayHelper;
+	import reflex.display.MeasurableItem;
+	import reflex.display.StatefulItem;
+	import reflex.events.ContainerEvent;
+	import reflex.framework.IDataContainer;
+	import reflex.framework.IStateful;
+	import reflex.injection.IReflexInjector;
+	import reflex.invalidation.IReflexInvalidation;
+	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
 	import reflex.layouts.ILayout;
 	import reflex.states.applyState;
 	import reflex.states.removeState;
-	import reflex.templating.addItemsAt;
-	
-	//use namespace mx_internal;
+	import reflex.templating.getDataRenderer;
 	
 	[Style(name="left")]
 	[Style(name="right")]
@@ -42,103 +55,92 @@ package reflex.containers
 	[DefaultProperty("content")]
 	
 	/**
-	 * Used to contain and layout children.
-	 * 
+	 * Container is a cornerstone class of Reflex. 
+	 * Anything that holds anything extends this (though it's never referenced concretely in the framework).
+	 * It delegates item renderers, layout and dependency injection among other things.
+	 * As such, it doesn't do too much internally besides provide coordination of the multiple systems.
 	 * @alpha
 	 */
-	public class Container extends Display implements IContainer, IStateful
+	public class Container extends StatefulItem implements IDataContainer
 	{
-		
-		static public const CREATE:String = "create";
-		static public const INITIALIZE:String = "initialize";
-		static public const MEASURE:String = "measure";
-		static public const LAYOUT:String = "layout";
-		
-		Invalidation.registerPhase(CREATE, 0, true);
-		Invalidation.registerPhase(INITIALIZE, 100, true);
-		Invalidation.registerPhase(MEASURE, 200, false);
-		Invalidation.registerPhase(LAYOUT, 300, true);
 		
 		private var _layout:ILayout;
 		private var _template:Object;
-		private var _content:IList;
-		private var renderers:Array;
+		private var templateChanged:Boolean;
 		
-		private var _states:Array;
-		private var _transitions:Array;
-		private var _currentState:String;
-		private var _styleDeclaration:* = {};
-		private var _styleManager:* = {};
+		private var _content:IList; // a mix of data and/or Reflex Components
+		private var contentChanged:Boolean;
+		private var layoutChanged:Boolean;
 		
-		public function Container()
-		{
-			if (_template == null) {
-				//_template = new ReflexDataTemplate();
+		private var _fill:IFill;
+		private var fillChanged:Boolean;
+		
+		[Bindable]
+		public var renderers:IList = new SimpleCollection(); //:Array = []; // just reflex components
+		
+		private var itemRenderers:Dictionary = new Dictionary(true);
+		private var rendererItems:Dictionary = new Dictionary(true);
+		private var animationType:String = AnimationType.GENERIC; // generic, add, remove, reset, layout, resize, drag, scroll ... ?
+		
+		public function getItemForRenderer(renderer:Object):* {
+			return rendererItems[renderer];
+		}
+		
+		public function getRendererForItem(item:*):Object {
+			return itemRenderers[item];
+		}
+		
+		public function getRenderers():Array { return renderers.toArray()/*concat()*/; }
+		
+		private var _animator:IAnimator;//= new Animator();
+		public function get animator():IAnimator { return _animator; }
+		public function set animator(value:IAnimator):void {
+			_animator = value;
+		}
+		
+		
+		private var _injector:IReflexInjector;// = new HardCodedInjector();
+		public function get injector():IReflexInjector { return _injector; }
+		public function set injector(value:IReflexInjector):void {
+			_injector = value;
+		}
+		
+		private var _horizontal:IPosition; [Bindable(event="horizontalChange")]
+		public function get horizontal():IPosition { return _horizontal; }
+		public function set horizontal(value:IPosition):void {
+			if(_horizontal is IEventDispatcher) {
+				(_horizontal as IEventDispatcher).removeEventListener("valueChange", positionChangeHandler);
 			}
-			if (_layout == null) {
-				//_layout = new BasicLayout();
+			notify("horizontal", _horizontal, _horizontal = value);
+			if(_horizontal is IEventDispatcher) {
+				(_horizontal as IEventDispatcher).addEventListener("valueChange", positionChangeHandler);
 			}
-			
-			content = new SimpleCollection(); // use setter logic
-			//_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
-			
-			addEventListener(Event.ADDED, onAdded, false, 0, true);
-			addEventListener(MEASURE, onMeasure, false, 0, true);
-			addEventListener(LAYOUT, onLayout, false, 0, true);
-			//addEventListener("widthChange", onSizeChange, false, 0, true);
-			//addEventListener("heightChange", onSizeChange, false, 0, true);
 		}
 		
-		// width/height invalidation needs some thought
-		
-		private function onSizeChange(event:Event):void {
-			Invalidation.invalidate(this, LAYOUT);
-		}
-		
-		// IStateful implementation
-		
-		[Bindable(event="statesChange")]
-		public function get states():Array { return _states; }
-		public function set states(value:Array):void {
-			DataChange.change(this, "states", _states, _states = value);
-		}
-		
-		[Bindable(event="transitionsChange")]
-		public function get transitions():Array { return _transitions; }
-		public function set transitions(value:Array):void {
-			DataChange.change(this, "transitions", _transitions, _transitions = value);
-		}
-		
-		[Bindable(event="currentStateChange")]
-		public function get currentState():String { return _currentState; }
-		public function set currentState(value:String):void {
-			if (_currentState == value) {
-				return;
+		private var _vertical:IPosition; [Bindable(event="verticalChange")]
+		public function get vertical():IPosition { return _vertical; }
+		public function set vertical(value:IPosition):void {
+			if(_vertical is IEventDispatcher) {
+				(_vertical as IEventDispatcher).removeEventListener("valueChange", positionChangeHandler);
 			}
-			// might need to add invalidation for this later
-			reflex.states.removeState(this, _currentState, states);
-			DataChange.change(this, "currentState", _currentState, _currentState = value);
-			reflex.states.applyState(this, _currentState, states);
-		}
-		
-		public function hasState(state:String):Boolean {
-			for each(var s:Object in states) {
-				if(s.name == state) {
-					return true;
-				}
+			notify("vertical", _vertical, _vertical = value);
+			if(_vertical is IEventDispatcher) {
+				(_vertical as IEventDispatcher).addEventListener("valueChange", positionChangeHandler);
 			}
-			return false;
 		}
 		
-		// the compiler goes looking for styleDeclaration and styleManager properties when setting styles on root elements
-		// ... but they don't really have to be anything specific :)
-		
-		public function get styleDeclaration():* { return _styleDeclaration; }
-		public function set styleDeclaration(value:*):void {
-			_styleDeclaration = value;
+		private function positionChangeHandler(event:Event):void {
+			animationType = AnimationType.SCROLL;
+			onLayout(); // skip render event
 		}
 		
-		public function get styleManager():* { return _styleManager; }
+		[Bindable(event="fillChange")]
+		public function get fill():IFill { return _fill; }
+		public function set fill(value:IFill):void {
+			fillChanged = true;
+			notify("fill", _fill, _fill = value);
+			invalidate(LifeCycle.COMMIT);
+		}
 		
 		/**
 		 * @inheritDoc
@@ -156,25 +158,17 @@ package reflex.containers
 			
 			if (_content) {
 				_content.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
-				renderers = [];
+				removeItems(_content.toArray(), 0);
 			}
-			
 			_content = reflex.collections.convertToIList(value);
 			
-			if (_content) {
-				_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
-				var items:Array = [];
-				for (var i:int = 0; i < _content.length; i++) {
-					var child:Object = _content.getItemAt(i);
-					//child.addEventListener("widthChange", item_measureHandler, false, true);
-					items.push(child);
-				}
-			}
-			reset(items);
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
-			//dispatchEvent( new Event("contentChange") );
-			DataChange.change(this, "content", oldContent, _content);
+			contentChanged = true;
+			animationType = AnimationType.RESET;
+			invalidate(LifeCycle.COMMIT);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("content", oldContent, _content);
+			this.validate(); // todo: ???
 		}
 		
 		/**
@@ -190,10 +184,11 @@ package reflex.containers
 			if (_layout) { _layout.target = null; }
 			_layout = value;
 			if (_layout) { _layout.target = this; }
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
-			//dispatchEvent( new Event("layoutChange") );
-			DataChange.change(this, "layout", oldLayout, _layout);
+			layoutChanged = true;
+			animationType = AnimationType.LAYOUT;
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("layout", oldLayout, _layout);
 		}
 		
 		[Bindable(event="templateChange")]
@@ -204,143 +199,179 @@ package reflex.containers
 			}
 			var oldTemplate:Object = _template;
 			_template = value;
-			if (_content != null) {
-				var items:Array = [];
-				var length:int = _content.length;
-				for (var i:int = 0; i < length; i++) {
-					var child:Object = _content.getItemAt(i);
-					items.push(child);
-				}
-				reset(items);
-			}
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
-			//dispatchEvent( new Event("templateChange") );
-			DataChange.change(this, "template", oldTemplate, _template);
+			templateChanged = true;
+			animationType = AnimationType.RESET;
+			invalidate(LifeCycle.COMMIT);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("template", oldTemplate, _template);
 		}
 		
 		override public function setSize(width:Number, height:Number):void {
 			super.setSize(width, height);
-			Invalidation.invalidate(this, LAYOUT);
+			animationType = AnimationType.RESIZE;
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
-		private function onAdded(event:Event):void {
-			removeEventListener(Event.ADDED, onAdded, false);
-			Invalidation.invalidate(this, CREATE);
-			Invalidation.invalidate(this, INITIALIZE);
+		override protected function onCommit():void {
+			super.onCommit();
+			if(contentChanged || templateChanged) {
+				if (_content) {
+					_content.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChildrenChange);
+				}
+				addItems(_content ? _content.toArray() : [], 0);//reset(_content ? _content.toArray() : []);
+				contentChanged = false;
+				templateChanged = false;
+			}
+			if(fillChanged) {
+				drawBackground();
+				fillChanged = false;
+			}
 		}
 		
-		protected function onMeasure(event:Event):void {
+		override protected function onMeasure():void {
+			super.onMeasure();
 			// the compiler gives us root styles like this. yay?
 			if(styleDeclaration.defaultFactory != null) {
 				var f:Function = styleDeclaration.defaultFactory;
 				var t:* = f.apply(style);
 				styleDeclaration.defaultFactory = null
 			}
-			if ((isNaN(explicit.width) || isNaN(explicit.height)) 
+			if ((isNaN(explicitWidth) || isNaN(explicitHeight)) 
 				//|| (isNaN(percentWidth) || isNaN(percentHeight))
 				&& layout) {
-				var point:Point = layout.measure(renderers);
-				if (point.x != measured.width || point.y != measured.height) {
-					measured.width = point.x;
-					measured.height = point.y;
+				var point:Point = layout.measure(renderers.toArray());
+				if (point.x != measuredWidth || point.y != measuredHeight) {
+					_measuredWidth = point.x;
+					_measuredHeight = point.y;
 				}
 			}
 		}
 		
-		private function onLayout(event:Event):void {
-			if (layout) {
+		override protected function onLayout():void {
+			super.onLayout();
+			if (layout && renderers.length > 0) {
 				var rectangle:Rectangle = new Rectangle(0, 0, unscaledWidth, unscaledHeight);
-				layout.update(renderers, rectangle);
+				var tokens:Array = layout.update(_content ? _content.toArray() : [], generateTokens(), rectangle);
+				animateToTokens(renderers.toArray(), tokens);
 			}
+			drawBackground();
+		}
+		
+		private function drawBackground():void {
+			if(fill && display && display.graphics) {
+				var g:Graphics = display.graphics;
+				g.clear();
+				fill.begin(g, new Rectangle(0, 0, unscaledWidth, unscaledHeight), new Point());
+				g.drawRect(0, 0, unscaledWidth, unscaledHeight);
+				fill.end(g);
+			}
+		}
+		
+		private function generateTokens():Array {
+			// we'll want to pool these tokens later
+			var tokens:Array = [];
+			//if(templateChanged==true) { return tokens; }
+			var length:int = renderers ? renderers.length : 0;
+			for( var i:int = 0; i < length; i++) {
+				var renderer:Object = renderers.getItemAt(i); //renderers[i];
+				var token:AnimationToken = animator.createAnimationToken(renderer);
+				tokens.push(token);
+			}
+			return tokens;
+		}
+		
+		private function animateToTokens(renderers:Array, tokens:Array):void {
+			//if(templateChanged==true) { return; }
+			animator.begin();
+			var length:int = renderers ? renderers.length : 0;
+			for( var i:int = 0; i < length; i++) {
+				var renderer:Object = renderers[i];
+				var token:AnimationToken = tokens[i];
+				animator.moveItem(renderer, token, animationType);
+			}
+			animator.end();
+			layoutChanged = false;
+			animationType = AnimationType.GENERIC;
 		}
 		
 		private function onChildrenChange(event:CollectionEvent):void
 		{
-			var child:DisplayObject;
-			var loc:int = event.location;
 			switch (event.kind) {
-				//case ListEventKind.ADD :
 				case CollectionEventKind.ADD :
-					add(event.items, loc);
+					animationType = AnimationType.ADD;
+					addItems(event.items, event.location);
 					break;
 				case CollectionEventKind.REMOVE :
-					remove(event.items, event.oldLocation);
+					animationType = AnimationType.REMOVE;
+					removeItems(event.items, event.oldLocation);
 					break;
 				case CollectionEventKind.REPLACE :
-					removeChild(event.items[1]);
+					animationType = AnimationType.REPLACE;
+					helper.removeChild(display, event.items[1]);
 					//addChildAt(event.items[0], loc);
 					break;
 				case CollectionEventKind.RESET :
 				default:
-					reset(event.items);
+					animationType = AnimationType.RESET;
+					//reset(event.items);
+					removeItems(event.items, 0);
+					addItems(_content ? _content.toArray() : [], 0);
 					break;
 			}
-			Invalidation.invalidate(this, LAYOUT);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
-		
-		private function add(items:Array, index:int):void {
-			var children:Array = reflex.templating.addItemsAt(this, items, index, _template);
-			
-			var length:int = children.length;
-			for(var i:int = 0; i < length; i++) {
-				var child:Object = children[i];
-				//child.addEventListener("widthChange", item_measureHandler, false, true);
-				//child.addEventListener("measure", item_measureHandler, false, true);
-				//child.addEventListener("layout", item_measureHandler, false, true);
-				renderers.splice(index+i, 0, child);
-				if(child is Component) { // need to make this generic
-					(child as Component).owner = this;
-				}
-			}
-			
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
-		}
-		
-		// temporary?
 		/*
-		private function item_measureHandler(event:Event):void {
-			//var child:IEventDispatcher = event.currentTarget;
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
+		private function reset(items:Array):void {
+			removeItems(items, 0);
+			addItems(items, 0);
 		}
 		*/
-		
-		private function remove(items:Array, index:int):void {
-			// this isn't working with templating yet
-			var child:Object;
-			for each (child in items) {
-				if(child is Component) { // need to make this generic
-					(child as Component).owner = null;
+		private function addItems(items:Array, index:int):void {
+			var length:int = items ? items.length : 0;
+			for(var i:int = 0; i < length; i++) {
+				var item:Object = items[i];
+				var renderer:Object = reflex.templating.getDataRenderer(display, item, _template);
+				
+				if(renderer is MeasurableItem) { // need to make this generic
+					(renderer as MeasurableItem).owner = this;
 				}
-				//var index:int = content.getItemIndex(child); //renderers.indexOf(child);
-				var renderer:Object = renderers.splice(index, 1)[0];
-				if((renderer is DisplayObject) 
-					&& contains(renderer as DisplayObject)) {
-					removeChild(renderer as DisplayObject);
+				if(injector) {
+					injector.injectInto(renderer);
 				}
+				
+				// renderer is actually not a DisplayObject now
+				if(helper) { helper.addChild(display, renderer); }
+				//renderers.push(renderer);
+				//renderers.splice(index+i, 1, renderer);
+				renderers.addItem(renderer);
+				
+				itemRenderers[item] = renderer;
+				rendererItems[renderer] = item;
+				
+				//if(invalidation) { invalidation.add(renderer as IEventDispatcher); }
+				dispatchEvent(new ContainerEvent(ContainerEvent.ITEM_ADDED, item, renderer));
 			}
-			Invalidation.invalidate(this, MEASURE);
-			Invalidation.invalidate(this, LAYOUT);
 		}
 		
-		private function reset(items:Array):void {
-			while (numChildren) {
-				var child:DisplayObject = removeChildAt(numChildren-1);
-				if(child is Component) { // need to make this generic
-					(child as Component).owner = null;
+		private function removeItems(items:Array, index:int):void {
+			for each (var item:Object in items) {
+				var renderer:Object = itemRenderers[item];
+				//if(renderer == null) { renderer = item; }
+				if(renderer is MeasurableItem) { // need to make this generic
+					(renderer as MeasurableItem).owner = null;
 				}
-			}
-			renderers = reflex.templating.addItemsAt(this, items, 0, _template); // todo: correct ordering
-			for each (child in renderers) {
-				if(child is Component) { // need to make this generic
-					(child as Component).owner = this;
+				if(helper.contains(display, renderer)) {
+					helper.removeChild(display, renderer);
 				}
+				if(invalidation) {
+					invalidation.validate(renderer as IEventDispatcher);
+				}
+				delete rendererItems[renderer];
+				delete itemRenderers[item];
 			}
-			Invalidation.invalidate(this, LAYOUT);
 		}
-		
 		
 	}
 }

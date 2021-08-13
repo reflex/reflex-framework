@@ -28,8 +28,8 @@ package reflex.skins
 			renderThumb(thumb.graphics);
 			//layout = new BasicLayout();
 			content = [track, thumb];
-			measured.width = 14;
-			measured.height = 170;
+			_measuredWidth = 14;
+			_measuredHeight = 170;
 		}
 		
 		override protected function render(currentState:String):void {

@@ -1,6 +1,9 @@
 package reflex.containers
 {
 	
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.ContextMenuEvent;
@@ -10,88 +13,93 @@ package reflex.containers
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
-	import reflex.binding.DataChange;
+	import mx.collections.IList;
+	import mx.core.IStateClient;
+	import mx.core.IStateClient2;
+	
+	import reflex.framework.IStateful;
+	import reflex.injection.IReflexInjector;
+	import reflex.invalidation.Interval;
 	import reflex.invalidation.Invalidation;
+	import reflex.invalidation.LifeCycle;
 	import reflex.layouts.BasicLayout;
 	
 	
 	//[Frame(factoryClass="reflex.tools.flashbuilder.ReflexApplicationLoader")]
 	[SWF(widthPercent="100%", heightPercent="100%", frameRate="30")]
 	
+	[DefaultProperty("content")]
 	/**
 	 * @alpha
 	 */
-	public class Application extends Container
+	public class Application extends Sprite implements IStateful
 	{
 		
-		private var _backgroundColor:uint;
+		include "../framework/PropertyDispatcherImplementation.as";
+		include "../framework/StatefulImplementation.as";
 		
-		// the compiler knows to look for this, so we don't really draw anything for it
-		[Bindable(event="backgroundColorChange")]
-		public function get backgroundColor():uint { return _backgroundColor; }
-		public function set backgroundColor(value:uint):void {
-			DataChange.change(this, "backgroundColor", _backgroundColor, _backgroundColor = value);
+		public var injector:IReflexInjector;
+		
+		private var _container:Group;
+		public function get container():Group { return _container; }
+		
+		public function get content():IList { return _container ? _container.content : null; }
+		public function set content(value:*):void {
+			if(_container) {
+				_container.content = value;
+			}
 		}
 		
-		//public var viewSourceURL:String;
+		private var _backgroundColor:uint;
+		[Bindable(event="backgroundColorChange")] // the compiler knows to look for this, so we don't really draw anything for it
+		public function get backgroundColor():uint { return _backgroundColor; }
+		public function set backgroundColor(value:uint):void {
+			_backgroundColor = value;
+			//notify("backgroundColor", _backgroundColor, _backgroundColor = value);
+		}
+		
+		public var owner:Object = null;
 		
 		public function Application()
 		{
 			super();
-			layout = new BasicLayout();
-			if (stage) init();
-            else addEventListener(Event.ADDED_TO_STAGE, init)
+			_container = new Group();
+			_container.display = this;
+			preinitialize();
 		}
-
-        private function init(e:Event = null):void {
-
+		
+		protected function preinitialize():void {
+			if(stage) { initialize(null); }
+			else { addEventListener(Event.ADDED_TO_STAGE, initialize); }
+		}
+		
+        public function initialize(event:Event):void {
+			// Application is the only Reflex thing not in a container
+			//super.initialize(event);
 			var contextMenu:ContextMenu = new ContextMenu();
-			/*if(viewSourceURL != null && viewSourceURL != "") {
-				var viewSourceCMI:ContextMenuItem = new ContextMenuItem("View Source", true);
-				viewSourceCMI.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-				contextMenu.customItems.push(viewSourceCMI);
-			}*/
 			contextMenu.hideBuiltInItems();
 			this.contextMenu = contextMenu;
-
+			
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.RESIZE, onStageResize, false, 0, true);
+			removeEventListener(Event.ADDED_TO_STAGE, initialize);
+			
+			_container.owner = owner = this.stage;
+			//Invalidation.stage = this.stage;
+			//Invalidation.app = _container;
+			injector.initialize(stage, _container);
+			injector.injectInto(_container);
+			stage.addChild(this);
+			//this.addChild(_container.display as DisplayObject);
 			onStageResize(null);
-
-            onInit()
-        }
-
-        protected function onInit():void {
-            //OVERRIDE FOR STAGE ENABLED SETUP
         }
 		
-		private function onStageResize(event:Event):void
-		{
-			if(isNaN(explicit.width)) { unscaledWidth = stage.stageWidth; }
-			if(isNaN(explicit.height)) { unscaledHeight = stage.stageHeight; }
-			Invalidation.invalidate(this, LAYOUT);
+		private function onStageResize(event:Event):void {
+			_container.width = stage.stageWidth;
+			_container.height = stage.stageHeight;
 		}
 		
-		override protected function onMeasure(event:Event):void {
-			// no measurement in Application
-			// the compiler gives us root styles like this. yay?
-			if(styleDeclaration.defaultFactory != null) {
-				var f:Function = styleDeclaration.defaultFactory;
-				var t:* = f.apply(style);
-				styleDeclaration.defaultFactory = null
-			}
-		}
 		
-		override public function setSize(width:Number, height:Number):void {
-			// no measurement in application
-		}
-		
-		/*
-		private function menuItemSelectHandler(event:ContextMenuEvent):void {
-			var request:URLRequest = new URLRequest(viewSourceURL);
-			navigateToURL(request, "_blank");
-		}
-		*/
 	}
 }

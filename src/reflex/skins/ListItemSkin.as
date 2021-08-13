@@ -13,7 +13,13 @@ package reflex.skins
 	public class ListItemSkin extends GraphicSkin
 	{
 		
-		public var labelDisplay:Label;
+		private var _labelDisplay:Label;
+		
+		[Bindable(event="labelDisplayChange")]
+		public function get labelDisplay():Label { return _labelDisplay; }
+		public function set labelDisplay(value:Label):void {
+			notify("labelDisplay", _labelDisplay, _labelDisplay = value);
+		}
 		
 		public function ListItemSkin()
 		{
@@ -25,35 +31,37 @@ package reflex.skins
 			labelDisplay.style = "left: 10; right: 10; top: 5; bottom: 5;";
 			layout = new BasicLayout();
 			content = [labelDisplay];
-			measured.width = 250;
-			measured.height = 64;
+			_measuredWidth = 250;
+			_measuredHeight = 64;
 		}
 		
 		override protected function render(currentState:String):void {
 			if(graphics) {
 				graphics.clear();
-				switch(currentState) {
-					case "up":
-						renderUp();
-						break;
-					case "over":
-						renderOver();
-						break;
-					case "down":
-						renderDown();
-						break;
-					case "upAndSelected":
-						renderDown();
-						break;
-					case "overAndSelected":
-						renderDown();
-						break;
-					case "downAndSelected":
-						renderDown();
-						break;
-					default:
-						renderUp();
-						break;
+				if(unscaledWidth > 0 && unscaledHeight > 0) {
+					switch(currentState) {
+						case "up":
+							renderUp();
+							break;
+						case "over":
+							renderOver();
+							break;
+						case "down":
+							renderDown();
+							break;
+						case "upAndSelected":
+							renderDown();
+							break;
+						case "overAndSelected":
+							renderDown();
+							break;
+						case "downAndSelected":
+							renderDown();
+							break;
+						default:
+							renderUp();
+							break;
+					}
 				}
 			}
 		}

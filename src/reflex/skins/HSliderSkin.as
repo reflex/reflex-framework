@@ -27,8 +27,8 @@ package reflex.skins
 			thumb = new Sprite();
 			renderThumb(thumb.graphics);
 			content = [track, thumb];
-			measured.width = 170;
-			measured.height = 14;
+			_measuredWidth = 170;
+			_measuredHeight = 14;
 		}
 		
 		override protected function render(currentState:String):void {

@@ -2,6 +2,7 @@ package reflex.measurement
 {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import reflex.framework.IMeasurablePercent;
 	
 	public function calculateAvailableSpace(children:Array, rectangle:Rectangle):Point
 	{

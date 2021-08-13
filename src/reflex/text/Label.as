@@ -18,23 +18,16 @@ package reflex.text
 	import flash.text.engine.TextLineValidity;
 	import flash.text.engine.TypographicCase;
 	
-	import reflex.binding.DataChange;
-	import reflex.display.Display;
+	import reflex.display.MeasurableItem;
 	import reflex.invalidation.Invalidation;
+	import reflex.invalidation.LifeCycle;
 	import reflex.styles.resolveStyle;
 	
 	
-	[Style(name="left")]
-	[Style(name="right")]
-	[Style(name="top")]
-	[Style(name="bottom")]
-	[Style(name="horizontalCenter")]
-	[Style(name="verticalCenter")]
-	[Style(name="dock")]
 	[Style(name="align")]
 	[Style(name="txtAlign", format="String", enumeration="left,right,center,justify")]
 	//[Style(name="verticalAlign")]
-	public class Label extends Display
+	public class Label extends MeasurableItem
 	{
 		
 		public static const LEFT:String = "left";
@@ -42,8 +35,8 @@ package reflex.text
 		public static const CENTER:String = "center";
 		public static const JUSTIFY:String = "justify";
 		
-		public static const TEXT_RENDER:String = "textRender";
-		private static var textPhase:Boolean = Invalidation.registerPhase(TEXT_RENDER, 0, true);
+		//public static const TEXT_RENDER:String = "textRender";
+		//private static var textPhase:Boolean = Invalidation.registerPhase(TEXT_RENDER, 0, true);
 		
 		protected var fontFormat:FontDescription;
 		protected var format:ElementFormat;
@@ -54,26 +47,36 @@ package reflex.text
 		
 		protected var _allowWrap:Boolean = false;
 		protected var _clipText:Boolean = false;
-		
+		/*
+		override public function set display(value:Object):void {
+			super.display = value;
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+		}
+		*/
 		public function Label(text:String = "")
 		{
 			fontFormat = new FontDescription();
 			format = new ElementFormat(null, 24);
 			textElement = new TextElement("");
 			textBlock = new TextBlock(textElement);
-			mouseChildren = false;
-			addEventListener(TEXT_RENDER, onTextRender);
 			this.text = text;
 		}
-		
+		/*
+		override protected function initialize():void {
+			super.initialize();
+			
+		}
+		*/
 		[Bindable(event="textChange")]
 		public function get text():String { return textElement.text; }
 		public function set text(value:String):void {
 			if (value == textElement.text) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "text", textElement.text, textElement.text = value);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("text", textElement.text, textElement.text = value);
 		}
 		
 		[Bindable(event="allowWrapChange")]
@@ -84,8 +87,9 @@ package reflex.text
 			if(value == _allowWrap) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "allowWrap", _allowWrap, _allowWrap = value);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("allowWrap", _allowWrap, _allowWrap = value);
 		}
 		
 		[Bindable(event="clipTextChange")]
@@ -96,8 +100,9 @@ package reflex.text
 			if(value == _clipText) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "clipText", _clipText, _clipText = value);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("clipText", _clipText, _clipText = value);
 		}
 		
 		[Bindable(event="embedChange")]
@@ -105,7 +110,7 @@ package reflex.text
 			return (fontFormat.fontLookup == FontLookup.EMBEDDED_CFF);
 		}
 		public function set embed(value:Boolean):void {
-			DataChange.change(this, "embed", fontFormat.fontLookup == FontLookup.EMBEDDED_CFF, fontFormat.fontLookup = value ? FontLookup.EMBEDDED_CFF : FontLookup.DEVICE);
+			notify("embed", fontFormat.fontLookup == FontLookup.EMBEDDED_CFF, fontFormat.fontLookup = value ? FontLookup.EMBEDDED_CFF : FontLookup.DEVICE);
 		}
 		
 		[Bindable(event="colorChange")]
@@ -114,8 +119,9 @@ package reflex.text
 			if (value == format.color) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "color", format.color, format.color = value);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("color", format.color, format.color = value);
 		}
 		
 		[Bindable(event="fontFamilyChange")]
@@ -124,8 +130,9 @@ package reflex.text
 			if (value == fontFormat.fontName) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "fontFamily", fontFormat.fontName, fontFormat.fontName = value);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("fontFamily", fontFormat.fontName, fontFormat.fontName = value);
 		}
 		
 		[Bindable(event="fontSizeChange")]
@@ -134,8 +141,9 @@ package reflex.text
 			if (value == format.fontSize) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "fontSize", format.fontSize, format.fontSize = value);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("fontSize", format.fontSize, format.fontSize = value);
 		}
 		
 		[Bindable(event="boldChange")]
@@ -146,8 +154,9 @@ package reflex.text
 			if (value == (fontFormat.fontWeight == FontWeight.BOLD)) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "bold", fontFormat.fontWeight == FontWeight.BOLD, fontFormat.fontWeight = value ? FontWeight.BOLD : FontWeight.NORMAL);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("bold", fontFormat.fontWeight == FontWeight.BOLD, fontFormat.fontWeight = value ? FontWeight.BOLD : FontWeight.NORMAL);
 		}
 		
 		[Bindable(event="italicChange")]
@@ -159,8 +168,9 @@ package reflex.text
 			if (value == (fontFormat.fontPosture == FontPosture.ITALIC)) {
 				return;
 			}
-			Invalidation.invalidate(this, TEXT_RENDER);
-			DataChange.change(this, "italic", fontFormat.fontPosture == FontPosture.ITALIC, fontFormat.fontPosture = value ? FontPosture.ITALIC : FontPosture.NORMAL);
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
+			notify("italic", fontFormat.fontPosture == FontPosture.ITALIC, fontFormat.fontPosture = value ? FontPosture.ITALIC : FontPosture.NORMAL);
 		}
 		
 		protected function alignText(align:String, line:TextLine):void {
@@ -181,10 +191,15 @@ package reflex.text
 			line.y = unscaledHeight/2 + line.textHeight/2 - 5; // fuzzy math here
 		}
 		
-		protected function onTextRender(event:Event):void
+		override protected function onMeasure():void {
+			super.onMeasure();
+			onLayout(); // todo: need proper measurement
+		}
+		
+		override protected function onLayout():void
 		{
-			
-			while (numChildren) removeChildAt(0);
+			super.onLayout();
+			while (helper.getNumChildren(display)) helper.removeChildAt(display, 0);
 			
 			format.fontDescription = fontFormat;
 			textElement.elementFormat = format;
@@ -194,7 +209,7 @@ package reflex.text
 			
 			var startY:int = 0;
 			var align:String = resolveStyle(this, "txtAlign", String, CENTER) as String;
-		
+			
 			lineJustifier.lineJustification = (align == JUSTIFY) ? LineJustification.ALL_BUT_LAST : LineJustification.UNJUSTIFIED;
 			textBlock.textJustifier = lineJustifier;
 			
@@ -204,22 +219,22 @@ package reflex.text
 					startY += l.height;
 					l.y = startY;
 					alignText(align, l);
-					addChild(l);
+					helper.addChild(display, l);
 					l = textBlock.createTextLine(l, unscaledWidth);
 				}
-				measured.height = startY;
+				_measuredHeight = startY;
 			} else {
 				line = textBlock.createTextLine(null, clipText ? unscaledWidth : 100000);
 				if(line) {
-					measured.width = line.textWidth;
-					measured.height = line.textHeight;
+					_measuredWidth = line.textWidth;
+					_measuredHeight = line.textHeight;
 					line.y = line.height; //height/2 + line.height/2-3;
 					alignText(align, line);
 					verticalAlignText(line);
-					addChild(line);
+					helper.addChild(display, line);
 				} else {
-					measured.width = 0;
-					measured.height = 0;
+					_measuredWidth = 0;
+					_measuredHeight = 0;
 				}
 			}
 			
@@ -241,6 +256,8 @@ package reflex.text
 				}
 				
 			}
+			invalidate(LifeCycle.MEASURE);
+			invalidate(LifeCycle.LAYOUT);
 		}
 		
 		

@@ -1,10 +1,9 @@
 package reflex.graphics
 {
-	public class Spacer extends GraphicBase
+	import reflex.display.MeasurableItem;
+
+	public class Spacer extends MeasurableItem
 	{
-		public function Spacer()
-		{
-			super();
-		}
+		
 	}
 }

@@ -14,7 +14,7 @@ package mx.states
 	{
 		
 		// need tests for applying states to Arrays and generic Objects / DisplayObjects
-		
+		/*
 		[Test]
 		public function testAddItemsFirst():void
 		{
@@ -66,7 +66,7 @@ package mx.states
 			override.apply(container);
 			Assert.assertEquals(sprite, container.content.getItemAt(1));
 		}
-		
+		*/
 		/*
 		[Test]
 		public function testAddItemsAfter():void

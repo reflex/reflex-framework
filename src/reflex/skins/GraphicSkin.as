@@ -3,8 +3,8 @@ package reflex.skins
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	
-	import reflex.binding.DataChange;
 	import reflex.metadata.resolveCommitProperties;
 	
 	public class GraphicSkin extends Skin
@@ -19,11 +19,12 @@ package reflex.skins
 			
 		}
 		
-		override public function set target(value:Sprite):void {
+		override public function set target(value:IEventDispatcher):void {
 			super.target = value;
 			graphics = null;
 			if(value) {
-				graphics = value.graphics;
+				helper = Object(value).helper;
+				graphics = helper.getGraphics(display);
 				value.addEventListener("layout", onRender, false, 0, true);
 			}
 		}

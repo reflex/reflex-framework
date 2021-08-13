@@ -1,5 +1,6 @@
 package reflex.styles
 {
+	import reflex.framework.IStyleable;
 	
 	public function resolveStyle(child:Object, property:String, type:Object = null, standard:* = null):Object
 	{

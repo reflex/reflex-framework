@@ -4,7 +4,8 @@
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
-	import reflex.binding.DataChange;
+	import reflex.display.PropertyDispatcher;
+	import reflex.events.DataChangeEvent;
 	import reflex.metadata.resolveBindings;
 	import reflex.metadata.resolveDataListeners;
 	import reflex.metadata.resolveEventListeners;
@@ -17,10 +18,8 @@
 	 * 
 	 * @alpha
 	 */
-	public class Behavior extends EventDispatcher implements IBehavior
+	public class Behavior extends PropertyDispatcher implements IBehavior
 	{
-		
-		
 		
 		private var _target:IEventDispatcher;
 		
@@ -30,14 +29,14 @@
 		[Bindable(event="targetChange")]
 		public function get target():IEventDispatcher { return _target; }
 		public function set target(value:IEventDispatcher):void {
-			DataChange.change(this, "target", _target, _target = value);
+			notify("target", _target, _target = value);
 		}
 		
 		
 		public function Behavior(target:IEventDispatcher = null)
 		{
 			super(this);
-			_target = target;
+			_target = target; // binding
 			reflex.metadata.resolveBindings(this);
 			reflex.metadata.resolveDataListeners(this);
 			reflex.metadata.resolveEventListeners(this);

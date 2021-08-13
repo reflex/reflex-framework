@@ -1,6 +1,7 @@
 package reflex.components
 {
 	
+	import flash.events.Event;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
@@ -10,7 +11,6 @@ package reflex.components
 	import reflex.behaviors.ButtonBehavior;
 	import reflex.behaviors.SelectBehavior;
 	import reflex.binding.Bind;
-	import reflex.binding.DataChange;
 	import reflex.skins.ISkin;
 	import reflex.skins.ListItemSkin;
 	
@@ -25,25 +25,25 @@ package reflex.components
 		[Bindable(event="dataChange")]
 		public function get data():Object { return _data; }
 		public function set data(value:Object):void {
-			DataChange.change(this, "data", _data, _data = value);
+			notify("data", _data, _data = value);
 		}
 		
 		
 		public function ListItem()
 		{
 			super();
-			initialize();
 		}
 		
-		private function initialize():void {
-			skin = new ListItemSkin();
-			behaviors.addItem(new ButtonBehavior(this));
-			behaviors.addItem(new SelectBehavior(this));
+		override protected function initialize():void {
+			super.initialize();
+			//skin = new ListItemSkin();
+			//behaviors.addItem(new ButtonBehavior(this));
+			//behaviors.addItem(new SelectBehavior(this));
 			Bind.addBinding(this, "skin.labelDisplay.text", this, "data.label");
-			Bind.addBinding(this, "skin.labelDisplay.text", this, "data.name");
+			//Bind.addBinding(this, "skin.labelDisplay.text", this, "data.name"); // weird - only one targetPath
 			Bind.addBinding(this, "skin.currentState", this, "currentState", false);
-			measured.width = 210;
-			measured.height = 64;
+			//_measuredWidth = 210;
+			//_measuredHeight = 88;
 			percentWidth = 100;
 		}
 		
@@ -69,10 +69,10 @@ package reflex.components
 				C = flash.utils.getDefinitionByName( name ) as Class
 			} catch ( error:Error )
 			{
-				if( loaderInfo )
+				/*if( loaderInfo )
 				{
 					C = loaderInfo.applicationDomain.getDefinition( name ) as Class;
-				}
+				}*/
 				if( !C )
 				{
 					trace( "ListItem: Unable to retrieve definition of Class '" + name + "'." );

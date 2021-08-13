@@ -41,7 +41,6 @@ package
 	import reflex.skins.SkinContainerTest;
 	import reflex.skins.SkinMeasurementTest;
 	import reflex.styles.StyleFunctionsTest;
-	import reflex.templating.addItemAtTest;
 	import reflex.text.LabelTest;
 	
 	[Suite]
@@ -74,7 +73,7 @@ package
 		public var displayFunctions:DisplayFunctionsTest;
 		public var containerMeasurement:ContainerMeasurementTest;
 		public var containerTest:ContainerTest;
-
+		
 		// data
 		public var position:PositionTest;
 		public var range:RangeTest;
@@ -105,7 +104,7 @@ package
 		public var collection:SimpleCollectionTest;
 		
 		//templating
-		public var addItemAt:addItemAtTest;
+		//public var addItemAt:addItemAtTest;
 		
 		// states
 		public var addItems:AddItemsTest;

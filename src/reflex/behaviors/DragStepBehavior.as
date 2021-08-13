@@ -5,7 +5,6 @@ package reflex.behaviors
 	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	
-	import reflex.binding.DataChange;
 	import reflex.data.IPosition;
 	
 	public class DragStepBehavior extends Behavior
@@ -17,7 +16,7 @@ package reflex.behaviors
 		[Binding(target="target.position")]
 		public function get position():IPosition { return _position; }
 		public function set position(value:IPosition):void {
-			DataChange.change(this, "position", _position, _position = value);
+			notify("position", _position, _position = value);
 		}
 		
 		public var increment:Number = 1;

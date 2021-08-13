@@ -6,6 +6,7 @@ package reflex.metadata
 	 * @experimental
 	 */
 	// this needs some updates to handle non-DisplayObjects (like Rect) better
+	
 	public function resolveCommitProperties(instance:IEventDispatcher, resolver:Function = null):void
 	{
 		var desc:XMLList = Type.describeMethods(instance, "Commit");
@@ -16,7 +17,7 @@ package reflex.metadata
 			for each (var tag:XML in meta) {
 				var target:String = ( tag.arg.(@key == "properties").length() > 0 ) ? tag.arg.(@key == "properties").@value : tag.arg.@value;
 				var properties:Array = target.replace(/\s+/g, "").split(",");
-				CommitUtility.instance.register(instance, meth.@name, properties, resolver);
+				//CommitUtility.instance.register(instance, meth.@name, properties, resolver);
 			}
 		}
 	}

@@ -4,7 +4,8 @@ package reflex.layouts
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import reflex.measurement.IMeasurablePercent;
+	import reflex.animation.AnimationToken;
+	import reflex.framework.IMeasurablePercent;
 	import reflex.measurement.calculateAvailableSpace;
 	import reflex.measurement.calculatePercentageTotals;
 	import reflex.measurement.resolveHeight;
@@ -40,11 +41,11 @@ package reflex.layouts
 			this.edging = edging;
 		}
 		
-		override public function measure(children:Array):Point
+		override public function measure(content:Array):Point
 		{
-			var point:Point = super.measure(children);
+			var point:Point = super.measure(content);
 			point.y = edging ? gap/2 : 0;
-			for each(var child:Object in children) {
+			for each(var child:Object in content) {
 				var width:Number = reflex.measurement.resolveWidth(child);
 				var height:Number = reflex.measurement.resolveHeight(child);
 				point.x = Math.max(point.x, width);
@@ -54,50 +55,55 @@ package reflex.layouts
 			return point;
 		}
 		
-		override public function update(children:Array, rectangle:Rectangle):void
+		override public function update(content:Array, tokens:Array, rectangle:Rectangle):Array
 		{
-			super.update(children, rectangle);
-			if(children) {
+			super.update(content, tokens, rectangle);
+			if(content) {
 				
 				// some style-binding might take care of this later
 				var gap:Number = reflex.styles.resolveStyle(target, "gap", Number, this.gap) as Number;
 				var horizontalAlign:String = reflex.styles.resolveStyle(target, "horizontalAlign", String, this.horizontalAlign) as String;
 				
 				// this takes a few passes for percent-based measurement. we can probably speed it up later
-				var availableSpace:Point = reflex.measurement.calculateAvailableSpace(children, rectangle);
-				var percentageTotals:Point = reflex.measurement.calculatePercentageTotals(children);
+				var availableSpace:Point = reflex.measurement.calculateAvailableSpace(content, rectangle);
+				var percentageTotals:Point = reflex.measurement.calculatePercentageTotals(content);
 				
 				
 				var position:Number = edging ? gap/2 : 0;
-				var length:int = children.length;
+				var length:int = content.length;
 				
 				availableSpace.y -= edging ? gap*length : gap*(length-1);
 				for(var i:int = 0; i < length; i++) {
-					var child:Object = children[i];
-					var width:Number = reflex.measurement.resolveWidth(child, rectangle.width); // calculate percentWidths based on full width and with no normalization
+					var child:Object = content[i];
+					var token:AnimationToken = tokens[i];
+					var width:Number = reflex.measurement.resolveWidth(token, rectangle.width); // calculate percentWidths based on full width and with no normalization
 					if(horizontalAlign == "justify")
                         width = rectangle.width;
-					var height:Number = reflex.measurement.resolveHeight(child, availableSpace.y, percentageTotals.y);  // calculate percentHeights based on available height and normalized percentages
-					reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					var height:Number = reflex.measurement.resolveHeight(token, availableSpace.y, percentageTotals.y);  // calculate percentHeights based on available height and normalized percentages
+					
 					
 					switch(horizontalAlign) {
 						case "center":
 						case "middle":
-							child.x = Math.round(rectangle.width/2 - width/2);
+							token.x = Math.round(rectangle.width/2 - width/2);
 							break;
 						case "justify":
 						case "left":
-							child.x = 0;
+							token.x = 0;
 							break;
 						case "right":
-							child.x = Math.round(rectangle.width - width);
+							token.x = Math.round(rectangle.width - width);
 							break;
 					}
 					//child.x = Math.round(rectangle.width/2 - width/2);
-					child.y = Math.round(position);
+					token.y = Math.round(position);
+					//reflex.measurement.setSize(child, Math.round(width), Math.round(height));
+					token.width = Math.round(width);
+					token.height = Math.round(height);
 					position += height + gap;
 				}
 			}
+			return tokens;
 		}
 		
 	}

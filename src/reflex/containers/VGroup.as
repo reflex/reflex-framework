@@ -7,11 +7,5 @@ package reflex.containers
 	public class VGroup extends Container
 	{
 		
-		public function VGroup()
-		{
-			super();
-			layout = new VerticalLayout();
-		}
-		
 	}
 }

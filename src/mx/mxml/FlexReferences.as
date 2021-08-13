@@ -1,6 +1,6 @@
 package mx.mxml
 {
-	
+	/*
 	import mx.binding.ArrayElementWatcher;
 	import mx.binding.BindingManager;
 	import mx.binding.FunctionReturnWatcher;
@@ -20,7 +20,7 @@ package mx.mxml
 	import mx.states.SetStyle;
 	import mx.states.State;
 	import mx.styles.CSSStyleDeclaration;
-	
+	*/
 	/**
 	 * Pulls various Flex classes into the Reflex swc.
 	 * These classes are not referenced by Reflex and are not required to build Reflex in Flash Pro or AS3 projects.
@@ -30,7 +30,7 @@ package mx.mxml
 	 */
 	public class FlexReferences
 	{
-		
+		/*
 		// binding
 		static private var bm:BindingManager;
 		static private var aw:ArrayElementWatcher;
@@ -51,7 +51,7 @@ package mx.mxml
 		
 		static private var bf:IBitmapFilter;
 		static private var difc:DeferredInstanceFromClass;
-		
+		*/
 		/*
 		// 
 		static private var ai:AddItems;
